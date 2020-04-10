@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<title>VR Tools</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/w3.css">
+
+<style>
+    .slide {
+        height: 430px;
+        width: auto;
+        display: inline-block;
+        margin: auto;
+    }
+    
+    .badge {
+        margin: auto;
+        height: 50px;
+        width: auto;
+    }
+</style>
+
+<body>
+
+    <!-- Navbar (sit on top) -->
+    <div class="w3-top">
+        <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+            <a href="index.html#home" class="w3-bar-item w3-button"><b>VR</b> Tools</a>
+            <!-- Float links to the right. Hide them on small screens -->
+            <div class="w3-right w3-hide-small">
+                <a href="index.html#projects" class="w3-bar-item w3-button">Projects</a>
+                <a href="index.html#about" class="w3-bar-item w3-button">About</a>
+                <a href="index.html#contact" class="w3-bar-item w3-button">Contact</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page content -->
+    <div class="w3-content w3-padding" style="max-width:1564px">
+
+        <div class="w3-container w3-padding-32" id="projects">
+            <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey">Google Arts & Culture</h1>
+        </div>
+
+        <!-- images/slideshow -->
+        <div class="w3-content w3-display-container w3-center w3-row">
+
+            <img class="slide" src="img/gartsculture/screenshot1.png" alt="">
+            <img class="slide" src="img/gartsculture/screenshot2.png" alt="">
+            <img class="slide" src="img/gartsculture/screenshot3.png" alt="">
+            <img class="slide" src="img/gartsculture/screenshot4.png" alt="">
+
+            <button id="btn-left" class="w3-button w3-black w3-display-left w3-hide-large" onclick="plusDivs(-1)">&#10094;</button>
+            <button class="w3-button w3-black w3-display-right w3-hide-large" onclick="plusDivs(1)">&#10095;</button>
+        </div>
+
+        <div class="w3-container w3-padding-32" id="about">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur
+                sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur
+                sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </div>
+
+        <div class=" w3-center">
+            <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.cultural&hl=en_US" target="_blank"><img class="badge" src="img/google-play-badge.png" alt=""></a>
+            <a href="https://apps.apple.com/us/app/google-arts-culture/id1050970557" target="_blank"><img class="badge" src="img/app-store-badge.svg" alt=""></a>
+        </div>
+
+        <!-- End page content -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-center w3-black w3-padding-16">
+        <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+    </footer>
+
+    <script>
+        let slideIndex = 1;
+        window.addEventListener('resize', () => {
+            console.log('resized')
+            showDivs(slideIndex)
+        })
+
+        if (window.innerWidth < 768) showDivs(slideIndex);
+
+        function plusDivs(n) {
+            showDivs(slideIndex += n)
+        }
+
+        function showDivs(n) {
+            const slide = document.getElementsByClassName("slide");
+            const display = window.innerWidth <= 768 ? 'none' : "inline-block"
+
+            if (n > slide.length) {
+                slideIndex = 1
+            }
+            if (n < 1) {
+                slideIndex = slide.length
+            }
+            for (let i = 0; i < slide.length; i++) {
+                slide[i].style.display = display;
+            }
+            slide[slideIndex - 1].style.display = "inline-block";
+        }
+    </script>
+
+</body>
+
+</html>
