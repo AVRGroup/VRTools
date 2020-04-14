@@ -1,0 +1,12 @@
+.slide {
+    height: 430px;
+    width: auto;
+    display: inline-block;
+    margin: auto;
+}
+
+.badge {
+    margin: auto;
+    height: 50px;
+    width: auto;
+}
