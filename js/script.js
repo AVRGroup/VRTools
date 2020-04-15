@@ -12,7 +12,7 @@ function plusDivs(n) {
 
 function showDivs(n) {
     const slide = document.getElementsByClassName("slide");
-    const display = window.innerWidth <= 768 ? 'none' : "inline-block"
+    const display = window.innerWidth < 1024 ? 'none' : "inline-block"
 
     if (n > slide.length) {
         slideIndex = 1
