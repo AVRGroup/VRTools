@@ -6,19 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../css/w3.css">
         <link rel="stylesheet" href="../css/style.css">
-
-        <!-- Libraries of configuration -->
-        <script type="text/javascript" charset="UTF-8" src="libs/three/three.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="libs/three/controls/TrackballControls.js"></script>
-        <script type="text/javascript" src="libs/util/Stats.js"></script>
-        <script type="text/javascript" src="libs/util/dat.gui.js"></script>
-        <!--
-        -->
-        <script type="text/javascript" src="libs/util/util.js"></script>
-
-        <!-- Library of example -->
-        <script type="text/javascript" src="platonic-solids.js"></script>
-
     </head>
 
     <body>
@@ -40,12 +27,29 @@
         <!-- Page content -->
         <div class="w3-content w3-padding " style="max-width:1564px ">
 
-            <div class="w3-container w3-padding-32 " id="projects ">
+            <div class="w3-container w3-padding-32 " id="projects">
                 <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Platonics solids</h1>
             </div>
 
-            <div class="w3-container w3-padding-32 " id="webgl-output" style="text-align:center"></div>
-            <script type="text/javascript"> (function () { init() })(); </script>
+            <div class="w3-container w3-padding-32" style="text-align:center">
+                <iframe id="scene" src="./platonic-solids-application.html" height="400" width="800"></iframe>
+                <script>
+
+                    // iOS iframe auto-resize workaround
+            
+                    if ( /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
+            
+                        var scene = document.getElementById( 'scene' );
+            
+                        scene.style.width = getComputedStyle( scene ).width;
+                        scene.style.height = getComputedStyle( scene ).height;
+                        scene.setAttribute( 'scrolling', 'no' );
+            
+                    }
+            
+                </script>
+            </div>
+           
             
 
             <div class="w3-container w3-padding-48 " id="about">

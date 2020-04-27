@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Platonic Solids</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                margin: 0;
+                overflow: hidden;
+            }
+            </style>
+
+        <!-- Libraries of configuration -->
+        <script type="text/javascript" charset="UTF-8" src="libs/three/three.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="libs/three/controls/TrackballControls.js"></script>
+        <script type="text/javascript" src="libs/util/Stats.js"></script>
+        <script type="text/javascript" src="libs/util/dat.gui.js"></script>
+        <!--
+        -->
+        <script type="text/javascript" src="libs/util/util.js"></script>
+
+        <!-- Library of example -->
+        <script type="text/javascript" src="platonic-solids.js"></script>
+
+    </head>
+
+    <body>
+
+        <div class="w3-container w3-padding-32" id="status-output">
+            <div id="webgl-output" ></div>
+        </div>
+        <script type="text/javascript"> (function () { init() })(); </script>
+    </body>
+
+</html>

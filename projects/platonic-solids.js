@@ -8,11 +8,12 @@ function init(){
     // use the defaults
     var renderer = initRenderer();
     var stats = initStats();
+    //renderer.domElement.appendChild(stats.dom);
     var camera = initCamera(new THREE.Vector3(0, 20, 40));
     var trackballControls = initTrackballControls(camera, renderer);
     var clock = new THREE.Clock();
 
-    var axisHelper = new THREE.AxesHelper(10);
+    var axisHelper = new THREE.AxesHelper(20);
 
     // create a scene, that will hold all our elements such as objects, cameras and lights.
     // and add some simple default lights
@@ -34,7 +35,7 @@ function init(){
     var gui = new dat.GUI();
     gui.add(controls, 'rotationSpeed', 0, 0.5);
     gui.add(controls, 'bouncingSpeed', 0, 0.5);
-    
+
     render();
     function render() {
         stats.update();

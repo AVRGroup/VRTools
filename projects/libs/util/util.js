@@ -10,8 +10,8 @@ function initStats(type) {
     var stats = new Stats();
 
     stats.showPanel(panelType); // 0: fps, 1: ms, 2: mb, 3+: custom
-    document.getElementById("webgl-output").appendChild(stats.dom);
-    //document.body.appendChild(stats.dom);
+    //document.getElementById("status-output").appendChild(stats.dom);
+    document.body.appendChild(stats.dom);
 
     return stats;
 }
@@ -30,7 +30,7 @@ function initRenderer(additionalProperties) {
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     renderer.setClearColor(new THREE.Color(0x000000));
-    renderer.setSize(600, 400);//(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
     document.getElementById("webgl-output").appendChild(renderer.domElement);
 
