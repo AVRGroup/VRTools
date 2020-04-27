@@ -1,24 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Platonic Solids</title>
+        <title>Work in Progress</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../css/w3.css">
         <link rel="stylesheet" href="../css/style.css">
-
-        <!-- Libraries of configuration -->
         <script type="text/javascript" charset="UTF-8" src="libs/three/three.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="libs/three/controls/TrackballControls.js"></script>
-        <script type="text/javascript" src="libs/util/Stats.js"></script>
-        <script type="text/javascript" src="libs/util/dat.gui.js"></script>
-        <!--
-        -->
-        <script type="text/javascript" src="libs/util/util.js"></script>
-
-        <!-- Library of example -->
-        <script type="text/javascript" src="platonic-solids.js"></script>
-
     </head>
 
     <body>
@@ -41,12 +29,28 @@
         <div class="w3-content w3-padding " style="max-width:1564px ">
 
             <div class="w3-container w3-padding-32 " id="projects ">
-                <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Platonics solids</h1>
+                <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Work in progress</h1>
             </div>
 
-            <div class="w3-container w3-padding-32 " id="webgl-output" style="text-align:center"></div>
-            <script type="text/javascript"> (function () { init() })(); </script>
-            
+            <!-- images/slideshow -->
+            <div class="w3-content w3-display-container w3-center w3-row ">
+
+                <img class="slide " src="../img/work-in-progress.png " alt="Work tools crossed" onclick="openModal(1)">
+
+                <button id="btn-left " class="w3-button w3-black w3-display-left w3-hide-large " onclick="plusDivs(-1) ">&#10094;</button>
+                <button class="w3-button w3-black w3-display-right w3-hide-large " onclick="plusDivs(1) ">&#10095;</button>
+            </div>
+
+            <div id="modal-slideshow" class="w3-modal w3-black">
+                <div class="w3-content w3-center" style="height: 80%;">
+                    <img class="slide-modal w3-display-middle" src="../img/work-in-progress.png" style="height: 100%; background-color: white;">
+
+                    <span class="w3-black w3-text-white w3-opacity w3-display-left w3-btn" onclick="plusModal(-1)">❮</span>
+                    <span class="w3-black w3-text-white w3-opacity w3-display-right w3-btn" onclick="plusModal(1)">❯</span>
+                </div>
+
+                <span class="w3-black w3-text-white w3-opacity w3-xxlarge w3-hover-text-grey w3-container w3-display-topright" onclick="closeModal()" style="cursor:pointer">×</span>
+            </div>
 
             <div class="w3-container w3-padding-48 " id="about">
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore, neque! Atque ipsa vel temporibus voluptates distinctio modi suscipit eveniet officiis tempore necessitatibus voluptatibus aspernatur, fugiat iusto dolor animi, reprehenderit id!</p>
@@ -61,6 +65,7 @@
             <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp " title="W3.CSS " target="_blank " class="w3-hover-text-green ">w3.css</a></p>
         </footer>
 
+        <script type="text/javascript" src="../js/script.js "></script>
     </body>
 
 </html>
