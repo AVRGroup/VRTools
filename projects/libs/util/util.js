@@ -1,4 +1,152 @@
 /**
+ * Get ASCII table code of a given character
+ * Use character in uppercase
+ *
+ * @param {char} ch
+ * @returns ASCII code of the caracter
+ */
+
+function getCode(ch)
+{
+  var code = ch.charCodeAt(0);
+  return code;
+}
+
+/**
+ * Convert degrees to radians
+ */
+function degreesToRadians(degrees)
+{
+  var pi = Math.PI;
+  return degrees * (pi/180);
+}
+
+/**
+ * Format output to show 'num' number with 'decimalPlaces' decimal places
+ */
+function formatOutput(num, decimalPlaces)
+{
+  return (Math.round(num * 100) / 100).toFixed(decimalPlaces);
+}
+
+
+/**
+ Compute the max size acording to XYZ axes
+ Return the maxSzie
+*/
+function getMaxSize(obj)
+{
+  var maxSize;
+  var box = new THREE.Box3().setFromObject( obj );
+  var min = box.min;
+  var max = box.max;
+
+  var size = new THREE.Box3();
+  size.x = max.x - min.x;
+  size.y = max.y - min.y;
+  size.z = max.z - min.z;
+
+  if(size.x >= size.y && size.x >= size.z)
+    maxSize = size.x;
+  else {
+    if(size.y >= size.z )
+      maxSize = size.y;
+    else {
+      maxSize = size.z;
+    }
+  }
+  return maxSize;
+}
+
+/**
+  * ...
+  *
+  */
+class SecondaryBox
+{
+  constructor(defaultText) {
+    this.box = document.createElement('div');
+    this.box.id = "box";
+    this.box.style.padding = "6px 14px";
+    this.box.style.bottom = "0";
+    this.box.style.left= "0";
+    this.box.style.position = "fixed";
+    this.box.style.backgroundColor = "rgba(100,100,255,0.3)";
+    this.box.style.color = "white";
+    this.box.style.fontFamily = "sans-serif";
+    this.box.style.fontSize = "26px";
+
+    this.textnode = document.createTextNode(defaultText);
+    this.box.appendChild(this.textnode);
+    document.body.appendChild(this.box);
+  }
+  changeMessage(newText) {
+    this.textnode.nodeValue = newText;
+  }
+}
+
+
+/**
+  * Class box - show information onscreen
+  *
+  */
+class InfoBox {
+  constructor() {
+    this.infoBox = document.createElement('div');
+    this.infoBox.id = "InfoxBox";
+    this.infoBox.style.padding = "6px 14px";
+    this.infoBox.style.position = "fixed";
+    this.infoBox.style.bottom = "0";
+    this.infoBox.style.right = "0";
+    this.infoBox.style.backgroundColor = "rgba(255,255,255,0.2)";
+    this.infoBox.style.color = "white";
+    this.infoBox.style.fontFamily = "sans-serif";
+    this.infoBox.style.userSelect = "none";
+    this.infoBox.style.textAlign = "left";
+  }
+
+  addParagraph() {
+    const paragraph = document.createElement("br")
+    this.infoBox.appendChild(paragraph);              ;
+  }
+
+  add(text) {
+    var textnode = document.createTextNode(text);
+    this.infoBox.appendChild(textnode);
+    this.addParagraph();
+  }
+
+  show() {
+    document.body.appendChild(this.infoBox);
+  }
+}
+
+/**
+ * Makes a definite light follows the camera
+ */
+function lightFollowingCamera(light, camera)
+{
+  light.position.copy( camera.position );
+}
+
+
+/**
+ * Fix camera and renderer when window size changes
+ */
+function onWindowResize(camera, renderer){
+
+    if (camera instanceof THREE.PerspectiveCamera)
+    {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+    }
+    else {
+      // TODO for other cameras
+    }
+}
+
+/**
  * Initialize the statistics domelement
  * 
  * @param {Number} type 0: fps, 1: ms, 2: mb, 3+: custom
@@ -232,6 +380,20 @@ function addGroundPlane(scene) {
 }
 
 /**
+ * Add a small and simple ground plane
+ */
+function createGroundPlane(width, height) {
+    // create the ground plane
+    var planeGeometry = new THREE.PlaneGeometry(width, height, 10, 10);
+    var planeMaterial = new THREE.MeshPhongMaterial({color:"rgb(200,200,200)", side:THREE.DoubleSide});
+    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.receiveShadow = true;
+
+    return plane;
+}
+
+
+/**
  * Add a simple ground plance to the provided scene
  * 
  * @param {THREE.Scene} scene 
@@ -266,165 +428,37 @@ function addLargeGroundPlane(scene, useTexture) {
     return plane;
 }
 
-function addHouseAndTree(scene) {
+function createGroundPlane(scene) {
+    // create the ground plane
+    var planeGeometry = new THREE.PlaneGeometry(70, 50);
+    var planeMaterial = new THREE.MeshPhongMaterial({
+        color: 0x9acd32
+    });
+    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.receiveShadow = true;
 
-    createBoundingWall(scene);
-    createGroundPlane(scene);
-    createHouse(scene);
-    createTree(scene);
+    // rotate and position the plane
+    plane.rotation.x = -0.5 * Math.PI;
+    plane.position.x = 15;
+    plane.position.y = 0;
+    plane.position.z = 0;
 
-    function createBoundingWall(scene) {
-        var wallLeft = new THREE.CubeGeometry(70, 2, 2);
-        var wallRight = new THREE.CubeGeometry(70, 2, 2);
-        var wallTop = new THREE.CubeGeometry(2, 2, 50);
-        var wallBottom = new THREE.CubeGeometry(2, 2, 50);
-
-        var wallMaterial = new THREE.MeshPhongMaterial({
-            color: 0xa0522d
-        });
-
-        var wallLeftMesh = new THREE.Mesh(wallLeft, wallMaterial);
-        var wallRightMesh = new THREE.Mesh(wallRight, wallMaterial);
-        var wallTopMesh = new THREE.Mesh(wallTop, wallMaterial);
-        var wallBottomMesh = new THREE.Mesh(wallBottom, wallMaterial);
-
-        wallLeftMesh.position.set(15, 1, -25);
-        wallRightMesh.position.set(15, 1, 25);
-        wallTopMesh.position.set(-19, 1, 0);
-        wallBottomMesh.position.set(49, 1, 0);
-
-        scene.add(wallLeftMesh);
-        scene.add(wallRightMesh);
-        scene.add(wallBottomMesh);
-        scene.add(wallTopMesh);
-
-    }
-
-    function createGroundPlane(scene) {
-        // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(70, 50);
-        var planeMaterial = new THREE.MeshPhongMaterial({
-            color: 0x9acd32
-        });
-        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.receiveShadow = true;
-
-        // rotate and position the plane
-        plane.rotation.x = -0.5 * Math.PI;
-        plane.position.x = 15;
-        plane.position.y = 0;
-        plane.position.z = 0;
-
-        scene.add(plane)
-    }
-
-    function createHouse(scene) {
-        var roof = new THREE.ConeGeometry(5, 4);
-        var base = new THREE.CylinderGeometry(5, 5, 6);
-
-        // create the mesh
-        var roofMesh = new THREE.Mesh(roof, new THREE.MeshPhongMaterial({
-            color: 0x8b7213
-        }));
-        var baseMesh = new THREE.Mesh(base, new THREE.MeshPhongMaterial({
-            color: 0xffe4c4
-        }));
-
-        roofMesh.position.set(25, 8, 0);
-        baseMesh.position.set(25, 3, 0);
-
-        roofMesh.receiveShadow = true;
-        baseMesh.receiveShadow = true;
-        roofMesh.castShadow = true;
-        baseMesh.castShadow = true;
-
-        scene.add(roofMesh);
-        scene.add(baseMesh);
-    }
-
-    /**
-     * Add the tree to the scene
-     * @param scene The scene to add the tree to
-     */
-    function createTree(scene) {
-        var trunk = new THREE.CubeGeometry(1, 8, 1);
-        var leaves = new THREE.SphereGeometry(4);
-
-        // create the mesh
-        var trunkMesh = new THREE.Mesh(trunk, new THREE.MeshPhongMaterial({
-            color: 0x8b4513
-        }));
-        var leavesMesh = new THREE.Mesh(leaves, new THREE.MeshPhongMaterial({
-            color: 0x00ff00
-        }));
-
-        // position the trunk. Set y to half of height of trunk
-        trunkMesh.position.set(-10, 4, 0);
-        leavesMesh.position.set(-10, 12, 0);
-
-        trunkMesh.castShadow = true;
-        trunkMesh.receiveShadow = true;
-        leavesMesh.castShadow = true;
-        leavesMesh.receiveShadow = true;
-
-        scene.add(trunkMesh);
-        scene.add(leavesMesh);
-    }
+    scene.add(plane)
 }
 
-function createGhostTexture() {
-    var canvas = document.createElement('canvas');
-    canvas.width = 32;
-    canvas.height = 32;
+/**
+ * Add a small and simple ground plane
+ */
+function createGroundPlane(width, height) {
+    // create the ground plane
+    var planeGeometry = new THREE.PlaneGeometry(width, height, 10, 10);
+    var planeMaterial = new THREE.MeshPhongMaterial({color:"rgb(200,200,200)", side:THREE.DoubleSide});
+    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.receiveShadow = true;
 
-    var ctx = canvas.getContext('2d');
-    // the body
-    ctx.translate(-81, -84);
+    return plane;
+}
 
-    ctx.fillStyle = "orange";
-    ctx.beginPath();
-    ctx.moveTo(83, 116);
-    ctx.lineTo(83, 102);
-    ctx.bezierCurveTo(83, 94, 89, 88, 97, 88);
-    ctx.bezierCurveTo(105, 88, 111, 94, 111, 102);
-    ctx.lineTo(111, 116);
-    ctx.lineTo(106.333, 111.333);
-    ctx.lineTo(101.666, 116);
-    ctx.lineTo(97, 111.333);
-    ctx.lineTo(92.333, 116);
-    ctx.lineTo(87.666, 111.333);
-    ctx.lineTo(83, 116);
-    ctx.fill();
-
-    // the eyes
-    ctx.fillStyle = "white";
-    ctx.beginPath();
-    ctx.moveTo(91, 96);
-    ctx.bezierCurveTo(88, 96, 87, 99, 87, 101);
-    ctx.bezierCurveTo(87, 103, 88, 106, 91, 106);
-    ctx.bezierCurveTo(94, 106, 95, 103, 95, 101);
-    ctx.bezierCurveTo(95, 99, 94, 96, 91, 96);
-    ctx.moveTo(103, 96);
-    ctx.bezierCurveTo(100, 96, 99, 99, 99, 101);
-    ctx.bezierCurveTo(99, 103, 100, 106, 103, 106);
-    ctx.bezierCurveTo(106, 106, 107, 103, 107, 101);
-    ctx.bezierCurveTo(107, 99, 106, 96, 103, 96);
-    ctx.fill();
-
-    // the pupils
-    ctx.fillStyle = "blue";
-    ctx.beginPath();
-    ctx.arc(101, 102, 2, 0, Math.PI * 2, true);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(89, 102, 2, 0, Math.PI * 2, true);
-    ctx.fill();
-
-
-    var texture = new THREE.Texture(canvas);
-    texture.needsUpdate = true;
-    return texture;
-};
 
 /**
  * Add a folder to the gui containing the basic material properties.
@@ -507,8 +541,8 @@ function addSpecificMaterialSettings(gui, controls, material, name) {
 function redrawGeometryAndUpdateUI(gui, scene, controls, geomFunction) {
     guiRemoveFolder(gui, controls.specificMaterialFolder);
     guiRemoveFolder(gui, controls.currentMaterialFolder);
-    if (controls.mesh) scene.remove(controls.mesh)
-    var changeMat = eval("(" + controls.appliedMaterial + ")")
+    if (controls.mesh) scene.remove(controls.mesh);
+    var changeMat = eval("(" + controls.appliedMaterial + ")");
     if (controls.mesh) {
         controls.mesh = changeMat(geomFunction(), controls.mesh.material);
     } else {
@@ -534,91 +568,6 @@ function guiRemoveFolder(gui, folder) {
         delete gui.__folders[folder.name];
         gui.onResize();
     }
-}
-
-/**
- * 
- * 
- * @param gui the gui to add to
- * @param controls the current controls object
- * @param material material for the meshes
- */
-function addMeshSelection(gui, controls, material, scene) {
-  var sphereGeometry = new THREE.SphereGeometry(10, 20, 20);
-  var cubeGeometry = new THREE.BoxGeometry(16, 16, 15);
-  var planeGeometry = new THREE.PlaneGeometry(14, 14, 4, 4);
-
-  var sphere = new THREE.Mesh(sphereGeometry, material);
-  var cube = new THREE.Mesh(cubeGeometry, material);
-  var plane = new THREE.Mesh(planeGeometry, material);
-
-  sphere.position.x = 0;
-  sphere.position.y = 11;
-  sphere.position.z = 2;
-
-  cube.position.y = 8;
-
-  controls.selectedMesh = "cube";
-  loadGopher(material).then(function(gopher) {
-
-    gopher.scale.x = 5;
-    gopher.scale.y = 5;
-    gopher.scale.z = 5;
-    gopher.position.z = 0
-    gopher.position.x = -10
-    gopher.position.y = 0
-
-    gui.add(controls, 'selectedMesh', ["cube", "sphere", "plane", "gopher"]).onChange(function (e) {
-
-      scene.remove(controls.selected);
-  
-      switch (e) {
-        case "cube":
-          scene.add(cube);
-          controls.selected = cube;
-          break;
-        case "sphere":
-          scene.add(sphere);
-          controls.selected = sphere;
-          break;
-        case "plane":
-          scene.add(plane);
-          controls.selected = plane;
-          break;
-        case "gopher":
-          scene.add(gopher);
-          controls.selected = gopher;
-          break;
-      }
-    });
-  });
-
-  controls.selected = cube;
-  scene.add(controls.selected);
-}
-
-/**
- * Load a gopher, and apply the material
- * @param material if set apply this material to the gopher
- * @returns promise which is fullfilled once the goher is loaded
- */
-function loadGopher(material) {
-    var loader = new THREE.OBJLoader();
-    var mesh = null;
-    var p = new Promise(function(resolve) {
-        loader.load('../../assets/models/gopher/gopher.obj', function (loadedMesh) {
-            // this is a group of meshes, so iterate until we reach a THREE.Mesh
-            mesh = loadedMesh;
-            if (material) {
-                // material is defined, so overwrite the default material.
-                computeNormalsGroup(mesh);
-                setMaterialGroup(material, mesh);
-            }
-            resolve(mesh);
-        });
-    });
-
-    return p;
 }
 
 function setMaterialGroup(material, group) {
