@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Platonic Solids</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                margin: 0;
+                overflow: hidden;
+            } 
+
+            a {
+                color: var(--color-blue);
+                cursor: pointer;
+                text-decoration: none;
+            }
+
+            #newWindow {
+				display: block;
+				position: absolute;
+				bottom: 0.3em;
+				left: 0.4em;
+				color: #fff;
+			}
+        </style>
+
+        <!-- Libraries of configuration (Default) -->
+        <script type="text/javascript" charset="UTF-8" src="../libs/three/three.js"></script>
+        <script type="text/javascript" src="../libs/util/Stats.js"></script>
+        <script type="text/javascript" src="../libs/util/dat.gui.js"></script>
+
+        <!-- Library of Augmented Reality that uses Three.js -->
+        <script src="../libs/MarkerTracking--LocationBasedAR/THREE/ar.js"></script>
+        <script>THREEx.ArToolkitContext.baseURL = "../"</script>  <!-- Define o local do contexto -->
+        
+        <!-- There are many useful functionss -->
+        <script type="text/javascript" src="../libs/util/util.js"></script>
+
+        <!-- Library of example -->
+        <script type="text/javascript" src="platonic-solids-AR.js"></script>
+
+    </head>
+
+    <body>
+
+        <!-- Open the application on another tab -->
+        <a id="newWindow" href="./platonic-solids-application-AR.html" target="_blank">Open in New Window</a>
+        <div id="webgl-output" ></div>
+        <script type="text/javascript"> 
+            main();
+        </script>
+    </body>
+
+</html>
