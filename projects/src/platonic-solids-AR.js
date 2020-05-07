@@ -250,13 +250,18 @@ function main(){
 		//sourceHeight: 480,
 
 		// resolution displayed for the source
-		displayWidth: window.innerWidth,  //window.innerWidth,
-		displayHeight: window.innerHeight//window.innerHeight
+		// displayWidth: window.innerWidth,  //window.innerWidth,
+		// displayHeight: window.innerHeight//window.innerHeight
 	})
 
 	arToolkitSource.init(function onReady(){
-		onResize();
-	})
+        //onResize();
+
+        // Esse timeout força a interface de AR se redimensionar com base no tempo passado
+        setTimeout(() => {
+            onResize()
+        }, 25);
+    });
 
 	// handle resize
 	window.addEventListener('resize', function(){
