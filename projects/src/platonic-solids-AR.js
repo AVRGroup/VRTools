@@ -5,27 +5,28 @@ function main(){
 
 	// use the defaults
     var scene = new THREE.Scene();                  // Create main scene
-	var stats = initStats();                        // To show FPS information
-	//var camera = new THREE.Camera();
-	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);    //var camera = initCamera(new THREE.Vector3(0, 10, 20));
-    camera.lookAt(0, 0, 0);
-    camera.position.set(5, 15, 30);
-    camera.up.set( 0, 1, 0 );
+	var camera = new THREE.Camera();
 	scene.add(camera);
 
     var clock = new THREE.Clock();
-	var light = initDefaultLighting(scene, new THREE.Vector3(2.2, 4.4, 0));  // Use default light
+    //var light = initDefaultLighting(scene, new THREE.Vector3(2.2, 4.4, 0));  // Use default light
+
+    var dirLight = new THREE.DirectionalLight(0xffffff);
+    dirLight.position = new THREE.Vector3(2.2, 4.4, 0);
+    dirLight.castShadow = false;
+
+    scene.add(dirLight);
+
+    var ambientLight = new THREE.AmbientLight(0x343434);
+    ambientLight.name = "ambientLight";
+    scene.add(ambientLight);
 
 	// init renderer
 	var renderer	= new THREE.WebGLRenderer({
 		antialias: true,
 		alpha: true
-	});
-	renderer.shadowMap.enabled = true;
-    renderer.shadowMapSoft = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    });
     renderer.setClearColor(new THREE.Color('lightgrey'), 0);
-	renderer.shadowMap.enabled = true;
 	
 	renderer.domElement.style.position = 'absolute';
 	renderer.domElement.style.top = '0px';
@@ -42,12 +43,14 @@ function main(){
     axes.visible = false;
     scene.add(axes);
 
-    var groundPlane = createGroundPlane(1, 1); // width and height
+    /* Generate a plane above the solids */
+    /*var groundPlane = createGroundPlane(1, 1); // width and height
     groundPlane.rotateX(degreesToRadians(-90));
-	scene.add(groundPlane);   
+	scene.add(groundPlane);*/   
 	
 	// Object Material for all objects
-    var objectMaterial = new THREE.MeshPhongMaterial({color:"rgb(255, 0, 0)"});
+    var objectMaterial = new THREE.MeshNormalMaterial({color:"rgb(255, 0, 0)"});//new THREE.MeshPhongMaterial({color:"rgb(255, 0, 0)"});
+    objectMaterial.side = THREE.DoubleSide;     
 
     // Add objects to scene
     var objectArray = new Array();
@@ -62,7 +65,6 @@ function main(){
 	
 	// Controls of sidebar
     var controls = new function () {
-        var self = this;
 
         // Axes
         this.axes = false;
@@ -75,20 +77,12 @@ function main(){
             scene.add(axes);
         }
 
-        // Inicia a geometria e material de base a serem controlados pelo menu interativo
-        //this.appliedMaterial = applyMeshNormalMaterial;
-        this.castShadow = true;
-        this.groundPlaneVisible = true;
-
-        //Physics
-        this.rotation = 0.02;
+        this.wireframe = false;
         this.color = "rgb(255, 0, 0)";
 
         // Geometry
         this.mesh = objectArray[0];
         this.meshNumber = 0;
-        this.radius = 10;
-        this.detail = 0;
         this.type = 'Tetrahedron';
 
         this.choosePoligon = function(){
@@ -120,7 +114,10 @@ function main(){
                 scene.remove(objectArray[i]);
             }
             objectArray = new Array();
-            objectMaterial = new THREE.MeshPhongMaterial({color:controls.color});   // Setting the material with new color
+            objectMaterial = new THREE.MeshNormalMaterial({color:controls.color});//new THREE.MeshPhongMaterial({color:controls.color})
+            // Setting the material with new color
+
+            objectMaterial.side = THREE.DoubleSide;
             
             // Recreating those objects
             scene.add(createTetrahedron(0.28, 0));
@@ -152,11 +149,17 @@ function main(){
     guiFolder.add(controls, "axesSize", 0.1, 3).listen().onChange(function(e){
          controls.updateAxes();
     });
-    guiFolder.add(controls, 'rotation', 0, 0.5);
     guiFolder.addColor(controls, 'color').onChange(function(e){
         controls.updateColor();
     });
-
+    guiFolder.add(controls, 'wireframe').listen().onChange(function(e){
+        if(controls.wireframe){
+        	objectMaterial.wireframe = true;
+        }
+        else{
+        	objectMaterial.wireframe = false;
+        }
+    });
     guiFolder.add(controls, 'type', ['Tetrahedron','Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e){
         controls.choosePoligon();
     });
@@ -168,8 +171,8 @@ function main(){
     {
         var geometry = new THREE.TetrahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
-        object.castShadow = true;
         object.position.set(0.0, radius, 0.0);
+        object.rotation.z = 45;
         object.visible = false;
         object.name = "Tetrahedron";
         objectArray.push(object);
@@ -181,7 +184,6 @@ function main(){
     {
         let geometry = new THREE.BoxGeometry(s, s, s);
         let object = new THREE.Mesh(geometry, objectMaterial);
-        object.castShadow = true;
         object.position.set(0.0, s/2.0, 0.0);
         object.visible = false;
         object.name = "Cube";
@@ -194,7 +196,6 @@ function main(){
     {
         var geometry = new THREE.OctahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
-        object.castShadow = true;
         object.position.set(0.0, radius, 0.0);
         object.visible = false;
         object.name = "Octahedro";
@@ -207,7 +208,6 @@ function main(){
     {
         var geometry = new THREE.DodecahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
-        object.castShadow = true;
         object.position.set(0.0, radius, 0.0);
         object.visible = false;
         object.name = "Dodecahedron";
@@ -220,7 +220,6 @@ function main(){
     {
         let geometry = new THREE.IcosahedronGeometry(radius, detail);
         let object = new THREE.Mesh(geometry, objectMaterial);
-        object.castShadow = true;
         object.position.set(0.0, radius, 0.0);
         object.visible = false;
         object.name = "Icosahedron";
@@ -258,9 +257,12 @@ function main(){
         //onResize();
 
         // Esse timeout força a interface de AR se redimensionar com base no tempo passado
-        setTimeout(() => {
+        /*setTimeout(() => {
             onResize()
         }, 25);
+        */
+
+       setTimeout(onResize, 100);
     });
 
 	// handle resize
@@ -289,8 +291,8 @@ function main(){
 		// tune the maximum rate of pose detection in the source image
 		//maxDetectionRate: 60,
 		// resolution of at which we detect pose in the source image
-		canvasWidth: window.innerWidth,	//640
-		canvasHeight: window.innerHeight,	//480
+		// canvasWidth: window.innerWidth,	//640
+		// canvasHeight: window.innerHeight,	//480
 
 		// debug - true if one should display artoolkit debug canvas, false otherwise
 		//debug: false,
@@ -303,7 +305,8 @@ function main(){
 	// initialize it
 	arToolkitContext.init(function onCompleted(){
 		// copy projection matrix to camera
-		camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+        camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+        onResize();     // TESTE
 	});
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -323,7 +326,7 @@ function main(){
 	scene.visible = false;
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		render the whole thing on the page
+	//		Rendering of camera and solids
 	//////////////////////////////////////////////////////////////////////////////////
 
 	function updateAR(){
@@ -337,12 +340,7 @@ function main(){
 
 	render();
     function render() {
-		updateAR();
-        stats.update();
-        // Rotating the mesh selected
-        controls.mesh.rotation.x += controls.rotation;
-        controls.mesh.rotation.y += controls.rotation;
-        controls.mesh.rotation.z += controls.rotation;
+        updateAR();
         renderer.render(scene, camera);
         requestAnimationFrame(render);
     }
