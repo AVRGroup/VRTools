@@ -31,8 +31,8 @@ function main(){
 	renderer.domElement.style.position = 'absolute';
 	renderer.domElement.style.top = '0px';
 	renderer.domElement.style.left = '0px';
-    renderer.setSize(window.innerWidth, window.innerHeight);
-	//renderer.setSize( 640, 480 );
+	renderer.setSize( 640, 480 );
+    //renderer.setSize(window.innerWidth, window.innerHeight);
 
 	// Adiciona a saída do renderizador para um elemento da página HTML
 	document.getElementById("webgl-output").appendChild(renderer.domElement);	//document.body.appendChild( renderer.domElement );

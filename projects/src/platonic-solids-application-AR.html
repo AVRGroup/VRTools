@@ -3,7 +3,11 @@
     <head>
         <title>Platonic Solids</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Tag that adapt the dimensions(width, height) of interface for mobile devices:
+            https://developer.mozilla.org/pt-BR/docs/Mozilla/Mobile/Viewport_meta_tag
+        -->
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
         <style>
             body {
                 margin: 0;
@@ -43,13 +47,12 @@
     </head>
 
     <body>
-
-        <!-- Open the application on another tab -->
-        
         <div id="webgl-output" ></div>
         <script type="text/javascript"> 
             main();
         </script>
+
+        <!-- Open the application on another tab -->
         <a id="newWindow" href="./platonic-solids-application-AR.html" target="_blank">Open in New Window</a>
     </body>
 
