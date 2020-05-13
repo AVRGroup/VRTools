@@ -6,17 +6,14 @@ function main(){
 	// use the defaults
     var scene = new THREE.Scene();                  // Create main scene
 	var camera = new THREE.Camera();
-	scene.add(camera);
+    scene.add(camera);
+    
 
-    var clock = new THREE.Clock();
-    //var light = initDefaultLighting(scene, new THREE.Vector3(2.2, 4.4, 0));  // Use default light
-
+    // Default Light
     var dirLight = new THREE.DirectionalLight(0xffffff);
     dirLight.position = new THREE.Vector3(2.2, 4.4, 0);
     dirLight.castShadow = false;
-
     scene.add(dirLight);
-
     var ambientLight = new THREE.AmbientLight(0x343434);
     ambientLight.name = "ambientLight";
     scene.add(ambientLight);
@@ -31,37 +28,37 @@ function main(){
 	renderer.domElement.style.position = 'absolute';
 	renderer.domElement.style.top = '0px';
 	renderer.domElement.style.left = '0px';
-	renderer.setSize( 640, 480 );
-    //renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);  //Improve Ratio of pixel in function of the of device
+    renderer.setSize( window.innerWidth, window.innerHeight );  //640, 480
 
-	// Adiciona a saída do renderizador para um elemento da página HTML
-	document.getElementById("webgl-output").appendChild(renderer.domElement);	//document.body.appendChild( renderer.domElement );
-	
+    // Adiciona a saída do renderizador para um elemento da página HTML
+    document.getElementById("webgl-output").appendChild(renderer.domElement);
+    
 	// Show axes (parameter is size of each axis)
     var axes = new THREE.AxesHelper(0.8);
     axes.name = "AXES";
     axes.visible = false;
     scene.add(axes);
-
-    /* Generate a plane above the solids */
-    /*var groundPlane = createGroundPlane(1, 1); // width and height
-    groundPlane.rotateX(degreesToRadians(-90));
-	scene.add(groundPlane);*/   
 	
-	// Object Material for all objects
-    var objectMaterial = new THREE.MeshNormalMaterial({color:"rgb(255, 0, 0)"});//new THREE.MeshPhongMaterial({color:"rgb(255, 0, 0)"});
+	// Object Material for all objects -- MeshNormalMaterial
+    var objectMaterial = new THREE.MeshBasicMaterial({color:"rgb(255, 0, 0)"});
     objectMaterial.side = THREE.DoubleSide;     
+
+    // Height of objects
+    var heightObjects = 0.35;   //0.25
 
     // Add objects to scene
     var objectArray = new Array();
-    scene.add(createTetrahedron(0.28, 0));
-    scene.add(createCube(0.28));
-    scene.add(createOctahedron(0.28, 0));
-    scene.add(createDodecahedron(0.28, 0));
-    scene.add(createIcosahedron(0.28, 0));
-    
-    // Position of the cube
-	objectArray[1].position.y = 0.25;
+
+    criationObjects();
+
+    function criationObjects(){
+        scene.add(createTetrahedron(0.28, 0));
+        scene.add(createCube(0.28));
+        scene.add(createOctahedron(0.28, 0));
+        scene.add(createDodecahedron(0.28, 0));
+        scene.add(createIcosahedron(0.28, 0));
+    }
 	
 	// Controls of sidebar
     var controls = new function () {
@@ -106,6 +103,9 @@ function main(){
             }
             objectArray[this.meshNumber].visible = true;
             this.mesh = objectArray[this.meshNumber];
+            if(this.wireframe){
+                controls.mesh.children[0].visible = false;      //Black line
+            }
         }
 
         this.updateColor = function(){
@@ -114,30 +114,21 @@ function main(){
                 scene.remove(objectArray[i]);
             }
             objectArray = new Array();
-            objectMaterial = new THREE.MeshNormalMaterial({color:controls.color});//new THREE.MeshPhongMaterial({color:controls.color})
-            // Setting the material with new color
-
+            objectMaterial = new THREE.MeshBasicMaterial({color:controls.color});
             objectMaterial.side = THREE.DoubleSide;
             
             // Recreating those objects
-            scene.add(createTetrahedron(0.28, 0));
-            scene.add(createCube(0.28));
-            scene.add(createOctahedron(0.28, 0));
-            scene.add(createDodecahedron(0.28, 0));
-            scene.add(createIcosahedron(0.28, 0));
+            criationObjects();
             
-            // Position of the cube
-            objectArray[1].position.y = 0.25;
-
             controls.choosePoligon();
         }
 	}
 	
 	// GUI de controle e ajuste de valores especificos da geometria do objeto
-	var gui = new dat.GUI();
+    var gui = new dat.GUI();
 
     var guiFolder = gui.addFolder("Properties");
-    guiFolder.open();                                       // Open the folder
+    //guiFolder.open();                                       // Open the folder
     guiFolder.add(controls, "axes").listen().onChange(function(e){
         if(controls.axes){
         	axes.visible = true;
@@ -154,10 +145,12 @@ function main(){
     });
     guiFolder.add(controls, 'wireframe').listen().onChange(function(e){
         if(controls.wireframe){
-        	objectMaterial.wireframe = true;
+            objectMaterial.wireframe = true;
+            controls.mesh.children[0].visible = false;      //Black line
         }
         else{
-        	objectMaterial.wireframe = false;
+            objectMaterial.wireframe = false;
+            controls.mesh.children[0].visible = true;
         }
     });
     guiFolder.add(controls, 'type', ['Tetrahedron','Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e){
@@ -171,10 +164,19 @@ function main(){
     {
         var geometry = new THREE.TetrahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
-        object.position.set(0.0, radius, 0.0);
-        object.rotation.z = 45;
+        object.position.set(0.0, heightObjects, 0.0);
+        object.rotation.y = 10;
         object.visible = false;
         object.name = "Tetrahedron";
+
+        // Border -- Black line
+        var geo = new THREE.EdgesGeometry( object.geometry );
+        var mat = new THREE.LineBasicMaterial( { color: 0x000000, transparent: true, opacity: 0.4 } );
+        var borderLine = new THREE.LineSegments( geo, mat );
+        borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
+        borderLine.name = "borderLine";
+        object.add( borderLine );
+
         objectArray.push(object);
         return object;
     }
@@ -184,9 +186,18 @@ function main(){
     {
         let geometry = new THREE.BoxGeometry(s, s, s);
         let object = new THREE.Mesh(geometry, objectMaterial);
-        object.position.set(0.0, s/2.0, 0.0);
+        object.position.set(0.0, heightObjects, 0.0);
         object.visible = false;
         object.name = "Cube";
+
+        // Border
+        var geo = new THREE.EdgesGeometry( object.geometry );
+        var mat = new THREE.LineBasicMaterial( { color: 0x000000, transparent: true, opacity: 0.4 } );
+        var borderLine = new THREE.LineSegments( geo, mat );
+        borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
+        borderLine.name = "borderLine";
+        object.add( borderLine );
+
         objectArray.push(object);
         return object;
     }
@@ -196,9 +207,18 @@ function main(){
     {
         var geometry = new THREE.OctahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
-        object.position.set(0.0, radius, 0.0);
+        object.position.set(0.0, heightObjects, 0.0);
         object.visible = false;
         object.name = "Octahedro";
+
+        // Border
+        var geo = new THREE.EdgesGeometry( object.geometry );
+        var mat = new THREE.LineBasicMaterial( { color: 0x000000, transparent: true, opacity: 0.4 });
+        var borderLine = new THREE.LineSegments( geo, mat );
+        borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
+        borderLine.name = "borderLine";
+        object.add( borderLine );
+
         objectArray.push(object);
         return object;
     }
@@ -208,9 +228,18 @@ function main(){
     {
         var geometry = new THREE.DodecahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
-        object.position.set(0.0, radius, 0.0);
+        object.position.set(0.0, heightObjects, 0.0);
         object.visible = false;
         object.name = "Dodecahedron";
+
+        // Border
+        var geo = new THREE.EdgesGeometry( object.geometry );
+        var mat = new THREE.LineBasicMaterial( { color: 0x000000, transparent: true, opacity: 0.4 } );
+        var borderLine = new THREE.LineSegments( geo, mat );
+        borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
+        borderLine.name = "borderLine";
+        object.add( borderLine );
+
         objectArray.push(object);
         return object;
     }
@@ -220,9 +249,18 @@ function main(){
     {
         let geometry = new THREE.IcosahedronGeometry(radius, detail);
         let object = new THREE.Mesh(geometry, objectMaterial);
-        object.position.set(0.0, radius, 0.0);
+        object.position.set(0.0, heightObjects, 0.0);
         object.visible = false;
         object.name = "Icosahedron";
+
+        // Border
+        var geo = new THREE.EdgesGeometry( object.geometry );
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
+        var borderLine = new THREE.LineSegments( geo, mat );
+        borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
+        borderLine.name = "borderLine";
+        object.add( borderLine );
+
         objectArray.push(object);
         return object;
     }
@@ -254,15 +292,8 @@ function main(){
 	})
 
 	arToolkitSource.init(function onReady(){
-        //onResize();
-
-        // Esse timeout força a interface de AR se redimensionar com base no tempo passado
-        /*setTimeout(() => {
-            onResize()
-        }, 25);
-        */
-
-       setTimeout(onResize, 100);
+       // Esse timeout força a interface de AR se redimensionar com base no tempo passado
+       setTimeout(onResize, 1000);
     });
 
 	// handle resize
@@ -275,7 +306,7 @@ function main(){
 		arToolkitSource.copyElementSizeTo(renderer.domElement);
 		if( arToolkitContext.arController !== null ){
 			arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
-		}
+        }
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////
@@ -306,7 +337,6 @@ function main(){
 	arToolkitContext.init(function onCompleted(){
 		// copy projection matrix to camera
         camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
-        onResize();     // TESTE
 	});
 
 	////////////////////////////////////////////////////////////////////////////////
