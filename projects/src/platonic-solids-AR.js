@@ -121,6 +121,20 @@ function main(){
             criationObjects();
             
             controls.choosePoligon();
+
+            // Correcting if the wireframe option is tick
+            this.wireframeController();
+        }
+
+        this.wireframeController = function(){
+            if(this.wireframe){
+                objectMaterial.wireframe = true;
+                this.mesh.children[0].visible = false;      //Black line
+            }
+            else{
+                objectMaterial.wireframe = false;
+                this.mesh.children[0].visible = true;
+            }
         }
 	}
 	
@@ -144,14 +158,7 @@ function main(){
         controls.updateColor();
     });
     guiFolder.add(controls, 'wireframe').listen().onChange(function(e){
-        if(controls.wireframe){
-            objectMaterial.wireframe = true;
-            controls.mesh.children[0].visible = false;      //Black line
-        }
-        else{
-            objectMaterial.wireframe = false;
-            controls.mesh.children[0].visible = true;
-        }
+        controls.wireframeController();
     });
     guiFolder.add(controls, 'type', ['Tetrahedron','Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e){
         controls.choosePoligon();
