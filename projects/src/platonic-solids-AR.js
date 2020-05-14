@@ -216,9 +216,6 @@ function main(){
         let geometry = new THREE.BoxGeometry(s, s, s);
         let object = new THREE.Mesh(geometry, objectMaterial);
         object.position.set(0.0, s/2, 0.0);
-        //object.rotation.x = 2;          // in Radians
-        //object.rotation.y = 1;
-        //
         object.visible = false;
         object.name = "Cube";
 
@@ -384,9 +381,6 @@ function main(){
 		// as we controls the camera, set changeMatrixMode: 'cameraTransformMatrix'
 		changeMatrixMode: 'cameraTransformMatrix'
     });
-    
-    console.log(arToolkitContext);
-    console.log(arToolkitSource);
 
 	// as we do changeMatrixMode: 'cameraTransformMatrix', start with invisible scene
 	scene.visible = false;
