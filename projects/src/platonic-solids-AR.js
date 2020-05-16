@@ -1,13 +1,13 @@
-function main(){
-	//////////////////////////////////////////////////////////////////////////////////
-	//		Init
-	//////////////////////////////////////////////////////////////////////////////////
+function main() {
+    //////////////////////////////////////////////////////////////////////////////////
+    //		Init
+    //////////////////////////////////////////////////////////////////////////////////
 
-	// use the defaults
-    var scene = new THREE.Scene();                  // Create main scene
-	var camera = new THREE.Camera();
+    // use the defaults
+    var scene = new THREE.Scene(); // Create main scene
+    var camera = new THREE.Camera();
     scene.add(camera);
-    
+
 
     // Default Light
     var dirLight = new THREE.DirectionalLight(0xffffff);
@@ -18,23 +18,23 @@ function main(){
     ambientLight.name = "ambientLight";
     scene.add(ambientLight);
 
-	// init renderer
-	var renderer	= new THREE.WebGLRenderer({
-		antialias: true,
-		alpha: true
+    // init renderer
+    var renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true
     });
     renderer.setClearColor(new THREE.Color('lightgrey'), 0);
-	
-	renderer.domElement.style.position = 'absolute';
-	renderer.domElement.style.top = '0px';
-	renderer.domElement.style.left = '0px';
-    renderer.setPixelRatio(window.devicePixelRatio);  //Improve Ratio of pixel in function of the of device
-    renderer.setSize(window.innerWidth, window.innerHeight);  //640, 480
+
+    renderer.domElement.style.position = 'absolute';
+    renderer.domElement.style.top = '0px';
+    renderer.domElement.style.left = '0px';
+    renderer.setPixelRatio(window.devicePixelRatio); //Improve Ratio of pixel in function of the of device
+    renderer.setSize(window.innerWidth, window.innerHeight); //640, 480
 
     // Adiciona a saída do renderizador para um elemento da página HTML
     document.getElementById("webgl-output").appendChild(renderer.domElement);
-    
-	// Show axes (parameter is size of each axis)
+
+    // Show axes (parameter is size of each axis)
     var axes = new THREE.AxesHelper(0.8);
     axes.name = "AXES";
     axes.visible = false;
@@ -43,37 +43,29 @@ function main(){
     /*var groundPlane = createGroundPlane(1, 1,0); // width and height
     groundPlane.rotateX(degreesToRadians(-90));
 	scene.add(groundPlane);*/
-	
-	// Object Material for all objects -- MeshNormalMaterial
-    var objectMaterial = new THREE.MeshBasicMaterial({color:"rgb(255, 0, 0)"});
-    objectMaterial.side = THREE.DoubleSide;     
+
+    // Object Material for all objects -- MeshNormalMaterial
+    var objectMaterial = new THREE.MeshBasicMaterial({ color: "rgb(255, 0, 0)" });
+    objectMaterial.side = THREE.DoubleSide;
 
     // Add objects to scene
     var objectArray = new Array();
 
     criationObjects();
 
-    function criationObjects(){
+    function criationObjects() {
         scene.add(createTetrahedron(0.35, 0));
         scene.add(createCube(0.50));
         scene.add(createOctahedron(0.28, 0));
         scene.add(createDodecahedron(0.28, 0));
         scene.add(createIcosahedron(0.28, 0));
     }
-	
-	// Controls of sidebar
-    var controls = new function () {
+
+    // Controls of sidebar
+    var controls = new function() {
 
         // Axes
         this.axes = false;
-        this.axesSize = 0.8;
-
-        this.updateAxes = function(){
-            scene.remove(axes);                                 //Remove o eixo antigo
-            axes = new THREE.AxesHelper(controls.axesSize);
-            axes.visible = this.axes;
-            scene.add(axes);
-        }
 
         this.wireframe = false;
         this.color = "rgb(255, 0, 0)";
@@ -87,8 +79,9 @@ function main(){
         this.mesh = objectArray[0];
         this.meshNumber = 0;
         this.type = 'Tetrahedron';
+        this.size = 1.0
 
-        this.choosePoligon = function(){
+        this.choosePoligon = function() {
             objectArray[this.meshNumber].visible = false;
             switch (this.type) {
                 case 'Tetrahedron':
@@ -109,56 +102,60 @@ function main(){
             }
             objectArray[this.meshNumber].visible = true;
             this.mesh = objectArray[this.meshNumber];
-            if(this.wireframe){
-                controls.mesh.children[0].visible = false;      //Black line
+            if (this.wireframe) {
+                controls.mesh.children[0].visible = false; //Black line
             }
         }
 
-        this.updateColor = function(){
+        this.resizePoligon = function() {
+            const poligon = objectArray[this.meshNumber]
+            const radius = poligon.name === "Cube" ? poligon.geometry.parameters.height : poligon.geometry.parameters.radius
+
+            poligon.scale.set(this.size, this.size, this.size)
+                // console.log(poligon)
+            poligon.position.y = radius * this.size * 1.1
+        }
+
+        this.updateColor = function() {
             // removing the objects with the old material color
-            for(let i = 0; i < objectArray.length; i++){            
+            for (let i = 0; i < objectArray.length; i++) {
                 scene.remove(objectArray[i]);
             }
             objectArray = new Array();
-            objectMaterial = new THREE.MeshBasicMaterial({color:controls.color});
+            objectMaterial = new THREE.MeshBasicMaterial({ color: controls.color });
             objectMaterial.side = THREE.DoubleSide;
-            
+
             // Recreating those objects
             criationObjects();
-            
+
             controls.choosePoligon();
 
             // Correcting if the wireframe option is tick
             this.wireframeController();
         }
 
-        this.wireframeController = function(){
-            if(this.wireframe){
+        this.wireframeController = function() {
+            if (this.wireframe) {
                 objectMaterial.wireframe = true;
-                this.mesh.children[0].visible = false;      //Black line
-            }
-            else{
+                this.mesh.children[0].visible = false; //Black line
+            } else {
                 objectMaterial.wireframe = false;
                 this.mesh.children[0].visible = true;
             }
         }
-	}
-	
-	// GUI de controle e ajuste de valores especificos da geometria do objeto
+    }
+
+    // GUI de controle e ajuste de valores especificos da geometria do objeto
     var gui = new dat.GUI();
 
     var guiFolder = gui.addFolder("Properties");
     //guiFolder.open();                                       // Open the folder
-    guiFolder.add(controls, "axes").listen().onChange(function(e){
-        if(controls.axes){
-        	axes.visible = true;
+    guiFolder.add(controls, "axes").listen().onChange(function(e) {
+        if (controls.axes) {
+            axes.visible = true;
+        } else {
+            axes.visible = false;
         }
-        else{
-        	axes.visible = false;
-        }
-    });
-    guiFolder.add(controls, "axesSize", 0.1, 3).listen().onChange(function(e){
-         controls.updateAxes();
     });
 
     /*guiFolder.add(controls, "rotX", -60, 60).listen().onChange(function(e){
@@ -171,24 +168,26 @@ function main(){
         controls.mesh.rotation.z = (degreesToRadians(controls.rotZ));
     });*/
 
-    guiFolder.addColor(controls, 'color').onChange(function(e){
+    guiFolder.addColor(controls, 'color').onChange(function(e) {
         controls.updateColor();
     });
-    guiFolder.add(controls, 'wireframe').listen().onChange(function(e){
+    guiFolder.add(controls, 'wireframe').listen().onChange(function(e) {
         controls.wireframeController();
     });
-    guiFolder.add(controls, 'type', ['Tetrahedron','Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e){
+    guiFolder.add(controls, 'type', ['Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e) {
         controls.choosePoligon();
     });
+    guiFolder.add(controls, 'size', 0.5, 1.5).listen().onChange(function(e) {
+        controls.resizePoligon()
+    })
 
-    controls.choosePoligon();               // Update de selection of the polygon
+    controls.choosePoligon(); // Update de selection of the polygon
 
     // 4 faces
-    function createTetrahedron(radius, detail)
-    {
+    function createTetrahedron(radius, detail) {
         var geometry = new THREE.TetrahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
-        object.position.set(0.0, radius/3, 0.0);      //Color Axe (Red, Green, Blue)
+        object.position.set(0.0, radius / 3, 0.0); //Color Axe (Red, Green, Blue)
 
         //Set rotation
         object.rotation.x = degreesToRadians(-41.12);
@@ -199,41 +198,39 @@ function main(){
         object.name = "Tetrahedron";
 
         // Border -- Black line
-        var geo = new THREE.EdgesGeometry( object.geometry );
-        var mat = new THREE.LineBasicMaterial( { color: 0x000000, transparent: true, opacity: 0.4 } );
-        var borderLine = new THREE.LineSegments( geo, mat );
+        var geo = new THREE.EdgesGeometry(object.geometry);
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
+        var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
-        object.add( borderLine );
+        object.add(borderLine);
 
         objectArray.push(object);
         return object;
     }
 
     // 6 faces
-    function createCube(s)
-    {
+    function createCube(s) {
         let geometry = new THREE.BoxGeometry(s, s, s);
         let object = new THREE.Mesh(geometry, objectMaterial);
-        object.position.set(0.0, s/2, 0.0);
+        object.position.set(0.0, s / 2, 0.0);
         object.visible = false;
         object.name = "Cube";
 
         // Border
-        var geo = new THREE.EdgesGeometry( object.geometry );
-        var mat = new THREE.LineBasicMaterial( { color: 0x000000, transparent: true, opacity: 0.4});
-        var borderLine = new THREE.LineSegments( geo, mat );
+        var geo = new THREE.EdgesGeometry(object.geometry);
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
+        var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
-        object.add( borderLine );
+        object.add(borderLine);
 
         objectArray.push(object);
         return object;
     }
 
     // 8 faces
-    function createOctahedron(radius, detail)
-    {
+    function createOctahedron(radius, detail) {
         var geometry = new THREE.OctahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
         object.position.set(0.0, radius, 0.0);
@@ -241,20 +238,19 @@ function main(){
         object.name = "Octahedro";
 
         // Border
-        var geo = new THREE.EdgesGeometry( object.geometry );
-        var mat = new THREE.LineBasicMaterial( { color: 0x000000, transparent: true, opacity: 0.4 });
-        var borderLine = new THREE.LineSegments( geo, mat );
+        var geo = new THREE.EdgesGeometry(object.geometry);
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
+        var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
-        object.add( borderLine );
+        object.add(borderLine);
 
         objectArray.push(object);
         return object;
     }
 
     // 12 faces
-    function createDodecahedron(radius, detail)
-    {
+    function createDodecahedron(radius, detail) {
         var geometry = new THREE.DodecahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
         object.position.set(0.0, radius, 0.0);
@@ -262,20 +258,19 @@ function main(){
         object.name = "Dodecahedron";
 
         // Border
-        var geo = new THREE.EdgesGeometry( object.geometry );
-        var mat = new THREE.LineBasicMaterial( { color: 0x000000, transparent: true, opacity: 0.4 } );
-        var borderLine = new THREE.LineSegments( geo, mat );
+        var geo = new THREE.EdgesGeometry(object.geometry);
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
+        var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
-        object.add( borderLine );
+        object.add(borderLine);
 
         objectArray.push(object);
         return object;
     }
 
     // 20 faces
-    function createIcosahedron(radius, detail)
-    {
+    function createIcosahedron(radius, detail) {
         let geometry = new THREE.IcosahedronGeometry(radius, detail);
         let object = new THREE.Mesh(geometry, objectMaterial);
         object.position.set(0.0, radius - 0.05, 0.0);
@@ -283,122 +278,123 @@ function main(){
         object.name = "Icosahedron";
 
         // Border
-        var geo = new THREE.EdgesGeometry( object.geometry );
+        var geo = new THREE.EdgesGeometry(object.geometry);
         var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
-        var borderLine = new THREE.LineSegments( geo, mat );
+        var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
-        object.add( borderLine );
+        object.add(borderLine);
 
         objectArray.push(object);
         return object;
     }
-    
 
-	////////////////////////////////////////////////////////////////////////////////
-	//          Handler arToolkitSource
-	////////////////////////////////////////////////////////////////////////////////
 
-	var arToolkitSource = new THREEx.ArToolkitSource({
-		// to read from the webcam
-		sourceType : 'webcam',
+    ////////////////////////////////////////////////////////////////////////////////
+    //          Handler arToolkitSource
+    ////////////////////////////////////////////////////////////////////////////////
 
-		// // to read from an image
-		// sourceType : 'image',
-		// sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/images/img.jpg',
+    var arToolkitSource = new THREEx.ArToolkitSource({
+        // to read from the webcam
+        sourceType: 'webcam',
 
-		// to read from a video
-		// sourceType : 'video',
-		// sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/videos/headtracking.mp4',
+        // // to read from an image
+        // sourceType : 'image',
+        // sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/images/img.jpg',
 
-		// resolution of at which we initialize the source image
-		//sourceWidth: 640,   //640
-		//sourceHeight: 480,  // 480
+        // to read from a video
+        // sourceType : 'video',
+        // sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/videos/headtracking.mp4',
 
-		// resolution displayed for the source
-		//displayWidth: 640,  //window.innerWidth,
+        // resolution of at which we initialize the source image
+        //sourceWidth: 640,   //640
+        //sourceHeight: 480,  // 480
+
+        // resolution displayed for the source
+        //displayWidth: 640,  //window.innerWidth,
         //displayHeight: 480//window.innerHeight
-        
-	})
 
-	arToolkitSource.init(function onReady(){
-       // Esse timeout força a interface de AR se redimensionar com base no tempo passado
-       setTimeout(onResize, 1000);
+    })
+
+    arToolkitSource.init(function onReady() {
+        // Esse timeout força a interface de AR se redimensionar com base no tempo passado
+        setTimeout(onResize, 1000);
     });
 
-	// handle resize
-	window.addEventListener('resize', function(){
-		onResize();
-	});
+    // handle resize
+    window.addEventListener('resize', function() {
+        onResize();
+    });
 
-	function onResize(){
-		arToolkitSource.onResizeElement();
-		arToolkitSource.copyElementSizeTo(renderer.domElement);
-		if( arToolkitContext.arController !== null ){
-			arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
+    function onResize() {
+        arToolkitSource.onResizeElement();
+        arToolkitSource.copyElementSizeTo(renderer.domElement);
+        if (arToolkitContext.arController !== null) {
+            arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
         }
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////
-	//          initialize arToolkitContext
-	////////////////////////////////////////////////////////////////////////////////
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //          initialize arToolkitContext
+    ////////////////////////////////////////////////////////////////////////////////
 
 
-	// create atToolkitContext
-	var arToolkitContext = new THREEx.ArToolkitContext({
-		cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/data/camera_para.dat',
-		detectionMode: 'mono',
+    // create atToolkitContext
+    var arToolkitContext = new THREEx.ArToolkitContext({
+        cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/data/camera_para.dat',
+        detectionMode: 'mono',
 
-		// tune the maximum rate of pose detection in the source image
-		//maxDetectionRate: 60,
-		// resolution of at which we detect pose in the source image
-		// canvasWidth: window.innerWidth,	//640
-		// canvasHeight: window.innerHeight,	//480
+        // tune the maximum rate of pose detection in the source image
+        //maxDetectionRate: 60,
+        // resolution of at which we detect pose in the source image
+        // canvasWidth: window.innerWidth,	//640
+        // canvasHeight: window.innerHeight,	//480
 
-		// debug - true if one should display artoolkit debug canvas, false otherwise
-		//debug: false,
+        // debug - true if one should display artoolkit debug canvas, false otherwise
+        //debug: false,
 
-		// enable image smoothing or not for canvas copy - default to true
-		// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled
-		// imageSmoothingEnabled : true,
-	})
+        // enable image smoothing or not for canvas copy - default to true
+        // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled
+        // imageSmoothingEnabled : true,
+    })
 
-	// initialize it
-	arToolkitContext.init(function onCompleted(){
-		// copy projection matrix to camera
-        camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
-	});
-
-	////////////////////////////////////////////////////////////////////////////////
-	//          Create a ArMarkerControls
-	////////////////////////////////////////////////////////////////////////////////
-
-	// init controls for camera
-	var markerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
-		type : 'pattern',
-		patternUrl : THREEx.ArToolkitContext.baseURL + 'data/data/patt.hiro',
-		// patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji',
-		// as we controls the camera, set changeMatrixMode: 'cameraTransformMatrix'
-		changeMatrixMode: 'cameraTransformMatrix'
+    // initialize it
+    arToolkitContext.init(function onCompleted() {
+        // copy projection matrix to camera
+        camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
     });
 
-	// as we do changeMatrixMode: 'cameraTransformMatrix', start with invisible scene
-	scene.visible = false;
+    ////////////////////////////////////////////////////////////////////////////////
+    //          Create a ArMarkerControls
+    ////////////////////////////////////////////////////////////////////////////////
 
-	//////////////////////////////////////////////////////////////////////////////////
-	//		Rendering of camera and solids
-	//////////////////////////////////////////////////////////////////////////////////
+    // init controls for camera
+    var markerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
+        type: 'pattern',
+        patternUrl: THREEx.ArToolkitContext.baseURL + 'data/data/patt.hiro',
+        // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji',
+        // as we controls the camera, set changeMatrixMode: 'cameraTransformMatrix'
+        changeMatrixMode: 'cameraTransformMatrix'
+    });
 
-	function updateAR(){
-		if( arToolkitSource.ready === false )	return;
+    // as we do changeMatrixMode: 'cameraTransformMatrix', start with invisible scene
+    scene.visible = false;
 
-		arToolkitContext.update( arToolkitSource.domElement );
+    //////////////////////////////////////////////////////////////////////////////////
+    //		Rendering of camera and solids
+    //////////////////////////////////////////////////////////////////////////////////
 
-		// update scene.visible if the marker is seen
-		scene.visible = camera.visible;
-	}
+    function updateAR() {
+        if (arToolkitSource.ready === false) return;
 
-	render();
+        arToolkitContext.update(arToolkitSource.domElement);
+
+        // update scene.visible if the marker is seen
+        scene.visible = camera.visible;
+    }
+
+    render();
+
     function render() {
         updateAR();
         renderer.render(scene, camera);
