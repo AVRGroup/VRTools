@@ -29,16 +29,7 @@
             bottom: 0em;
             left: 0.4em;
             color: #fff;
-            background-color: #000;
-        }
-        
-        #newWindowAR {
-            display: block;
-            position: absolute;
-            bottom: 0em;
-            right: 0.4em;
-            color: #fff;
-            background-color: #000;
+            text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
         }
     </style>
 
@@ -59,8 +50,10 @@
 <body>
 
     <!-- Open the application on another tab -->
-    <a id="newWindow" href="./platonic-solids-application.html" target="_blank">Open in New Window</a>
-    <a id="newWindowAR" href="./platonic-solids-application-AR.html" target="_blank">Open in Augmented Reality</a>
+    <div id="newWindow">
+        <p><a id="" href="./platonic-solids-application.html" target="_blank">Open in New Window</a></p>
+        <p><a id="" href="./platonic-solids-application-AR.html" target="_blank">Open in Augmented Reality</a></p>
+    </div>
     <div id="webgl-output"></div>
     <script type="text/javascript">
         (function() {
