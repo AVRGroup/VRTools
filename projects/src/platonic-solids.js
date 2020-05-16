@@ -1,16 +1,16 @@
-function init(){
+function init() {
     // use the defaults
-    var scene = new THREE.Scene();                  // Create main scene
-    var stats = initStats();                        // To show FPS information
-    var renderer = initRenderer();                  // View function in util/utils
+    var scene = new THREE.Scene(); // Create main scene
+    var stats = initStats(); // To show FPS information
+    var renderer = initRenderer(); // View function in util/utils
     //renderer.setClearColor("rgb(30, 30, 40)");
-    var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);    //var camera = initCamera(new THREE.Vector3(0, 10, 20));
+    var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); //var camera = initCamera(new THREE.Vector3(0, 10, 20));
     camera.lookAt(0, 0, 0);
     camera.position.set(5, 15, 30);
-    camera.up.set( 0, 1, 0 );
+    camera.up.set(0, 1, 0);
 
     var clock = new THREE.Clock();
-    var light = initDefaultLighting(scene, new THREE.Vector3(25, 30, 20));  // Use default light
+    var light = initDefaultLighting(scene, new THREE.Vector3(25, 30, 20)); // Use default light
 
     // Show axes (parameter is size of each axis)
     var axes = new THREE.AxesHelper(12);
@@ -20,13 +20,13 @@ function init(){
 
     var groundPlane = createGroundPlane(30, 30); // width and height
     groundPlane.rotateX(degreesToRadians(-90));
-    scene.add(groundPlane);    
+    scene.add(groundPlane);
 
     // Enable mouse rotation, pan, zoom etc.
     var trackballControls = initTrackballControls(camera, renderer);
 
     // Object Material for all objects
-    var objectMaterial = new THREE.MeshPhongMaterial({color:"rgb(255, 0, 0)"});
+    var objectMaterial = new THREE.MeshPhongMaterial({ color: "rgb(255, 0, 0)" });
 
     // Add objects to scene
     var objectArray = new Array();
@@ -35,7 +35,7 @@ function init(){
     scene.add(createOctahedron(4.0, 0));
     scene.add(createDodecahedron(4.0, 0));
     scene.add(createIcosahedron(4.0, 0));
-    
+
     // Position of the cube
     objectArray[1].position.y = 5;
 
@@ -43,21 +43,13 @@ function init(){
         this.rotation = 0.02;
         this.mesh;
     };*/
-    
+
     // Controls of sidebar
-    var controls = new function () {
+    var controls = new function() {
         var self = this;
 
         // Axes
         this.axes = false;
-        this.axesSize = 10;
-
-        this.updateAxes = function(){
-            scene.remove(axes);                                 //Remove o eixo antigo
-            axes = new THREE.AxesHelper(controls.axesSize);
-            axes.visible = this.axes;
-            scene.add(axes);
-        }
 
         // Inicia a geometria e material de base a serem controlados pelo menu interativo
         //this.appliedMaterial = applyMeshNormalMaterial;
@@ -74,8 +66,9 @@ function init(){
         this.radius = 10;
         this.detail = 0;
         this.type = 'Tetrahedron';
+        this.size = 1.0
 
-        this.choosePoligon = function(){
+        this.choosePoligon = function() {
             objectArray[this.meshNumber].visible = false;
             switch (this.type) {
                 case 'Tetrahedron':
@@ -98,22 +91,31 @@ function init(){
             this.mesh = objectArray[this.meshNumber];
         }
 
-        this.updateColor = function(){
+        this.resizePoligon = function() {
+            const poligon = objectArray[this.meshNumber]
+            const radius = poligon.name === "Cube" ? poligon.geometry.parameters.height : poligon.geometry.parameters.radius
+
+            poligon.scale.set(this.size, this.size, this.size)
+                // console.log(poligon)
+            poligon.position.y = radius * this.size * 1.1
+        }
+
+        this.updateColor = function() {
             // removing the objects with the old material color
-            for(let i = 0; i < objectArray.length; i++){            
+            for (let i = 0; i < objectArray.length; i++) {
                 //scene.remove(scene.getObjectByName("particles1"));
                 scene.remove(objectArray[i]);
             }
             objectArray = new Array();
-            objectMaterial = new THREE.MeshPhongMaterial({color:controls.color});   // Setting the material with new color
-            
+            objectMaterial = new THREE.MeshPhongMaterial({ color: controls.color }); // Setting the material with new color
+
             // Recreating those objects
             scene.add(createTetrahedron(4.0, 0));
             scene.add(createCube(5.0));
             scene.add(createOctahedron(4.0, 0));
             scene.add(createDodecahedron(4.0, 0));
             scene.add(createIcosahedron(4.0, 0));
-            
+
             // Position of the cube
             objectArray[1].position.y = 5;
 
@@ -125,38 +127,39 @@ function init(){
     var gui = new dat.GUI();
 
     var guiFolder = gui.addFolder("Properties");
-    guiFolder.open();                                       // Open the folder
-    guiFolder.add(controls, "axes").listen().onChange(function(e){
-        if(controls.axes){
-         axes.visible = true;
-        }
-        else{
-         axes.visible = false;
+    guiFolder.open(); // Open the folder
+    guiFolder.add(controls, "axes").listen().onChange(function(e) {
+        if (controls.axes) {
+            axes.visible = true;
+        } else {
+            axes.visible = false;
         }
     });
-    guiFolder.add(controls, "axesSize", 1, 40).listen().onChange(function(e){
-         controls.updateAxes();
-    });
-    guiFolder.add(controls, 'rotation', 0, 0.5);
+
+    guiFolder.add(controls, 'rotation', 0, 0.5).onChange();
     //gui.add(controls, 'radius', 0, 40).step(1).onChange(controls.redraw);
     //gui.add(controls, 'detail', 0, 3).step(1).onChange(controls.redraw);
-    guiFolder.addColor(controls, 'color').onChange(function(e){
+    guiFolder.addColor(controls, 'color').onChange(function(e) {
         controls.updateColor();
     });
 
-    guiFolder.add(controls, 'type', ['Tetrahedron','Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e){
+    guiFolder.add(controls, 'type', ['Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e) {
         controls.choosePoligon();
+        controls.resizePoligon()
     });
 
-    controls.choosePoligon();               // Update de selection of the polygon
+    gui.add(controls, 'size', 0.5, 1.5).listen().onChange(function(e) {
+        controls.resizePoligon()
+    })
+
+    controls.choosePoligon(); // Update de selection of the polygon
 
     // 4 faces
-    function createTetrahedron(radius, detail)
-    {
+    function createTetrahedron(radius, detail) {
         var geometry = new THREE.TetrahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
         object.castShadow = true;
-        object.position.set(0.0, radius, 0.0);
+        object.position.set(0.0, radius * 1.1, 0.0);
         object.visible = false;
         object.name = "Tetrahedron";
         objectArray.push(object);
@@ -164,12 +167,11 @@ function init(){
     }
 
     // 6 faces
-    function createCube(s)
-    {
+    function createCube(s) {
         let geometry = new THREE.BoxGeometry(s, s, s);
         let object = new THREE.Mesh(geometry, objectMaterial);
         object.castShadow = true;
-        object.position.set(0.0, s/2.0, 0.0);
+        object.position.set(0.0, s / 2.0, 0.0);
         object.visible = false;
         object.name = "Cube";
         objectArray.push(object);
@@ -177,8 +179,7 @@ function init(){
     }
 
     // 8 faces
-    function createOctahedron(radius, detail)
-    {
+    function createOctahedron(radius, detail) {
         var geometry = new THREE.OctahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
         object.castShadow = true;
@@ -190,8 +191,7 @@ function init(){
     }
 
     // 12 faces
-    function createDodecahedron(radius, detail)
-    {
+    function createDodecahedron(radius, detail) {
         var geometry = new THREE.DodecahedronGeometry(radius, detail);
         var object = new THREE.Mesh(geometry, objectMaterial);
         object.castShadow = true;
@@ -203,8 +203,7 @@ function init(){
     }
 
     // 20 faces
-    function createIcosahedron(radius, detail)
-    {
+    function createIcosahedron(radius, detail) {
         let geometry = new THREE.IcosahedronGeometry(radius, detail);
         let object = new THREE.Mesh(geometry, objectMaterial);
         object.castShadow = true;
@@ -214,9 +213,10 @@ function init(){
         objectArray.push(object);
         return object;
     }
-    
+
 
     render();
+
     function render() {
         stats.update();
         trackballControls.update(clock.getDelta());
