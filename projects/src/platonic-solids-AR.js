@@ -113,7 +113,7 @@ function main() {
 
             poligon.scale.set(this.size, this.size, this.size)
                 // console.log(poligon)
-            poligon.position.y = radius * this.size * 1.1
+            poligon.position.y = radius * this.size
         }
 
         this.updateColor = function() {
