@@ -112,8 +112,6 @@ function main() {
             const radius = poligon.name === "Cube" ? poligon.geometry.parameters.height : poligon.geometry.parameters.radius
 
             poligon.scale.set(this.size, this.size, this.size)
-                // console.log(poligon)
-            poligon.position.y = radius * this.size
         }
 
         this.updateColor = function() {
