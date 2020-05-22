@@ -174,6 +174,7 @@ function main() {
     });
     guiFolder.add(controls, 'type', ['Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e) {
         controls.choosePoligon();
+        controls.resizePoligon()
     });
     guiFolder.add(controls, 'size', 0.5, 2).listen().onChange(function(e) {
         controls.resizePoligon()
