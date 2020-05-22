@@ -148,7 +148,7 @@ function init() {
         controls.resizePoligon()
     });
 
-    gui.add(controls, 'size', 0.5, 1.5).listen().onChange(function(e) {
+    gui.add(controls, 'size', 0.5, 2).listen().onChange(function(e) {
         controls.resizePoligon()
     })
 
