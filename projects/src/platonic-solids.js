@@ -58,6 +58,7 @@ function init() {
 
         //Physics
         this.rotation = 0.02;
+        this.wireframe = false;
         this.color = "rgb(255, 0, 0)";
 
         // Geometry
@@ -66,7 +67,7 @@ function init() {
         this.radius = 10;
         this.detail = 0;
         this.type = 'Tetrahedron';
-        this.size = 1.0
+        this.size = 1.0;
 
         this.choosePoligon = function() {
             objectArray[this.meshNumber].visible = false;
@@ -120,6 +121,17 @@ function init() {
             objectArray[1].position.y = 5;
 
             controls.choosePoligon();
+
+            // Correcting if the wireframe option is tick
+            this.wireframeController();
+        }
+
+        this.wireframeController = function() {
+            if (this.wireframe) {
+                objectMaterial.wireframe = true;
+            } else {
+                objectMaterial.wireframe = false;
+            }
         }
     }
 
@@ -141,6 +153,10 @@ function init() {
     //gui.add(controls, 'detail', 0, 3).step(1).onChange(controls.redraw);
     guiFolder.addColor(controls, 'color').onChange(function(e) {
         controls.updateColor();
+    });
+
+    guiFolder.add(controls, 'wireframe').listen().onChange(function(e) {
+        controls.wireframeController();
     });
 
     guiFolder.add(controls, 'type', ['Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e) {
