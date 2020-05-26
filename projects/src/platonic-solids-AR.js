@@ -109,9 +109,25 @@ function main() {
 
         this.resizePoligon = function() {
             const poligon = objectArray[this.meshNumber]
-            const radius = poligon.name === "Cube" ? poligon.geometry.parameters.height : poligon.geometry.parameters.radius
+            const radius = this.type === "Cube" ? poligon.geometry.parameters.height : poligon.geometry.parameters.radius
 
             poligon.scale.set(this.size, this.size, this.size)
+
+            switch (this.type) {
+                case 'Tetrahedron':
+                    poligon.position.y = radius / 3 * this.size;
+                    break;
+                case 'Cube':
+                    poligon.position.y = radius / 2 * this.size;
+                    break;
+                case 'Octahedron':
+                case 'Dodecahedron':
+                    poligon.position.y = radius * this.size;
+                    break;
+                case 'Icosahedron':
+                    poligon.position.y = (radius - 0.05) * this.size;
+                    break;
+            }
         }
 
         this.updateColor = function() {
