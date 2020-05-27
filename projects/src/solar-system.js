@@ -14,48 +14,32 @@ function init() {
 
     var clock = new THREE.Clock();
     
-    // Light
-    /*var spotLight = new THREE.SpotLight(0xffffff);
-    //spotLight.position.set(10, 80, 150);
-    spotLight.shadow.mapSize.width = 2048;
-    spotLight.shadow.mapSize.height = 2048;
-    spotLight.shadow.camera.fov = 20;
-    spotLight.angle = Math.PI/2;
-    spotLight.castShadow = true;
-    spotLight.decay = 2;
-    spotLight.penumbra = 0.05;
-    spotLight.name = "spotLight"
-    scene.add(spotLight);*/
-    var light = new THREE.PointLight({
-        color: 0xffffff, 
-        intesity: 1, 
-        distance: 0,
-        decay: 2
-    });
-    light.position.set(-70, 0, 150 );
-    scene.add( light );
-
+    //  Setting the Lights
 
     var ambientLight = new THREE.AmbientLight(0x343434);
     ambientLight.name = "ambientLight";
     scene.add(ambientLight);
 
-    var spotLightSphereGeometry = new THREE.SphereGeometry(3, 50, 50);
-    var spotLightSphereMaterial = new THREE.MeshPhongMaterial({color: "white"});
-    var spotLightSphere = new THREE.Mesh(spotLightSphereGeometry, spotLightSphereMaterial);
-    //spotLightSphere.position.set(0, 0, 150);
-    //spotLightSphere.add(spotLight);
-    //spotLightSphere.position.copy(spotLight.position);
-    scene.add(spotLightSphere);
+    var pointlight = new THREE.PointLight({
+        color: 0xffffff, 
+        intesity: 1, 
+        distance: 0,
+        decay: 2
+    });
+    pointlight.position.set(-70, 0, 150 );
+    scene.add( pointlight );
 
-    console.log(spotLightSphere);
+    var pointLightSphereGeometry = new THREE.SphereGeometry(3, 50, 50);
+    var pointLightSphereMaterial = new THREE.MeshPhongMaterial({color: "white"});
+    var pointLightSphere = new THREE.Mesh(pointLightSphereGeometry, pointLightSphereMaterial);
+    pointLightSphere.position.copy(pointlight.position);
+    scene.add(pointLightSphere);
 
     // Show axes (parameter is size of each axis)
     var axes = new THREE.AxesHelper(80);
     axes.name = "AXES";
     axes.visible = false;
     scene.add(axes);
-    
 
     // Enable mouse rotation, pan, zoom etc.
     var trackballControls = initTrackballControls(camera, renderer);
@@ -73,33 +57,142 @@ function init() {
     skyBox.color =  "white";
     skyBox.castShadow = true;
     skyBox.receiveShadow = true;
-    
     scene.add(skyBox);
-    console.log(skyBox);
 
+    function createSolarObjects(objectArray){
+        // Sun
+        var sunMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("./assets/textures/space/sun.jpg"),  
+            normalScale: new THREE.Vector2(6, 6),
+        });
+        var sunGeometry = new THREE.SphereGeometry(12, 50, 50);
+        var sun = new THREE.Mesh(sunGeometry, sunMaterial);
+        sun.rotation.y = (1/6) * Math.PI;
+        objectArray.push(sun);
+        sun.visible = false;
+        scene.add(sun);
 
-    // Earth
-    var earthMaterial = new THREE.MeshPhongMaterial({
-        map: textureLoader.load("./assets/textures/space/Earth.jpg"),               // imagem da terra
-        normalMap: textureLoader.load("assets/textures/space/8k_earth_normal_map.tif"), // mapeamento das normais
-        specularMap: textureLoader.load("assets/textures/space/EarthSpec.tif"),     // mapeamento da luz especular(Reflexão)
-        normalScale: new THREE.Vector2(6, 6),
-        color: "white",
-    });
-    var earthGeometry = new THREE.SphereGeometry(12, 200, 200);
-    var earth = new THREE.Mesh(earthGeometry, earthMaterial);
-    
-    scene.add(earth);
+        // Mercury
+        var mercuryMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("./assets/textures/space/mercury.jpg"),         
+            normalScale: new THREE.Vector2(6, 6),
+        });
+        var mercuryGeometry = new THREE.SphereGeometry(12, 50, 50);
+        var mercury = new THREE.Mesh(mercuryGeometry, mercuryMaterial);
+        mercury.rotation.y = (1/6) * Math.PI;
+        objectArray.push(mercury);
+        mercury.visible = false;
+        scene.add(mercury);
 
-    earth.rotation.y = (1/6) * Math.PI;
+        // Venus
+        var venusMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("./assets/textures/space/venus_surface.jpg"),         
+            normalScale: new THREE.Vector2(6, 6),
+        });
+        var venusGeometry = new THREE.SphereGeometry(12, 50, 50);
+        var venus = new THREE.Mesh(venusGeometry, venusMaterial);
+        venus.rotation.y = (1/6) * Math.PI;
+        objectArray.push(venus);
+        venus.visible = false;
+        scene.add(venus);
 
-    //spotLight.target = earth;
+        // Moon
+        var moonMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("./assets/textures/space/moon.jpg"),   
+            normalScale: new THREE.Vector2(6, 6),
+        });
+        var moonGeometry = new THREE.SphereGeometry(12, 50, 50);
+        var moon = new THREE.Mesh(moonGeometry, moonMaterial);
+        moon.rotation.y = (1/6) * Math.PI;
+        objectArray.push(moon);
+        moon.visible = false;
+        scene.add(moon);
 
-    // Object Material for all objects
-    var objectMaterial = new THREE.MeshPhongMaterial({ color: "rgb(255, 0, 0)" });
+        // Earth
+        var earthMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("./assets/textures/space/Earth.jpg"),               // imagem da terra
+            normalMap: textureLoader.load("assets/textures/space/earth_normal_map.tif"), // mapeamento das normais
+            specularMap: textureLoader.load("assets/textures/space/EarthSpec.tif"),     // mapeamento da luz especular(Reflexão)
+            normalScale: new THREE.Vector2(6, 6),
+            color: "white",
+        });
+        var earthGeometry = new THREE.SphereGeometry(12, 200, 200);
+        var earth = new THREE.Mesh(earthGeometry, earthMaterial);
+        earth.rotation.y = (1/6) * Math.PI;
+        objectArray.push(earth);
+        earth.visible = false;
+        scene.add(earth);
+
+        // Mars
+        var marsMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("./assets/textures/space/mars.jpg"),         
+            normalScale: new THREE.Vector2(6, 6),
+        });
+        var marsGeometry = new THREE.SphereGeometry(12, 50, 50);
+        var mars = new THREE.Mesh(marsGeometry, marsMaterial);
+        mars.rotation.y = (1/6) * Math.PI;
+        objectArray.push(mars);
+        mars.visible = false;
+        scene.add(mars);
+
+        // Jupiter
+        var JupiterMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("./assets/textures/space/jupiter.jpg"),         
+            normalScale: new THREE.Vector2(6, 6),
+        });
+        var jupiterGeometry = new THREE.SphereGeometry(12, 50, 50);
+        var jupiter = new THREE.Mesh(jupiterGeometry, JupiterMaterial);
+        jupiter.rotation.y = (1/6) * Math.PI;
+        objectArray.push(jupiter);
+        jupiter.visible = false;
+        scene.add(jupiter);
+
+        // Saturn
+        var saturnMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("./assets/textures/space/saturn.jpg"),         
+            normalScale: new THREE.Vector2(6, 6),
+        });
+        var saturnGeometry = new THREE.SphereGeometry(12, 50, 50);
+        var saturn = new THREE.Mesh(saturnGeometry, saturnMaterial);
+        saturn.rotation.y = (1/6) * Math.PI;
+        objectArray.push(saturn);
+        saturn.visible = false;
+        scene.add(saturn);
+
+        // Saturn ring
+
+        // ADD LATER
+
+        // Uranus
+        var uranusMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("./assets/textures/space/uranus.jpg"),         
+            normalScale: new THREE.Vector2(6, 6),
+        });
+        var uranusGeometry = new THREE.SphereGeometry(12, 50, 50);
+        var uranus = new THREE.Mesh(uranusGeometry, uranusMaterial);
+        uranus.rotation.y = (1/6) * Math.PI;
+        objectArray.push(uranus);
+        uranus.visible = false;
+        scene.add(uranus);
+
+        // Neptune
+        var neptuneMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("./assets/textures/space/neptune.jpg"),         
+            normalScale: new THREE.Vector2(6, 6),
+        });
+        var neptuneGeometry = new THREE.SphereGeometry(12, 50, 50);
+        var neptune = new THREE.Mesh(neptuneGeometry, neptuneMaterial);
+        neptune.rotation.y = (1/6) * Math.PI;
+        objectArray.push(neptune);
+        neptune.visible = false;
+        scene.add(neptune);
+    }
 
     // Add objects to scene
     var objectArray = new Array();
+
+    // Creating de planets and stars
+    createSolarObjects(objectArray);
 
     // Controls of sidebar
     var controls = new function() {
@@ -108,85 +201,58 @@ function init() {
         // Axes
         this.axes = false;
 
-        // Inicia a geometria e material de base a serem controlados pelo menu interativo
-        //this.appliedMaterial = applyMeshNormalMaterial;
-        this.castShadow = true;
-        this.groundPlaneVisible = true;
-
-        //Physics
-        this.rotation = 0.02;
-        this.wireframe = false;
-        this.color = "rgb(255, 0, 0)";
+        // Physics
+        this.rotation = 0.01;
 
         // Geometry
-        this.mesh = objectArray[0];
-        this.meshNumber = 0;
+        this.meshNumber = 4;
+        this.mesh = objectArray[this.meshNumber];
         this.radius = 10;
         this.detail = 0;
-        this.type = 'Tetrahedron';
         this.size = 1.0;
+        this.type = "Earth";
 
-        this.choosePoligon = function() {
+        this.chooseObject = function() {
             objectArray[this.meshNumber].visible = false;
             switch (this.type) {
-                case 'Tetrahedron':
+                case 'Sun':
                     this.meshNumber = 0;
                     break;
-                case 'Cube':
+                case 'Mercury':
                     this.meshNumber = 1;
                     break;
-                case 'Octahedron':
+                case 'Venus':
                     this.meshNumber = 2;
                     break;
-                case 'Dodecahedron':
+                case 'Moon':
                     this.meshNumber = 3;
                     break;
-                case 'Icosahedron':
+                case 'Earth':
                     this.meshNumber = 4;
+                    break;
+                case 'Mars':
+                    this.meshNumber = 5;
+                    break;
+                case 'Jupiter':
+                    this.meshNumber = 6;
+                    break;
+                case 'Saturn':
+                    this.meshNumber = 7;
+                    break;
+                case 'Uranus':
+                    this.meshNumber = 8;
+                    break;
+                case 'Neptune':
+                    this.meshNumber = 9;
                     break;
             }
             objectArray[this.meshNumber].visible = true;
             this.mesh = objectArray[this.meshNumber];
         }
-
-        this.resizePoligon = function() {
-            const poligon = objectArray[this.meshNumber]
-            const radius = poligon.name === "Cube" ? poligon.geometry.parameters.height : poligon.geometry.parameters.radius
-
-            poligon.scale.set(this.size, this.size, this.size)
-                // console.log(poligon)
-            poligon.position.y = radius * this.size * 1.1
-        }
-
-        this.updateColor = function() {
-            // removing the objects with the old material color
-            for (let i = 0; i < objectArray.length; i++) {
-                //scene.remove(scene.getObjectByName("particles1"));
-                scene.remove(objectArray[i]);
-            }
-            objectArray = new Array();
-            objectMaterial = new THREE.MeshPhongMaterial({ color: controls.color }); // Setting the material with new color
-
-            // Recreating those objects
-            scene.add(createCube(5.0));
-
-            // Position of the cube
-            objectArray[1].position.y = 5;
-
-            controls.choosePoligon();
-
-            // Correcting if the wireframe option is tick
-            this.wireframeController();
-        }
-
-        this.wireframeController = function() {
-            if (this.wireframe) {
-                objectMaterial.wireframe = true;
-            } else {
-                objectMaterial.wireframe = false;
-            }
-        }
     }
+
+    // Firs object is visible
+    controls.mesh.visible = true;
 
     // GUI de controle e ajuste de valores especificos da geometria do objeto
     var gui = new dat.GUI();
@@ -202,27 +268,10 @@ function init() {
     });
 
     guiFolder.add(controls, 'rotation', 0, 0.5).onChange();
-    //gui.add(controls, 'radius', 0, 40).step(1).onChange(controls.redraw);
-    //gui.add(controls, 'detail', 0, 3).step(1).onChange(controls.redraw);
-    guiFolder.addColor(controls, 'color').onChange(function(e) {
-        controls.updateColor();
+
+    guiFolder.add(controls, 'type', ['Sun', 'Mercury', 'Venus', 'Moon', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']).onChange(function(e) {
+        controls.chooseObject();
     });
-
-    guiFolder.add(controls, 'wireframe').listen().onChange(function(e) {
-        controls.wireframeController();
-    });
-
-    guiFolder.add(controls, 'type', ['Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e) {
-        controls.choosePoligon();
-        controls.resizePoligon()
-    });
-
-    gui.add(controls, 'size', 0.5, 2).listen().onChange(function(e) {
-        controls.resizePoligon()
-    });
-
-    
-
 
     render();
 
@@ -234,7 +283,7 @@ function init() {
         /*controls.mesh.rotation.x += controls.rotation;
         controls.mesh.rotation.y += controls.rotation;
         controls.mesh.rotation.z += controls.rotation;*/
-        earth.rotation.y -= 0.01;
+        controls.mesh.rotation.y -= controls.rotation;
         requestAnimationFrame(render);
         renderer.render(scene, camera);
     }
