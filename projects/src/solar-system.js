@@ -15,17 +15,25 @@ function init() {
     var clock = new THREE.Clock();
     
     // Light
-    var spotLight = new THREE.SpotLight(0xffffff);
+    /*var spotLight = new THREE.SpotLight(0xffffff);
     //spotLight.position.set(10, 80, 150);
     spotLight.shadow.mapSize.width = 2048;
     spotLight.shadow.mapSize.height = 2048;
     spotLight.shadow.camera.fov = 20;
+    spotLight.angle = Math.PI/2;
     spotLight.castShadow = true;
     spotLight.decay = 2;
     spotLight.penumbra = 0.05;
     spotLight.name = "spotLight"
-
-    scene.add(spotLight);
+    scene.add(spotLight);*/
+    var light = new THREE.PointLight({
+        color: 0xffffff, 
+        intesity: 1, 
+        distance: 0,
+        decay: 2
+    });
+    light.position.set(-70, 0, 150 );
+    scene.add( light );
 
 
     var ambientLight = new THREE.AmbientLight(0x343434);
@@ -35,8 +43,8 @@ function init() {
     var spotLightSphereGeometry = new THREE.SphereGeometry(3, 50, 50);
     var spotLightSphereMaterial = new THREE.MeshPhongMaterial({color: "white"});
     var spotLightSphere = new THREE.Mesh(spotLightSphereGeometry, spotLightSphereMaterial);
-    spotLightSphere.position.set(0, 0, 150);
-    spotLightSphere.add(spotLight);
+    //spotLightSphere.position.set(0, 0, 150);
+    //spotLightSphere.add(spotLight);
     //spotLightSphere.position.copy(spotLight.position);
     scene.add(spotLightSphere);
 
@@ -58,7 +66,7 @@ function init() {
         side: 1,        
     });
 
-    var skyBoxGeometry = new THREE.SphereGeometry(200, 50, 50);
+    var skyBoxGeometry = new THREE.SphereGeometry(300, 50, 50);
     //var sphere1 = addGeometryWithMaterial(scene, sphere, 'sphere', gui, controls, skyBoxMaterial.clone());
 
     var skyBox = new THREE.Mesh(skyBoxGeometry,skyBoxMaterial);
@@ -73,43 +81,19 @@ function init() {
     // Earth
     var earthMaterial = new THREE.MeshPhongMaterial({
         map: textureLoader.load("./assets/textures/space/Earth.jpg"),               // imagem da terra
-        normalMap: textureLoader.load("assets/textures/space/Earth-normal-8k.dds"),     // mapeamento das normais
+        normalMap: textureLoader.load("assets/textures/space/8k_earth_normal_map.tif"), // mapeamento das normais
         specularMap: textureLoader.load("assets/textures/space/EarthSpec.tif"),     // mapeamento da luz especular(Reflexão)
-        normalScale: new THREE.Vector2(164, 82), //6,6
+        normalScale: new THREE.Vector2(6, 6),
         color: "white",
-        //flatShading: false,
-        //side: THREE.frontSide
     });
-    /*var earthMaterial = new THREE.MeshPhongMaterial({
-        map: textureLoader.load("./assets/textures/space/earth/Earth.png"),               // imagem da terra
-        normalMap: textureLoader.load("assets/textures/space/earth/EarthNormal.png"),     // mapeamento das normais
-        specularMap: textureLoader.load("assets/textures/space/earth/EarthSpec.png"),     // mapeamento da luz especular(Reflexão)
-        normalScale: new THREE.Vector2(6, 6), //6,6
-        color: "white",
-        //flatShading: false,
-        //side: THREE.frontSide
-    });*/
-
-    /*var earthMaterial = new THREE.MeshPhongMaterial({
-        color: "blue",
-        //side: THREE.frontSide
-    });*/
-  
-    //console.log(skyBoxMaterial);
     var earthGeometry = new THREE.SphereGeometry(12, 200, 200);
-    //var sphere1 = addGeometryWithMaterial(scene, sphere, 'sphere', gui, controls, skyBoxMaterial.clone());
-
     var earth = new THREE.Mesh(earthGeometry, earthMaterial);
-    //mesh.castShadow = true;
     
     scene.add(earth);
-    console.log(earthMaterial);
-    //earth.material.flatShading = false;
-    //earth.material.needsUpdate = true;
-    //addBasicMaterialSettings(gui, controls, material, name + '-THREE.Material');
-    //addSpecificMaterialSettings(gui, controls, material, name + '-Material');
 
     earth.rotation.y = (1/6) * Math.PI;
+
+    //spotLight.target = earth;
 
     // Object Material for all objects
     var objectMaterial = new THREE.MeshPhongMaterial({ color: "rgb(255, 0, 0)" });
