@@ -273,6 +273,16 @@ function init() {
         controls.chooseObject();
     });
 
+      // Reajuste da renderização com base na mudança da janela
+    function onResize(){
+        camera.aspect = window.innerWidth / window.innerHeight;  //Atualiza o aspect da camera com relação as novas dimensões
+        camera.updateProjectionMatrix();                         //Atualiza a matriz de projeção
+        renderer.setSize(window.innerWidth, window.innerHeight); //Define os novos valores para o renderizador
+        //console.log('Resizing to %s x %s.', window.innerWidth, window.innerHeight);
+    }
+
+    window.addEventListener('resize', onResize, false);         // Ouve os eventos de resize
+
     render();
 
     function render() {
