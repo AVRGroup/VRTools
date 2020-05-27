@@ -8,7 +8,7 @@ function init() {
 
     var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.lookAt(0, 0, 0);
-    camera.position.set(5, 15, 30);
+    camera.position.set(5, 15, 50);
     camera.up.set(0, 1, 0);
     scene.add(camera);
 
@@ -42,21 +42,17 @@ function init() {
     scene.add(axes);
 
     // Enable mouse rotation, pan, zoom etc.
-    var trackballControls = initTrackballControls(camera, renderer);
+    var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    orbitControls.target.set(0, 0, -1);
 
     // Skybox of galaxy
     var skyBoxMaterial = new THREE.MeshBasicMaterial({
         map: textureLoader.load("./assets/textures/space/Stars_milky_way.jpg"),               // imagem da terra
         side: 1,        
     });
-
     var skyBoxGeometry = new THREE.SphereGeometry(300, 50, 50);
-    //var sphere1 = addGeometryWithMaterial(scene, sphere, 'sphere', gui, controls, skyBoxMaterial.clone());
-
     var skyBox = new THREE.Mesh(skyBoxGeometry,skyBoxMaterial);
     skyBox.color =  "white";
-    skyBox.castShadow = true;
-    skyBox.receiveShadow = true;
     scene.add(skyBox);
 
     function createSolarObjects(objectArray){
@@ -287,7 +283,7 @@ function init() {
 
     function render() {
         stats.update();
-        trackballControls.update(clock.getDelta());
+        orbitControls.update();                 // Atualiza o controle da câmera
 
         // Rotating the mesh selected
         /*controls.mesh.rotation.x += controls.rotation;
