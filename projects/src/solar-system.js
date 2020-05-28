@@ -96,7 +96,7 @@ function main() {
         },
         textures: {
             skyBoxMap:{
-                path: "./assets/textures/space/Stars_milky_way.jpg", fileSize: 1909
+                path: "./assets/textures/space/stars_milky_way.jpg", fileSize: 1909
             },
             sunMap:{
                 path: "./assets/textures/space/sun.jpg", fileSize: 3699
