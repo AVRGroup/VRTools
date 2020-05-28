@@ -375,7 +375,6 @@ function main() {
             camera.aspect = window.innerWidth / window.innerHeight;  //Atualiza o aspect da camera com relação as novas dimensões
             camera.updateProjectionMatrix();                         //Atualiza a matriz de projeção
             renderer.setSize(window.innerWidth, window.innerHeight); //Define os novos valores para o renderizador
-            camera.update();
             //console.log('Resizing to %s x %s.', window.innerWidth, window.innerHeight);
         }
     
