@@ -136,23 +136,17 @@ function main() {
             },
         },
         materials: {
-            main:new THREE.MeshStandardMaterial({color: 'white'}),
-            skyBoxMaterial: new THREE.MeshBasicMaterial({
-                side: 1
-            }),
-            sunMaterial: new THREE.MeshPhongMaterial({normalScale: new THREE.Vector2(6, 6)}),
-            mercuryMaterial: new THREE.MeshPhongMaterial({normalScale: new THREE.Vector2(6, 6)}),
-            venusMaterial: new THREE.MeshPhongMaterial({normalScale: new THREE.Vector2(6, 6)}),
-            moonMaterial: new THREE.MeshPhongMaterial({normalScale: new THREE.Vector2(6, 6)}),
-            earthMaterial: new THREE.MeshPhongMaterial({
-                normalScale: new THREE.Vector2(6, 6),
-                color: "white"
-            }),
-            marsMaterial: new THREE.MeshPhongMaterial({normalScale: new THREE.Vector2(6, 6)}),
-            jupiterMaterial: new THREE.MeshPhongMaterial({normalScale: new THREE.Vector2(6, 6)}),
-            saturnMaterial: new THREE.MeshPhongMaterial({normalScale: new THREE.Vector2(6, 6)}),
-            uranusMaterial: new THREE.MeshPhongMaterial({normalScale: new THREE.Vector2(6, 6)}),
-            neptuneMaterial: new THREE.MeshPhongMaterial({normalScale: new THREE.Vector2(6, 6)}),
+            skyBoxMaterial: new THREE.MeshLambertMaterial({side: 1}),
+            sunMaterial: new THREE.MeshLambertMaterial(),
+            mercuryMaterial: new THREE.MeshLambertMaterial(),
+            venusMaterial: new THREE.MeshLambertMaterial(),
+            moonMaterial: new THREE.MeshLambertMaterial(),
+            earthMaterial: new THREE.MeshLambertMaterial(),
+            marsMaterial: new THREE.MeshLambertMaterial(),
+            jupiterMaterial: new THREE.MeshLambertMaterial(),
+            saturnMaterial: new THREE.MeshLambertMaterial(),
+            uranusMaterial: new THREE.MeshLambertMaterial(),
+            neptuneMaterial: new THREE.MeshLambertMaterial(),
         }
     };
 
