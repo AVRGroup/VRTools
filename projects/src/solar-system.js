@@ -299,6 +299,7 @@ function main() {
             // Geometry
             this.meshNumber = 4;
             this.mesh = objectArray[this.meshNumber];
+            this.animation = true;
             this.radius = 10;
             this.detail = 0;
             this.size = 1.0;
@@ -358,18 +359,23 @@ function main() {
                 axes.visible = false;
             }
         });
-
+        
+        guiFolder.add(controls, "animation").listen().onChange(function(e) {
+            if (controls.animation) {
+                controls.rotation = 0.01;
+            } 
+            else{
+                controls.rotation = 0;
+            }
+        });
+        
         guiFolder.add(controls, "lightFollowCam").listen().onChange(function(e) {
             if (!controls.lightFollowCam) {
                 pointlight.position.set(-70, 0, 150 );
                 pointLightSphere.position.set(-70, 0, 150 );
             } 
-            /*else {
-                axes.visible = false;
-            }*/
         });
     
-        guiFolder.add(controls, 'rotation', 0, 0.5).onChange();
     
         guiFolder.add(controls, 'type', ['Sun', 'Mercury', 'Venus', 'Moon', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']).onChange(function(e) {
             controls.chooseObject();
