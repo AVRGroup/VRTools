@@ -189,11 +189,11 @@ function main() {
         pointlight.position.set(-70, 0, 150 );
         scene.add( pointlight );
 
-        var pointLightSphereGeometry = new THREE.SphereGeometry(3, 50, 50);
+        /*var pointLightSphereGeometry = new THREE.SphereGeometry(3, 50, 50);
         var pointLightSphereMaterial = new THREE.MeshPhongMaterial({color: "white"});
         var pointLightSphere = new THREE.Mesh(pointLightSphereGeometry, pointLightSphereMaterial);
         pointLightSphere.position.copy(pointlight.position);
-        scene.add(pointLightSphere);
+        scene.add(pointLightSphere);*/
 
         // Show axes (parameter is size of each axis)
         var axes = new THREE.AxesHelper(80);
@@ -300,6 +300,7 @@ function main() {
     
             // Physics
             this.rotation = 0.01;
+            this.lightFollowCam = false;
     
             // Geometry
             this.meshNumber = 4;
@@ -363,6 +364,15 @@ function main() {
                 axes.visible = false;
             }
         });
+
+        guiFolder.add(controls, "lightFollowCam").listen().onChange(function(e) {
+            if (!controls.lightFollowCam) {
+                pointlight.position.set(-70, 0, 150 );
+            } 
+            /*else {
+                axes.visible = false;
+            }*/
+        });
     
         guiFolder.add(controls, 'rotation', 0, 0.5).onChange();
     
@@ -384,6 +394,9 @@ function main() {
         function render() {
             stats.update();
             orbitControls.update();                 // Atualiza o controle da câmera
+            if (controls.lightFollowCam) {
+                pointlight.position.copy(camera.position);
+            } 
     
             // Rotating the mesh selected
             controls.mesh.rotation.y -= controls.rotation;
