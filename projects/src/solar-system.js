@@ -11,7 +11,7 @@ function main() {
 
     // Load all elements before the execution 
     var assets = {
-        objects:{ //Easy assigning.
+        objects:{       //Easy assigning.
             skyBox:{
                 type: 'mesh',
                 geometry: 'skyBoxGeometry', // assing attribute with geometry stored on assets
@@ -47,7 +47,7 @@ function main() {
                 geometry: 'earthGeometry',
                 material: 'earthMaterial',
                 map: 'earthMap',
-                normalMap: 'earthNormalMap',         // mapeamento das normais
+                //normalMap: 'earthNormalMap',         // mapeamento das normais
                 specularMap: 'earthSpecularMap',     // mapeamento da luz especular(Reflexão)
             },
             mars:{
@@ -113,9 +113,9 @@ function main() {
             earthMap:{
                 path: "./assets/textures/space/earth.jpg", fileSize: 64860
             },
-            earthNormalMap:{
+            /*earthNormalMap:{
                 path: "./assets/textures/space/earth_normal_map.png", fileSize: 9163
-            },
+            },*/
             earthSpecularMap:{
                 path: "./assets/textures/space/earthSpec.png", fileSize: 1872
             },
