@@ -172,7 +172,11 @@ function initStats(type) {
  */
 function initRenderer(additionalProperties) {
 
-    var renderer = new THREE.WebGLRenderer();
+    var renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true
+    });
+    //var renderer = new THREE.WebGLRenderer();
     renderer.shadowMap.enabled = true;
     renderer.shadowMapSoft = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;

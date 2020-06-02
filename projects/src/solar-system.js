@@ -68,6 +68,12 @@ function main() {
                 material: 'saturnMaterial',
                 map: 'saturnMap',
             },
+            saturnRing:{
+                type: 'mesh',
+                geometry: 'saturnRingGeometry',
+                material: 'saturnRingMaterial',
+                map: 'saturnRingMap',
+            },
             uranus:{
                 type: 'mesh',
                 geometry: 'uranusGeometry',
@@ -87,52 +93,64 @@ function main() {
             mercuryGeometry: new THREE.SphereGeometry(12, 50, 50),
             venusGeometry: new THREE.SphereGeometry(12, 50, 50),
             moonGeometry: new THREE.SphereGeometry(12, 50, 50),
-            earthGeometry: new THREE.SphereGeometry(12, 200, 200),
+            earthGeometry: new THREE.SphereGeometry(12, 50, 50),
             marsGeometry: new THREE.SphereGeometry(12, 50, 50),
             jupiterGeometry: new THREE.SphereGeometry(12, 50, 50),
             saturnGeometry: new THREE.SphereGeometry(12, 50, 50),
+            /*saturnRingGeometry: new THREE.RingGeometry({
+                innerRadius: 16,
+                outerRadius: 20,
+                thetaSegments: 8,
+                phiSegments: 8,
+                thetaStart: 0,
+                thetaLength: Math.PI * 2
+            }),*/
+            saturnRingGeometry: new THREE.RingBufferGeometry(13, 20, 96, 96, 0, Math.PI * 2),
             uranusGeometry: new THREE.SphereGeometry(12, 50, 50),
             neptuneGeometry: new THREE.SphereGeometry(12, 50, 50),
         },
         textures: {
             skyBoxMap:{
-                path: "./assets/textures/space/stars_milky_way.jpg", fileSize: 1909
+                path: "./assets/textures/space/8k_stars_milky_way.jpg", fileSize: 1909
             },
             sunMap:{
-                path: "./assets/textures/space/sun.jpg", fileSize: 3699
+                path: "./assets/textures/space/8k_sun.jpg", fileSize: 3699
             },
             mercuryMap:{
-                path: "./assets/textures/space/mercury.jpg", fileSize: 15037
+                path: "./assets/textures/space/8k_mercury.jpg", fileSize: 15037
             },
             venusMap:{
-                path: "./assets/textures/space/venus_surface.jpg", fileSize: 12526
+                path: "./assets/textures/space/8k_venus_surface.jpg", fileSize: 12526
             },
             moonMap:{
-                path: "./assets/textures/space/moon.jpg", fileSize: 1057
+                path: "./assets/textures/space/8k_moon.jpg", fileSize: 15037
             },
             earthMap:{
-                path: "./assets/textures/space/earth.jpg", fileSize: 64860
+                path: "./assets/textures/space/8k_earth.jpg", fileSize: 64860
             },
             /*earthNormalMap:{
-                path: "./assets/textures/space/earth_normal_map.png", fileSize: 9163
+                path: "./assets/textures/space/8k_earth_normal_map.png", fileSize: 9163
             },*/
             earthSpecularMap:{
-                path: "./assets/textures/space/earthSpec.png", fileSize: 1872
+                path: "./assets/textures/space/8k_earthSpec.png", fileSize: 1872
             },
             marsMap:{
-                path: "./assets/textures/space/mars.jpg", fileSize: 8401
+                path: "./assets/textures/space/8k_mars.jpg", fileSize: 8401
             },
             jupiterMap:{
-                path: "./assets/textures/space/jupiter.jpg", fileSize: 3085
+                path: "./assets/textures/space/8k_jupiter.jpg", fileSize: 3085
             },
             saturnMap:{
-                path: "./assets/textures/space/saturn.jpg", fileSize: 1102
+                path: "./assets/textures/space/8k_saturn.jpg", fileSize: 1102
+            },
+            saturnRingMap:{
+                path: "./assets/textures/space/8k_saturn_ring_alpha.png", fileSize: 65
             },
             uranusMap:{
-                path: "./assets/textures/space/uranus.jpg", fileSize: 78
+                path: "./assets/textures/space/2k_uranus.jpg", fileSize: 78
             },
             neptuneMap:{
-                path: "./assets/textures/space/neptune.jpg", fileSize: 242
+                path: "./assets/textures/space/2k_neptune.jpg", fileSize: 242
             },
         },
         materials: {
@@ -145,6 +163,7 @@ function main() {
             marsMaterial: new THREE.MeshLambertMaterial(),
             jupiterMaterial: new THREE.MeshLambertMaterial(),
             saturnMaterial: new THREE.MeshLambertMaterial(),
+            saturnRingMaterial: new THREE.MeshBasicMaterial({side: 2}),
             uranusMaterial: new THREE.MeshLambertMaterial(),
             neptuneMaterial: new THREE.MeshLambertMaterial(),
         }
@@ -262,7 +281,12 @@ function main() {
     
             // Saturn ring
     
-            // ADD LATER
+            var saturnRing = assets.objects.saturnRing;
+            saturnRing.rotation.x = Math.PI/2;
+            saturnRing.material.opacity = 1;
+            saturnRing.material.transparent = true;
+            saturn.add(saturnRing);                 //Add on planet
+            //scene.add(saturnRing);
     
             // Uranus
             var uranus = assets.objects.uranus;
@@ -287,8 +311,6 @@ function main() {
     
         // Controls of sidebar
         var controls = new function() {
-            var self = this;
-    
             // Axes
             this.axes = false;
     
@@ -297,13 +319,13 @@ function main() {
             this.lightFollowCam = false;
     
             // Geometry
-            this.meshNumber = 4;
+            this.meshNumber = 7;//4;
             this.mesh = objectArray[this.meshNumber];
             this.animation = true;
             this.radius = 10;
             this.detail = 0;
             this.size = 1.0;
-            this.type = "Earth";
+            this.type = "Saturn";//"Earth";
     
             this.chooseObject = function() {
                 objectArray[this.meshNumber].visible = false;
@@ -368,7 +390,7 @@ function main() {
                 controls.rotation = 0;
             }
         });
-        
+
         guiFolder.add(controls, "lightFollowCam").listen().onChange(function(e) {
             if (!controls.lightFollowCam) {
                 pointlight.position.set(-70, 0, 150 );
