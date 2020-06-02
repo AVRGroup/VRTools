@@ -1,4 +1,12 @@
-function main() {
+/******************************
+ *                            *
+ *    HIGH QUALITY TEXTURES   *
+ *                            *
+ *****************************/
+
+
+function mainHighQuality() {
+    console.log("High Quality of the textures");
 
     // use the basic elements
     var scene;
@@ -443,7 +451,15 @@ function main() {
 }
 
 
+/******************************
+ *                            *
+ *  MEDIUM QUALITY TEXTURES   *
+ *                            *
+ *****************************/
+
+
 function mainMediumQuality() {
+    console.log("Medium Quality of the textures");
 
     // use the basic elements
     var scene;
