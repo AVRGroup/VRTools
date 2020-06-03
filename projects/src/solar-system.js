@@ -4,7 +4,6 @@
  *                            *
  *****************************/
 
-
 function mainHighQuality() {
     console.log("High Quality of the textures");
 
@@ -163,7 +162,7 @@ function mainHighQuality() {
         },
         materials: {
             skyBoxMaterial: new THREE.MeshLambertMaterial({side: 1}),
-            sunMaterial: new THREE.MeshLambertMaterial(),
+            sunMaterial: new THREE.MeshBasicMaterial(),
             mercuryMaterial: new THREE.MeshLambertMaterial(),
             venusMaterial: new THREE.MeshLambertMaterial(),
             moonMaterial: new THREE.MeshLambertMaterial(),
@@ -336,13 +335,13 @@ function mainHighQuality() {
             this.lightFollowCam = false;
     
             // Geometry
-            this.meshNumber = 7;//4;
+            this.meshNumber = 4;//4;
             this.mesh = objectArray[this.meshNumber];
             this.animation = true;
             this.radius = 10;
             this.detail = 0;
             this.size = 1.0;
-            this.type = "Saturn";//"Earth";
+            this.type = "Earth";//"Earth";
     
             this.chooseObject = function() {
                 objectArray[this.meshNumber].visible = false;
@@ -608,7 +607,7 @@ function mainMediumQuality() {
         },
         materials: {
             skyBoxMaterial: new THREE.MeshLambertMaterial({side: 1}),
-            sunMaterial: new THREE.MeshLambertMaterial(),
+            sunMaterial: new THREE.MeshBasicMaterial(),
             mercuryMaterial: new THREE.MeshLambertMaterial(),
             venusMaterial: new THREE.MeshLambertMaterial(),
             moonMaterial: new THREE.MeshLambertMaterial(),
@@ -781,13 +780,13 @@ function mainMediumQuality() {
             this.lightFollowCam = false;
     
             // Geometry
-            this.meshNumber = 7;//4;
+            this.meshNumber = 4;//4;
             this.mesh = objectArray[this.meshNumber];
             this.animation = true;
             this.radius = 10;
             this.detail = 0;
             this.size = 1.0;
-            this.type = "Saturn";//"Earth";
+            this.type = "Earth";//"Earth";
     
             this.chooseObject = function() {
                 objectArray[this.meshNumber].visible = false;
