@@ -56,13 +56,21 @@
                 cameraEl.object3D.children[0].lookAt(0,0,0);
                 console.log(cameraEl.object3D.children[0]);*/
                 //camera.lookAt(0,0,0);
+                
             },
             // Antes da cena ser renderizada
             tick: function(time, timeDelta){
             },
             // Após a cena ser renderizada
             tock: function(time, timeDelta, camera){
-                sunEl.object3D.rotateY(0.01);
+                for(let i = 0; i < objectArray.length;i++){
+                    objectArray[i].rotateY(0.01);
+                }
+                /*sun.rotateY(0.01);
+                earth.rotateY(0.01);
+                mars.rotateY(0.01);
+                mercury.rotateY(0.01);
+                venus.rotateY(0.01);*/
             },
             update: function(){
             }
@@ -72,22 +80,31 @@
             schema: function(){},
             init: function(){
                 self = this;
-                var camera = self.el;   // var cameraEl = document.querySelector('#camera');
-                camera.object3D.children[0].lookAt(0,0,0);
+                //var camera = self.el;   // var cameraEl = document.querySelector('#camera');
+                //camera.object3D.children[0].lookAt(0,0,0);
             },
         });
-        //cam_controller
 
-        
+        /*AFRAME.registerComponent('#earth', {
+            schema: function(){},
+            init: function(){
+                self = this;
+                var camera = self.el;   // var cameraEl = document.querySelector('#camera');
+                console.log(camera);
+                //camera.object3D.children[0].lookAt(0,0,0);
+            },
+        });*/
     </script>
 
     <a-scene main_scene id="scene" stats time light="defaultLightsEnabled: false" shadow="type: pcfsoft">
-        <a-camera cam_controller id="camera" camera="active: true;" look-controls wasd-controls position="-1 0.5 -1">
+        <a-entity cam_controller id="camera" camera="active: true;" position="-2 0.5 -2">
             <script type="text/javascript">
-                var sceneEl = document.querySelector('#scene');
-                var cameraEl = document.querySelector('#camera');
+                /*var sceneEl = document.querySelector('#scene');
+                look-controlsw
+                wasd-controls
+                var cameraEl = document.querySelector('#camera');*/
             </script>
-        </a-camera>
+        </a-entity>
         <!--
         a-camera id="camera" camera="active: true;" look-controls wasd-controls></a-camera>
         <a-entity id="rig" position="-2, 0, -2">
@@ -120,22 +137,82 @@
         </a-sphere>
 
         <!-- Axis -->
-        <a-entity line="start: 0, 0, 0; end: 200, 0, 0; color: red"
-                  line__2="start: 0, 0, 0; end: 0, 200, 0; color: green"
-                  line__3="start: 0, 0, 0; end: 0, 0, 200; color: blue"
+        <a-entity id="axis" line="start: 0, 0, 0; end: 200, 0, 0; color: red;"
+                  line__2="start: 0, 0, 0; end: 0, 200, 0; color: green;"
+                  line__3="start: 0, 0, 0; end: 0, 0, 200; color: blue;"
         ></a-entity>
 
-        <a-sphere id="sun" material="shader: standard; src: #sunMap;" shadow="cast: true; receive: false" position="0 0 5" radius="1.25">
-            <script type="text/javascript">
-                var sunEl = document.querySelector('#sun');
-            </script>
-        </a-sphere>
+        <a-sphere id="sun" material="shader: standard; src: #sunMap;" shadow="cast: true; receive: false" position="0 0 5" radius="1.0"></a-sphere>
+
+        <a-sphere id="mercury" material="shader: standard; src: #mercuryMap;" shadow="cast: true; receive: true" position="5 0 0" radius="1.0"></a-sphere>
         
-        <a-sphere id="earth" material="shader: standard; src: #earthMap;" shadow="cast: true; receive: true" position="5 0 5" radius="1.25" 
-            animation="property: rotation; to: 0 360 0; loop: true"></a-sphere>
+        <a-sphere id="venus" material="shader: standard; src: #venusMap;" shadow="cast: true; receive: true" position="5 -3 0" radius="1.0"></a-sphere>
+
+        <a-sphere id="moon" material="shader: standard; src: #moonMap;" shadow="cast: true; receive: true" position="5 0 5" radius="1.0"></a-sphere>
+
+        <a-sphere id="earth" material="shader: standard; src: #earthMap;" shadow="cast: true; receive: true" position="5 0 5" radius="1.0"></a-sphere>
+
+        <a-sphere id="mars" material="shader: standard; src: #marsMap;" shadow="cast: true; receive: true" position="5 0 10" radius="1.0"></a-sphere>
+
+        <a-sphere id="jupiter" material="shader: standard; src: #jupiterMap;" shadow="cast: true; receive: true" position="5 5 5" radius="1.0"></a-sphere>
+
+        <a-sphere id="saturn" material="shader: standard; src: #saturnMap;" shadow="cast: true; receive: true" position="5 -5 5" radius="1.0"></a-sphere>
+
+        <a-sphere id="uranus" material="shader: standard; src: #uranusMap;" shadow="cast: true; receive: true" position="0 3 5" radius="1.0"></a-sphere>
+
+        <a-sphere id="neptune" material="shader: standard; src: #neptuneMap;" shadow="cast: true; receive: true" position="0 -3 5" radius="1.0"></a-sphere>
+
+
       
         <a-sky id="skyBox" material="src: #skyBoxMap"></a-sky>
+
+        <script type="text/javascript">
+            var scene = document.querySelector('#scene').object3D;
+            var camera = document.querySelector('#camera').object3D;
+            var axis = document.querySelector('#axis').object3D;
+            //axis.visible = false;
+
+            var objectArray = new Array();
+            objectArray.push(document.querySelector('#sun').object3D);
+            objectArray.push(document.querySelector('#mercury').object3D);
+            objectArray.push(document.querySelector('#venus').object3D);
+            objectArray.push(document.querySelector('#moon').object3D);
+            objectArray.push(document.querySelector('#earth').object3D);
+            objectArray.push(document.querySelector('#mars').object3D);
+            objectArray.push(document.querySelector('#jupiter').object3D);
+            objectArray.push(document.querySelector('#saturn').object3D);
+            objectArray.push(document.querySelector('#uranus').object3D);
+            objectArray.push(document.querySelector('#neptune').object3D);
+            /*var sun = document.querySelector('#sun').object3D;
+            var earth = document.querySelector('#earth').object3D;
+            var mars = document.querySelector('#mars').object3D;
+            var mercury = document.querySelector('#mercury').object3D;
+            var venus = document.querySelector('#venus').object3D;*/
+
+            camera.children[0].lookAt(0,0,0);
+            document.querySelector('#camera').setAttribute('look-controls', '');    //Adiciona o atributo de movimentação da câmera
+            //document.querySelector('#camera').setAttribute('wasd-controls', '');
+            //document.querySelector('#camera').add(look-controls);
+        </script>
     </a-scene>
+
+    <script type="text/javascript">
+        /*var scene = document.querySelector('a-scene');
+
+        if (scene.hasLoaded) {
+            run();
+        } else {
+            scene.addEventListener('loaded', run);
+        }
+
+        function run () {
+            //var entity = scene.querySelector('a-entity');
+            //entity.setAttribute('material', 'color', 'red');
+
+            console.log("teste");
+            
+        }*/
+    </script>
 
     <!-- Open the application on another tab -->
     <div id="newWindow">
