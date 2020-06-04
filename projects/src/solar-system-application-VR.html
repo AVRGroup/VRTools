@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Solar System - VR</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        a {
+            color: var(--color-blue);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        #newWindow {
+            display: block;
+            position: absolute;
+            bottom: 0em;
+            left: 0.4em;
+            color: #fff;
+            text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+        }
+    </style>
+
+    <!-- Library of Augmented Reality that uses Three.js -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
+
+    <!-- Loading screen -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/util/loadScreen/LoadScreen.js"></script>
+
+    <!-- There are many useful functionss -->
+    <script type="text/javascript" src="../libs/util/util.js"></script>
+
+</head>
+<body>
+    <script type="text/javascript">
+        AFRAME.registerComponent('main_scene', {
+            schema: function(){},
+            init: function(){
+                console.log("Carregou a cena");
+                self = this;
+                /*var camera = self.el;
+                console.log(camera);
+                var cameraEl = document.querySelector('#camera');
+                cameraEl.object3D.children[0].lookAt(0,0,0);
+                console.log(cameraEl.object3D.children[0]);*/
+                //camera.lookAt(0,0,0);
+            },
+            // Antes da cena ser renderizada
+            tick: function(time, timeDelta){
+            },
+            // Após a cena ser renderizada
+            tock: function(time, timeDelta, camera){
+                sunEl.object3D.rotateY(0.01);
+            },
+            update: function(){
+            }
+        });
+
+        AFRAME.registerComponent('cam_controller', {
+            schema: function(){},
+            init: function(){
+                self = this;
+                var camera = self.el;   // var cameraEl = document.querySelector('#camera');
+                camera.object3D.children[0].lookAt(0,0,0);
+            },
+        });
+        //cam_controller
+
+        
+    </script>
+
+    <a-scene main_scene id="scene" stats time light="defaultLightsEnabled: false" shadow="type: pcfsoft">
+        <a-camera cam_controller id="camera" camera="active: true;" look-controls wasd-controls position="-1 0.5 -1">
+            <script type="text/javascript">
+                var sceneEl = document.querySelector('#scene');
+                var cameraEl = document.querySelector('#camera');
+            </script>
+        </a-camera>
+        <!--
+        a-camera id="camera" camera="active: true;" look-controls wasd-controls></a-camera>
+        <a-entity id="rig" position="-2, 0, -2">
+            <a-entity id="camera" camera="active: true;" look-controls wasd-controls></a-entity>
+        </a-entity>
+        -->
+
+        <!-- Asset management system. -->
+        <a-assets timeout="10000">
+            <img id="skyBoxMap" src="./assets/textures/space/2k_stars_milky_way.jpg"></img>
+            <img id="sunMap" src="./assets/textures/space/2k_sun.jpg"></img>
+            <img id="mercuryMap" src="./assets/textures/space/2k_mercury.jpg"></img>
+            <img id="venusMap" src="./assets/textures/space/2k_venus_surface.jpg"></img>
+            <img id="moonMap" src="./assets/textures/space/2k_moon.jpg"></img>
+            <img id="earthMap" src="./assets/textures/space/2k_earth.jpg"></img>
+            <img id="earthSpecularMap" src="./assets/textures/space/2k_earth_specular_map.png"></img>
+            <img id="marsMap" src="./assets/textures/space/2k_mars.jpg"></img>
+            <img id="jupiterMap" src="./assets/textures/space/2k_jupiter.jpg"></img>
+            <img id="saturnMap" src="./assets/textures/space/2k_saturn.jpg"></img>
+            <img id="saturnRingMap" src="./assets/textures/space/2k_saturn_ring_alpha.png"></img>
+            <img id="uranusMap" src="./assets/textures/space/2k_uranus.jpg"></img>
+            <img id="neptuneMap" src="./assets/textures/space/2k_neptune.jpg"></img>
+        </a-assets>
+
+        <!-- Lights -->
+        <a-entity light="type: ambient; color: #AAA"></a-entity>
+        <a-sphere radius="0.25" position="0 0 -10">
+            <a-entity light="type: point; castShadow: true; intensity: 0.75; distance: 100; decay: 2;" 
+            position="0 0 0"></a-entity>
+        </a-sphere>
+
+        <!-- Axis -->
+        <a-entity line="start: 0, 0, 0; end: 200, 0, 0; color: red"
+                  line__2="start: 0, 0, 0; end: 0, 200, 0; color: green"
+                  line__3="start: 0, 0, 0; end: 0, 0, 200; color: blue"
+        ></a-entity>
+
+        <a-sphere id="sun" material="shader: standard; src: #sunMap;" shadow="cast: true; receive: false" position="0 0 5" radius="1.25">
+            <script type="text/javascript">
+                var sunEl = document.querySelector('#sun');
+            </script>
+        </a-sphere>
+        
+        <a-sphere id="earth" material="shader: standard; src: #earthMap;" shadow="cast: true; receive: true" position="5 0 5" radius="1.25" 
+            animation="property: rotation; to: 0 360 0; loop: true"></a-sphere>
+      
+        <a-sky id="skyBox" material="src: #skyBoxMap"></a-sky>
+    </a-scene>
+
+    <!-- Open the application on another tab -->
+    <div id="newWindow">
+        <p><a id="" href="./solar-system-application.html?quality=0" target="_blank">Medium Quality</a></p>
+        <p><a id="" href="./solar-system-application.html?quality=1" target="_blank">High Quality</a></p>
+        <p><a id="" href="./solar-system-application-AR.html" target="_blank">Augmented Reality</a></p>
+    </div>
+</body>
+
+</html>
