@@ -50,13 +50,6 @@
             init: function(){
                 console.log("Carregou a cena");
                 self = this;
-                /*var camera = self.el;
-                console.log(camera);
-                var cameraEl = document.querySelector('#camera');
-                cameraEl.object3D.children[0].lookAt(0,0,0);
-                console.log(cameraEl.object3D.children[0]);*/
-                //camera.lookAt(0,0,0);
-                
             },
             // Antes da cena ser renderizada
             tick: function(time, timeDelta){
@@ -66,11 +59,6 @@
                 for(let i = 0; i < objectArray.length;i++){
                     objectArray[i].rotateY(0.01);
                 }
-                /*sun.rotateY(0.01);
-                earth.rotateY(0.01);
-                mars.rotateY(0.01);
-                mercury.rotateY(0.01);
-                venus.rotateY(0.01);*/
             },
             update: function(){
             }
@@ -84,33 +72,14 @@
                 //camera.object3D.children[0].lookAt(0,0,0);
             },
         });
-
-        /*AFRAME.registerComponent('#earth', {
-            schema: function(){},
-            init: function(){
-                self = this;
-                var camera = self.el;   // var cameraEl = document.querySelector('#camera');
-                console.log(camera);
-                //camera.object3D.children[0].lookAt(0,0,0);
-            },
-        });*/
     </script>
 
     <a-scene main_scene id="scene" stats time light="defaultLightsEnabled: false" shadow="type: pcfsoft">
-        <a-entity cam_controller id="camera" camera="active: true;" position="-2 0.5 -2">
+        <a-entity cam_controller id="camera" camera="active: true;" position="-2 5 -2">
             <script type="text/javascript">
-                /*var sceneEl = document.querySelector('#scene');
-                look-controlsw
-                wasd-controls
-                var cameraEl = document.querySelector('#camera');*/
+            // To work the LookAt function of the camera
             </script>
         </a-entity>
-        <!--
-        a-camera id="camera" camera="active: true;" look-controls wasd-controls></a-camera>
-        <a-entity id="rig" position="-2, 0, -2">
-            <a-entity id="camera" camera="active: true;" look-controls wasd-controls></a-entity>
-        </a-entity>
-        -->
 
         <!-- Asset management system. -->
         <a-assets timeout="10000">
@@ -142,28 +111,46 @@
                   line__3="start: 0, 0, 0; end: 0, 0, 200; color: blue;"
         ></a-entity>
 
-        <a-sphere id="sun" material="shader: standard; src: #sunMap;" shadow="cast: true; receive: false" position="0 0 5" radius="1.0"></a-sphere>
+        <!-- Galaxy Objects -->
 
-        <a-sphere id="mercury" material="shader: standard; src: #mercuryMap;" shadow="cast: true; receive: true" position="5 0 0" radius="1.0"></a-sphere>
+        <a-sphere id="sun" material="shader: standard; src: #sunMap;" shadow="cast: false; receive: false" position="0 0 0" radius="1.0"></a-sphere>
+
+        <a-entity id="mercuryBox" position="0 0 0">
+            <a-sphere id="mercury" material="shader: standard; src: #mercuryMap;" shadow="cast: true; receive: true" position="0 0 10" radius="1.0"></a-sphere>
+        </a-entity>
         
-        <a-sphere id="venus" material="shader: standard; src: #venusMap;" shadow="cast: true; receive: true" position="5 -3 0" radius="1.0"></a-sphere>
+        <a-entity id="venusBox" position="0 0 0">
+            <a-sphere id="venus" material="shader: standard; src: #venusMap;" shadow="cast: true; receive: true" position="0 0 15" radius="1.0"></a-sphere>
+        </a-entity>
 
-        <a-sphere id="moon" material="shader: standard; src: #moonMap;" shadow="cast: true; receive: true" position="5 0 5" radius="1.0"></a-sphere>
+        <a-entity id="moonBox" position="0 0 0">
+            <a-sphere id="moon" material="shader: standard; src: #moonMap;" shadow="cast: true; receive: true" position="0 0 18" radius="1.0"></a-sphere>
+        </a-entity>
 
-        <a-sphere id="earth" material="shader: standard; src: #earthMap;" shadow="cast: true; receive: true" position="5 0 5" radius="1.0"></a-sphere>
+        <a-entity id="earthBox" position="0 0 0">
+            <a-sphere id="earth" material="shader: standard; src: #earthMap;" shadow="cast: true; receive: true" position="0 0 20" radius="1.0"></a-sphere>
+        </a-entity>
 
-        <a-sphere id="mars" material="shader: standard; src: #marsMap;" shadow="cast: true; receive: true" position="5 0 10" radius="1.0"></a-sphere>
+        <a-entity id="marsBox" position="0 0 0">
+            <a-sphere id="mars" material="shader: standard; src: #marsMap;" shadow="cast: true; receive: true" position="0 0 25" radius="1.0"></a-sphere>
+        </a-entity>
 
-        <a-sphere id="jupiter" material="shader: standard; src: #jupiterMap;" shadow="cast: true; receive: true" position="5 5 5" radius="1.0"></a-sphere>
+        <a-entity id="jupiterBox" position="0 0 0">
+            <a-sphere id="jupiter" material="shader: standard; src: #jupiterMap;" shadow="cast: true; receive: true" position="0 0 30" radius="1.0"></a-sphere>
+        </a-entity>
 
-        <a-sphere id="saturn" material="shader: standard; src: #saturnMap;" shadow="cast: true; receive: true" position="5 -5 5" radius="1.0"></a-sphere>
+        <a-entity id="saturnBox" position="0 0 0">
+            <a-sphere id="saturn" material="shader: standard; src: #saturnMap;" shadow="cast: true; receive: true" position="0 0 35" radius="1.0"></a-sphere>    
+        </a-entity>
 
-        <a-sphere id="uranus" material="shader: standard; src: #uranusMap;" shadow="cast: true; receive: true" position="0 3 5" radius="1.0"></a-sphere>
+        <a-entity id="uranusBox" position="0 0 0">
+            <a-sphere id="uranus" material="shader: standard; src: #uranusMap;" shadow="cast: true; receive: true" position="0 0 40" radius="1.0"></a-sphere>
+        </a-entity>
 
-        <a-sphere id="neptune" material="shader: standard; src: #neptuneMap;" shadow="cast: true; receive: true" position="0 -3 5" radius="1.0"></a-sphere>
+        <a-entity id="neptuneBox" position="0 0 0">
+            <a-sphere id="neptune" material="shader: standard; src: #neptuneMap;" shadow="cast: true; receive: true" position="0 0 45" radius="1.0"></a-sphere>
+        </a-entity>            
 
-
-      
         <a-sky id="skyBox" material="src: #skyBoxMap"></a-sky>
 
         <script type="text/javascript">
@@ -183,36 +170,25 @@
             objectArray.push(document.querySelector('#saturn').object3D);
             objectArray.push(document.querySelector('#uranus').object3D);
             objectArray.push(document.querySelector('#neptune').object3D);
-            /*var sun = document.querySelector('#sun').object3D;
-            var earth = document.querySelector('#earth').object3D;
-            var mars = document.querySelector('#mars').object3D;
-            var mercury = document.querySelector('#mercury').object3D;
-            var venus = document.querySelector('#venus').object3D;*/
+
+            // Boxes
+            objectArray.push(document.querySelector('#mercuryBox').object3D);
+            objectArray.push(document.querySelector('#venusBox').object3D);
+            objectArray.push(document.querySelector('#moonBox').object3D);
+            objectArray.push(document.querySelector('#earthBox').object3D);
+            objectArray.push(document.querySelector('#marsBox').object3D);
+            objectArray.push(document.querySelector('#jupiterBox').object3D);
+            objectArray.push(document.querySelector('#saturnBox').object3D);
+            objectArray.push(document.querySelector('#uranusBox').object3D);
+            objectArray.push(document.querySelector('#neptuneBox').object3D);
 
             camera.children[0].lookAt(0,0,0);
             document.querySelector('#camera').setAttribute('look-controls', '');    //Adiciona o atributo de movimentação da câmera
+
             //document.querySelector('#camera').setAttribute('wasd-controls', '');
             //document.querySelector('#camera').add(look-controls);
         </script>
     </a-scene>
-
-    <script type="text/javascript">
-        /*var scene = document.querySelector('a-scene');
-
-        if (scene.hasLoaded) {
-            run();
-        } else {
-            scene.addEventListener('loaded', run);
-        }
-
-        function run () {
-            //var entity = scene.querySelector('a-entity');
-            //entity.setAttribute('material', 'color', 'red');
-
-            console.log("teste");
-            
-        }*/
-    </script>
 
     <!-- Open the application on another tab -->
     <div id="newWindow">
