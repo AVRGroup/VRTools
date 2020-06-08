@@ -72,7 +72,8 @@
         });
     </script>
 
-    <a-scene main_scene id="scene" time light="defaultLightsEnabled: false" shadow="type: pcfsoft">
+    <a-scene main_scene id="scene" time light="defaultLightsEnabled: false" 
+    ar-mode-ui="enabled: false" shadow="type: pcfsoft">
         <a-entity id="rig" movement-controls position="0 6 70">
             <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true"></a-entity>            
         </a-entity>
@@ -142,7 +143,9 @@
 
         <a-entity id="saturnBox" position="0 0 0">
             <a-sphere id="saturn" material="shader: standard; src: #saturnMap;" 
-            shadow="cast: true; receive: false" position="0 0 54" radius="2.0"></a-sphere>    
+            shadow="cast: true; receive: false" position="0 0 54" radius="2.0">
+
+            </a-sphere>    
         </a-entity>
 
         <a-entity id="uranusBox" position="0 0 0">
@@ -198,6 +201,9 @@
                 TranslationObjects[i].speedTranslation = speedTranslation;
                 speedTranslation = speedTranslation - 0.0025;
             }
+
+            // Increase translation of moon
+            TranslationObjects[3].speedTranslation = 0.07;
 
             // Fix the start rotation of planets
             var angleRotation = -45;
