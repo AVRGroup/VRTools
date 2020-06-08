@@ -386,13 +386,13 @@ function mainHighQuality() {
     
         var guiFolder = gui.addFolder("Properties");
         guiFolder.open(); // Open the folder
-        guiFolder.add(controls, "axes").listen().onChange(function(e) {
+        /*guiFolder.add(controls, "axes").listen().onChange(function(e) {
             if (controls.axes) {
                 axes.visible = true;
             } else {
                 axes.visible = false;
             }
-        });
+        });*/
         
         guiFolder.add(controls, "animation").listen().onChange(function(e) {
             if (controls.animation) {
@@ -820,13 +820,13 @@ function mainMediumQuality() {
     
         var guiFolder = gui.addFolder("Properties");
         guiFolder.open(); // Open the folder
-        guiFolder.add(controls, "axes").listen().onChange(function(e) {
+        /*guiFolder.add(controls, "axes").listen().onChange(function(e) {
             if (controls.axes) {
                 axes.visible = true;
             } else {
                 axes.visible = false;
             }
-        });
+        });*/
         
         guiFolder.add(controls, "animation").listen().onChange(function(e) {
             if (controls.animation) {
