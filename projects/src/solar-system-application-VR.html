@@ -203,7 +203,15 @@
 
             var speedTranslation = 0.025;
             for(let i = 0; i < TranslationObjects.length; i++){
-                TranslationObjects[i].speedTranslation = speedTranslation;
+                if(i%2 === 0){  // pair index ===> invert sense
+                    //TranslationObjects[i].rotateY(-speedTranslation);
+                    TranslationObjects[i].speedTranslation = -speedTranslation;
+                }
+                else{
+                    TranslationObjects[i].speedTranslation = speedTranslation;
+                    //TranslationObjects[i].rotateY(speedTranslation);
+                }
+               
                 speedTranslation = speedTranslation - 0.0025;
             }
 
@@ -220,7 +228,8 @@
                 else{
                     TranslationObjects[i].rotateY(THREE.Math.degToRad(angleRotation));
                 }
-                angleRotation = angleRotation + 19;
+                //angleRotation = angleRotation + 19;
+                angleRotation = Math.floor(Math.random() * (360 - 0)) + 0; // Variation 0 to 360
             }
 
             //camera.children[0].lookAt(0,0,0);
