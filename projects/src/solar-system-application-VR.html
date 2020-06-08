@@ -33,8 +33,12 @@
         }
     </style>
 
-    <!-- Library of Augmented Reality that uses Three.js -->
+    <!-- Library of Virtual Reality -->
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/util/Aframe-Extras/aframe-extras.js"></script>
+    <!-- Details about aframe-extras "controls" here:
+        https://github.com/donmccurdy/aframe-extras/tree/master/src/controls
+    -->
 
     <!-- Loading screen -->
     <script type="text/javascript" charset="UTF-8" src="../libs/util/loadScreen/LoadScreen.js"></script>
@@ -68,10 +72,10 @@
         });
     </script>
 
-    <a-scene main_scene id="scene" stats time light="defaultLightsEnabled: false" shadow="type: pcfsoft">
-        <a-camera id="camera" camera="active: true;" position="0 8 70" 
-        look-controls wasd-controls="acceleration:600">
-        </a-camera>
+    <a-scene main_scene id="scene" time light="defaultLightsEnabled: false" shadow="type: pcfsoft">
+        <a-entity id="rig" movement-controls position="0 6 70">
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true"></a-entity>            
+        </a-entity>
 
         <!-- Asset management system. -->
         <a-assets timeout="10000">
@@ -138,7 +142,7 @@
 
         <a-entity id="saturnBox" position="0 0 0">
             <a-sphere id="saturn" material="shader: standard; src: #saturnMap;" 
-            shadow="cast: true; receive: false" position="0 0 54" radius="1.0"></a-sphere>    
+            shadow="cast: true; receive: false" position="0 0 54" radius="2.0"></a-sphere>    
         </a-entity>
 
         <a-entity id="uranusBox" position="0 0 0">
