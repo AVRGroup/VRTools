@@ -7,14 +7,9 @@
 function mainHighQuality() {
     console.log("High Quality of the textures");
 
-    // use the basic elements
-    var scene;
-    var stats;
+    // Initialize the renderer to load textures before the scene
     var renderer = initRenderer();              // View function in util/utils
     renderer.setClearColor("rgb(30, 30, 40)");
-    var textureLoader = new THREE.TextureLoader();
-    var camera;
-    var clock = new THREE.Clock();
 
     // Load all elements before the execution 
     var assets = {
@@ -182,12 +177,13 @@ function mainHighQuality() {
     function setScene(){
         console.log("Elements loaded");
 
-        // use the defaults
-        scene = new THREE.Scene();  // Create main scene;
-        stats = initStats();        // To show FPS information
+        // use the basic elements
+        var scene = new THREE.Scene();  // Create main scene;
+        var stats = initStats();        // To show FPS information
+        var clock = new THREE.Clock();
         
         // Setting Camera
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.lookAt(0, 0, 0);
         camera.position.set(5, 15, 50);
         camera.up.set(0, 1, 0);
@@ -206,13 +202,13 @@ function mainHighQuality() {
             distance: 0,
             decay: 2
         });
-        pointlight.position.set(-70, 0, 150 );
-        scene.add( pointlight );
+        pointlight.position.set(0, 0, 0);
 
         var pointLightSphereGeometry = new THREE.SphereGeometry(3, 25, 25);
         var pointLightSphereMaterial = new THREE.MeshPhongMaterial({color: "white"});
         var pointLightSphere = new THREE.Mesh(pointLightSphereGeometry, pointLightSphereMaterial);
-        pointLightSphere.position.copy(pointlight.position);
+        pointLightSphere.position.set(-70, 0, 150 );
+        pointLightSphere.add(pointlight);   //Add light to sphere
         scene.add(pointLightSphere);
 
         // Show axes (parameter is size of each axis)
@@ -332,7 +328,7 @@ function mainHighQuality() {
     
             // Physics
             this.rotation = 0.01;
-            this.lightFollowCam = false;
+            this.lightFollowCam = true;
     
             // Geometry
             this.meshNumber = 4;//4;
@@ -409,11 +405,9 @@ function mainHighQuality() {
 
         guiFolder.add(controls, "lightFollowCam").listen().onChange(function(e) {
             if (!controls.lightFollowCam) {
-                pointlight.position.set(-70, 0, 150 );
                 pointLightSphere.position.set(-70, 0, 150 );
             } 
         });
-    
     
         guiFolder.add(controls, 'type', ['Sun', 'Mercury', 'Venus', 'Moon', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']).onChange(function(e) {
             controls.chooseObject();
@@ -429,12 +423,10 @@ function mainHighQuality() {
     
         window.addEventListener('resize', onResize, false);         // Ouve os eventos de resize
     
-    
         function render() {
             stats.update();
             orbitControls.update();                 // Atualiza o controle da câmera
             if (controls.lightFollowCam) {
-                pointlight.position.copy(camera.position);
                 pointLightSphere.position.copy(camera.position);
             } 
     
@@ -443,7 +435,6 @@ function mainHighQuality() {
             requestAnimationFrame(render);
             renderer.render(scene, camera);
         }
-
 
         ls.remove(render);   // Remove the interface of loading and play loop of render
     }
@@ -460,14 +451,9 @@ function mainHighQuality() {
 function mainMediumQuality() {
     console.log("Medium Quality of the textures");
 
-    // use the basic elements
-    var scene;
-    var stats;
+    // Initialize the renderer to load textures before the scene
     var renderer = initRenderer();              // View function in util/utils
     renderer.setClearColor("rgb(30, 30, 40)");
-    var textureLoader = new THREE.TextureLoader();
-    var camera;
-    var clock = new THREE.Clock();
 
     // Load all elements before the execution 
     var assets = {
@@ -596,7 +582,7 @@ function mainMediumQuality() {
                 path: "./assets/textures/space/2k_saturn.jpg", fileSize: 201
             },
             saturnRingMap:{
-                path: "./assets/textures/space/2k_saturn_ring_alpha.png", fileSize: 13
+                path: "./assets/textures/space/SaturnRing.jpg", fileSize: 13
             },
             uranusMap:{
                 path: "./assets/textures/space/2k_uranus.jpg", fileSize: 78
@@ -627,20 +613,19 @@ function mainMediumQuality() {
     function setScene(){
         console.log("Elements loaded");
 
-        // use the defaults
-        scene = new THREE.Scene();  // Create main scene;
-        stats = initStats();        // To show FPS information
+        // use the basic elements
+        var scene = new THREE.Scene();  // Create main scene;
+        var stats = initStats();        // To show FPS information
+        var clock = new THREE.Clock();
         
         // Setting Camera
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.lookAt(0, 0, 0);
         camera.position.set(5, 15, 50);
         camera.up.set(0, 1, 0);
         scene.add(camera);
 
-
         //  Setting the Lights
-
         var ambientLight = new THREE.AmbientLight(0x343434);
         ambientLight.name = "ambientLight";
         scene.add(ambientLight);
@@ -651,13 +636,13 @@ function mainMediumQuality() {
             distance: 0,
             decay: 2
         });
-        pointlight.position.set(-70, 0, 150 );
-        scene.add( pointlight );
+        pointlight.position.set(0, 0, 0);
 
         var pointLightSphereGeometry = new THREE.SphereGeometry(3, 25, 25);
         var pointLightSphereMaterial = new THREE.MeshPhongMaterial({color: "white"});
         var pointLightSphere = new THREE.Mesh(pointLightSphereGeometry, pointLightSphereMaterial);
-        pointLightSphere.position.copy(pointlight.position);
+        pointLightSphere.position.set(-70, 0, 150 );
+        pointLightSphere.add(pointlight);   //Add light to sphere
         scene.add(pointLightSphere);
 
         // Show axes (parameter is size of each axis)
@@ -777,7 +762,7 @@ function mainMediumQuality() {
     
             // Physics
             this.rotation = 0.01;
-            this.lightFollowCam = false;
+            this.lightFollowCam = true;
     
             // Geometry
             this.meshNumber = 4;//4;
@@ -854,11 +839,9 @@ function mainMediumQuality() {
 
         guiFolder.add(controls, "lightFollowCam").listen().onChange(function(e) {
             if (!controls.lightFollowCam) {
-                pointlight.position.set(-70, 0, 150 );
                 pointLightSphere.position.set(-70, 0, 150 );
             } 
         });
-    
     
         guiFolder.add(controls, 'type', ['Sun', 'Mercury', 'Venus', 'Moon', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']).onChange(function(e) {
             controls.chooseObject();
@@ -879,7 +862,6 @@ function mainMediumQuality() {
             stats.update();
             orbitControls.update();                 // Atualiza o controle da câmera
             if (controls.lightFollowCam) {
-                pointlight.position.copy(camera.position);
                 pointLightSphere.position.copy(camera.position);
             } 
     
