@@ -92,6 +92,7 @@
             <img id="jupiterMap" src="./assets/textures/space/2k_jupiter.jpg"></img>
             <img id="saturnMap" src="./assets/textures/space/2k_saturn.jpg"></img>
             <img id="saturnRingMap" src="./assets/textures/space/SaturnRing.jpg"></img>
+            <img id="saturnRingMapTest" src="./assets/textures/space/2k_saturn_ring_alpha.png"></img>
             <img id="uranusMap" src="./assets/textures/space/2k_uranus.jpg"></img>
             <img id="neptuneMap" src="./assets/textures/space/2k_neptune.jpg"></img>
         </a-assets>
@@ -144,12 +145,12 @@
 
         <a-entity id="saturnBox" position="0 0 0">
             <a-sphere id="saturn" material="shader: standard; src: #saturnMap;" 
-            shadow="cast: true; receive: false" position="0 0 54" radius="2.0">
+                shadow="cast: true; receive: false" position="0 0 54" radius="2.0">
             </a-sphere> 
-            <a-ring id="saturnRing" material="shader: flat; src: #saturnRingMap; 
-            opacity: 0.7; transparent: true; side: double"
-            position="0 0 54" rotation="-90 0 0" 
-            radius-inner="2.25" radius-outer="4.5"
+            <a-ring id="saturnRing" material="shader: flat; src: #saturnRingMapTest; 
+                opacity: 0.7; transparent: true; side: double"
+                position="0 0 54" rotation="-90 0 0" 
+                radius-inner="2.25" radius-outer="4.5"
             ></a-ring>
         </a-entity>
 
@@ -203,13 +204,11 @@
 
             var speedTranslation = 0.025;
             for(let i = 0; i < TranslationObjects.length; i++){
-                if(i%2 === 0){  // pair index ===> invert sense
-                    //TranslationObjects[i].rotateY(-speedTranslation);
+                if(i % 2 === 0){  // pair index ===> invert sense
                     TranslationObjects[i].speedTranslation = -speedTranslation;
                 }
                 else{
                     TranslationObjects[i].speedTranslation = speedTranslation;
-                    //TranslationObjects[i].rotateY(speedTranslation);
                 }
                
                 speedTranslation = speedTranslation - 0.0025;
@@ -222,19 +221,15 @@
             var angleRotation = -45;
 
             for(let i = 0; i < TranslationObjects.length; i++){
-                if(i%2 === 0){  // pair index ===> invert sense
+                angleRotation = Math.floor(Math.random() * (360 - 0)) + 0; // Variation 0 to 360
+                if(i % 2 === 0){  // pair index ===> invert sense
                     TranslationObjects[i].rotateY(THREE.Math.degToRad(-angleRotation));
                 }
                 else{
                     TranslationObjects[i].rotateY(THREE.Math.degToRad(angleRotation));
                 }
                 //angleRotation = angleRotation + 19;
-                angleRotation = Math.floor(Math.random() * (360 - 0)) + 0; // Variation 0 to 360
             }
-
-            //camera.children[0].lookAt(0,0,0);
-            //document.querySelector('#camera').setAttribute('wasd-controls-enabled', '');
-            //document.querySelector('#camera').setAttribute('look-controls', '');    //Adiciona o atributo de movimentação da câmera
         </script>
     </a-scene>
 

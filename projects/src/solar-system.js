@@ -179,7 +179,6 @@ function mainHighQuality() {
 
         // use the basic elements
         var scene = new THREE.Scene();  // Create main scene;
-        var stats = initStats();        // To show FPS information
         var clock = new THREE.Clock();
         
         // Setting Camera
@@ -424,7 +423,6 @@ function mainHighQuality() {
         window.addEventListener('resize', onResize, false);         // Ouve os eventos de resize
     
         function render() {
-            stats.update();
             orbitControls.update();                 // Atualiza o controle da câmera
             if (controls.lightFollowCam) {
                 pointLightSphere.position.copy(camera.position);
@@ -582,7 +580,7 @@ function mainMediumQuality() {
                 path: "./assets/textures/space/2k_saturn.jpg", fileSize: 201
             },
             saturnRingMap:{
-                path: "./assets/textures/space/SaturnRing.jpg", fileSize: 13
+                path: "./assets/textures/space/2k_saturn_ring_alpha.png", fileSize: 271//13
             },
             uranusMap:{
                 path: "./assets/textures/space/2k_uranus.jpg", fileSize: 78
@@ -615,7 +613,6 @@ function mainMediumQuality() {
 
         // use the basic elements
         var scene = new THREE.Scene();  // Create main scene;
-        var stats = initStats();        // To show FPS information
         var clock = new THREE.Clock();
         
         // Setting Camera
@@ -720,16 +717,43 @@ function mainMediumQuality() {
     
             var saturnRing = assets.objects.saturnRing;
             saturnRing.rotation.x = Math.PI/2;
-            saturnRing.material.opacity = 1;
-            saturnRing.material.transparent = true;
-            /*var geometry = saturnRing.geometry;//new THREE.RingBufferGeometry(3, 5, 64);
-            var pos = geometry.attributes.position;
+            /*saturnRing.material.opacity = 1;
+            saturnRing.material.transparent = true;*/
+            console.log(saturnRing.geometry);
+
+            var geometry = saturnRing.geometry;//new THREE.RingBufferGeometry(3, 5, 64);
+
+            /*var pos = geometry.attributes.position;
             var v3 = new THREE.Vector3();
             for (let i = 0; i < pos.count; i++){
                 v3.fromBufferAttribute(pos, i);
                 geometry.attributes.uv.setXY(i, v3.length() < 4 ? 0 : 1, 1);
             }*/
-            saturn.add(saturnRing);                 //Add on planet
+            //saturn.add(saturnRing);                 //Add on planet
+           /* var segs = 128;
+            var ii = 10 * 1.200;
+            var oo = 10 * 1.950;
+
+            //var geometry = new THREE.RingBufferGeometry(ii, oo, segs);
+
+            /var uvs = geometry.attributes.uv.array;
+            // loop and initialization taken from RingBufferGeometry
+            var phiSegments = geometry.parameters.phiSegments || 0;
+            var thetaSegments = geometry.parameters.thetaSegments || 0;
+            //phiSegments = phiSegments !== undefined ? Math.max( 1, phiSegments ) : 1;
+            //thetaSegments = thetaSegments !== undefined ? Math.max( 3, thetaSegments ) : 8;
+            for ( var c = 0, j = 0; j <= phiSegments; j ++ ) {
+                for ( var i = 0; i <= thetaSegments; i ++ ) {
+                    uvs[c++] = i / thetaSegments,
+                    uvs[c++] = j / phiSegments;
+                }
+            }
+            var mat = new THREE.MeshBasicMaterial({map: assets.textures.saturnRingMap, side: 2});
+            var mesh = new THREE.Mesh(geometry,mat);
+            mesh.rotateX(Math.PI/2);
+            mesh.material.opacity = 1;
+            mesh.material.transparent = true;
+            scene.add(mesh);*/
 
            
             //scene.add(saturnRing);
@@ -859,7 +883,6 @@ function mainMediumQuality() {
     
     
         function render() {
-            stats.update();
             orbitControls.update();                 // Atualiza o controle da câmera
             if (controls.lightFollowCam) {
                 pointLightSphere.position.copy(camera.position);
