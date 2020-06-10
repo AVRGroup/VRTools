@@ -219,7 +219,7 @@ function mainHighQuality() {
         // Enable mouse rotation, pan, zoom etc.
         var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControls.target.set(0, 0, 0);
-        orbitControls.minDistance = 14;
+        orbitControls.minDistance = 25;
         orbitControls.maxDistance = 100;
 
         // Skybox of galaxy
@@ -643,7 +643,7 @@ function mainMediumQuality() {
         // Enable mouse rotation, pan, zoom etc.
         var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControls.target.set(0, 0, 0);
-        orbitControls.minDistance = 14;
+        orbitControls.minDistance = 25;
         orbitControls.maxDistance = 100;
 
         // Skybox of galaxy
