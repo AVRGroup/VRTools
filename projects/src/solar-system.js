@@ -218,7 +218,9 @@ function mainHighQuality() {
 
         // Enable mouse rotation, pan, zoom etc.
         var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-        orbitControls.target.set(0, 0, -1);
+        orbitControls.target.set(0, 0, 0);
+        orbitControls.minDistance = 14;
+        orbitControls.maxDistance = 100;
 
         // Skybox of galaxy
         var skyBox = assets.objects.skyBox;
@@ -287,17 +289,7 @@ function mainHighQuality() {
             saturnRing.rotation.x = Math.PI/2;
             saturnRing.material.opacity = 1;
             saturnRing.material.transparent = true;
-            /*var geometry = saturnRing.geometry;//new THREE.RingBufferGeometry(3, 5, 64);
-            var pos = geometry.attributes.position;
-            var v3 = new THREE.Vector3();
-            for (let i = 0; i < pos.count; i++){
-                v3.fromBufferAttribute(pos, i);
-                geometry.attributes.uv.setXY(i, v3.length() < 4 ? 0 : 1, 1);
-            }*/
             saturn.add(saturnRing);                 //Add on planet
-
-           
-            //scene.add(saturnRing);
     
             // Uranus
             var uranus = assets.objects.uranus;
@@ -650,7 +642,9 @@ function mainMediumQuality() {
 
         // Enable mouse rotation, pan, zoom etc.
         var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-        orbitControls.target.set(0, 0, -1);
+        orbitControls.target.set(0, 0, 0);
+        orbitControls.minDistance = 14;
+        orbitControls.maxDistance = 100;
 
         // Skybox of galaxy
         var skyBox = assets.objects.skyBox;
