@@ -139,7 +139,7 @@ function mainMediumQuality() {
                 path: "./assets/textures/space/2k_saturn.jpg", fileSize: 201
             },
             saturnRingMap:{
-                path: "./assets/textures/space/2k_saturn_ring_alpha.png", fileSize: 271//13
+                path: "./assets/textures/space/saturn-Ring-1024x1024.png", fileSize: 1220//13
             },
             uranusMap:{
                 path: "./assets/textures/space/2k_uranus.jpg", fileSize: 78
@@ -278,46 +278,9 @@ function mainMediumQuality() {
     
             var saturnRing = assets.objects.saturnRing;
             saturnRing.rotation.x = Math.PI/2;
-            /*saturnRing.material.opacity = 1;
-            saturnRing.material.transparent = true;*/
-            console.log(saturnRing.geometry);
-
-            var geometry = saturnRing.geometry;//new THREE.RingBufferGeometry(3, 5, 64);
-
-            /*var pos = geometry.attributes.position;
-            var v3 = new THREE.Vector3();
-            for (let i = 0; i < pos.count; i++){
-                v3.fromBufferAttribute(pos, i);
-                geometry.attributes.uv.setXY(i, v3.length() < 4 ? 0 : 1, 1);
-            }*/
-            //saturn.add(saturnRing);                 //Add on planet
-           /* var segs = 128;
-            var ii = 10 * 1.200;
-            var oo = 10 * 1.950;
-
-            //var geometry = new THREE.RingBufferGeometry(ii, oo, segs);
-
-            /var uvs = geometry.attributes.uv.array;
-            // loop and initialization taken from RingBufferGeometry
-            var phiSegments = geometry.parameters.phiSegments || 0;
-            var thetaSegments = geometry.parameters.thetaSegments || 0;
-            //phiSegments = phiSegments !== undefined ? Math.max( 1, phiSegments ) : 1;
-            //thetaSegments = thetaSegments !== undefined ? Math.max( 3, thetaSegments ) : 8;
-            for ( var c = 0, j = 0; j <= phiSegments; j ++ ) {
-                for ( var i = 0; i <= thetaSegments; i ++ ) {
-                    uvs[c++] = i / thetaSegments,
-                    uvs[c++] = j / phiSegments;
-                }
-            }
-            var mat = new THREE.MeshBasicMaterial({map: assets.textures.saturnRingMap, side: 2});
-            var mesh = new THREE.Mesh(geometry,mat);
-            mesh.rotateX(Math.PI/2);
-            mesh.material.opacity = 1;
-            mesh.material.transparent = true;
-            scene.add(mesh);*/
-
-           
-            //scene.add(saturnRing);
+            saturnRing.material.opacity = 0.6;
+            saturnRing.material.transparent = true;
+            saturn.add(saturnRing);
     
             // Uranus
             var uranus = assets.objects.uranus;
@@ -564,14 +527,6 @@ function mainHighQuality() {
             marsGeometry: new THREE.SphereGeometry(12, 50, 50),
             jupiterGeometry: new THREE.SphereGeometry(12, 50, 50),
             saturnGeometry: new THREE.SphereGeometry(12, 50, 50),
-            /*saturnRingGeometry: new THREE.RingGeometry({
-                innerRadius: 16,
-                outerRadius: 20,
-                thetaSegments: 8,
-                phiSegments: 8,
-                thetaStart: 0,
-                thetaLength: Math.PI * 2
-            }),*/
             saturnRingGeometry: new THREE.RingBufferGeometry(13, 20, 64, 64, 0, Math.PI * 2),
             uranusGeometry: new THREE.SphereGeometry(12, 50, 50),
             neptuneGeometry: new THREE.SphereGeometry(12, 50, 50),
@@ -611,7 +566,7 @@ function mainHighQuality() {
                 path: "./assets/textures/space/8k_saturn.jpg", fileSize: 1102
             },
             saturnRingMap:{
-                path: "./assets/textures/space/8k_saturn_ring_alpha.png", fileSize: 12
+                path: "./assets/textures/space/saturn-Ring-7000x7000.png", fileSize: 38281
             },
             uranusMap:{
                 path: "./assets/textures/space/2k_uranus.jpg", fileSize: 78
@@ -752,7 +707,7 @@ function mainHighQuality() {
     
             var saturnRing = assets.objects.saturnRing;
             saturnRing.rotation.x = Math.PI/2;
-            saturnRing.material.opacity = 1;
+            saturnRing.material.opacity = 0.6;
             saturnRing.material.transparent = true;
             saturn.add(saturnRing);                 //Add on planet
     

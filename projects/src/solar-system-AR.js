@@ -135,7 +135,7 @@ function mainMediumQuality() {
                 path: "./assets/textures/space/2k_saturn.jpg", fileSize: 201
             },
             saturnRingMap:{
-                path: "./assets/textures/space/2k_saturn_ring_alpha.png", fileSize: 13
+                path: "./assets/textures/space/saturn-Ring-1024x1024.png", fileSize: 1220//13
             },
             uranusMap:{
                 path: "./assets/textures/space/2k_uranus.jpg", fileSize: 78
@@ -258,15 +258,8 @@ function mainMediumQuality() {
     
             var saturnRing = assets.objects.saturnRing;
             saturnRing.rotation.x = Math.PI/2;
-            saturnRing.material.opacity = 1;
+            saturnRing.material.opacity = 0.6;
             saturnRing.material.transparent = true;
-            /*var geometry = saturnRing.geometry;//new THREE.RingBufferGeometry(3, 5, 64);
-            var pos = geometry.attributes.position;
-            var v3 = new THREE.Vector3();
-            for (let i = 0; i < pos.count; i++){
-                v3.fromBufferAttribute(pos, i);
-                geometry.attributes.uv.setXY(i, v3.length() < 4 ? 0 : 1, 1);
-            }*/
             saturn.add(saturnRing);                 //Add on planet
     
             // Uranus
