@@ -201,16 +201,10 @@
             TranslationObjects.push(document.querySelector('#uranusBox').object3D);
             TranslationObjects.push(document.querySelector('#neptuneBox').object3D);
 
-            var speedTranslation = 0.025;
+            var speedTranslation = -0.024;
             for(let i = 0; i < TranslationObjects.length; i++){
-                if(i % 2 === 0){  // pair index ===> invert sense
-                    TranslationObjects[i].speedTranslation = -speedTranslation;
-                }
-                else{
-                    TranslationObjects[i].speedTranslation = speedTranslation;
-                }
-               
-                speedTranslation = speedTranslation - 0.0025;
+                TranslationObjects[i].speedTranslation = speedTranslation;
+                speedTranslation = speedTranslation + 0.0025;
             }
 
             // Increase translation of moon
