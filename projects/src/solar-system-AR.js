@@ -347,6 +347,7 @@ function mainMediumQuality() {
     
         var guiFolder = gui.addFolder("Properties");
         guiFolder.open(); // Open the folder
+        
         /*guiFolder.add(controls, "axes").listen().onChange(function(e) {
             if (controls.axes) {
                 axes.visible = true;
