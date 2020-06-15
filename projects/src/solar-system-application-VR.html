@@ -91,8 +91,7 @@
             <img id="marsMap" src="./assets/textures/space/2k_mars.jpg"></img>
             <img id="jupiterMap" src="./assets/textures/space/2k_jupiter.jpg"></img>
             <img id="saturnMap" src="./assets/textures/space/2k_saturn.jpg"></img>
-            <img id="saturnRingMap" src="./assets/textures/space/SaturnRing.jpg"></img>
-            <img id="saturnRingMapTest" src="./assets/textures/space/saturn-Ring-1024x1024.png"></img>
+            <img id="saturnRingMap" src="./assets/textures/space/saturn-Ring-1024x1024.png"></img>
             <img id="uranusMap" src="./assets/textures/space/2k_uranus.jpg"></img>
             <img id="neptuneMap" src="./assets/textures/space/2k_neptune.jpg"></img>
         </a-assets>
@@ -147,10 +146,10 @@
             <a-sphere id="saturn" material="shader: standard; src: #saturnMap;" 
                 shadow="cast: true; receive: false" position="0 0 54" radius="2.0">
             </a-sphere> 
-            <a-ring id="saturnRing" material="shader: flat; src: #saturnRingMapTest; 
+            <a-ring id="saturnRing" material="shader: flat; src: #saturnRingMap; 
                 opacity: 0.7; transparent: true; side: double"
                 position="0 0 54" rotation="-90 0 0" 
-                radius-inner="2.25" radius-outer="4.5"
+                radius-inner="0" radius-outer="4.5"
             ></a-ring>
         </a-entity>
 
