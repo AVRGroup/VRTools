@@ -106,12 +106,39 @@
             <h3 class="w3-padding-16 w3-border-bottom w3-border-light-grey">Images in Augmented Reality</h3>
         </div>
 
-        <div class="w3-content w3-display-container w3-center w3-row">
+        <div class="w3-content w3-display-container w3-center w3-row ">
 
-            <img class="slide " src="./img/screenshot1.png" onclick="openModal(1)">
-            <img class="slide " src="./img/screenshot2.png " onclick="openModal(2)">
-            <img class="slide " src="./img/screenshot3.png " onclick="openModal(3)">
-            <img class="slide " src="./img/screenshot4.png " onclick="openModal(4)">
+            <img class="slide" src="./img/Solar-System/screenshot1-AR.jpeg" style="border:1px solid black" onclick="openModal(1)">
+            <img class="slide" src="./img/Solar-System/screenshot2-AR.jpeg" style="border:1px solid black" onclick="openModal(2)">
+            <img class="slide" src="./img/Solar-System/screenshot3-AR.jpeg" style="border:1px solid black" onclick="openModal(3)">
+            <img class="slide" src="./img/Solar-System/screenshot4-AR.jpeg" style="border:1px solid black" onclick="openModal(4)">
+            <button id="btn-left " class="w3-button w3-black w3-display-left w3-hide-large " onclick="plusDivs(-1) ">&#10094;</button>
+            <button class="w3-button w3-black w3-display-right w3-hide-large " onclick="plusDivs(1) ">&#10095;</button>
+        </div>
+
+        <div id="modal-slideshow-1" class="w3-modal w3-black">
+            <div class="w3-content w3-center" style="height: 80%;">
+                <img class="slide-modal w3-display-middle" src="./img/Solar-System/screenshot1-AR.jpeg" style="height: 100%; border:1px solid black">
+                <img class="slide-modal w3-display-middle" src="./img/Solar-System/screenshot2-AR.jpeg" style="height: 100%; border:1px solid black">
+                <img class="slide-modal w3-display-middle" src="./img/Solar-System/screenshot3-AR.jpeg" style="height: 100%; border:1px solid black">
+                <img class="slide-modal w3-display-middle" src="./img/Solar-System/screenshot4-AR.jpeg" style="height: 100%; border:1px solid black">
+                <span class="w3-black w3-text-white w3-opacity w3-display-left w3-btn" onclick="plusModal(-1)">❮</span>
+                <span class="w3-black w3-text-white w3-opacity w3-display-right w3-btn" onclick="plusModal(1)">❯</span>
+            </div>
+
+            <span class="w3-black w3-text-white w3-opacity w3-xxlarge w3-hover-text-grey w3-container w3-display-topright" onclick="closeModal(0)" style="cursor:pointer">×</span>
+        </div>
+
+        <div class="w3-container w3-padding-32 ">
+            <h3 class="w3-padding-16 w3-border-bottom w3-border-light-grey">Images in Virtual Reality</h3>
+        </div>
+
+        <div class="w3-content w3-display-container w3-center w3-row ">
+
+            <img class="slide" src="./img/Solar-System/screenshot5-VR.jpeg" style="border:1px solid black" onclick="openModal(5)">
+            <img class="slide" src="./img/Solar-System/screenshot6-VR.jpeg" style="border:1px solid black" onclick="openModal(6)">
+            <img class="slide" src="./img/Solar-System/screenshot7-VR.jpeg" style="border:1px solid black" onclick="openModal(7)">
+            <img class="slide" src="./img/Solar-System/screenshot8-VR.jpeg" style="border:1px solid black" onclick="openModal(8)">
 
             <button id="btn-left " class="w3-button w3-black w3-display-left w3-hide-large " onclick="plusDivs(-1) ">&#10094;</button>
             <button class="w3-button w3-black w3-display-right w3-hide-large " onclick="plusDivs(1) ">&#10095;</button>
@@ -119,10 +146,10 @@
 
         <div id="modal-slideshow" class="w3-modal w3-black">
             <div class="w3-content w3-center" style="height: 80%;">
-                <img class="slide-modal w3-display-middle" src="./img/screenshot1.png" style="height: 100%;">
-                <img class="slide-modal w3-display-middle" src="./img/screenshot2.png" style="height: 100%;">
-                <img class="slide-modal w3-display-middle" src="./img/screenshot3.png" style="height: 100%;">
-                <img class="slide-modal w3-display-middle" src="./img/screenshot4.png" style="height: 100%;">
+                <img class="slide-modal w3-display-middle" src="./img/Solar-System/screenshot5-VR.jpeg" style="height: 100%; border:1px solid black">
+                <img class="slide-modal w3-display-middle" src="./img/Solar-System/screenshot6-VR.jpeg" style="height: 100%; border:1px solid black">
+                <img class="slide-modal w3-display-middle" src="./img/Solar-System/screenshot7-VR.jpeg" style="height: 100%; border:1px solid black">
+                <img class="slide-modal w3-display-middle" src="./img/Solar-System/screenshot8-VR.jpeg" style="height: 100%; border:1px solid black">
 
                 <span class="w3-black w3-text-white w3-opacity w3-display-left w3-btn" onclick="plusModal(-1)">❮</span>
                 <span class="w3-black w3-text-white w3-opacity w3-display-right w3-btn" onclick="plusModal(1)">❯</span>
@@ -130,6 +157,7 @@
 
             <span class="w3-black w3-text-white w3-opacity w3-xxlarge w3-hover-text-grey w3-container w3-display-topright" onclick="closeModal()" style="cursor:pointer">×</span>
         </div>
+
 
         <div class="w3-panel w3-leftbar w3-serif">
             <h5><b>Reference:</b></h5>
@@ -145,7 +173,11 @@
     <footer class="w3-center w3-black w3-padding-16 ">
         <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp " title="W3.CSS " target="_blank " class="w3-hover-text-green ">w3.css</a></p>
     </footer>
-    <script src="../js/script.js"></script>
+    <script type="text/javascript" src="../js/script.js"></script>
+    <script type="text/javascript">
+        //buildModalArray(["modal-slideshow-1", "modal-slideshow-2"],
+            //            ["slide-1", "slide-2"], ["slide-modal-1", "slide-modal-2"]);
+    </script>
 </body>
 
 </html>
