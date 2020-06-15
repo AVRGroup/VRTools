@@ -1,7 +1,7 @@
 function init() {
     // use the defaults
     var scene = new THREE.Scene(); // Create main scene
-    var stats = initStats(); // To show FPS information
+    //var stats = initStats(); // To show FPS information
     var renderer = initRenderer(); // View function in util/utils
     //renderer.setClearColor("rgb(30, 30, 40)");
     var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); //var camera = initCamera(new THREE.Vector3(0, 10, 20));
@@ -23,7 +23,10 @@ function init() {
     scene.add(groundPlane);
 
     // Enable mouse rotation, pan, zoom etc.
-    var trackballControls = initTrackballControls(camera, renderer);
+    var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    orbitControls.target.set(0, 0, 0);
+    orbitControls.minDistance = 25;
+    orbitControls.maxDistance = 100;
 
     // Object Material for all objects
     var objectMaterial = new THREE.MeshPhongMaterial({ color: "rgb(255, 0, 0)" });
@@ -38,11 +41,6 @@ function init() {
 
     // Position of the cube
     objectArray[1].position.y = 5;
-
-    /*var controls = new function () {
-        this.rotation = 0.02;
-        this.mesh;
-    };*/
 
     // Controls of sidebar
     var controls = new function() {
@@ -148,7 +146,7 @@ function init() {
         }
     });
 
-    guiFolder.add(controls, 'rotation', 0, 0.5).onChange();
+    //guiFolder.add(controls, 'rotation', 0, 0.5).onChange();
     //gui.add(controls, 'radius', 0, 40).step(1).onChange(controls.redraw);
     //gui.add(controls, 'detail', 0, 3).step(1).onChange(controls.redraw);
     guiFolder.addColor(controls, 'color').onChange(function(e) {
@@ -234,8 +232,9 @@ function init() {
     render();
 
     function render() {
-        stats.update();
-        trackballControls.update(clock.getDelta());
+        //stats.update();
+        orbitControls.update();                 // Atualiza o controle da câmera
+        //orbitControls.update(clock.getDelta());
 
         // Rotating the mesh selected
         controls.mesh.rotation.x += controls.rotation;
