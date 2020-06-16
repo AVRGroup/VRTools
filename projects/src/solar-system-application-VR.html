@@ -75,7 +75,7 @@
     <a-scene main_scene id="scene" time light="defaultLightsEnabled: false" 
     renderer="antialias: true; alpha: true"
     shadow="type: pcfsoft">
-        <a-entity id="rig" movement-controls position="0 50 70">
+        <a-entity id="rig" movement-controls position="0 50 135">
             <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true"></a-entity>            
         </a-entity>
 
@@ -115,18 +115,18 @@
 
         <a-entity id="mercuryBox" position="0 0 0">
             <a-sphere id="mercury" material="shader: standard; src: #mercuryMap;" 
-            shadow="cast: true; receive: false" position="0 0 21" radius="1.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 30" radius="1.0"></a-sphere>
         </a-entity>
         
         <a-entity id="venusBox" position="0 0 0">
             <a-sphere id="venus" material="shader: standard; src: #venusMap;" 
-            shadow="cast: true; receive: false" position="0 0 26" radius="1.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 45" radius="1.0"></a-sphere>
         </a-entity>
 
         <a-entity id="moonEarthBox" position="0 0 0">
             <a-sphere id="earth" material="shader: standard; src: #earthMap;" 
-                shadow="cast: true; receive: true" position="0 0 31" radius="1.0"></a-sphere> 
-            <a-entity id="moonBox" position="0 0 31">
+                shadow="cast: true; receive: true" position="0 0 60" radius="1.0"></a-sphere> 
+            <a-entity id="moonBox" position="0 0 60">
                 <a-sphere id="moon" material="shader: standard; src: #moonMap;" 
                 shadow="cast: true; receive: true" position="0 0 3" radius="0.5"></a-sphere>  
                 <a-ring id="moonOrbit" material="shader: flat; color:gray;
@@ -141,33 +141,33 @@
 
         <a-entity id="marsBox" position="0 0 0">
             <a-sphere id="mars" material="shader: standard; src: #marsMap;" 
-            shadow="cast: true; receive: false" position="0 0 36" radius="1.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 75" radius="1.0"></a-sphere>
         </a-entity>
 
         <a-entity id="jupiterBox" position="0 0 0">
             <a-sphere id="jupiter" material="shader: standard; src: #jupiterMap;" 
-            shadow="cast: true; receive: false" position="0 0 46" radius="4.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 90" radius="4.0"></a-sphere>
         </a-entity>
 
         <a-entity id="saturnBox" position="0 0 0">
             <a-sphere id="saturn" material="shader: standard; src: #saturnMap;" 
-                shadow="cast: true; receive: false" position="0 0 54" radius="2.0">
+                shadow="cast: true; receive: false" position="0 0 105" radius="2.0">
             </a-sphere> 
             <a-ring id="saturnRing" material="shader: flat; src: #saturnRingMap; 
                 opacity: 0.7; transparent: true; side: double"
-                position="0 0 54" rotation="-90 0 0" 
+                position="0 0 105" rotation="-90 0 0" 
                 radius-inner="0" radius-outer="4.5"
             ></a-ring>
         </a-entity>
 
         <a-entity id="uranusBox" position="0 0 0">
             <a-sphere id="uranus" material="shader: standard; src: #uranusMap;" 
-            shadow="cast: true; receive: false" position="0 0 61" radius="1.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 120" radius="1.0"></a-sphere>
         </a-entity>
 
         <a-entity id="neptuneBox" position="0 0 0">
             <a-sphere id="neptune" material="shader: standard; src: #neptuneMap;" 
-            shadow="cast: true; receive: false" position="0 0 66" radius="1.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 135" radius="1.0"></a-sphere>
         </a-entity>            
 
         <!-- Orbit rings -->
@@ -175,56 +175,56 @@
         <a-ring id="mercuryOrbit" material="shader: flat; color:gray;
             opacity: 0.4; transparent: true; side: double"
             position="0 0 0" rotation="-90 0 0" 
-            radius-inner="20.90" radius-outer="21.10"
+            radius-inner="29.90" radius-outer="30.10"
             segments-phi="120" segments-theta="120"
         ></a-ring>
 
         <a-ring id="venusOrbit" material="shader: flat; color:gray;
             opacity: 0.4; transparent: true; side: double"
             position="0 0 0" rotation="-90 0 0" 
-            radius-inner="25.90" radius-outer="26.10"
+            radius-inner="44.90" radius-outer="45.10"
             segments-phi="120" segments-theta="120"
         ></a-ring>
 
         <a-ring id="eartMoonOrbit" material="shader: flat; color:gray;
             opacity: 0.4; transparent: true; side: double"
             position="0 0 0" rotation="-90 0 0" 
-            radius-inner="30.90" radius-outer="31.10"
+            radius-inner="59.90" radius-outer="60.10"
             segments-phi="120" segments-theta="120"
         ></a-ring>
 
         <a-ring id="marsOrbit" material="shader: flat; color:gray;
             opacity: 0.4; transparent: true; side: double"
             position="0 0 0" rotation="-90 0 0" 
-            radius-inner="35.90" radius-outer="36.10"
+            radius-inner="74.90" radius-outer="75.10"
             segments-phi="120" segments-theta="120"
         ></a-ring>
 
         <a-ring id="jupiterOrbit" material="shader: flat; color:gray;
             opacity: 0.4; transparent: true; side: double"
             position="0 0 0" rotation="-90 0 0" 
-            radius-inner="53.90" radius-outer="54.10"
+            radius-inner="89.90" radius-outer="90.10"
             segments-phi="120" segments-theta="120"
         ></a-ring>
 
         <a-ring id="saturnOrbit" material="shader: flat; color:gray;
             opacity: 0.4; transparent: true; side: double"
             position="0 0 0" rotation="-90 0 0" 
-            radius-inner="45.90" radius-outer="46.10"
+            radius-inner="104.90" radius-outer="105.10"
             segments-phi="120" segments-theta="120"
         ></a-ring>
 
         <a-ring id="uranusOrbit" material="shader: flat; color:gray;
             opacity: 0.4; transparent: true; side: double"
             position="0 0 0" rotation="-90 0 0" 
-            radius-inner="60.90" radius-outer="61.10"
+            radius-inner="119.90" radius-outer="120.10"
             segments-phi="120" segments-theta="120"
         ></a-ring>
 
         <a-ring id="neptuneOrbit" material="shader: flat; color:gray;
             opacity: 0.4; transparent: true; side: double"
             position="0 0 0" rotation="-90 0 0" 
-            radius-inner="65.90" radius-outer="66.10"
+            radius-inner="134.90" radius-outer="135.10"
             segments-phi="120" segments-theta="120"
         ></a-ring>
 
