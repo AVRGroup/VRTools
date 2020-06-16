@@ -111,28 +111,28 @@
 
         <!-- Galaxy Objects -->
 
-        <a-sphere id="sun" material="shader: flat; src: #sunMap;" position="0 0 0" radius="11.0"></a-sphere>
+        <a-sphere id="sun" material="shader: flat; src: #sunMap;" position="0 0 0" radius="14.0"></a-sphere>
 
         <a-entity id="mercuryBox" position="0 0 0">
             <a-sphere id="mercury" material="shader: standard; src: #mercuryMap;" 
-            shadow="cast: true; receive: false" position="0 0 30" radius="1.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 30" radius="2.0"></a-sphere>
         </a-entity>
         
         <a-entity id="venusBox" position="0 0 0">
             <a-sphere id="venus" material="shader: standard; src: #venusMap;" 
-            shadow="cast: true; receive: false" position="0 0 45" radius="1.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 45" radius="2.0"></a-sphere>
         </a-entity>
 
         <a-entity id="moonEarthBox" position="0 0 0">
             <a-sphere id="earth" material="shader: standard; src: #earthMap;" 
-                shadow="cast: true; receive: true" position="0 0 60" radius="1.0"></a-sphere> 
+                shadow="cast: true; receive: true" position="0 0 60" radius="2.0"></a-sphere> 
             <a-entity id="moonBox" position="0 0 60">
                 <a-sphere id="moon" material="shader: standard; src: #moonMap;" 
-                shadow="cast: true; receive: true" position="0 0 3" radius="0.5"></a-sphere>  
+                shadow="cast: true; receive: true" position="0 0 6" radius="0.5"></a-sphere>  
                 <a-ring id="moonOrbit" material="shader: flat; color:gray;
                     opacity: 0.4; transparent: true; side: double"
                     position="0 0 0" rotation="-90 0 0" 
-                    radius-inner="2.9" radius-outer="3.10"
+                    radius-inner="5.8" radius-outer="6.10"
                     segments-phi="120" segments-theta="120"
                 ></a-ring>  
             </a-entity>
@@ -141,33 +141,33 @@
 
         <a-entity id="marsBox" position="0 0 0">
             <a-sphere id="mars" material="shader: standard; src: #marsMap;" 
-            shadow="cast: true; receive: false" position="0 0 75" radius="1.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 75" radius="2.0"></a-sphere>
         </a-entity>
 
         <a-entity id="jupiterBox" position="0 0 0">
             <a-sphere id="jupiter" material="shader: standard; src: #jupiterMap;" 
-            shadow="cast: true; receive: false" position="0 0 90" radius="4.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 90" radius="6.0"></a-sphere>
         </a-entity>
 
         <a-entity id="saturnBox" position="0 0 0">
             <a-sphere id="saturn" material="shader: standard; src: #saturnMap;" 
-                shadow="cast: true; receive: false" position="0 0 105" radius="2.0">
+                shadow="cast: true; receive: false" position="0 0 105" radius="4.0">
             </a-sphere> 
             <a-ring id="saturnRing" material="shader: flat; src: #saturnRingMap; 
                 opacity: 0.7; transparent: true; side: double"
                 position="0 0 105" rotation="-90 0 0" 
-                radius-inner="0" radius-outer="4.5"
+                radius-inner="0" radius-outer="8.5"
             ></a-ring>
         </a-entity>
 
         <a-entity id="uranusBox" position="0 0 0">
             <a-sphere id="uranus" material="shader: standard; src: #uranusMap;" 
-            shadow="cast: true; receive: false" position="0 0 120" radius="1.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 120" radius="2.0"></a-sphere>
         </a-entity>
 
         <a-entity id="neptuneBox" position="0 0 0">
             <a-sphere id="neptune" material="shader: standard; src: #neptuneMap;" 
-            shadow="cast: true; receive: false" position="0 0 135" radius="1.0"></a-sphere>
+            shadow="cast: true; receive: false" position="0 0 135" radius="2.0"></a-sphere>
         </a-entity>            
 
         <!-- Orbit rings -->
