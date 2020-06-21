@@ -279,14 +279,13 @@
             var angleRotation = -45;
 
             for(let i = 0; i < TranslationObjects.length; i++){
-                angleRotation = Math.floor(Math.random() * (360 - 0)) + 0; // Variation 0 to 360
+                angleRotation = Math.floor(Math.random() * (360 - 0)) + 0; // Variation of 0 to 360
                 if(i % 2 === 0){  // pair index ===> invert sense
                     TranslationObjects[i].rotateY(THREE.Math.degToRad(-angleRotation));
                 }
                 else{
                     TranslationObjects[i].rotateY(THREE.Math.degToRad(angleRotation));
                 }
-                //angleRotation = angleRotation + 19;
             }
         </script>
     </a-scene>
