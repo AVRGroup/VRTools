@@ -33,3 +33,13 @@
     height: 50px;
     width: auto;
 }
+
+.options-buttons-container {
+    text-align: center;
+    font-style: italic;
+    text-shadow: 2px 2px #2a1540;
+}
+
+.options-buttons-container a {
+    text-decoration: none;
+}
