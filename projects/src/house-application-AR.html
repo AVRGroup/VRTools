@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>AR boilerplate</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="stats"></div>
+    <div id="gui"></div>
+
+    <script src="../libs/three/three.js"></script>
+    <script src="../libs/MarkerTracking--LocationBasedAR/THREE/ar.js"></script>
+    <script>THREEx.ArToolkitContext.baseURL = "../"</script> <!-- Define o local do contexto -->
+
+    <!-- <script src="../libs/util/dat.gui.js"></script> -->
+    <script src="../libs/util/Stats.js"></script>
+    <script src="../libs/loaders/GLTFLoader.js"></script>
+    <!-- <script src="../libs/util/loadScreen/LoadScreen.js"></script> -->
+
+    <script type="module" src="house-ar.js"></script>
+</body>
+
+</html>
