@@ -34,12 +34,13 @@
     width: auto;
 }
 
-.options-buttons-container {
+.more-modes-container {
+    color: white;
     text-align: center;
     font-style: italic;
-    text-shadow: 2px 2px #2a1540;
+    text-shadow: 2px 2px 1px #2a1540;
 }
 
-.options-buttons-container a {
+.more-modes-container a {
     text-decoration: none;
 }
