@@ -1,7 +1,3 @@
-/* eslint-disable no-undef */
-import * as THREE from '../libs/three/three.module.js';
-import { LoadScreen } from '../libs/util/loadScreen/LoadScreen.module.js';
-
 let stats, renderer, scene, camera, light, ambientLight;
 
 let arToolkitSource, arToolkitContext, markerControls;
