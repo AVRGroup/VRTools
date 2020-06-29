@@ -55,7 +55,8 @@ function init() {
         this.groundPlaneVisible = true;
 
         //Physics
-        this.rotation = 0.02;
+        this.animation = true;
+        this.rotation = 0.015;
         this.wireframe = false;
         this.color = "rgb(255, 0, 0)";
 
@@ -138,13 +139,21 @@ function init() {
 
     var guiFolder = gui.addFolder("Properties");
     guiFolder.open(); // Open the folder
-    guiFolder.add(controls, "axes").listen().onChange(function(e) {
+    guiFolder.add(controls, "animation").listen().onChange(function(e) {
+        if (controls.animation) {
+            controls.rotation = 0.015;
+        } 
+        else{
+            controls.rotation = 0;
+        }
+    });
+    /*guiFolder.add(controls, "axes").listen().onChange(function(e) {
         if (controls.axes) {
             axes.visible = true;
         } else {
             axes.visible = false;
         }
-    });
+    });*/
 
     //guiFolder.add(controls, 'rotation', 0, 0.5).onChange();
     //gui.add(controls, 'radius', 0, 40).step(1).onChange(controls.redraw);
