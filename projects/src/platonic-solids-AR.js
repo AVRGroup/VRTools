@@ -192,7 +192,7 @@ function main() {
         controls.choosePoligon();
         controls.resizePoligon()
     });
-    guiFolder.add(controls, 'size', 0.5, 2).listen().onChange(function(e) {
+    guiFolder.add(controls, 'size', 0.5, 4).listen().onChange(function(e) {
         controls.resizePoligon()
     })
 
