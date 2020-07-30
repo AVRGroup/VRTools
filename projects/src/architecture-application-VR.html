@@ -59,15 +59,31 @@
         });
 
         AFRAME.registerComponent('teleport', {
+            schema: {
+                curveType: { default: 'parabolic', oneOf: ['parabolic', 'line'] },
+                curveWidth: { default: 0.01 },
+                curveSegments: { type: 'number', default: 30 },
+                teleporterColor: { type: 'color', default: '#7744AA' },
+                collisionObjects: { type: 'array' },
+                shootSpeed: { type: 'number', default: 3 },
+                shootAngle: { type: 'number', default: Math.PI / 6 },
+            },
+
             init: function () {
                 this.gamepad = null;
                 this.obj = this.el.object3D;
                 this.objPos = new THREE.Vector3();
-                this.camera = document.querySelector('#camera');
                 this.canTeleport = true;
+                this.path;
+                this.ProjectileCurve;
+                this.collisionObjects = this.data.collisionObjects || this.el.sceneEl.object3D.children.filter(e => e.type === 'Mesh');
                 this.raycaster = new THREE.Raycaster();
                 this.direction = new THREE.Vector3();
+                this.rayDirection = new THREE.Vector3();
                 this.intersection;
+                this.time = 0;
+                this.p1;
+                this.p2;
 
                 let self = this
                 window.addEventListener("gamepadconnected", function (e) {
@@ -87,51 +103,95 @@
                 })
 
                 let material = new THREE.MeshBasicMaterial({
-                    color: 0x7744AA,
+                    color: new THREE.Color(this.data.teleporterColor),
                     side: THREE.DoubleSide,
                 });
+
+                this.obj.position.set(-3, 0, 18);
+
+                this.objPos.copy(this.obj.position);
+                this.objPos.y += 1.4;
+
+                this.ProjectileCurve = this.ProjectileCurve();
+
+                if (this.data.curveType === 'parabolic') {
+                    this.path = new this.ProjectileCurve(
+                        this.objPos,
+                        this.data.shootSpeed + camera.object3D.rotation.x * 5,
+                        this.data.shootAngle,
+                        Math.PI / 2 + camera.object3D.rotation.y
+                    );
+                } else if (this.data.curveType === 'line') {
+                    this.path = new THREE.LineCurve3(this.objPos, this.obj.position)
+                }
+
+                this.telepRay = new THREE.Mesh(
+                    new THREE.TubeBufferGeometry(this.path, this.data.curveSegments, this.data.curveWidth, 4, false),
+                    material
+                )
 
                 this.teleportMark = new THREE.Mesh(
                     new THREE.CylinderGeometry(0.5, 0.5, 0.2, 20, 1, true),
                     material
                 );
 
-                this.teleportMark.position.set(-3, 0, 15);
-                this.obj.position.set(-3, 0, 18);
+                this.el.parentEl.setObject3D('telepMark', this.teleportMark);
 
-                this.el.parentEl.setObject3D('telep', this.teleportMark);
-
-                this.objPos.copy(this.obj.position);
-                this.objPos.y += 1.4;
-
-                let tubeGeometry = new THREE.TubeBufferGeometry(new THREE.LineCurve3(this.objPos, this.teleportMark.position), 1, 0.01, 5, false);
-                this.tube = new THREE.Mesh(tubeGeometry, material);
-
-                this.el.sceneEl.setObject3D('tube', this.tube)
+                this.el.sceneEl.setObject3D('telepRay', this.telepRay);
             },
             tick: function (time, delta) {
                 this.gamepad = navigator.getGamepads()[0];
 
-                camera.object3D.getWorldDirection(this.direction);
-                this.direction.multiplyScalar(-1);
-                if (this.direction.y > -0.2) {
-                    this.direction.y = -0.2;
-                }
-
                 this.objPos.copy(this.obj.position);
                 this.objPos.y += 1.4;
 
-                this.raycaster.far = 9
-                this.raycaster.set(this.objPos, this.direction);
-                this.intersection = this.raycaster.intersectObjects(floor);
+                if (this.data.curveType === 'parabolic') {
+                    this.path = new this.ProjectileCurve(
+                        this.objPos,
+                        this.data.shootSpeed + camera.object3D.rotation.x * 5,
+                        this.data.shootAngle,
+                        Math.PI / 2 + camera.object3D.rotation.y
+                    );
 
-                if (this.intersection[0] && this.intersection[0].face.normal.x == 0 && this.intersection[0].face.normal.z == 0) {
-                    this.teleportMark.position.copy(this.intersection[0].point);
-                    this.teleportMark.position.y += 0.15;
+                    this.time = this.quadraticTime(this.path.g / 2, this.path.vy, this.path.p0.y) / this.data.curveSegments;
+
+                    for (let i = 0; i < this.data.curveSegments * 2; i++) {
+                        this.p1 = i === 0 ? this.path.getPoint(this.time * i++) : this.p2;
+                        this.p2 = this.path.getPoint(this.time * i);
+
+                        this.raycaster.far = this.p1.distanceTo(this.p2);
+                        this.raycaster.set(this.p1, this.direction.subVectors(this.p2, this.p1).normalize());
+                        this.intersection = this.raycaster.intersectObjects(this.data.collisionObjects);
+
+                        if (this.intersection[0]) {
+                            this.teleportMark.position.copy(this.intersection[0].point);
+                            this.teleportMark.position.y += 0.15;
+                            break;
+                        }
+                    }
+
+                } else if (this.data.curveType === 'line') {
+                    this.path = new THREE.LineCurve3(this.objPos, this.teleportMark.position)
+
+                    camera.object3D.getWorldDirection(this.direction);
+                    this.direction.multiplyScalar(-1);
+                    if (this.direction.y > -0.2) {
+                        this.direction.y = -0.2;
+                    }
+
+                    this.raycaster.far = 9
+                    this.raycaster.set(this.objPos, this.direction);
+
+                    this.intersection = this.raycaster.intersectObjects(this.data.collisionObjects);
+
+                    if (this.intersection[0]) {
+                        this.teleportMark.position.copy(this.intersection[0].point);
+                        this.teleportMark.position.y += 0.15;
+                    }
                 }
 
-                this.tube.geometry = new THREE.TubeBufferGeometry(new THREE.LineCurve3(this.objPos, this.teleportMark.position), 1, 0.01, 5, false);
-                this.tube.geometry.needsupdate = true;
+                this.telepRay.geometry = new THREE.TubeBufferGeometry(this.path, this.data.curveSegments, this.data.curveWidth, 4, false);
+                this.telepRay.geometry.needsupdate = true;
 
                 if (!this.gamepad) return;
 
@@ -149,8 +209,73 @@
                     setTimeout(() => { this.canTeleport = true }, 500);
                     console.log('teleported')
                 }
+            },
+            ProjectileCurve: function () {
+                function ProjectileCurve(p0, velocity, verticalAngle, horizontalAngle, gravity, scale) {
+                    THREE.Curve.call(this);
+
+                    if (p0 === undefined || velocity === undefined || verticalAngle === undefined || horizontalAngle === undefined) {
+                        return null;
+                    }
+
+                    let vhorizontal = velocity * Math.cos(verticalAngle);
+
+                    this.p0 = p0;
+                    this.vy = velocity * Math.sin(verticalAngle);
+                    this.vx = velocity * Math.cos(horizontalAngle);
+                    this.vz = velocity * Math.sin(horizontalAngle);
+                    this.g = (gravity === undefined) ? -9.8 : gravity;
+                    this.scale = (scale === undefined) ? 1 : scale;
+
+                    if (this.g > 0) this.g *= -1;
+                    p0.x += 0.05;
+
+                }
+                ProjectileCurve.prototype = Object.create(THREE.Curve.prototype);
+                ProjectileCurve.prototype.constructor = ProjectileCurve;
+
+                ProjectileCurve.prototype.getPoint = function (t) {
+                    let x = this.p0.x + this.vx * t * this.scale;
+                    let y = this.p0.y + ((this.vy * t) + (this.g * 0.5 * (t * t))) * this.scale;
+                    let z = this.p0.z - this.vz * t * this.scale;
+                    return new THREE.Vector3(x, y, z);
+
+                };
+
+                return ProjectileCurve
+            },
+            quadraticTime: function (a, b, c) {
+                // This uses the quadratic formula to solve for time in a linear motion with constant aceleration
+                // It returns null when the result is negative once negative time doesn't make sense
+                // ax^2 + bx + c = 0
+
+                let delta = (b * b) - 4 * a * c;
+
+                if (delta < 0) return null;
+
+                let x;
+
+                if (delta === 0) {
+                    x = -b / 2 * a;
+                    return x >= 0 ? x : null;
+                }
+
+                x = (-b - Math.sqrt(delta)) / (2 * a);
+                if (x > 0) return x;
+
+                x = (-b + Math.sqrt(delta)) / (2 * a);
+                if (x > 0) return x;
+
+                return null;
             }
         });
+
+        AFRAME.registerComponent('setteleport', {
+            init: function () {
+                let rig = document.getElementById('rig');
+                rig.setAttribute('teleport', { collisionObjects: floor })
+            }
+        })
     </script>
 </head>
 
@@ -161,7 +286,7 @@
             <img id="skyBoxMap" src="./assets/textures/cloud.jpg">
         </a-assets>
 
-        <a-entity id="rig" position="-3 0 18" teleport>
+        <a-entity id="rig" position="-3 0 18" setteleport>
             <a-entity id="camera" camera position="0 1.5 0" look-controls="pointerLockEnabled: true">
             </a-entity>
         </a-entity>
