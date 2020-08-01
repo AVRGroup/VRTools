@@ -65,8 +65,8 @@
                 curveSegments: { type: 'number', default: 30 },
                 teleporterColor: { type: 'color', default: '#7744AA' },
                 collisionObjects: { type: 'array' },
-                shootSpeed: { type: 'number', default: 3 },
-                shootAngle: { type: 'number', default: Math.PI / 6 },
+                shootSpeed: { type: 'number', default: 15 },
+                shootAngle: { type: 'number', default: Math.PI * 0.028 }, // approximately 5 degrees
             },
 
             init: function () {
@@ -145,7 +145,7 @@
                     if (this.data.curveType === 'parabolic') {
                         this.path = new this.ProjectileCurve(
                             this.objPos,
-                            this.data.shootSpeed + camera.object3D.rotation.x * 5,
+                            this.data.shootSpeed + camera.object3D.rotation.x * 10,
                             this.data.shootAngle,
                             Math.PI / 2 + camera.object3D.rotation.y
                         );
@@ -232,6 +232,7 @@
 
                     if (this.g > 0) this.g *= -1;
                     p0.x += 0.05;
+                    p0.z += 0.05;
 
                 }
                 ProjectileCurve.prototype = Object.create(THREE.Curve.prototype);
