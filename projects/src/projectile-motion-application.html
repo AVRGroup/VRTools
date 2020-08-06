@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projectile Motion</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .top {
+            border-top: rgb(120, 120, 120) solid 5px;
+            border-left: rgb(120, 120, 120) solid 5px;
+            border-right: rgb(120, 120, 120) solid 5px;
+        }
+
+        .middle {
+            border-left: rgb(120, 120, 120) solid 5px;
+            border-right: rgb(120, 120, 120) solid 5px;
+        }
+
+        .bottom {
+            border-left: rgb(120, 120, 120) solid 5px;
+            border-right: rgb(120, 120, 120) solid 5px;
+            border-bottom: rgb(120, 120, 120) solid 5px;
+        }
+
+        #explanation {
+            position: absolute;
+            margin-left: auto;
+            margin-right: auto;
+            left: 5%;
+            right: 5%;
+            bottom: 5px;
+            background-color: rgba(220, 220, 220, 0.7);
+            padding: 3px;
+            text-align: center;
+            border: rgb(120, 120, 120) solid 5px;
+        }
+
+        #vars {
+            position: absolute;
+            top: 30%;
+            bottom: 30%;
+            left: 2px;
+            list-style-type: none;
+        }
+
+        #vars li {
+            font-size: 1.2em;
+            background-color: rgba(220, 220, 220, 0.7);
+            padding: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="three-stats"></div>
+    <div id="physijs-stats"></div>
+    <div id="gui"></div>
+
+    <ul id="vars">
+        <li class="top">Distance:</li>
+        <li id="x" class="middle">x: -</li>
+        <li id="y" class="middle">y: -</li>
+        <li id="time" class="middle">Time:</li>
+        <li id="t" class="bottom">t: -</li>
+    </ul>
+
+    <div id="explanation">
+        The motion along the x-axis and y-axis are independent, thus they have different formulas.
+        $$ x = {x}_{0} + v_xt.$$
+        $$ y={y}_{0}+{v}_{0y}t-\frac{1}{2}{\mathrm{gt}}^{2}\\ .$$
+    </div>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../libs/three/three.js"></script>
+    <script src="../libs/util/dat.gui.js"></script>
+    <script src="../libs/util/Stats.js"></script>
+    <script src="../libs/util/loadScreen/LoadScreen.js"></script>
+    <script src="../libs/loaders/GLTFLoader.js"></script>
+    <script src="../libs/other/physijs/physi.js"></script>
+    <script src="projectile-motion.js"></script>
+</body>
+
+</html>
