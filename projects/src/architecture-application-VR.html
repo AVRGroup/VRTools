@@ -61,11 +61,7 @@
 
         AFRAME.registerComponent('setteleport', {
             init: function () {
-                this.el.addEventListener('model-loaded', () => { console.log('loaded') })
-
-
-                let rig = document.getElementById('camera');
-                console.log('floor: ', floor.length);
+                let rig = document.getElementById('rig');
                 rig.setAttribute('teleporter', {
                     collisionObjects: floor,
                     fireTeleporterOnSpacebar: true,
@@ -90,10 +86,12 @@
 
         <a-entity id="house" gltf-model="#house" modify-materials></a-entity>
 
-        <a-entity id="camera" camera position="-3 1.6 18" look-controls="pointerLockEnabled: true" setteleport>
+        <a-entity id="rig" position="-3 0 18" setteleport>
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
+            </a-entity>
         </a-entity>
 
-    </a-scene>>
+    </a-scene>
 
 </body>
 

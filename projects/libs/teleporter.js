@@ -9,23 +9,30 @@ if (typeof AFRAME === 'undefined') {
  * 
  * Usage:
  * - Import this file with an script tag after importing A-Frame
- * - You might add the teleporter to your entity like below, but it is way better to provide the meshes the teleporter will collide with
+ * - You might add the teleporter to your rig entity like below, but it is way better to provide the meshes the teleporter will collide with
  * 
- *       <a-entity camera position="-3 1.6 18" teleporter></a-entity>
+       <a-entity id="rig" position="-3 0 18" teleporter>
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
+            </a-entity>
+        </a-entity>
  * 
  * - Obs: In order to use it in a desktop, add also look-controls;
- * 
  * - If you don't suply an array with meshes to account in collision, the teleporter will check all elements in the scene, what may cause bad performace.
  * - In order to provide the array with the meshes, you need to use an auxiliar component on your code like it is shown below:
  *   
     AFRAME.registerComponent('setteleporter', {
             init: function () {
-                let myEntity = document.getElementById('myEntity');
-                myEntity.setAttribute('teleporter', {
+                let rig = document.getElementById('rig');
+                rig.setAttribute('teleporter', {
                     collisionObjects: myMeshesArray
                 });
             }
-        });
+    });
+
+    <a-entity id="rig" position="-3 0 18" setteleporter>
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
+            </a-entity>
+    </a-entity>
  */
 AFRAME.registerComponent('teleporter', {
     schema: {
@@ -43,7 +50,7 @@ AFRAME.registerComponent('teleporter', {
     init: function () {
         this.gamepad = null;
         this.obj = this.el.object3D;
-        this.objHeight = this.obj.position.y;
+        this.height = camera.object3D.position.y - 0.2;
         this.pathOrigin = new THREE.Vector3();
         this.path;
         this.Curve;
@@ -63,7 +70,7 @@ AFRAME.registerComponent('teleporter', {
         });
 
         this.pathOrigin.copy(this.obj.position);
-        this.pathOrigin.y -= 0.2;
+        this.pathOrigin.y += this.height;
 
         this.Curve = this.ProjectileCurve();
 
@@ -125,7 +132,6 @@ AFRAME.registerComponent('teleporter', {
         if (data.collisionObjects && data.collisionObjects[0] !== 'default') {
             this.collisionObjects = data.collisionObjects;
             this.raycastRecursively = false;
-            console.log('hi')
         }
         else {
             this.collisionObjects = this.el.sceneEl.object3D.children.filter(child => !/teleporter/.test(child.name));
@@ -143,7 +149,7 @@ AFRAME.registerComponent('teleporter', {
     tick: function () {
         if (this.telepRay.visible) {
             this.pathOrigin.copy(this.obj.position);
-            this.pathOrigin.y -= 0.2;
+            this.pathOrigin.y += this.height;
 
             if (this.data.curveType === 'parabolic') {
                 this.path = new this.Curve(
@@ -211,7 +217,7 @@ AFRAME.registerComponent('teleporter', {
     },
     teleport: function () {
         this.obj.position.x = this.telepTarget.position.x;
-        this.obj.position.y = this.telepTarget.position.y + this.objHeight;
+        this.obj.position.y = this.telepTarget.position.y;
         this.obj.position.z = this.telepTarget.position.z;
         this.toggleTeleport(false);
     },
@@ -222,8 +228,6 @@ AFRAME.registerComponent('teleporter', {
             if (p0 === undefined || velocity === undefined || verticalAngle === undefined || horizontalAngle === undefined) {
                 return null;
             }
-
-            let vhorizontal = velocity * Math.cos(verticalAngle);
 
             this.p0 = p0;
             this.vy = velocity * Math.sin(verticalAngle);
