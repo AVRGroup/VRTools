@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Inclined Plane</title>
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/three.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/controls/OrbitControls.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/other/physijs/physi.js"></script>
+
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/geometries/ConvexGeometry.js"></script>    <!-- Biblioteca para trabalhar com Geometria convexa-->
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/geometries/QuickHull.js"></script>
+
+    <script type="text/javascript" src="../libs/util/Stats.js"></script>
+    <script type="text/javascript" src="../libs/util/dat.gui.js"></script>
+
+    <script type="text/javascript" src="../libs/util/util.js"></script>
+    <script type="text/javascript" src="inclined-plane.js"></script>
+
+    <!-- Math Equations 
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js"></script>
+    -->
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js"></script>
+
+    <!--
+    <link rel="stylesheet" href="../libs/css/default.css">
+    -->
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        table, th, td {
+            border: 2px solid white;
+            border-collapse: collapse;
+            padding: 2px;
+        }
+        table{
+            width:100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="informations" style="position: absolute; width: 90%; height: 30%;
+    background-color: rgba(7, 7, 9, 0.6); display: flex; z-index: 1000; border: 2px solid #000 ">
+        <div id="content" style="color: #ffffff; 
+        z-index: 1001; width: 100%; overflow: auto;">
+            <canvas id="forces-canvas-box" style="display: block; overflow: auto;" width="130px" height="150px">
+                Seu browser não suporta canvas!
+            </canvas>
+            <table>
+                <tr>
+                    <th colspan="5" style="font-size: 1.3em; text-align: center;">Informations</th>
+                </tr>
+                <tr>
+                  <th colspan="2">Equations</th>
+                  <th colspan="3">Dates</th>
+                </tr>
+                <tr>
+                    <td style="width:25%">Weight: \(\overrightarrow{W}\) = \(m * \overrightarrow{G} \)</td>
+                    <td style="width:25%">Friction: \(\overrightarrow{Fr}\) = \(\mu * \overrightarrow{N} \)</td>
+
+                    <td style="width:16%">Mass: m = 1.0 Kg</td>
+                    <td style="width:16%">Gravity: \(\overrightarrow{G}\) = <span id="gravityCoefficient"></span> m/\(s^2\)</td>
+                    <td style="width:16%">\(\mu\) = <span id="frictionCoefficient"></span></td>
+                </tr>
+                <tr>
+                    <td style="width:25%">\(\overrightarrow{W_x}\) = \(\overrightarrow{W} * sin(\theta) \)</td>
+                    <td style="width:25%">\(\overrightarrow{W_y}\) = \(\overrightarrow{W} * cos(\theta) \)</td>
+
+                    <td style="width:16%">Angle: \(\theta\) = <span id="thetaAngleDegree"></span>° 
+                        = <span id="thetaAngleRadians"></span> rad</td>
+                    <td style="width:16%">\(\sin(\theta)\) = <span id="thetaAngleSin"></span></td>
+                    <td style="width:16%">\(\cos(\theta)\) = <span id="thetaAngleCos"></span></td>
+                </tr>
+                <tr>
+                    <td style="width:25%">Normal: \(\overrightarrow{N}\) = \(\overrightarrow{W_y}\)</td>
+                    <td style="width:25%"></td>
+
+                    <td style="width:16%">\(\tan(\theta)\) = <span id="thetaAngleTan"></span></td>
+                    <td style="width:16%">\(\overrightarrow{W}\) = <span id="weightForce"></span> N</td>
+                    <td style="width:16%">\(\overrightarrow{W_x}\) = <span id="weightXForce"></span> N</td>
+                </tr>
+                <tr>
+                    <td style="width:25%"></td>
+                    <td style="width:25%"></td>
+
+                    <td style="width:16%">\(\overrightarrow{W_y}\) = <span id="weightYForce"></span> N</td>
+                    <td style="width:16%">\(\overrightarrow{N}\) = <span id="normalForce"></span> N</td>
+                    <td style="width:16%">\(\overrightarrow{Fr}\) = <span id="frictionForce"></span> N</td>
+                </tr>
+            </table>
+            
+        </div>
+    </div>
+
+    
+    <script type="text/javascript"> 
+        init();
+
+        var forcesCanvas = document.getElementById("forces-canvas-box");
+        forcesCanvas.style.border = "2px solid #000";                       //Colocando borda no canvas
+
+        var informations = document.getElementById("informations");
+        informations.style.left = "5%";
+        informations.style.bottom = "50px";
+
+        var ctx = forcesCanvas.getContext("2d");
+        onResizePanels();
+        
+
+        function escreveTexto (ctx, texto, x, y) {
+            ctx.strokeText(texto, x, y);
+            ctx.fillText(texto, x, y);
+        }
+
+        function onResizePanels() {
+            informations.style.left = "5%";//(window.innerWidth/) + "px";
+            informations.style.bottom = '50px';
+            adjustForcesPanel();
+            if(window.width < 450){
+                forcesCanvas.width = "500px";
+            }
+            drawForcesPanel(ctx);
+        }
+
+        function adjustForcesPanel(){
+            // Make it visually fill the positioned parent
+            forcesCanvas.style.width ='100%';
+            //canvas.style.height='100%';
+
+            // ...then set the internal size to match
+            forcesCanvas.width  = forcesCanvas.offsetWidth;
+            //canvas.height = canvas.offsetHeight;
+            forcesCanvas.height = 60;
+        }
+        
+        function drawForcesPanel(ctx){
+
+            if(window.innerWidth < 850){    //393
+                ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+                ctx.fillRect(0, 0, forcesCanvas.width, forcesCanvas.height);
+                ctx.font = "15px Arial Black";
+                ctx.fillStyle = "white";
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 2;
+                escreveTexto(ctx, "Forces", forcesCanvas.width/2, 20);
+                ctx.font = "15px Arial Black";
+                
+                //escreveTexto(ctx, "Normal", 42, 42);
+                escreveTexto(ctx, "Normal (N)", 10 + 30, 45);
+                escreveTexto(ctx, "Weight (W)", 150 + 30, 45);
+                escreveTexto(ctx, "Friction (Fr)", 290 + 30, 45);
+                ctx.fillStyle = "green";
+                ctx.fillRect(10, 30, 20, 20);
+                ctx.strokeStyle = "black";
+                ctx.strokeRect(10, 30, 20, 20);
+                ctx.fillStyle = "red";
+                ctx.fillRect(150, 30, 20, 20);
+                ctx.strokeStyle = "black";
+                ctx.strokeRect(150, 30, 20, 20);
+                ctx.fillStyle = "blue";
+                ctx.fillRect(290, 30, 20, 20);
+                ctx.strokeStyle = "black";
+                ctx.strokeRect(290, 30, 20, 20);
+            }
+            else{
+                ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+                ctx.fillRect(0, 0, forcesCanvas.width, forcesCanvas.height);
+                ctx.font = "15px Arial Black";
+                ctx.fillStyle = "white";
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 2;
+                escreveTexto(ctx, "Forces", forcesCanvas.width/2.1, 20);
+                ctx.font = "12px Arial Black";
+                
+                //escreveTexto(ctx, "Normal", 42, 42);
+                escreveTexto(ctx, "Normal (N)", forcesCanvas.width/100 + 30, 45);
+                escreveTexto(ctx, "Weight (W)", forcesCanvas.width/6 + 30, 45);
+                escreveTexto(ctx, "Friction (Fr)", forcesCanvas.width/3 + 30, 45);
+                ctx.fillStyle = "green";
+                ctx.fillRect(forcesCanvas.width/100, 30, 20, 20);
+                ctx.strokeStyle = "black";
+                ctx.strokeRect(forcesCanvas.width/100, 30, 20, 20);
+                ctx.fillStyle = "red";
+                ctx.fillRect(forcesCanvas.width/6, 30, 20, 20);
+                ctx.strokeStyle = "black";
+                ctx.strokeRect(forcesCanvas.width/6, 30, 20, 20);
+                ctx.fillStyle = "blue";
+                ctx.fillRect(forcesCanvas.width/3, 30, 20, 20);
+                ctx.strokeStyle = "black";
+                ctx.strokeRect(forcesCanvas.width/3, 30, 20, 20);
+            }
+        }
+
+        window.addEventListener('resize', function(){
+            onResizePanels();
+        });  // Ajuste de tela
+
+    </script>
+</body>
+</html>
