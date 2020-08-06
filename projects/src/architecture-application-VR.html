@@ -73,7 +73,8 @@
 </head>
 
 <body>
-    <a-scene main_scene id="scene" time light="defaultLightsEnabled: false" renderer="antialias: true; alpha: true">
+    <a-scene main_scene id="scene" time light="defaultLightsEnabled: false"
+        renderer="antialias: true; alpha: true; sortObjects: true;">
         <a-assets timeout="60000">
             <a-asset-item id="house" src="./assets/models/modern-house.glb"></a-asset-item>
             <img id="skyBoxMap" src="./assets/textures/cloud.jpg">

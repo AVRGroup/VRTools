@@ -40,6 +40,8 @@ AFRAME.registerComponent('teleporter', {
         curveWidth: { default: 0.01 },
         curveSegments: { type: 'number', default: 30 },
         teleporterColor: { type: 'color', default: 'rgb(120,65,132)' },
+        teleporterTransparency: { type: 'boolean', default: true },
+        teleporterOpacity: { type: 'number', default: 0.7 },
         collisionObjects: { type: 'array', default: ['default'] },
         shootSpeed: { type: 'number', default: 15 },
         shootAngle: { type: 'number', default: Math.PI * 0.028 }, // approximately 5 degrees
@@ -64,9 +66,16 @@ AFRAME.registerComponent('teleporter', {
         this.p1;
         this.p2;
 
-        let material = new THREE.MeshBasicMaterial({
+        let rayMaterial = new THREE.MeshBasicMaterial({
+            color: new THREE.Color(this.data.teleporterColor),
+            transparent: this.data.teleporterTransparency,
+            opacity: this.data.teleporterOpacity,
+        });
+        let markMaterial = new THREE.MeshBasicMaterial({
             color: new THREE.Color(this.data.teleporterColor),
             side: THREE.DoubleSide,
+            transparent: this.data.teleporterTransparency,
+            opacity: this.data.teleporterOpacity,
         });
 
         this.pathOrigin.copy(this.obj.position);
@@ -87,15 +96,17 @@ AFRAME.registerComponent('teleporter', {
 
         this.telepRay = new THREE.Mesh(
             new THREE.TubeBufferGeometry(this.path, this.data.curveSegments, this.data.curveWidth, 4, false),
-            material
+            rayMaterial
         );
         this.telepRay.name = 'teleporter-ray';
+        // this.telepRay.renderOrder = 1;
 
         this.telepTarget = new THREE.Mesh(
             new THREE.CylinderGeometry(0.5, 0.5, 0.2, 20, 1, true),
-            material
+            markMaterial
         );
         this.telepTarget.name = 'teleporter-target';
+        // this.telepRay.renderOrder = 1;
 
         this.el.parentEl.setObject3D('telepMark', this.telepTarget);
         this.el.sceneEl.setObject3D('telepRay', this.telepRay);
@@ -196,7 +207,7 @@ AFRAME.registerComponent('teleporter', {
                 }
             }
 
-            this.telepRay.geometry = new THREE.TubeBufferGeometry(this.path, this.data.curveSegments, this.data.curveWidth, 4, false);
+            this.telepRay.geometry = new THREE.TubeBufferGeometry(this.path, this.data.curveSegments, this.data.curveWidth, 3, false);
             this.telepRay.geometry.needsupdate = true;
         }
 
