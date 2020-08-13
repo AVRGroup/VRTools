@@ -156,7 +156,7 @@ function init() {
     clock = new THREE.Clock();
 
     window.addEventListener('resize', onResize);
-    window.addEventListener('keydown', onKeyDown);
+    document.getElementById('drop').addEventListener('click', onClick);
 
     ls.remove(() => {
         animate();
@@ -329,12 +329,8 @@ function initStats() {
     document.getElementById('physijs-stats').appendChild(physicsStats.domElement);
 }
 
-function onKeyDown(event) {
-    switch (event.keyCode) {
-        case 32:
-            releaseBox();
-            break;
-    }
+function onClick() {
+    releaseBox();
 }
 
 function onResize() {
