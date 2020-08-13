@@ -42,6 +42,8 @@
             padding: 3px;
             text-align: center;
             border: rgb(120, 120, 120) solid 3px;
+            overflow: scroll;
+            height: 20%;
         }
 
         #vars {
@@ -74,7 +76,7 @@
     <div id="gui"></div>
 
     <ul id="vars">
-        <li class="top">Distance:</li>
+        <li class="top">Displacement:</li>
         <li id="x" class="middle">x: -</li>
         <li id="y" class="middle">y: -</li>
         <li id="time" class="middle">Time:</li>
@@ -83,9 +85,9 @@
     </ul>
 
     <div id="explanation">
-        The motion along the x-axis and y-axis are independent, thus they have different formulas.
-        $$ x = {x}_{0} + v_xt.$$
-        $$ y={y}_{0}+{v}_{0y}t-\frac{1}{2}{\mathrm{gt}}^{2}\\ .$$
+        The displacement along x-axis and y-axis formulas are given below:
+        $$ \Delta x = v_xt.$$
+        $$ \Delta y={v}_{0y}t-\frac{1}{2}{\mathrm{gt}}^{2}\\ .$$
     </div>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
