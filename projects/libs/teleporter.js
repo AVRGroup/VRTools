@@ -52,7 +52,7 @@ AFRAME.registerComponent('teleporter', {
     init: function () {
         this.gamepad = null;
         this.obj = this.el.object3D;
-        this.height = camera.object3D.position.y - 0.2;
+        this.height = camera.object3D.position.y - 0.4;
         this.pathOrigin = new THREE.Vector3();
         this.path;
         this.Curve;
