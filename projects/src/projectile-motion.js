@@ -1,4 +1,4 @@
-let rendererStats, physicsStats, renderer, scene, camera, light, controls, gui, clock;
+let rendererStats, renderer, scene, camera, light, controls, gui, clock;
 
 let box, airplane, airplaneRange, trajectory, TrajectoryPath, lookDirection, x, y, t, time, totalTime;
 let xPos, xTotalDis, xDis, yTotalDis, yDis; //position and displacement
@@ -77,6 +77,7 @@ function init() {
         this.velocity = 30;
         this.height = 100;
         this.switch_camera = false;
+        this.show_info = true;
     };
 
     gui = new dat.GUI();
@@ -90,7 +91,7 @@ function init() {
     });
     gui.add(controls, 'height', 50, 100).onChange(() => {
         airplane.position.y = controls.height;
-    })
+    });
     gui.add(controls, 'switch_camera').onChange(() => {
         if (!controls.switch_camera) {
             camera.position.set(0, 1.6, 80);
@@ -100,6 +101,9 @@ function init() {
             camera.position.copy(airplane.position);
             camera.lookAt(new THREE.Vector3(0, -1, 0))
         }
+    });
+    gui.add(controls, 'show_info').onChange(() => {
+        document.getElementById('info').style.display = controls.show_info ? 'block' : 'none';
     });
 
     let planeMaterial = new Physijs.createMaterial(
@@ -207,7 +211,6 @@ function animate() {
 }
 
 function simulate() {
-    physicsStats.update();
     scene.simulate();
     let delta = simuClock.getDelta()
     if (time !== totalTime) {
@@ -336,12 +339,6 @@ function initStats() {
     rendererStats.domElement.style.left = '0px';
     rendererStats.domElement.style.top = '0px';
     document.getElementById('three-stats').appendChild(rendererStats.domElement);
-
-
-    physicsStats = new Stats();
-    physicsStats.domElement.style.position = 'absolute';
-    physicsStats.domElement.style.top = '50px';
-    document.getElementById('physijs-stats').appendChild(physicsStats.domElement);
 }
 
 function onClick() {
