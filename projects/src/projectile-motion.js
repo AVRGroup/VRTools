@@ -3,8 +3,6 @@ let rendererStats, renderer, scene, camera, light, controls, gui, clock;
 let box, airplane, airplaneRange, trajectory, TrajectoryPath, lookDirection, x, y, t, time, totalTime;
 let xPos, xTotalDis, xDis, yTotalDis, yDis; //position and displacement
 
-let frustum, cameraViewProjectionMatrix;
-
 Physijs.scripts.worker = '../libs/other/physijs/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
 
@@ -63,10 +61,7 @@ function init() {
     camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 700);
     camera.position.set(0, 1.6, 80);
     camera.lookAt(new THREE.Vector3(0, 30, 0));
-    cameraViewProjectionMatrix = new THREE.Matrix4();
     scene.add(camera);
-
-    frustum = new THREE.Frustum();
 
     light = new THREE.DirectionalLight(0xfefefe);
     light.position.set(0, 200, 200);
@@ -126,7 +121,7 @@ function init() {
     scene.add(skyBox);
 
     lookDirection = new THREE.Vector3(0, -1, 0);
-    airplaneRange = 150;
+    airplaneRange = 175;
     airplane = ASSETS.objects.airplane;
     airplane.position.set(-150, controls.height, 0);
     airplane.rotation.y = Math.PI * 0.5;
@@ -184,28 +179,17 @@ function animate() {
 
     airplane.position.x += controls.velocity * clock.getDelta();
 
-    if (controls.switch_camera) {
-        camera.position.copy(airplane.position);
-        camera.lookAt(airplane.position.x, 0, 0);
-
-        if (airplane.position.x > airplaneRange || airplane.position.x < -airplaneRange) {
-            airplane.rotation.y += controls.velocity > 0 ? Math.PI : - Math.PI;
-            controls.velocity *= -1;
-        }
+    if (airplane.position.x > airplaneRange) {
+        airplane.rotation.y += - Math.PI;
+        controls.velocity *= -1;
+        airplane.position.x = airplaneRange;
     }
-    else {
-        camera.updateMatrixWorld();
-        camera.matrixWorldInverse.getInverse(camera.matrixWorld);
-        cameraViewProjectionMatrix.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
-        frustum.setFromProjectionMatrix(cameraViewProjectionMatrix);
-
-        if (!frustum.intersectsObject(airplane.children[0])) {
-            if ((airplane.position.x > 0 && controls.velocity > 0) || (airplane.position.x < 0 && controls.velocity < 0)) {
-                airplane.rotation.y += controls.velocity > 0 ? Math.PI : -1 * Math.PI;
-                controls.velocity *= -1;
-            }
-        }
+    else if (airplane.position.x < -airplaneRange) {
+        airplane.rotation.y -= Math.PI;
+        controls.velocity *= -1;
+        airplane.position.x = -airplaneRange;
     }
+
     rendererStats.update();
     renderer.render(scene, camera);
 }
