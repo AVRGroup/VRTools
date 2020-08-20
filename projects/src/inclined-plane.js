@@ -39,8 +39,8 @@ function init() {
   scene.add(new THREE.AmbientLight(0x0393939));
 
   // Axis
-  var axis = new THREE.AxisHelper(300);
-  scene.add(axis);
+  //var axis = new THREE.AxisHelper(300);
+  //scene.add(axis);
 
   var textureLoader = new THREE.TextureLoader();
   var sideBound = 5;            // BoxSize
