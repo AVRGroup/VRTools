@@ -1,4 +1,6 @@
 function init() {
+
+  // Physijs configuration
   Physijs.scripts.worker = '../libs/other/physijs/physijs_worker.js';
   Physijs.scripts.ammo = 'ammo.js';
 
@@ -37,8 +39,8 @@ function init() {
   scene.add(new THREE.AmbientLight(0x0393939));
 
   // Axis
-  //var axis = new THREE.AxisHelper(300);
-  //scene.add(axis);
+  var axis = new THREE.AxisHelper(300);
+  scene.add(axis);
 
   var textureLoader = new THREE.TextureLoader();
   var sideBound = 5;            // BoxSize
@@ -46,11 +48,9 @@ function init() {
   // setup controls
   var controls = {
     angleRamp: 30,                              // Degrees of inclination of the ramp
-    angleOldRamp: 30,
     animation: true,
     frictionRamp: 0.9,
     frictionBox: 0.5,
-    frictionOldBox: 0.5,
     gravityX: 0,
     gravityY: -9.8,
     gravityZ: 0,
@@ -58,6 +58,7 @@ function init() {
     massBox: 1, 
     mesh: null,
     ramp: [],
+    widthRamp: 30,
     restitutionRamp: 0.3,
     startPosition: {
       x: 0,
@@ -74,8 +75,9 @@ function init() {
 
     // Paineis
     informations: document.getElementById("informations"),
+    canvasForces: document.getElementById("forces-canvas-box"),
     panels: {
-      informations: true,
+      informations: false,
     },
 
     createRamp: function(){
@@ -86,9 +88,7 @@ function init() {
 
       var ramp_material = Physijs.createMaterial(
         new THREE.MeshStandardMaterial(
-          {map: textureLoader.load("assets/textures/bathroom.jpg"),
-          side: THREE.DoubleSide
-          },
+          {map: textureLoader.load("assets/textures/bathroom.jpg")}
         ),
         this.frictionRamp, this.restitutionRamp
       ); //Friction and restitution
@@ -98,24 +98,22 @@ function init() {
       ramp_material.map.wrapS = THREE.RepeatWrapping;
       ramp_material.map.wrapT = THREE.RepeatWrapping;
     
-      var ramp = new Physijs.BoxMesh(new THREE.BoxGeometry(30, 0.1, 20), ramp_material, 0);
+      var ramp = new Physijs.BoxMesh(new THREE.BoxGeometry(this.widthRamp, 0.1, 20), ramp_material, 0);
       ramp.castShadow = true;
       ramp.receiveShadow = true;
 
-      let altura = Math.sin(this.angleRamp * (Math.PI/180)) * 30;
-      this.startPosition.y = altura;
-
+      let altura = Math.sin(this.angleRamp * (Math.PI/180)) * this.widthRamp;
       let fixDistRamp = 0.5;
       ramp.position.y = altura/2 + fixDistRamp;    //  8
+
       ramp.rotation.y = THREE.MathUtils.degToRad(90);
       ramp.rotation.z = THREE.MathUtils.degToRad(this.angleRamp);
       this.ramp.push(ramp);
       scene.add(ramp);
 
-
       var wall_material = Physijs.createMaterial(
         new THREE.MeshStandardMaterial(
-          {map: textureLoader.load("assets/textures/bathroom.jpg"),
+          {map: textureLoader.load('assets/textures/bathroom.jpg'),
           side: THREE.DoubleSide
         }
         ),
@@ -141,7 +139,73 @@ function init() {
 
       // Posicao inicial
       this.startPosition.x = 0;
-      this.startPosition.z = backWall.position.z;
+      this.startPosition.y = /*- fixDistRamp*2 + 0.2 +*/  backWall.position.y * 2 + Math.sqrt(sideBound);
+      this.startPosition.z = backWall.position.z + sideBound/2;
+
+      // Calculando posicao inicial do bloco
+      let centerPointRamp = new THREE.Vector3(ramp.position.x, ramp.position.y, ramp.position.z);
+      let heightPointRamp = new THREE.Vector3(backWall.position.x, altura, backWall.position.z);
+      let mediumPointRamp = new THREE.Vector3(backWall.position.x, ramp.position.y, backWall.position.z);
+      let mediumPointGroundRamp = new THREE.Vector3(backWall.position.x, 0, backWall.position.z);
+
+      // Calculate the unit vector of direction of the center ramp to the height point
+      let unitVector = {
+        component: new THREE.Vector3(0, 0, 0),
+        module: 0,
+      };
+      unitVector.component.x =  centerPointRamp.x - heightPointRamp.x;
+      unitVector.component.y =  centerPointRamp.y - heightPointRamp.y;
+      unitVector.component.z =  centerPointRamp.z - heightPointRamp.z;
+      unitVector.module = Math.sqrt(unitVector.component.x * unitVector.component.x + 
+      unitVector.component.y * unitVector.component.y + 
+      unitVector.component.z + unitVector.component.z);
+      
+      // Unitary Vector
+      unitVector.component.x = unitVector.component.x / unitVector.module;
+      unitVector.component.y = unitVector.component.y / unitVector.module;
+      unitVector.component.z = unitVector.component.z / unitVector.module;
+
+      let tempStartPosition = new THREE.Vector3(
+        heightPointRamp.x + unitVector.component.x * (unitVector.module/2),
+        heightPointRamp.y + unitVector.component.y * (unitVector.module/2), 
+        heightPointRamp.z + unitVector.component.z * (unitVector.module/2)
+      );
+
+      // Calculating the start position of the block
+      // Calculate the new unit vector of tempStartPosition to mediumPointRamp
+      let unitVector2 = {
+        component: new THREE.Vector3(0, 0, 0),
+        module: 0,
+      };
+      unitVector2.component.x = tempStartPosition.x - mediumPointGroundRamp.x;
+      unitVector2.component.y = tempStartPosition.y - mediumPointGroundRamp.y;
+      unitVector2.component.z = tempStartPosition.z - mediumPointGroundRamp.z;
+      unitVector2.module = Math.sqrt(unitVector2.component.x * unitVector2.component.x + 
+      unitVector2.component.y * unitVector2.component.y + 
+      unitVector2.component.z + unitVector2.component.z);
+      
+      // Unitary Vector
+      unitVector2.component.x = unitVector2.component.x / unitVector2.module;
+      unitVector2.component.y = unitVector2.component.y / unitVector2.module;
+      unitVector2.component.z = unitVector2.component.z / unitVector2.module;
+
+      // Set the start position of the box
+      if(this.angleRamp > 40){
+        this.startPosition.x = mediumPointGroundRamp.x + 
+        (unitVector2.component.x * ((sideBound * Math.sqrt(2))/2 + unitVector2.module));
+        this.startPosition.y = mediumPointGroundRamp.y + 
+        (unitVector2.component.y * Math.ceil((sideBound)/2 + 0.5 + unitVector2.module));
+        this.startPosition.z = mediumPointGroundRamp.z + 
+        (unitVector2.component.z * Math.ceil((sideBound)/2 + 0.5 + unitVector2.module));
+      }
+      else{
+        this.startPosition.x = mediumPointGroundRamp.x + 
+        (unitVector2.component.x * ((sideBound * Math.sqrt(2))/2 + unitVector2.module));
+        this.startPosition.y = mediumPointGroundRamp.y + 
+        (unitVector2.component.y * Math.ceil((sideBound)/2 + unitVector2.module));
+        this.startPosition.z = mediumPointGroundRamp.z + 
+        (unitVector2.component.z * Math.ceil((sideBound)/2 + unitVector2.module));
+      }
 
       var groundWall = new  Physijs.BoxMesh(new THREE.BoxGeometry(20, 0.1, (altura / Math.tan(controls.angleRamp * (Math.PI/180)))), wall_material, 0);
       groundWall.position.y = fixDistRamp;
@@ -174,8 +238,6 @@ function init() {
 
       this.ramp.push(leftWall);
       scene.add(leftWall);
-
-      //console.log("altura: " + altura, "angle: "+this.angleRamp, "backWall.position.z: "+ backWall.position.z);
 
       // Right Side
       points = [];
@@ -220,13 +282,13 @@ function init() {
       this.mesh.receiveShadow = true;
       if(this.ramp.length != 0){
         this.mesh.position.x = this.startPosition.x;
-        this.mesh.position.y = (this.startPosition.y * 16.47)/15;
-        this.mesh.position.z = (this.startPosition.z * -9.5)/-12.99; //-9.5;
+        this.mesh.position.y = this.startPosition.y;//(this.startPosition.y * 16.47)/15;
+        this.mesh.position.z = this.startPosition.z;//(this.startPosition.z * -9.5)/-12.99; //-9.5;
       }
       else{
         this.mesh.position.x = this.startPosition.x;
-        this.mesh.position.y = 16.47;
-        this.mesh.position.z = -9.5;
+        this.mesh.position.y = this.startPosition.y;//16.47;
+        this.mesh.position.z = this.startPosition.z;//-9.5;
       }
       this.mesh.rotation.set(0, 0, 0);
       this.mesh.rotation.y = THREE.MathUtils.degToRad(90);
@@ -238,13 +300,13 @@ function init() {
           controls.groupForces.children[0].visible = false;
           controls.groupForces.children[1].visible = true;
           controls.groupForces.children[2].visible = false;
-          console.log("Chao");
+          //console.log("Chao");
         }
         else{
           controls.groupForces.children[0].visible = true;
           controls.groupForces.children[1].visible = false;
           controls.groupForces.children[2].visible = false;
-          console.log("Rampa");
+          //console.log("Rampa");
         }
         this.collisions++;
       }
@@ -258,33 +320,43 @@ function init() {
     },
 
     resetSimulation: function(){
+      //this.createRamp();           // Recria o objeto pois a fisica é mudada
+      //this.createBox();           // Recria o objeto pois a fisica é mudada
+      
       // You may also want to cancel the object's velocity
       this.mesh.setLinearVelocity(new THREE.Vector3(0, 0, 0));
       this.mesh.setAngularVelocity(new THREE.Vector3(0, 0, 0));
 
-      this.mesh.position.x = this.startPosition.x;
+      /*this.mesh.position.x = this.startPosition.x;
       this.mesh.position.y = (this.startPosition.y * 16.47)/15;
       this.mesh.position.z = (this.startPosition.z * -9.5)/-12.99; //-9.5;
+      */
+      this.mesh.position.x = this.startPosition.x;
+      this.mesh.position.y = this.startPosition.y;
+      this.mesh.position.z = this.startPosition.z;
 
       this.mesh.rotation.set(0, 0, 0);
       this.mesh.rotation.y = THREE.MathUtils.degToRad(90);
-      this.mesh.rotation.z = THREE.MathUtils.degToRad(this.angleOldRamp);
+      this.mesh.rotation.z = THREE.MathUtils.degToRad(this.angleRamp);
 
       // https://github.com/chandlerprall/Physijs/wiki/Updating-an-object's-position-&-rotation
       // Permite a mudança de posição
       this.mesh.__dirtyPosition = true;
       this.mesh.__dirtyRotation = true;
 
-      this.angleRamp = this.angleOldRamp;
-      this.frictionBox = this.frictionOldBox;
       updateDisplay(gui);           // Update GUI
 
+      document.getElementById("alertPanel").style.display = "none";
+      this.animation = true;
     },
 
     startSimulation: function(){
       this.createRamp();           // Recria o objeto pois a fisica é mudada
       this.createBox();           // Recria o objeto pois a fisica é mudada
       this.updateDates();
+
+      document.getElementById("alertPanel").style.display = "none";
+      this.animation = true;
     },
 
     updateForces: function(){
@@ -296,52 +368,71 @@ function init() {
     },
 
     updateDates: function(){
-      this.angleOldRamp = this.angleRamp;
-      this.frictionOldBox = this.frictionBox;
+      //this.angleOldRamp = this.angleRamp;
+      //this.frictionOldBox = this.frictionBox;
       updateInstructionPanel(gravity, this);
     },
   };
-  
   controls.startSimulation();
+
+  // Don't active the first simulation
+  document.getElementById("alertPanel").style.display = "block";
+  this.animation = false;
 
   function updateInstructionPanel(gravity, controls){
     // Adjust values of the Instructions Panel
     document.getElementById("gravityCoefficient").innerHTML = gravity * -1;
-    document.getElementById("frictionCoefficient").innerHTML = controls.frictionOldBox;
-    document.getElementById("thetaAngleDegree").innerHTML = controls.angleOldRamp;
-    document.getElementById("thetaAngleRadians").innerHTML = THREE.MathUtils.degToRad(controls.angleOldRamp).toFixed(3);
-    document.getElementById("thetaAngleSin").innerHTML = Math.sin(THREE.MathUtils.degToRad(controls.angleOldRamp)).toFixed(3);
-    document.getElementById("thetaAngleCos").innerHTML = Math.cos(THREE.MathUtils.degToRad(controls.angleOldRamp)).toFixed(3);
-    document.getElementById("thetaAngleTan").innerHTML = Math.tan(THREE.MathUtils.degToRad(controls.angleOldRamp)).toFixed(3);
+    document.getElementById("frictionCoefficient").innerHTML = controls.frictionBox;
+    document.getElementById("thetaAngleDegree").innerHTML = controls.angleRamp;
+    document.getElementById("thetaAngleRadians").innerHTML = THREE.MathUtils.degToRad(controls.angleRamp).toFixed(3);
+    document.getElementById("thetaAngleSin").innerHTML = Math.sin(THREE.MathUtils.degToRad(controls.angleRamp)).toFixed(3);
+    document.getElementById("thetaAngleCos").innerHTML = Math.cos(THREE.MathUtils.degToRad(controls.angleRamp)).toFixed(3);
+    document.getElementById("thetaAngleTan").innerHTML = Math.tan(THREE.MathUtils.degToRad(controls.angleRamp)).toFixed(3);
     document.getElementById("weightForce").innerHTML = (controls.massBox * Math.abs(gravity)).toFixed(2);
     document.getElementById("weightXForce").innerHTML = ((controls.massBox * Math.abs(gravity)) 
-    * Math.sin(THREE.MathUtils.degToRad(controls.angleOldRamp))).toFixed(2);
+    * Math.sin(THREE.MathUtils.degToRad(controls.angleRamp))).toFixed(2);
     document.getElementById("weightYForce").innerHTML = ((controls.massBox * Math.abs(gravity)) 
-    * Math.cos(THREE.MathUtils.degToRad(controls.angleOldRamp))).toFixed(2);
+    * Math.cos(THREE.MathUtils.degToRad(controls.angleRamp))).toFixed(2);
     document.getElementById("normalForce").innerHTML = ((controls.massBox * Math.abs(gravity)) 
-    * Math.cos(THREE.MathUtils.degToRad(controls.angleOldRamp))).toFixed(2);
+    * Math.cos(THREE.MathUtils.degToRad(controls.angleRamp))).toFixed(2);
     document.getElementById("frictionForce").innerHTML = (controls.frictionBox * (controls.massBox * Math.abs(gravity)) 
-    * Math.cos(THREE.MathUtils.degToRad(controls.angleOldRamp))).toFixed(2);
+    * Math.cos(THREE.MathUtils.degToRad(controls.angleRamp))).toFixed(2);
   }
 
   updateInstructionPanel(gravity, controls);
+  controls.animation = false;                   //animação parada
 
   // Criando atributos do menu lateral
-  var objectMenu = gui.addFolder("object Menu");
+  var objectMenu = gui.addFolder("Menu");
   objectMenu.open();
-  objectMenu.add(controls, "resetSimulation");
-  objectMenu.add(controls, "animation");
-  objectMenu.add(controls, "frictionBox", 0, 1, 0.01);
-  objectMenu.add(controls, "angleRamp", 0, 60, 2);
+  //objectMenu.add(controls, "animation").name("Animation");
+  objectMenu.add(controls, "frictionBox", 0, 1, 0.01).name("Friction").onChange(function(e){
+    controls.createRamp();           // Recria o objeto pois a fisica é mudada
+    controls.createBox();           // Recria o objeto pois a fisica é mudada
+    controls.updateDates();
+
+    document.getElementById("alertPanel").style.display = "block";
+    controls.animation = false;
+  });
+  objectMenu.add(controls, "angleRamp", 10, 50, 2).name("Angle (°)").onChange(function(e){
+    controls.createRamp();           // Recria o objeto pois a fisica é mudada
+    controls.createBox();           // Recria o objeto pois a fisica é mudada
+    controls.updateDates();
+
+    document.getElementById("alertPanel").style.display = "block";
+    controls.animation = false;
+  });
   objectMenu.add(controls.panels, "informations").onChange(function(e){
     if(controls.panels.informations){
       controls.informations.style.display = "flex";
+      onResizePanels();                     // redraw the canvas forces
     }
     else{
       controls.informations.style.display = "none";
     }
-  });
-  objectMenu.add(controls, "startSimulation");
+  }).name("Informations");
+  objectMenu.add(controls, "resetSimulation").name("Reset Simulation");     // Attribute a different name to the button
+  objectMenu.add(controls, "startSimulation").name("Start Simulation");
 
   // Update GUI Elements
   function updateDisplay(gui) {
@@ -352,11 +443,26 @@ function init() {
         updateDisplay(gui.__folders[f]);
     }
 }
-  
 
   window.addEventListener('resize', function(){
     onResize(camera, renderer);
   });  // Ajuste de tela
+
+  window.onload = function(){
+    document.getElementById('close').onclick = function(){
+        /*this.parentNode.parentNode.parentNode
+        .removeChild(this.parentNode.parentNode);*/
+        this.parentNode.style.display = "none";
+        return false;
+    };
+    document.getElementById('close2').onclick = function(){
+        this.parentNode.parentNode.style.display = "none";
+        controls.panels.informations = false;
+        updateDisplay(gui);
+        return false;
+    };
+  };
+
 
   createGroundAndWalls(scene);
   render();
@@ -366,13 +472,14 @@ function init() {
     orbitControls.update(delta);                 // Atualiza o controle da câmera
 
     // Diagrama de forças
-    /*if(controls.animation){
-      controls.updateForces();
-      scene.simulate(undefined, 2);
-      //scene.simulate();
-    }*/
     controls.updateForces();
-    scene.simulate();
+    
+    if(controls.animation){
+      
+      scene.simulate(undefined, 2);      //scene.simulate();
+    }
+    //controls.updateForces();
+    // scene.simulate();
     //scene.simulate(undefined, 2); //scene.simulate();
     renderer.render(scene, camera);
     requestAnimationFrame(render);
@@ -386,6 +493,9 @@ function init() {
 function setRenderer(){
   var renderer = new THREE.WebGLRenderer({antialias: true});
   renderer.setClearColor(0x000);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMapSoft = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setPixelRatio(devicePixelRatio);
   renderer.setSize(innerWidth, innerHeight);
   document.body.appendChild(renderer.domElement);
@@ -423,7 +533,7 @@ function createForcesDiagram(controls, size){
                * Com atrito *
                **************/
 
-    /**********
+   /**********
    *  Peso  *
    *********/
 
