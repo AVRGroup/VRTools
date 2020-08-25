@@ -179,6 +179,11 @@ function animate() {
 
     airplane.position.x += controls.velocity * clock.getDelta();
 
+    if (controls.switch_camera) {
+        camera.position.copy(airplane.position);
+        camera.lookAt(airplane.position.x, 0, 0);
+    }
+
     if (airplane.position.x > airplaneRange) {
         airplane.rotation.y += - Math.PI;
         controls.velocity *= -1;
