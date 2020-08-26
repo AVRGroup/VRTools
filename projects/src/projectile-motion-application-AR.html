@@ -12,139 +12,265 @@
             margin: 0;
             overflow: hidden;
         }
+
+        #bar {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 1;
+            background-color: #fff;
+        }
+
+        #bar div {
+            display: inline-block;
+            width: 20%;
+            padding: 1%;
+            font-size: 0.8em;
+        }
+
+        #start {
+            cursor: pointer;
+            font-weight: bold;
+            border-left: 1px solid #ddd;
+            user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+        }
+
+        #chances {
+            display: none;
+            position: absolute;
+            top: 3px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 150px;
+            font-size: 1.2em;
+            text-align: center;
+            color: #777;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 1%;
+        }
+
+        #report {
+            display: none;
+            position: absolute;
+            top: 30%;
+            left: 0;
+            right: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #777;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding-top: 5%;
+            padding-bottom: 5%;
+            cursor: pointer;
+            z-index: 1;
+        }
     </style>
 
     <script src="../libs/aframe-master.js"></script>
     <script src="../libs/aframe-ar.js"></script>
-    <script src="../libs/other/aframe-aabb-collider-component.min.js"></script>
-    <script src="../libs/util/dat.gui.js"></script>
 
     <script>
-        let deviceRotation = 0;
+        let height = 15;
+        let velocity = 10;
+        let distance = 0;
+        let simulate = false;
+        let chances = 3;
+        let newGame = false;
+        let correctDistance;
 
-        AFRAME.registerComponent('listener', {
+        function start() {
+            let airplane = document.querySelector("#airplane").object3D;
+            let crate = document.querySelector("#crate").object3D;
+            let chancesLabel = document.getElementById("chances");
+
+            crate.visible = true;
+            crate.position.y = height * 0.1;
+            crate.position.z = 1.5;
+            airplane.visible = true;
+            airplane.position.z = height * 0.1;
+            simulate = true;
+
+            correctDistance = velocity * quadraticTime(-4.9, 0, height);
+
+            if (newGame) {
+                let heightLabel = document.getElementById("height");
+                let velocityLabel = document.getElementById('velocity');
+                let reportLabel = document.getElementById("report");
+
+
+                heightLabel.innerHTML = "Height: " + height + ".0m"
+                velocityLabel.innerHTML = "Velocity: " + velocity + ".0m/s"
+                reportLabel.style.display = "none";
+                chancesLabel.innerHTML = "Chances: " + chances;
+
+                newGame = false;
+            }
+            else {
+                chances--;
+                chancesLabel.innerHTML = "Chances: " + chances;
+            }
+        }
+
+        AFRAME.registerComponent('simulator', {
             init: function () {
                 this.airplane = document.querySelector('#airplane').object3D;
                 this.target = document.querySelector('#target').object3D;
-                this.obj = this.el.object3D;
-
-                this.el.addEventListener('hitstart', () => {
-                    if (controls.crate_isReleased) {
-                        this.target.scale.set(1.1, 1.1, 1.1);
-                        setTimeout(() => this.target.scale.set(1, 1, 1), 250);
-                        controls.crate_isReleased = false;
-                    }
-                }, false);
-
-                window.addEventListener('click', () => {
-                    this.obj.position.copy(this.airplane.position);
-                    controls.crate_isReleased = true;
-                    controls.crate_vz = controls.vz * controls.orientation;
-                    controls.crate_vx = controls.vx * controls.orientation;
-                }, false);
-
-                window.addEventListener("deviceorientation", (e) => {
-                    deviceRotation = (e.alpha * Math.PI / 180) - Math.PI * 0.5;
-                    controls.vz = controls.velocity * Math.cos(deviceRotation);
-                    controls.vx = controls.velocity * Math.sin(deviceRotation)
-                }, false);
-            },
-        });
-        AFRAME.registerComponent('move', {
-            init: function () {
-                this.obj = this.el.object3D;
                 this.crate = document.querySelector('#crate').object3D;
-                this.rotation = Math.PI;
-                this.interval;
+
+                this.marker1 = document.querySelector('#hiro').object3D;
+                this.marker2 = document.querySelector('#kanji').object3D;
+
+                this.distaceLabel = document.getElementById("distance");
+                this.heightLabel = document.getElementById("height");
+                this.velocityLabel = document.getElementById('velocity');
+                this.chancesLabel = document.getElementById("chances");
+                this.reportLabel = document.getElementById("report");
+
+                this.velocity;
+                this.delta;
+                this.distance;
+                this.time = 0;
+                this.correctDistance;
+
+
+                this.randomizeValues();
+                this.heightLabel.innerHTML = "Height: " + height + ".0m"
+                this.velocityLabel.innerHTML = "Velocity: " + velocity + ".0m/s"
+
+                setTimeout(() => {
+                    document.getElementById("bar").style.display = "block";
+                    document.getElementById("chances").style.display = "block";
+                }, 1000)
             },
-            tick: function (time, delta) {
-                this.interval = delta * 0.001 // converting delta to seconds
+            tick: function (tickTime, tickDelta) {
+                if (this.marker1.visible && this.marker2.visible) {
+                    this.distance = this.marker1.position.distanceTo(this.marker2.position);
+                    distance = this.distance * 10;
 
-                this.obj.position.z += controls.vz * this.interval * controls.orientation;
-                this.obj.position.x += controls.vx * this.interval * controls.orientation;
-                this.obj.rotation.y = this.rotation + deviceRotation;
-
-                if (this.obj.position.z > controls.range) {
-                    controls.orientation *= -1;
-                    this.rotation = Math.PI;
-                    this.obj.position.z = controls.range;
-                } else if (this.obj.position.x > controls.range) {
-                    controls.orientation *= -1;
-                    this.rotation = Math.PI;
-                    this.obj.position.x = controls.range;
+                    this.distaceLabel.innerHTML = "Distance: " + distance.toFixed(1) + 'm';
                 }
 
-                if (this.obj.position.z < -controls.range) {
-                    controls.orientation *= -1;
-                    this.rotation = 0;
-                    this.obj.position.z = -controls.range;
-                }
-                else if (this.obj.position.x < -controls.range) {
-                    controls.orientation *= -1;
-                    this.rotation = 0;
-                    this.obj.position.x = -controls.range;
-                }
+                if (simulate) {
+                    this.delta = tickDelta * 0.001 // ms to s
 
-                if (controls.crate_isReleased && this.crate.position.y > 0) {
-                    this.crate.position.y -= 0.98 * this.interval;
-                    this.crate.position.z += controls.crate_vz * this.interval;
-                    this.crate.position.x += controls.crate_vx * this.interval;
+                    this.airplane.position.z += this.velocity * this.delta * -1;
+
+                    if (this.crate.position.y > 0) this.crate.position.z = this.airplane.position.z;
+
+                    if (this.airplane.position.z <= 0) { // point of realse crate
+                        this.time += this.delta;
+                        this.crate.position.y = height * 0.1 + (-0.49 * (this.time * this.time));
+
+                        if (this.crate.position.y <= 0) {
+                            if (this.target.getWorldPosition().distanceTo(this.crate.getWorldPosition()) <= 0.12) {
+                                this.reportLabel.innerHTML = `You hit the target! The correct distance was ${correctDistance.toFixed(1)}m. <br/> Click here to play again!`
+                                this.reportLabel.style.display = "block";
+                                chances = 3
+                                this.randomizeValues();
+                                newGame = true;
+
+                            }
+                            else if (chances === 0) {
+                                this.reportLabel.innerHTML = `Game over! The correct distance was ${correctDistance.toFixed(1)}m. <br/> Click here to play again!`
+                                this.reportLabel.style.display = "block";
+                                chances = 3
+                                this.randomizeValues();
+                                newGame = true;
+                            }
+                            this.time = 0;
+                            simulate = false;
+                        };
+                    }
+
                 }
-            }
+            },
+            randomizeValues: function () {
+                height = (10 + Math.floor((11) * Math.random()));
+                velocity = (10 + Math.floor((11) * Math.random()));
+
+                this.velocity = velocity * 0.1;
+                this.airplane.position.y = height * 0.1;
+            },
         });
+
+        function quadraticTime(a, b, c) {
+            // This uses the quadratic formula to solve for time in a linear motion with constant aceleration
+            // It returns null when the result is negative once negative time doesn't make sense
+            // ax^2 + bx + c = 0
+
+            let delta = (b * b) - 4 * a * c;
+
+            if (delta < 0) return null;
+
+            let x;
+
+            if (delta === 0) {
+                x = -b / 2 * a;
+                return x >= 0 ? x : null;
+            }
+
+            x = (-b - Math.sqrt(delta)) / (2 * a);
+            if (x > 0) return x;
+
+            x = (-b + Math.sqrt(delta)) / (2 * a);
+            if (x > 0) return x;
+
+            return null;
+        }
     </script>
 </head>
 
-<body style='margin : 0px; overflow: hidden;'>
+<body>
+    <div id="bar">
+        <div id="height">Height: __._m</div>
+        <div id="velocity">Velocity: __._m/s</div>
+        <div id="distance"> Distance: __._m</div>
+        <div id="start" onclick="start()">Start Simulation</div>
+    </div>
 
-    <a-scene id="scene" vr-mode-ui="enabled: false" embedded arjs='sourceType: webcam;'
-        renderer="logarithmicDepthBuffer: true">
+    <div id="chances">Chances: 3</div>
+
+    <div id="report" onclick="start()"></div>
+
+    <a-scene id="scene" vr-mode-ui="enabled: false" embedded arjs renderer="logarithmicDepthBuffer: true">
         <a-assets timeout="60000">
             <a-asset-item id="airplaneModel" src="assets/models/airplane.glb"></a-asset-item>
             <img id="crateTexture" src="assets/textures/crate.png">
             <img id="targetTexture" src="assets/textures/target.png">
+            <img id="arrowTexture" src="assets/textures/arrow.png" />
         </a-assets>
 
-        <a-marker preset='hiro' id="hiro">
-            <a-entity id="airplane" gltf-model="#airplaneModel" position="0 1.5 0" rotation="0 0 0"
-                scale="0.01 0.01 0.01" move>
+        <a-marker id="hiro" preset="hiro" name="">
+            <a-entity id="airplane" gltf-model="#airplaneModel" position="0 1.5 0" rotation="0 180 0"
+                scale="0.01 0.01 0.01" visible="false">
             </a-entity>
-            <a-box id="crate" src="#crateTexture" height="0.1" width="0.1" depth="0.1" position="0 0 0" visible="true"
-                aabb-collider="objects: #target" listener>
+            <a-box id="crate" src="#crateTexture" height="0.05" width="0.05" depth="0.05" position="0 1.5 0"
+                visible="false" aabb-collider="objects: #target">
             </a-box>
+            <a-plane id="arrow" src="#arrowTexture" material="transparent: true" height="0.5" width="0.5"
+                rotation="-90 0 0"></a-plane>
         </a-marker>
 
         <a-marker preset='kanji' id="kanji">
-            <a-circle id="target" src="#targetTexture" material="transparent: true" radius="0.3" rotation="-90 0 0">
+            <a-circle id="target" src="#targetTexture" material="transparent: true" radius="0.07" rotation="-90 0 0">
             </a-circle>
         </a-marker>
 
         <a-entity id="camera" camera></a-entity>
+        <a-entity simulator></a-entity>
     </a-scene>
 
-    <script>
-        const controls = new function () {
-            this.height = 1.5;
-            this.velocity = 2;
-            this.vx = 0;
-            this.vz = this.velocity;
-            this.range = 3;
-            this.orientation = -1;
-            this.crate_vx;
-            this.crate_vz;
-            this.crate_isReleased = false;
-        }
 
-        const gui = new dat.GUI();
-        gui.add(controls, 'height', 1, 3).onChange(() => {
-            document.querySelector("#airplane").object3D.position.y = controls.height;
-        });
-        gui.add(controls, 'velocity', 1, 3).onChange(() => {
-            controls.vz = controls.velocity * Math.cos(deviceRotation);
-            controls.vx = controls.velocity * Math.sin(deviceRotation)
-        });
-        gui.add(controls, 'range', 1, 5);
-    </script>
 </body>
 
 
