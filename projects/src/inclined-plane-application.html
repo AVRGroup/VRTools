@@ -73,54 +73,73 @@
             background:#ccc;
             color:#fff;
         }
+        
+        .square {
+            height: 15px;
+            width: 15px;
+            vertical-align: middle;
+            background-color: #FFF;
+            border: 1px solid #555;
+            margin-top: 5px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+            margin-right: 5px;
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
-    <div id="informations" style="position: absolute; width: 70%; height: 50%;
-    background-color: rgba(7, 7, 9, 0.8); display: none; z-index: 1000; border: 2px solid #000 ">
+    <div id="informations" style="position: absolute; width: 65%; height: 50%;
+    background-color: rgba(7, 7, 9, 0.8); display: none; z-index: 1000; border: 2px solid #000 
+    ">
         <div id="content" style="color: #ffffff; 
-        z-index: 1001; width: 100%; ">
-            <span id='close2'>X</span>
-            <canvas id="forces-canvas-box" style="display: flex; overflow: auto;" width="130px" height="150px">
-                Seu browser não suporta canvas!
-            </canvas>
-            <table>
+        z-index: 1001; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;">
+            
+            <table >
                 <tr>
-                    <th colspan="3" style="font-size: 1.3em; text-align: center;">Informations</th>
+                    <th colspan="1" style="font-size: 1.3em; text-align: center;">
+                        Informations <span id='close2'>X</span>
+                    </th>
                 </tr>
                 <tr>
                   <th colspan="1">Equations</th>
-                  <th colspan="2">Data</th>
                 </tr>
                 <tr>
-                    <td style="width:25%">
+                    <td style="width:100%; text-align: justify">
                         <b style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = \(m * \overrightarrow{G} \); 
                         \(\overrightarrow{W_x}\) = \(\overrightarrow{W} * sin(\theta) \);
-                        \(\overrightarrow{W_y}\) = \(\overrightarrow{W} * cos(\theta) \) 
+                        \(\overrightarrow{W_y}\) = \(\overrightarrow{W} * cos(\theta) \);
+                        <b style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = \(\mu * \overrightarrow{N} \) ; 
+                        <b style="color:yellow">Normal:</b> \(\overrightarrow{N}\) = \(\overrightarrow{W_y}\) ;
+                        <b style="color:yellow">Forces:</b>
+                        <div class = "square" style="background-color:rgb(255,0,0); 
+                        border: 2px solid #000; display: inline-block;"></div>
+                        <p style="display: inline-block;"><b>Weight</b></p>
+                        <div class = "square" style="background-color:rgb(0,255,0);
+                        display: inline-block;"></div>
+                        <p style="display: inline-block;"><b>Normal</b></p>
+                        <div class = "square" style="background-color:rgb(0,0,255); 
+                        display: inline-block;"></div>
+                        <p style="display: inline-block;"><b>Friction</b></p>
                     </td>
-
-                    <td style="width:25%"><b style="color:yellow">Angle:</b> \(\theta\) = <span id="thetaAngleDegree"></span>° 
+                </tr>
+                <tr>
+                    <th colspan="1">Data</th>
+                </tr>
+                <tr>
+                    <td rowspan= "3" style="text-align: justify"><b style="color:yellow">Angle:</b> \(\theta\) = <span id="thetaAngleDegree"></span>° 
                         = <span id="thetaAngleRadians"></span> rad;
                         \(\sin(\theta)\) = <span id="thetaAngleSin"></span>;
                         \(\cos(\theta)\) = <span id="thetaAngleCos"></span>;
-                        \(\tan(\theta)\) = <span id="thetaAngleTan"></span>
-                    </td>
-                    <td style="width:25%"><b style="color:yellow">Mass:</b> m = 1.0 Kg; 
+                        \(\tan(\theta)\) = <span id="thetaAngleTan"></span>;
+                        <b style="color:yellow">Mass:</b> m = 1.0 Kg; 
                         <b style="color:yellow">Gravity:</b> \(\overrightarrow{G}\) = <span id="gravityCoefficient"></span> m/\(s^2\);
-                        <b style="color:yellow">Friction Coefficient:</b> \(\mu\) = <span id="frictionCoefficient"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width:25%"><b style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = \(\mu * \overrightarrow{N} \) ; 
-                        <b style="color:yellow">Normal:</b> \(\overrightarrow{N}\) = \(\overrightarrow{W_y}\)
-                    </td>
-                    
-                    <td style="width:25%"><b style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = <span id="weightForce"></span> N;
+                        <b style="color:yellow">Friction Coefficient:</b> \(\mu\) = <span id="frictionCoefficient"></span>;
+                        <b style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = <span id="frictionForce"></span> N;
+                        <b style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = <span id="weightForce"></span> N;
                         \(\overrightarrow{W_x}\) = <span id="weightXForce"></span> N;
-                        \(\overrightarrow{W_y}\) = <span id="weightYForce"></span> N
-                    </td>
-                    <td style="width:25%"><b style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = <span id="frictionForce"></span> N;
+                        \(\overrightarrow{W_y}\) = <span id="weightYForce"></span> N;
                         <b style="color:yellow">Normal:</b> \(\overrightarrow{N}\) = <span id="normalForce"></span> N
                     </td>
                 </tr>
@@ -129,127 +148,68 @@
         </div>
     </div>
 
-    <div id="alertPanel" style="position: absolute; left: 10%; bottom: 40%; width: 80%; height: 20%;
-    background-color: rgba(7, 7, 9, 0.8); display: block; z-index: 1002; border: 2px solid #000 ">
+    <div id="alertPanel" style="position: absolute; left: 10%; bottom: 10%; width: 80%; height: 15%;
+    background-color: rgba(7, 7, 9, 0.8); display: flex; z-index: 1002; border: 2px solid #000 ">
         <span id='close'>X</span>
-        <p style="font-size: 1.4em; text-align: center; color: #ffffff; 
-        z-index: 1003; width: 100%;">
-            Press the "Start Simulation" button to update the values and initialize the simulation
-        </p>
-        <div id="contentAlert" style="color: #ffffff; 
-        z-index: 1003; width: 100%; overflow: none;">
-            
+        <div style = "margin-top: 20px">
+            <p id="alertPanelContent" style="font-size: 1.3em; text-align: center; color: #ffffff; 
+            z-index: 1003; width: 95%; height: 90%;
+            word-wrap: break-word;">
+                Press the "Start" button to run the model 
+            </p>
         </div>
     </div>
 
     <script type="text/javascript"> 
         init();
 
-        var forcesCanvas = document.getElementById("forces-canvas-box");
-        forcesCanvas.style.border = "2px solid #000";                       //Colocando borda no canvas
-
-        
-        //var forcesCanvas = document.getElementById("forces-canvas-box");
-        /*forcesCanvas.style.left = (window.innerWidth - tela.width - 25) + "px";
-        forcesCanvas.style.bottom = '50px';*/
-        //tela.width = 100%;
-
         var informations = document.getElementById("informations");
-        //informations.style.left = "50%";
-        //informations.style.bottom = "50px";
+        var alertPanelContent =  document.getElementById("alertPanelContent");
+        var alertPanel =  document.getElementById("alertPanel");
 
-        var ctx = forcesCanvas.getContext("2d");
         onResizePanels();
 
-        function escreveTexto (ctx, texto, x, y) {
-            ctx.strokeText(texto, x, y);
-            ctx.fillText(texto, x, y);
-        }
-
         function onResizePanels() {
-            informations.style.left = "5%";//(window.innerWidth/) + "px";
-            informations.style.top = "10%";
-            adjustForcesPanel();
-            if(window.width < 450){
-                forcesCanvas.width = "500px";
-            }
-            drawForcesPanel(ctx);
-        }
+            informations.style.left = "5%";
+            informations.style.top = "5%";
 
-        function adjustForcesPanel(){
-            // Make it visually fill the positioned parent
-            forcesCanvas.style.width ='100%';
-            //canvas.style.height='100%';
-
-            // ...then set the internal size to match
-            forcesCanvas.width  = forcesCanvas.offsetWidth;
-            //canvas.height = canvas.offsetHeight;
-            forcesCanvas.height = 60;
-        }
-        
-        function drawForcesPanel(ctx){
-
-            if(window.innerWidth < 850){    //393
-                ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
-                ctx.fillRect(0, 0, forcesCanvas.width, forcesCanvas.height);
-                ctx.font = "15px Arial Black";
-                ctx.fillStyle = "white";
-                ctx.strokeStyle = "black";
-                ctx.lineWidth = 2;
-                escreveTexto(ctx, "Forces", forcesCanvas.width/2, 20);
-                ctx.font = "15px Arial Black";
-                
-                //escreveTexto(ctx, "Normal", 42, 42);
-                escreveTexto(ctx, "Normal (N)", 10 + 30, 45);
-                escreveTexto(ctx, "Weight (W)", 150 + 30, 45);
-                escreveTexto(ctx, "Friction (Fr)", 290 + 30, 45);
-                ctx.fillStyle = "green";
-                ctx.fillRect(10, 30, 20, 20);
-                ctx.strokeStyle = "black";
-                ctx.strokeRect(10, 30, 20, 20);
-                ctx.fillStyle = "red";
-                ctx.fillRect(150, 30, 20, 20);
-                ctx.strokeStyle = "black";
-                ctx.strokeRect(150, 30, 20, 20);
-                ctx.fillStyle = "blue";
-                ctx.fillRect(290, 30, 20, 20);
-                ctx.strokeStyle = "black";
-                ctx.strokeRect(290, 30, 20, 20);
+            if(window.innerHeight < 500){           // Horizontal screen mobile
+                informations.style.width = "90%";
+                informations.style.height = "90%";
+                alertPanelContent.style.fontSize = "6vh";
+                alertPanel.style.height = "15%";
             }
             else{
-                ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
-                ctx.fillRect(0, 0, forcesCanvas.width, forcesCanvas.height);
-                ctx.font = "15px Arial Black";
-                ctx.fillStyle = "white";
-                ctx.strokeStyle = "black";
-                ctx.lineWidth = 2;
-                escreveTexto(ctx, "Forces", forcesCanvas.width/2.1, 20);
-                ctx.font = "12px Arial Black";
-                
-                //escreveTexto(ctx, "Normal", 42, 42);
-                escreveTexto(ctx, "Normal (N)", forcesCanvas.width/100 + 30, 45);
-                escreveTexto(ctx, "Weight (W)", forcesCanvas.width/6 + 30, 45);
-                escreveTexto(ctx, "Friction (Fr)", forcesCanvas.width/3 + 30, 45);
-                ctx.fillStyle = "green";
-                ctx.fillRect(forcesCanvas.width/100, 30, 20, 20);
-                ctx.strokeStyle = "black";
-                ctx.strokeRect(forcesCanvas.width/100, 30, 20, 20);
-                ctx.fillStyle = "red";
-                ctx.fillRect(forcesCanvas.width/6, 30, 20, 20);
-                ctx.strokeStyle = "black";
-                ctx.strokeRect(forcesCanvas.width/6, 30, 20, 20);
-                ctx.fillStyle = "blue";
-                ctx.fillRect(forcesCanvas.width/3, 30, 20, 20);
-                ctx.strokeStyle = "black";
-                ctx.strokeRect(forcesCanvas.width/3, 30, 20, 20);
-            }
+                if(window.innerWidth < 1000){
+                    informations.style.width = "90%";
+                    if(window.innerWidth < 770){
+                        alertPanelContent.style.fontSize = "1.3em";
+                        if(window.innerWidth < 500){
+                            informations.style.height = "80%";
+                            alertPanel.style.height = "15%";
+                            alertPanelContent.style.fontSize = "6vw";
+                        }
+                        else{
+                            informations.style.height = "50%";
+                            alertPanelContent.style.fontSize = "4.5vw";
+                        }
+                    }
+                    else{
+                        alertPanelContent.style.fontSize = "3.3vw";
+                        informations.style.height = "50%";
+                    }
+                }
+                else{
+                    informations.style.width = "65%";
+                    informations.style.height = "50%";
+                    alertPanelContent.style.fontSize = "40px";
+                }
+            } 
         }
 
         window.addEventListener('resize', function(){
             onResizePanels();
-        });  // Ajuste de tela
-
-        
+        });  
     </script>
 </body>
 </html>
