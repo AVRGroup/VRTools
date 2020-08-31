@@ -93,12 +93,13 @@
             let crate = document.querySelector("#crate").object3D;
             let chancesLabel = document.getElementById("chances");
 
-            crate.visible = true;
-            crate.position.y = height * 0.1;
-            crate.position.z = 1.5;
-            airplane.visible = true;
-            airplane.position.z = height * 0.1;
-            simulate = true;
+            // crate.visible = true;
+            // crate.position.y = height * 0.1;
+            // crate.position.z = 1.5;
+            // airplane.visible = true;
+            // airplane.position.y = height * 0.1;
+            // airplane.position.z = 1.5;
+            // simulate = true;
 
             correctDistance = velocity * quadraticTime(-4.9, 0, height);
 
@@ -116,8 +117,16 @@
                 newGame = false;
             }
             else {
+                crate.visible = true;
+                crate.position.y = height * 0.1;
+                crate.position.z = 1.5;
+                airplane.visible = true;
+                airplane.position.y = height * 0.1;
+                airplane.position.z = 1.5;
+
                 chances--;
                 chancesLabel.innerHTML = "Chances: " + chances;
+                simulate = true;
             }
         }
 
@@ -140,8 +149,7 @@
                 this.delta;
                 this.distance;
                 this.time = 0;
-                this.correctDistance;
-
+                this.limiter = 0;
 
                 this.randomizeValues();
                 this.heightLabel.innerHTML = "Height: " + height + ".0m"
@@ -153,26 +161,34 @@
                 }, 1000)
             },
             tick: function (tickTime, tickDelta) {
-                if (this.marker1.visible && this.marker2.visible) {
+                this.limiter += tickDelta;
+                if (this.limiter > 200 && this.marker1.visible && this.marker2.visible) {
                     this.distance = this.marker1.position.distanceTo(this.marker2.position);
                     distance = this.distance * 10;
 
                     this.distaceLabel.innerHTML = "Distance: " + distance.toFixed(1) + 'm';
+                    this.limiter = 0;
                 }
 
                 if (simulate) {
                     this.delta = tickDelta * 0.001 // ms to s
 
                     this.airplane.position.z += this.velocity * this.delta * -1;
+                    if (this.airplane.position.z < -5) {
+                        this.airplane.visible = false;
+                        this.crate.visible = false;
+                        this.simulate = false;
+                    }
 
-                    if (this.crate.position.y > 0) this.crate.position.z = this.airplane.position.z;
+                    if (this.crate.position.y > 0)
+                        this.crate.position.z = this.airplane.position.z;
 
-                    if (this.airplane.position.z <= 0) { // point of realse crate
+                    if (this.crate.position.y > 0 && this.airplane.position.z <= 0) { // point of realse crate
                         this.time += this.delta;
                         this.crate.position.y = height * 0.1 + (-0.49 * (this.time * this.time));
 
                         if (this.crate.position.y <= 0) {
-                            if (this.target.getWorldPosition().distanceTo(this.crate.getWorldPosition()) <= 0.12) {
+                            if (Math.abs(distance - correctDistance) <= 1.5) {
                                 this.reportLabel.innerHTML = `You hit the target! The correct distance was ${correctDistance.toFixed(1)}m. <br/> Click here to play again!`
                                 this.reportLabel.style.display = "block";
                                 chances = 3
@@ -188,7 +204,6 @@
                                 newGame = true;
                             }
                             this.time = 0;
-                            simulate = false;
                         };
                     }
 
@@ -262,7 +277,7 @@
         </a-marker>
 
         <a-marker preset='kanji' id="kanji">
-            <a-circle id="target" src="#targetTexture" material="transparent: true" radius="0.07" rotation="-90 0 0">
+            <a-circle id="target" src="#targetTexture" material="transparent: true" radius="0.15" rotation="-90 0 0">
             </a-circle>
         </a-marker>
 
