@@ -37,7 +37,6 @@ function main() {
     spotLight.shadow.mapSize.width = 2048;
     spotLight.shadow.mapSize.height = 2048;
     spotLight.shadow.camera.fov = 20;
-    spotLight.castShadow = true;
     spotLight.decay = 2;
     spotLight.penumbra = 0.05;
     spotLight.name = "spotLight";
@@ -68,7 +67,8 @@ function main() {
         massBox: 1, 
         mesh: null,
         ramp: [],
-        widthRamp: 0.5,
+        lengthRamp: 0.5,    // Comprimento
+        widthRamp: 0.1667,  // Largura
         restitutionRamp: 0.3,
         startPosition: {
             x: 0,
@@ -107,12 +107,10 @@ function main() {
             ramp_material.map.wrapS = THREE.RepeatWrapping;
             ramp_material.map.wrapT = THREE.RepeatWrapping;
             
-            var ramp = new Physijs.BoxMesh(new THREE.BoxGeometry(this.widthRamp, 0.01, 0.1667), ramp_material, 0);
-            ramp.castShadow = true;
-            ramp.receiveShadow = true;
+            var ramp = new Physijs.BoxMesh(new THREE.BoxGeometry(this.lengthRamp, 0.01, this.widthRamp), ramp_material, 0);
 
-            let altura = Math.sin(this.angleRamp * (Math.PI/180)) * this.widthRamp;
-            let fixDistRamp = 0.1;
+            let altura = Math.sin(this.angleRamp * (Math.PI/180)) * this.lengthRamp;
+            let fixDistRamp = 0.2;
             ramp.position.y = altura/2 + fixDistRamp;    //  8
 
             ramp.rotation.y = THREE.MathUtils.degToRad(90);
@@ -141,7 +139,7 @@ function main() {
                 this.frictionRamp, this.restitutionRamp
             ); //Friction and restitution
 
-            /*var backWall = new  Physijs.BoxMesh(new THREE.BoxGeometry(0.1667, altura, 0.1), wall_material, 0);
+            var backWall = new  Physijs.BoxMesh(new THREE.BoxGeometry(this.widthRamp, altura, 0.01), wall_material, 0);
             backWall.position.z = - ((altura - altura/2) / Math.tan(this.angleRamp * (Math.PI/180)));
             backWall.position.y = altura/2 + fixDistRamp;
             this.ramp.push(backWall);
@@ -217,7 +215,7 @@ function main() {
                 (unitVector2.component.z * Math.ceil((sideBound)/2 + unitVector2.module));
             }
 
-            var groundWall = new  Physijs.BoxMesh(new THREE.BoxGeometry(0.1667, 0.05, (altura / Math.tan(controls.angleRamp * (Math.PI/180)))), wall_material, 0);
+            var groundWall = new  Physijs.BoxMesh(new THREE.BoxGeometry(this.widthRamp, 0.005, (altura / Math.tan(controls.angleRamp * (Math.PI/180)))), wall_material, 0);
             groundWall.position.y = fixDistRamp;
             this.ramp.push(groundWall);
             scene.add(groundWall);
@@ -226,12 +224,12 @@ function main() {
 
             // Left Side
             var points = [];
-            points.push(new THREE.Vector3(10, altura + fixDistRamp, backWall.position.z));
-            points.push(new THREE.Vector3(10, fixDistRamp, 
-                backWall.position.z + (Math.cos(this.angleRamp * Math.PI/180) * this.widthRamp)
+            points.push(new THREE.Vector3(this.widthRamp/2, altura + fixDistRamp, backWall.position.z));
+            points.push(new THREE.Vector3(this.widthRamp/2, fixDistRamp, 
+                backWall.position.z + (Math.cos(this.angleRamp * Math.PI/180) * this.lengthRamp)
             ));
-            points.push(new THREE.Vector3(10, fixDistRamp, backWall.position.z));
-            points.push(new THREE.Vector3(10, altura + fixDistRamp, backWall.position.z));
+            points.push(new THREE.Vector3(this.widthRamp/2, fixDistRamp, backWall.position.z));
+            points.push(new THREE.Vector3(this.widthRamp/2, altura + fixDistRamp, backWall.position.z));
 
             // Usa os mesmos pontos para criar o objeto geometrico convexo
             var geometry = new THREE.ConvexGeometry( points );
@@ -249,13 +247,13 @@ function main() {
 
             // Right Side
             points = [];
-            points.push(new THREE.Vector3(-10, altura + fixDistRamp, backWall.position.z));
-            points.push(new THREE.Vector3(-10, fixDistRamp, 
+            points.push(new THREE.Vector3(-this.widthRamp/2, altura + fixDistRamp, backWall.position.z));
+            points.push(new THREE.Vector3(-this.widthRamp/2, fixDistRamp, 
 
-                backWall.position.z + (Math.cos(this.angleRamp * Math.PI/180) * this.widthRamp)
+                backWall.position.z + (Math.cos(this.angleRamp * Math.PI/180) * this.lengthRamp)
             ));
-            points.push(new THREE.Vector3(-10, fixDistRamp, backWall.position.z));
-            points.push(new THREE.Vector3(-10, altura + fixDistRamp, backWall.position.z));
+            points.push(new THREE.Vector3(-this.widthRamp/2, fixDistRamp, backWall.position.z));
+            points.push(new THREE.Vector3(-this.widthRamp/2, altura + fixDistRamp, backWall.position.z));
 
             // Usa os mesmos pontos para criar o objeto geometrico convexo
             geometry = new THREE.ConvexGeometry( points );
@@ -264,7 +262,7 @@ function main() {
             geometry.normalsNeedUpdate = true;
             var rightWall = new Physijs.ConvexMesh(geometry, wall_sides_material, 0);
             this.ramp.push(rightWall);
-            scene.add(rightWall);*/
+            scene.add(rightWall);
         },
 
         createBox: function(){
