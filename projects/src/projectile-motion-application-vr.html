@@ -6,7 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projectile Motion VR</title>
 
+    <style>
+        #info {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            width: 80%;
+            transform: translateY(-50%);
+            margin: auto;
+            padding-left: 5px;
+            background-color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2em;
+            color: #444;
+            z-index: 1;
+        }
+
+        @media only screen and (min-width: 768px) {
+            #info {
+                text-align: center;
+            }
+        }
+    </style>
+
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-button-controls.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-physics-system.js"></script>
     <script>
         AFRAME.registerComponent('move', {
@@ -36,6 +61,12 @@
                 });
 
                 const self = this;
+                let controlsEl = document.querySelector('[button-controls]');
+                console.log('> ', controlsEl)
+                controlsEl.addEventListener('buttondown', function (evt) {
+                    self.dropBox();
+                });
+
                 this.crate.addEventListener('collide', () => {
                     self.crate.setAttribute('velocity', { x: 0, y: 0, z: 0 });
                 })
@@ -107,19 +138,38 @@
                 return ProjectileCurve
             }
         });
+
+        AFRAME.registerComponent('showinfo', {
+            init: function () {
+                document.getElementById('info').style.display = 'block';
+            }
+        })
     </script>
 </head>
 
 <body>
+    <div id="info">
+        <h2>Instructions: </h2>
+        <p><b>Google Cardboard:</b> press the button to release the crate</p>
+        <p><b>Joystick:</b> Press any button to release the crate</p>
+        <p><b>Keyboard:</b> Press space to release the crate</p>
+        <p><b>VR Mode:</b> Click in the VR button in the bottom right corner;</p>
+    </div>
+
     <a-scene id="scene" physics="friction: 0.8; restitution: 0.1">
         <a-assets timeout="60000">
             <a-asset-item id="airplaneModel" src="assets/models/airplane.glb"></a-asset-item>
             <img id="skyBoxMap" src="assets/textures/cloud.jpg">
             <img id="grass" src="assets/textures/grass.png">
             <img id="crateTexture" src="assets/textures/crate.png">
+            <audio id="airplaneSound" src="assets/sounds/airplane.wav" type="audio/wav">
+            </audio>
         </a-assets>
 
-        <a-entity light="type: ambient; color: #fff; intensity: 0.1"></a-entity>
+        <a-entity showinfo button-controls></a-entity>
+
+        <a-entity light=" type: ambient; color: #fff; intensity: 0.1">
+        </a-entity>
         <a-entity light="color: #fff" position="65 110 52"></a-entity>
 
         <a-sky id="skyBox" material="src: #skyBoxMap" radius="700"></a-sky>
@@ -133,7 +183,9 @@
         </a-box>
 
         <a-entity id="airplane" gltf-model="#airplaneModel" position="0 200 -70" rotation="0 90 0"
-            scale="0.25 0.25 0.25" move body="type: dynamic; mass: 0; shape: none;">
+            scale="0.25 0.25 0.25" body="type: dynamic; mass: 0; shape: none;"
+            sound="src: #airplaneSound; on: click; autoplay: true; loop: true;volume: 5; refDistance: 50; rolloffFactor: 1; distanceModel: exponential"
+            move>
         </a-entity>
 
         <a-entity id="rig" position="-3 0 200">
@@ -141,7 +193,7 @@
             </a-entity>
         </a-entity>
 
-    </a-scene>>
+    </a-scene>
 </body>
 
 </html>
