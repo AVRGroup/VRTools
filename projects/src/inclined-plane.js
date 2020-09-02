@@ -43,7 +43,7 @@ function init() {
   scene.add(axis);*/
 
   var textureLoader = new THREE.TextureLoader();
-  var sideBound = 5;            // BoxSize
+  var lengthBox = 5;            // BoxSize
 
   // setup controls
   var controls = {
@@ -138,8 +138,8 @@ function init() {
 
       // Posicao inicial
       this.startPosition.x = 0;
-      this.startPosition.y = /*- fixDistRamp*2 + 0.2 +*/  backWall.position.y * 2 + Math.sqrt(sideBound);
-      this.startPosition.z = backWall.position.z + sideBound/2;
+      this.startPosition.y = /*- fixDistRamp*2 + 0.2 +*/  backWall.position.y * 2 + Math.sqrt(lengthBox);
+      this.startPosition.z = backWall.position.z + lengthBox/2;
 
       // Calculando posicao inicial do bloco
       let centerPointRamp = new THREE.Vector3(ramp.position.x, ramp.position.y, ramp.position.z);
@@ -191,19 +191,19 @@ function init() {
       // Set the start position of the box
       if(this.angleRamp > 40){
         this.startPosition.x = mediumPointGroundRamp.x + 
-        (unitVector2.component.x * ((sideBound * Math.sqrt(2))/2 + unitVector2.module));
+        (unitVector2.component.x * ((lengthBox * Math.sqrt(2))/2 + unitVector2.module));
         this.startPosition.y = mediumPointGroundRamp.y + 
-        (unitVector2.component.y * Math.ceil((sideBound)/2 + 0.5 + unitVector2.module));
+        (unitVector2.component.y * Math.ceil((lengthBox)/2 + 0.5 + unitVector2.module));
         this.startPosition.z = mediumPointGroundRamp.z + 
-        (unitVector2.component.z * Math.ceil((sideBound)/2 + 0.5 + unitVector2.module));
+        (unitVector2.component.z * Math.ceil((lengthBox)/2 + 0.5 + unitVector2.module));
       }
       else{
         this.startPosition.x = mediumPointGroundRamp.x + 
-        (unitVector2.component.x * ((sideBound * Math.sqrt(2))/2 + unitVector2.module));
+        (unitVector2.component.x * ((lengthBox * Math.sqrt(2))/2 + unitVector2.module));
         this.startPosition.y = mediumPointGroundRamp.y + 
-        (unitVector2.component.y * Math.ceil((sideBound)/2 + unitVector2.module));
+        (unitVector2.component.y * Math.ceil((lengthBox)/2 + unitVector2.module));
         this.startPosition.z = mediumPointGroundRamp.z + 
-        (unitVector2.component.z * Math.ceil((sideBound)/2 + unitVector2.module));
+        (unitVector2.component.z * Math.ceil((lengthBox)/2 + unitVector2.module));
       }
 
       var groundWall = new  Physijs.BoxMesh(new THREE.BoxGeometry(20, 0.1, (altura / Math.tan(controls.angleRamp * (Math.PI/180)))), wall_material, 0);
@@ -275,7 +275,7 @@ function init() {
         ),
         this.frictionBox, .1
       ); //Friction and restitution
-      this.mesh = new Physijs.BoxMesh(new THREE.BoxGeometry(sideBound, sideBound, sideBound), 
+      this.mesh = new Physijs.BoxMesh(new THREE.BoxGeometry(lengthBox, lengthBox, lengthBox), 
       block_material, this.massBox);     //geometry, material and mass
       this.mesh.castShadow = true;
       this.mesh.receiveShadow = true;
@@ -305,8 +305,8 @@ function init() {
       this.mesh.collisions = 0;
       this.mesh.addEventListener( 'collision', handleCollision );
 
-      createAxisOnObject(this.mesh, sideBound);     // Put center axis on object
-      this.groupForces = createForcesDiagram(controls, sideBound);             // id to identify collision and plot the forces
+      createAxisOnObject(this.mesh, lengthBox);     // Put center axis on object
+      this.groupForces = createForcesDiagram(controls, lengthBox);             // id to identify collision and plot the forces
       this.groupForces.rotation.y = THREE.MathUtils.degToRad(90);
       scene.add(this.groupForces);
     },
@@ -338,7 +338,7 @@ function init() {
     updateForces: function(){
       if(this.mesh != null){
         this.groupForces.position.x = this.mesh.position.x; 
-        this.groupForces.position.y = this.mesh.position.y + sideBound * 1.75; 
+        this.groupForces.position.y = this.mesh.position.y + lengthBox * 1.75; 
         this.groupForces.position.z = this.mesh.position.z;
       }
     },

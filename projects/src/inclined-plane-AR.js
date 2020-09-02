@@ -52,7 +52,7 @@ function main() {
     scene.add(axis);
 
     var textureLoader = new THREE.TextureLoader();
-    var sideBound = 5;            // BoxSize
+    var lengthBox = 0.1;            // BoxSize
 
     // setup controls
     var controls = {
@@ -110,7 +110,7 @@ function main() {
             var ramp = new Physijs.BoxMesh(new THREE.BoxGeometry(this.lengthRamp, 0.01, this.widthRamp), ramp_material, 0);
 
             let altura = Math.sin(this.angleRamp * (Math.PI/180)) * this.lengthRamp;
-            let fixDistRamp = 0.02;
+            let fixDistRamp = 0.025;
             ramp.position.y = altura/2 + fixDistRamp;    //  8
 
             ramp.rotation.y = THREE.MathUtils.degToRad(90);
@@ -134,7 +134,7 @@ function main() {
             wall_material.map.wrapT = THREE.RepeatWrapping;
 
             var wall_sides_material = Physijs.createMaterial(new THREE.MeshBasicMaterial({
-                transparent: true, opacity: 0.4, color: 0xcFFFFFF, side: THREE.DoubleSide
+                color: 0xc222222, side: THREE.DoubleSide
                 }),
                 this.frictionRamp, this.restitutionRamp
             ); //Friction and restitution
@@ -147,8 +147,8 @@ function main() {
 
             // Posicao inicial
             this.startPosition.x = 0;
-            this.startPosition.y = backWall.position.y * 2 + Math.sqrt(sideBound);
-            this.startPosition.z = backWall.position.z + sideBound/2;
+            this.startPosition.y = backWall.position.y * 2 + Math.sqrt(lengthBox);
+            this.startPosition.z = backWall.position.z + lengthBox/2;
 
             // Calculando posicao inicial do bloco
             let centerPointRamp = new THREE.Vector3(ramp.position.x, ramp.position.y, ramp.position.z);
@@ -200,19 +200,19 @@ function main() {
             // Set the start position of the box
             if(this.angleRamp > 40){
                 this.startPosition.x = mediumPointGroundRamp.x + 
-                (unitVector2.component.x * ((sideBound * Math.sqrt(2))/2 + unitVector2.module));
+                (unitVector2.component.x * ((lengthBox * Math.sqrt(2))/2 + unitVector2.module));
                 this.startPosition.y = mediumPointGroundRamp.y + 
-                (unitVector2.component.y * Math.ceil((sideBound)/2 + 0.5 + unitVector2.module));
+                (unitVector2.component.y * Math.ceil((lengthBox)/40 + unitVector2.module));
                 this.startPosition.z = mediumPointGroundRamp.z + 
-                (unitVector2.component.z * Math.ceil((sideBound)/2 + 0.5 + unitVector2.module));
+                (unitVector2.component.z * Math.ceil((lengthBox)/40 + unitVector2.module));
             }
             else{
                 this.startPosition.x = mediumPointGroundRamp.x + 
-                (unitVector2.component.x * ((sideBound * Math.sqrt(2))/2 + unitVector2.module));
+                (unitVector2.component.x * ((lengthBox * Math.sqrt(2))/2 + unitVector2.module));
                 this.startPosition.y = mediumPointGroundRamp.y + 
-                (unitVector2.component.y * Math.ceil((sideBound)/2 + unitVector2.module));
+                (unitVector2.component.y * Math.ceil((lengthBox)/2 + unitVector2.module));
                 this.startPosition.z = mediumPointGroundRamp.z + 
-                (unitVector2.component.z * Math.ceil((sideBound)/2 + unitVector2.module));
+                (unitVector2.component.z * Math.ceil((lengthBox)/2 + unitVector2.module));
             }
 
             var groundWall = new  Physijs.BoxMesh(new THREE.BoxGeometry(this.widthRamp, 0.005, (altura / Math.tan(controls.angleRamp * (Math.PI/180)))), wall_material, 0);
@@ -281,10 +281,8 @@ function main() {
                 ),
                 this.frictionBox, .1
             ); //Friction and restitution
-            this.mesh = new Physijs.BoxMesh(new THREE.BoxGeometry(sideBound, sideBound, sideBound), 
+            this.mesh = new Physijs.BoxMesh(new THREE.BoxGeometry(lengthBox, lengthBox, lengthBox), 
             block_material, this.massBox);     //geometry, material and mass
-            this.mesh.castShadow = true;
-            this.mesh.receiveShadow = true;
             this.mesh.position.x = this.startPosition.x;
             this.mesh.position.y = this.startPosition.y;//16.47;
             this.mesh.position.z = this.startPosition.z;//-9.5;
@@ -311,8 +309,8 @@ function main() {
             this.mesh.collisions = 0;
             this.mesh.addEventListener( 'collision', handleCollision );
 
-            createAxisOnObject(this.mesh, sideBound);     // Put center axis on object
-            this.groupForces = createForcesDiagram(controls, sideBound);             // id to identify collision and plot the forces
+            createAxisOnObject(this.mesh, this.lengthBox);     // Put center axis on object
+            this.groupForces = createForcesDiagram(controls, this.lengthBox);             // id to identify collision and plot the forces
             this.groupForces.rotation.y = THREE.MathUtils.degToRad(90);
             scene.add(this.groupForces);
         },
@@ -344,7 +342,7 @@ function main() {
         updateForces: function(){
             if(this.mesh != null){
                 this.groupForces.position.x = this.mesh.position.x; 
-                this.groupForces.position.y = this.mesh.position.y + sideBound * 1.75; 
+                this.groupForces.position.y = this.mesh.position.y + 0.2;//this.mesh.position.y + this.lengthBox + 0.2; 
                 this.groupForces.position.z = this.mesh.position.z;
             }
         },
@@ -354,9 +352,9 @@ function main() {
         },
     };
     controls.createRamp();
-    //controls.createBox();
+    controls.createBox();
     controls.updateDates();
-    //controls.startSimulation();
+    controls.startSimulation();
 
     // Don't active the first simulation
     document.getElementById("alertPanel").style.display = "none";   // "block"
@@ -537,18 +535,18 @@ function createForcesDiagram(controls, size){
     var block_material = new THREE.MeshBasicMaterial(
         {color: 0xEEEEEE}
     );
-    var centerDiagram = new THREE.Mesh(new THREE.SphereGeometry(0.5, 64, 64), block_material);
+    var centerDiagram = new THREE.Mesh(new THREE.SphereGeometry(0.015, 64, 64), block_material);
     centerDiagram.position.y = 0;
     centerDiagram.position.x = 0;
     centerDiagram.position.z = 0;
     centerDiagram.rotation.z = THREE.MathUtils.degToRad(controls.angleRamp);
-  
+
+    //let headLength = // Default: 0.2 * lenght of line 
     size = size/3;
   
     // Axes of origin of block
     var groupForces = new THREE.Group;
     groupForces.name = "Forces";
-    //object.add(groupForces);
     groupForces.add(centerDiagram);
   
                 /**************
@@ -562,10 +560,12 @@ function createForcesDiagram(controls, size){
     var dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     var origin = new THREE.Vector3(0, 0, 0);
-    var length = size + 2;
+    var length = size + 1;
     var hex = 0xff0000;
-    var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
+    var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex);
     arrowHelper.rotation.z = THREE.MathUtils.degToRad(180 - controls.angleRamp);
+    arrowHelper.line.material.linewidth = 5;
+    //console.log(arrowHelper);
     centerDiagram.add(arrowHelper);
   
     /************
@@ -575,7 +575,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size + 1;
     hex = 0x00ff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -586,7 +586,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(1, 0, 0);
     dir.normalize(); //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size + 1;
     hex = 0x0000ff;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -596,7 +596,7 @@ function createForcesDiagram(controls, size){
                * Sem atrito
                */
   
-    centerDiagram = new THREE.Mesh(new THREE.SphereGeometry(0.5, 64, 64), block_material);
+    centerDiagram = new THREE.Mesh(new THREE.SphereGeometry(0.025, 64, 64), block_material);
     centerDiagram.position.y = 0;
     centerDiagram.position.x = 0;
     centerDiagram.position.z = 0;
@@ -609,7 +609,7 @@ function createForcesDiagram(controls, size){
     var dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     var origin = new THREE.Vector3(0, 0, 0);
-    var length = size + 2;
+    var length = size + 0.5;
     var hex = 0xff0000;
     var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     arrowHelper.rotation.z = THREE.MathUtils.degToRad(180);
@@ -622,7 +622,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size + 0.5;
     hex = 0x00ff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -645,7 +645,7 @@ function createForcesDiagram(controls, size){
     var dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     var origin = new THREE.Vector3(0, 0, 0);
-    var length = size + 2;
+    var length = size + 0.5;
     var hex = 0xff0000;
     var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -657,7 +657,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size + 0.5;
     hex = 0x00ff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -668,7 +668,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(1, 0, 0);
     dir.normalize(); //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size + 0.5;
     hex = 0x0000ff;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -698,7 +698,7 @@ function createAxisOnObject(object, size){
     dir.normalize();
   
     var origin = new THREE.Vector3(0, 0, 0);
-    var length = size + 2;
+    var length = size + 0.5;
     var hex = 0xff0000;
   
     var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
@@ -711,7 +711,7 @@ function createAxisOnObject(object, size){
     dir.normalize();
   
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size + 0.5;
     hex = 0x00ff00;
   
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
@@ -724,7 +724,7 @@ function createAxisOnObject(object, size){
     dir.normalize();
   
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size + 0.5;
     hex = 0x0000ff;
   
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
