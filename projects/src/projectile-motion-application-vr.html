@@ -62,13 +62,13 @@
 
                 const self = this;
                 let controlsEl = document.querySelector('[button-controls]');
-                console.log('> ', controlsEl)
                 controlsEl.addEventListener('buttondown', function (evt) {
                     self.dropBox();
                 });
 
                 this.crate.addEventListener('collide', () => {
                     self.crate.setAttribute('velocity', { x: 0, y: 0, z: 0 });
+                    if (self.crate.object3D.visible) self.crate.components.sound.playSound();
                 })
             },
             tick: function (time, delta) {
@@ -88,6 +88,7 @@
                 }
             },
             dropBox: function () {
+                this.crate.object3D.visible = true;
                 this.crate.body.position.set(this.obj.position.x, this.obj.position.y, this.obj.position.z)
                 this.crate.body.angularVelocity.set(0, 0, 0);
                 this.crate.body.velocity.set(this.velocity, 0, 0);
@@ -162,8 +163,8 @@
             <img id="skyBoxMap" src="assets/textures/cloud.jpg">
             <img id="grass" src="assets/textures/grass.png">
             <img id="crateTexture" src="assets/textures/crate.png">
-            <audio id="airplaneSound" src="assets/sounds/airplane.wav" type="audio/wav">
-            </audio>
+            <audio id="airplaneSound" preload="auto" src="assets/sounds/airplane.wav" type="audio/wav"></audio>
+            <audio id="crateSound" preload="auto" src="assets/sounds/dropped-wood.wav" type="audio/wav"></audio>
         </a-assets>
 
         <a-entity showinfo button-controls></a-entity>
@@ -178,8 +179,9 @@
             height="500" static-body>
         </a-plane>
 
-        <a-box id="crate" src="#crateTexture" height="4" width="4" depth="4" position="-15 1.5 200"
-            dynamic-body="linearDamping: 0; angularDamping: 0.01;">
+        <a-box id="crate" src="#crateTexture" height="4" width="4" depth="4" position="-3 3 190" visible="false"
+            dynamic-body="linearDamping: 0; angularDamping: 0.01;"
+            sound="src: #crateSound; poolSize: 2; refDistance: 50; volume: 3;">
         </a-box>
 
         <a-entity id="airplane" gltf-model="#airplaneModel" position="0 200 -70" rotation="0 90 0"
