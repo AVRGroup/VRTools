@@ -68,7 +68,7 @@ function main() {
         mesh: null,
         ramp: [],
         lengthRamp: 0.5,    // Comprimento
-        widthRamp: 0.1667,  // Largura
+        widthRamp: 0.5,//0.1667,  // Largura
         restitutionRamp: 0.3,
         startPosition: {
             x: 0,
@@ -110,7 +110,7 @@ function main() {
             var ramp = new Physijs.BoxMesh(new THREE.BoxGeometry(this.lengthRamp, 0.01, this.widthRamp), ramp_material, 0);
 
             let altura = Math.sin(this.angleRamp * (Math.PI/180)) * this.lengthRamp;
-            let fixDistRamp = 0.2;
+            let fixDistRamp = 0.02;
             ramp.position.y = altura/2 + fixDistRamp;    //  8
 
             ramp.rotation.y = THREE.MathUtils.degToRad(90);
@@ -744,36 +744,31 @@ function createGroundAndWalls(scene) {
             ),
             .9, .3);
   
-    var ground = new Physijs.BoxMesh(new THREE.BoxGeometry(1, 0.1, 1), ground_material, 0);
+    var ground = new Physijs.BoxMesh(new THREE.BoxGeometry(1, 0.05, 1), ground_material, 0);
     ground.name = "ground";
+    //ground.position.y = 0.1;
   
-    /*var borderLeft = new Physijs.BoxMesh(new THREE.BoxGeometry(0.2, 0.15, 1.5), ground_material, 0);
-    borderLeft.position.x = -0.735;
-    borderLeft.position.y = 0.2;
-    borderLeft.castShadow = true;
-    borderLeft.receiveShadow = true;
-    borderLeft.name = "ground";
+    var borderLeft = new Physijs.BoxMesh(new THREE.BoxGeometry(0.05, 0.125, 1.1), ground_material, 0);
+    borderLeft.position.x = -0.525;
+    borderLeft.position.y = 0.035;
   
     ground.add(borderLeft);
   
-    var borderRight = new Physijs.BoxMesh(new THREE.BoxGeometry(0.2, 0.15, 1.5), ground_material, 0);
-    borderRight.position.x = 0.735;
-    borderRight.position.y = 0.1;
-    borderRight.castShadow = true;
-    borderRight.receiveShadow = true;
-    borderRight.name = "ground";
+    var borderRight = new Physijs.BoxMesh(new THREE.BoxGeometry(0.05, 0.125, 1.1), ground_material, 0);
+    borderRight.position.x = 0.525;
+    borderRight.position.y = 0.035;
   
-    ground.add(borderRight);*/
+    ground.add(borderRight);
   
-    var borderBottom = new Physijs.BoxMesh(new THREE.BoxGeometry(1, 0.3, 0.1), ground_material, 0);
-    borderBottom.position.z = 0.55;
-    borderBottom.position.y = 0.1;
+    var borderBottom = new Physijs.BoxMesh(new THREE.BoxGeometry(1, 0.125, 0.05), ground_material, 0);
+    borderBottom.position.z = 0.525;
+    borderBottom.position.y = 0.035;
   
     ground.add(borderBottom);
   
-    var borderTop = new Physijs.BoxMesh(new THREE.BoxGeometry(1, 0.3, 0.1), ground_material, 0);
-    borderTop.position.z = -0.55;
-    borderTop.position.y = 0.1;
+    var borderTop = new Physijs.BoxMesh(new THREE.BoxGeometry(1, 0.125, 0.05), ground_material, 0);
+    borderTop.position.z = -0.525;
+    borderTop.position.y = 0.035;
   
     ground.add(borderTop);
     scene.add(ground);
