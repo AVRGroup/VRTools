@@ -521,8 +521,9 @@ function main() {
         controls.updateForces();
         
         if(controls.animation){
-            scene.simulate(undefined, 2);     // Fix the error that occurrent when change parameter the block
+            //scene.simulate(undefined, 2);     // Fix the error that occurrent when change parameter the block
                                             // start with an initial speed 
+            scene.simulate(undefined, 2);
         }
         renderer.render(scene, camera);
         requestAnimationFrame(render);
@@ -564,7 +565,7 @@ function createForcesDiagram(controls, size){
     var hex = 0xff0000;
     var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex);
     arrowHelper.rotation.z = THREE.MathUtils.degToRad(180 - controls.angleRamp);
-    arrowHelper.line.material.linewidth = 5;
+    //arrowHelper.line.material.linewidth = 5;
     //console.log(arrowHelper);
     centerDiagram.add(arrowHelper);
   
@@ -596,7 +597,7 @@ function createForcesDiagram(controls, size){
                * Sem atrito
                */
   
-    centerDiagram = new THREE.Mesh(new THREE.SphereGeometry(0.025, 64, 64), block_material);
+    centerDiagram = new THREE.Mesh(new THREE.SphereGeometry(0.015, 64, 64), block_material);
     centerDiagram.position.y = 0;
     centerDiagram.position.x = 0;
     centerDiagram.position.z = 0;
