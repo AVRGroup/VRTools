@@ -8,7 +8,7 @@ function main() {
     var gui = new dat.GUI();
 
     // use the defaults
-    var scene = new Physijs.Scene({reportSize: 4, fixedTimeStep: 1 / 60});
+    var scene = new Physijs.Scene({reportSize: 4, fixedTimeStep: 1 / 420});
     var gravity = -9.8;
     scene.setGravity(new THREE.Vector3(0, gravity, 0));
     var camera = new THREE.Camera();
