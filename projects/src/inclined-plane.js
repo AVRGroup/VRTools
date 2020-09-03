@@ -318,16 +318,16 @@ function init() {
             controls.collision.ground = true;
             controls.groupForces.children[0].visible = false;
             controls.groupForces.children[1].visible = false;
-            controls.groupForces.children[2].visible = true;
-            controls.groupForces.children[3].visible = false;
+            controls.groupForces.children[2].visible = false;
+            controls.groupForces.children[3].visible = true;
             //console.log("Chao");
           }
           if(collided_with.name === "ramp" && controls.collision.ground === false){ //FIX the diagram forces
             controls.collision.ramp = true;
             controls.groupForces.children[0].visible = false;
             controls.groupForces.children[1].visible = false;
-            controls.groupForces.children[2].visible = false;
-            controls.groupForces.children[3].visible = true;
+            controls.groupForces.children[2].visible = true;
+            controls.groupForces.children[3].visible = false;
             //console.log("Rampa");
           }
         }
@@ -545,8 +545,6 @@ function createForcesDiagram(controls, size){
   // Axes of origin of block
   var groupForces = new THREE.Group;
   groupForces.name = "Forces";
-  //object.add(groupForces);
-  //groupForces.add(centerDiagram);
 
               /**************
                * Com atrito *
@@ -651,6 +649,7 @@ function createForcesDiagram(controls, size){
   centerDiagram.position.x = 0;
   centerDiagram.position.z = 0;
   centerDiagram.visible = false;
+  centerDiagram.rotation.z = THREE.MathUtils.degToRad(controls.angleRamp);
 
    /**********
    *  Peso  *
