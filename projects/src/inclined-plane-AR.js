@@ -340,7 +340,7 @@ function main() {
             this.mesh.collisions = 0;
             this.mesh.addEventListener( 'collision', handleCollision );
 
-            this.groupForces = createForcesDiagram(controls, this.lengthBox);             // id to identify collision and plot the forces
+            this.groupForces = createForcesDiagram(controls, lengthBox);             // id to identify collision and plot the forces
             this.groupForces.rotation.y = THREE.MathUtils.degToRad(90);
             scene.add(this.groupForces);
         },
@@ -481,7 +481,6 @@ function main() {
             return false;
         };
         document.getElementById('close2').onclick = function(){
-            //this.parentNode.parentNode.parentNode.parentNode.style.display = "none";
             controls.informations.style.display = "none";
             controls.panels.informations = false;
             updateDisplay(gui);
@@ -593,7 +592,7 @@ function createForcesDiagram(controls, size){
     centerDiagram.position.z = 0;
     centerDiagram.rotation.z = THREE.MathUtils.degToRad(controls.angleRamp);
   
-    size = size/3;
+    //size = size/2;
   
     // Axes of origin of block
     var groupForces = new THREE.Group;
@@ -610,7 +609,7 @@ function createForcesDiagram(controls, size){
     var dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     var origin = new THREE.Vector3(0, 0, 0);
-    var length = size + 2;
+    var length = size;
     var hex = 0xff0000;
     var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     arrowHelper.rotation.z = THREE.MathUtils.degToRad(180 - controls.angleRamp);
@@ -623,7 +622,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size;
     hex = 0x00ff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -634,7 +633,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(1, 0, 0);
     dir.normalize(); //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size;
     hex = 0x0000ff;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -658,7 +657,7 @@ function createForcesDiagram(controls, size){
     var dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     var origin = new THREE.Vector3(0, 0, 0);
-    var length = size + 2;
+    var length = size;
     var hex = 0xff0000;
     var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     arrowHelper.rotation.z = THREE.MathUtils.degToRad(180);
@@ -671,7 +670,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size;
     hex = 0x00ff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -682,7 +681,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(1, 0, 0);
     dir.normalize(); //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size;
     hex = 0x0000ff;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -711,7 +710,7 @@ function createForcesDiagram(controls, size){
     var dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     var origin = new THREE.Vector3(0, 0, 0);
-    var length = size + 2;
+    var length = size;
     var hex = 0xff0000;
     var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     arrowHelper.rotation.z = THREE.MathUtils.degToRad(180 - controls.angleRamp);
@@ -724,7 +723,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size;
     hex = 0x00ff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
@@ -748,7 +747,7 @@ function createForcesDiagram(controls, size){
     var dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     var origin = new THREE.Vector3(0, 0, 0);
-    var length = size + 2;
+    var length = size;
     var hex = 0xff0000;
     var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     arrowHelper.rotation.z = THREE.MathUtils.degToRad(180);
@@ -761,7 +760,7 @@ function createForcesDiagram(controls, size){
     dir = new THREE.Vector3(0, 1, 0 );
     dir.normalize();  //normalize the direction vector (convert to vector of length 1)
     origin = new THREE.Vector3(0, 0, 0);
-    length = size + 2;
+    length = size;
     hex = 0x00ff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
     centerDiagram.add(arrowHelper);
