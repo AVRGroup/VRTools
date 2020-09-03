@@ -48,8 +48,8 @@ function main() {
     scene.add(new THREE.AmbientLight(0x0393939));
 
     // Axis
-    var axis = new THREE.AxisHelper(300);
-    scene.add(axis);
+    //var axis = new THREE.AxisHelper(300);
+    //scene.add(axis);
 
     var textureLoader = new THREE.TextureLoader();
     var lengthBox = 0.1;            // BoxSize
@@ -306,7 +306,6 @@ function main() {
                         controls.groupForces.children[1].visible = true;
                         controls.groupForces.children[2].visible = false;
                         controls.groupForces.children[3].visible = false;
-                        //console.log("Chao");
                     }
                     if(collided_with.name === "ramp" && controls.collision.ground === false){ //FIX the diagram forces
                         controls.collision.ramp = true;
@@ -314,7 +313,6 @@ function main() {
                         controls.groupForces.children[1].visible = false;
                         controls.groupForces.children[2].visible = false;
                         controls.groupForces.children[3].visible = false;
-                        //console.log("Rampa");
                     }
                 }
                 else{
@@ -324,7 +322,6 @@ function main() {
                         controls.groupForces.children[1].visible = false;
                         controls.groupForces.children[2].visible = false;
                         controls.groupForces.children[3].visible = true;
-                        //console.log("Chao");
                     }
                     if(collided_with.name === "ramp" && controls.collision.ground === false){ //FIX the diagram forces
                         controls.collision.ramp = true;
@@ -332,7 +329,6 @@ function main() {
                         controls.groupForces.children[1].visible = false;
                         controls.groupForces.children[2].visible = true;
                         controls.groupForces.children[3].visible = false;
-                        //console.log("Rampa");
                     }
                 }
                 this.collisions++;
