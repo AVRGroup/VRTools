@@ -91,12 +91,9 @@
 
 <body>
     <div id="informations" style="position: absolute; width: 65%; height: 50%;
-    background-color: rgba(7, 7, 9, 0.8); display: none; z-index: 1000; border: 2px solid #000 
-    ">
-        <div id="content" style="color: #ffffff; 
-        z-index: 1001; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;">
-            
-            <table >
+        display: none; z-index: 1000; ">
+            <div id="content" style="color: #ffffff;">
+                <table style="background-color: rgba(7, 7, 9, 0.9); border: 2px solid #000 ">
                 <tr>
                     <th colspan="1" style="font-size: 1.3em; text-align: center;">
                         Informations <span id='close2'>X</span>
@@ -185,18 +182,18 @@
                     if(window.innerWidth < 770){
                         alertPanelContent.style.fontSize = "1.3em";
                         if(window.innerWidth < 500){
-                            informations.style.height = "80%";
+                            informations.style.height = "90%";
                             alertPanel.style.height = "15%";
                             alertPanelContent.style.fontSize = "6vw";
                         }
                         else{
-                            informations.style.height = "50%";
+                            informations.style.height = "90%";
                             alertPanelContent.style.fontSize = "4.5vw";
                         }
                     }
                     else{
                         alertPanelContent.style.fontSize = "3.3vw";
-                        informations.style.height = "50%";
+                        informations.style.height = "90%";
                     }
                 }
                 else{
