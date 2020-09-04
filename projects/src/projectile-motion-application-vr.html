@@ -158,13 +158,14 @@
     </div>
 
     <a-scene id="scene" physics="friction: 0.8; restitution: 0.1">
-        <a-assets timeout="60000">
+        <a-assets timeout="3000">
             <a-asset-item id="airplaneModel" src="assets/models/airplane.glb"></a-asset-item>
             <img id="skyBoxMap" src="assets/textures/cloud.jpg">
             <img id="grass" src="assets/textures/grass.png">
             <img id="crateTexture" src="assets/textures/crate.png">
-            <audio id="airplaneSound" preload="auto" src="assets/sounds/airplane.wav" type="audio/wav"></audio>
-            <audio id="crateSound" preload="auto" src="assets/sounds/dropped-wood.wav" type="audio/wav"></audio>
+
+            <audio id="airplaneSound" src="assets/sounds/airplane.wav"></audio>
+            <audio id="crateSound" src="assets/sounds/dropped-wood.wav"></audio>
         </a-assets>
 
         <a-entity showinfo button-controls></a-entity>
