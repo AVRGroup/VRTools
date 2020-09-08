@@ -8,7 +8,7 @@ function main() {
     var gui = new dat.GUI();
 
     // use the defaults
-    var scene = new Physijs.Scene({reportSize: 4, fixedTimeStep: 1 / 420});
+    var scene = new Physijs.Scene({reportSize: 4, fixedTimeStep: 1 / 420}); //fixedTimeStep: 1 / 60
     var gravity = -9.8;
     scene.setGravity(new THREE.Vector3(0, gravity, 0));
     var camera = new THREE.Camera();
@@ -152,11 +152,6 @@ function main() {
             this.ramp.push(backWall);
             scene.add(backWall);
 
-            // Posicao inicial
-            this.startPosition.x = 0;
-            this.startPosition.y = backWall.position.y * 2 + Math.sqrt(lengthBox);
-            this.startPosition.z = backWall.position.z + lengthBox/2;
-
             // Calculando posicao inicial do bloco
             let centerPointRamp = new THREE.Vector3(ramp.position.x, ramp.position.y, ramp.position.z);
             let heightPointRamp = new THREE.Vector3(backWall.position.x, altura, backWall.position.z);
@@ -205,19 +200,24 @@ function main() {
             unitVector2.component.z = unitVector2.component.z / unitVector2.module;
 
             // Set the start position of the box
-            if(this.angleRamp > 40){
+            if(this.angleRamp > 20){
                 this.startPosition.x = mediumPointGroundRamp.x + 
                 (unitVector2.component.x * ((lengthBox * Math.sqrt(2))/2 + unitVector2.module));
-                this.startPosition.y = mediumPointGroundRamp.y + 
-                (unitVector2.component.y * Math.ceil((lengthBox)/40 + unitVector2.module));
+                this.startPosition.y = mediumPointGroundRamp.y 
+                + (unitVector2.component.y * ((lengthBox * Math.sqrt(1.8)) + unitVector2.module));
                 this.startPosition.z = mediumPointGroundRamp.z + 
-                (unitVector2.component.z * Math.ceil((lengthBox)/40 + unitVector2.module));
+                (unitVector2.component.z * Math.ceil((lengthBox)/2 + unitVector2.module));
+
+                if(this.angleRamp > 38){
+                    this.startPosition.y = mediumPointGroundRamp.y 
+                    + (unitVector2.component.y * ((lengthBox)/2 + unitVector2.module));
+                }
             }
             else{
                 this.startPosition.x = mediumPointGroundRamp.x + 
                 (unitVector2.component.x * ((lengthBox * Math.sqrt(2))/2 + unitVector2.module));
-                this.startPosition.y = mediumPointGroundRamp.y + 
-                (unitVector2.component.y * Math.ceil((lengthBox)/2 + unitVector2.module));
+                this.startPosition.y = mediumPointGroundRamp.y 
+                + (unitVector2.component.y * ((lengthBox * 3) + unitVector2.module));
                 this.startPosition.z = mediumPointGroundRamp.z + 
                 (unitVector2.component.z * Math.ceil((lengthBox)/2 + unitVector2.module));
             }
@@ -398,6 +398,7 @@ function main() {
             this.groupForces.children[1].visible = false;
             this.groupForces.children[2].visible = false;
             this.groupForces.children[3].visible = false;
+            this.animation = false;
             updateInstructionPanel(gravity, this);
         },
     };
@@ -467,10 +468,6 @@ function main() {
         }
     }
 
-    window.addEventListener('resize', function(){
-        onResize(camera, renderer);
-    });  // Ajuste de tela
-
     window.onload = function(){
         document.getElementById('close').onclick = function(){
             this.parentNode.style.display = "none";
@@ -492,6 +489,12 @@ function main() {
     var arToolkitSource = new THREEx.ArToolkitSource({
         // to read from the webcam
         sourceType: 'webcam',
+        // resolution of at which we initialize the source image
+        sourceWidth: 640,
+        sourceHeight: 480,
+        // resolution displayed for the source 
+        displayWidth: 640,
+        displayHeight: 480,
     })
 
     arToolkitSource.init(function onReady() {
@@ -521,6 +524,10 @@ function main() {
     var arToolkitContext = new THREEx.ArToolkitContext({
         cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/data/camera_para.dat',
         detectionMode: 'mono',
+        imageSmoothingEnabled : true,
+        // resolution of at which we detect pose in the source image
+        canvasWidth: 640,
+        canvasHeight: 480,
     })
 
     // initialize it
@@ -539,7 +546,8 @@ function main() {
         patternUrl: THREEx.ArToolkitContext.baseURL + 'data/data/patt.hiro',
         // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji',
         // as we controls the camera, set changeMatrixMode: 'cameraTransformMatrix'
-        changeMatrixMode: 'cameraTransformMatrix'
+        changeMatrixMode: 'cameraTransformMatrix',
+        smooth: true,
     });
 
     // as we do changeMatrixMode: 'cameraTransformMatrix', start with invisible scene
