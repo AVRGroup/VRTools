@@ -33,95 +33,165 @@
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-button-controls.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-physics-system.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/other/howler.js"></script>
+
     <script>
-        AFRAME.registerComponent('move', {
+        AFRAME.registerComponent('appcode', {
             init: function () {
-                this.obj = this.el.object3D;
+                const self = this;
+
+                this.isPaused = true;
+
+                this.airplane = document.querySelector('#airplane').object3D;
+                this.crate = document.querySelector('#crate').object3D;
+                this.camera = document.querySelector('#camera').object3D;
+
                 this.velocity = 50;
-                this.vx = this.velocity;
+                this.vx = 0;
                 this.vz = 0;
-                this.radiusSquared = 250000; // sqrt(250,000) = 500
+                this.radiusSquared = 250000; // sqrt(250,000) = 500 - it's squared because this way requires less Math.sqrt() calls
                 this.distanceSquared;
+                this.pauseVelAux = { x: 0, y: 0, z: 0 };
 
-                this.randomizePosition();
-                this.el.setAttribute('velocity', { x: this.vx, y: 0, z: this.vz });
+                this.randomizeAirplanePosition();
 
-                this.crate = this.el.sceneEl.querySelector('#crate');
+                // ----- Loading sound ----- //
 
-                this.TrajectoryPath = this.ProjectileCurve();
-                this.path;
-                this.trajectory;
-                this.material = new THREE.LineBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.5 })
+                this.airplaneSound = new Howl({
+                    src: ['assets/sounds/airplane.wav'], // Huggy13ear https://freesound.org/s/138957/
+                    volume: 50,
+                    loop: true,
+                });
+                this.soundLimiter = 0; // I'm using it to limit the amount of simultaneous sound being played
+                this.crateSound = new Howl({
+                    src: ['assets/sounds/dropped-wood.wav'], // Jagadamba https://freesound.org/s/258051/
+                    volume: 30,
+                    onplay: () => { self.soundLimiter++ },
+                    onend: () => { self.soundLimiter-- },
+                });
+                Howler.pos(0, 1.6, 0); // Sound listener position
 
+                // ----- Setting trajectory object ----- //
 
-                this.path = new this.TrajectoryPath(new THREE.Vector3(0, -1, 0), 0, 0, 0, 0);
+                this.Curve = this.ProjectileCurve(); // Personalized curve class
+                this.path = new this.Curve(new THREE.Vector3(0, -1, 0), 0, 0, 0, 0); // instantiate Curve in an object that can be used to create a geomety 
+                this.material = new THREE.LineBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.5 });
+
                 this.trajectory = new THREE.Line(
                     new THREE.BufferGeometry().setFromPoints(this.path.getPoints(1)),
                     this.material
                 );
                 this.el.sceneEl.setObject3D('trajectory', this.trajectory);
 
-                const self = this;
-                let controlsEl = document.querySelector('[button-controls]');
-                controlsEl.addEventListener('buttondown', function (evt) {
-                    self.dropBox();
+                // ----- Event listeners ----- //
+
+                this.crate.el.addEventListener('collide', () => {
+                    // Howler.js seems to have the x-axis and z-axis inverted when compared to THREE.js
+                    self.crateSound.pos(self.crate.position.z, self.crate.position.y, self.crate.position.x);
+
+                    if (!self.isPaused && self.soundLimiter < 3)
+                        self.crateSound.play();
+
+                    if (this.trajectory.visible)
+                        this.trajectory.visible = false;
                 });
 
-                this.crate.addEventListener('collide', () => {
-                    self.crate.setAttribute('velocity', { x: 0, y: 0, z: 0 });
-                    if (self.crate.object3D.visible) self.crate.components.sound.playSound();
+                this.el.sceneEl.addEventListener('enter-vr', () => {
+                    document.querySelector('#info').style.display = 'none';
+
+                    self.isPaused = false;
+
+                    self.airplaneSound.play();
+                    self.airplane.el.setAttribute('velocity', { x: this.vx, y: 0, z: this.vz });
+
+                    self.crate.el.body.mass = 5;
+                    self.crate.el.body.velocity.set(self.pauseVelAux.x, self.pauseVelAux.y, self.pauseVelAux.z);
+                });
+
+                this.el.sceneEl.addEventListener('exit-vr', () => {
+                    document.querySelector('#info').style.display = 'block';
+
+                    self.isPaused = true;
+
+                    self.airplaneSound.pause();
+                    self.airplane.el.setAttribute('velocity', { x: 0, y: 0, z: 0 });
+
+                    self.crate.el.body.mass = 0;
+                    self.pauseVelAux = self.crate.el.body.velocity.clone();
+                    self.crate.el.body.velocity.set(0, 0, 0);
+                });
+
+                this.el.sceneEl.addEventListener('loaded', () => {
+                    document.querySelector('#info').style.display = 'block';
+                });
+
+                document.querySelector('[button-controls]').addEventListener('buttondown', () => { // Listen click, touch, and joystick button pressed events
+                    if (!this.isPaused) self.dropCrate();
                 });
             },
-            tick: function (time, delta) {
-                this.distanceSquared = (this.obj.position.x * this.obj.position.x) + (this.obj.position.z * this.obj.position.z);
+            tick: function () {
+                if (this.isPaused) return;
+
+                this.distanceSquared = (this.airplane.position.x * this.airplane.position.x) + (this.airplane.position.z * this.airplane.position.z);
+
+                // Howler.js seems to have the x-axis and z-axis inverted when compared to THREE.js
+                this.airplaneSound.pos(
+                    this.airplane.position.z,
+                    this.airplane.position.y,
+                    this.airplane.position.x,
+
+                );
+
+                Howler.orientation( // rotates the sound listener
+                    Math.cos(this.camera.rotation.y), 0, Math.sin(this.camera.rotation.y),
+                    0, 1, 0
+                );
 
                 if (this.distanceSquared > this.radiusSquared) {
-                    this.obj.visible = false;
-                    this.el.setAttribute('velocity', { x: 0, y: 0, z: 0 });
+                    this.airplane.visible = false;
+                    this.airplane.el.setAttribute('velocity', { x: 0, y: 0, z: 0 });
 
-                    this.randomizePosition();
+                    this.randomizeAirplanePosition();
 
-                    const self = this;
-                    setTimeout(() => {
-                        self.obj.visible = true;
-                        self.el.setAttribute('velocity', { x: this.vx, y: 0, z: this.vz });
-                    }, 100);
+                    this.airplane.visible = true;
+                    this.airplane.el.setAttribute('velocity', { x: this.vx, y: 0, z: this.vz });
                 }
             },
-            dropBox: function () {
-                this.crate.object3D.visible = true;
-                this.crate.body.position.set(this.obj.position.x, this.obj.position.y, this.obj.position.z)
-                this.crate.body.angularVelocity.set(0, 0, 0);
-                this.crate.body.velocity.set(this.vx, 0, this.vz);
+            randomizeAirplanePosition: function () {
+                let x, z, theta;
 
-                this.path = new this.TrajectoryPath(
-                    this.obj.position,
+                // x^2 + z^2 = r^2
+                x = Math.floor(Math.random() * this.radiusSquared); // random number between [0, r^2)
+                z = this.radiusSquared - x;
+
+                this.airplane.position.x = Math.sqrt(x) * (Math.random() > 0.5 ? 1 : -1);
+                this.airplane.position.z = Math.sqrt(z) * (Math.random() > 0.5 ? 1 : -1);
+                this.airplane.position.y = Math.random() * 200 + 50;// random values in the interval [50, 250)
+
+                theta = Math.atan(this.airplane.position.z / this.airplane.position.x);
+
+                this.airplane.rotation.y = (Math.PI / 2) - theta; // Math.PI / 2 refers to airplane object inital rotation
+                this.vx = this.velocity * Math.cos(theta);
+                this.vz = this.velocity * Math.sin(theta);
+            },
+            dropCrate: function () {
+                this.crate.visible = true;
+                this.crate.el.body.position.set(this.airplane.position.x, this.airplane.position.y, this.airplane.position.z)
+                this.crate.el.body.angularVelocity.set(0, 0, 0);
+                this.crate.el.body.velocity.set(this.vx, 0, this.vz);
+
+                this.path = new this.Curve(
+                    this.airplane.position,
                     this.velocity,
                     0,
-                    this.obj.rotation.y - (Math.PI / 2),
+                    this.airplane.rotation.y - (Math.PI / 2),
                     9.8,
                     10
                 );
                 this.path = this.path.getPoints(30)
                 this.trajectory.geometry = new THREE.BufferGeometry().setFromPoints(this.path);
                 this.trajectory.geometry.needsupdate = true;
-            },
-            randomizePosition: function () {
-                let x, z, theta;
-
-                // x^2 + z^2 = r^2
-                x = Math.floor(Math.random() * this.radiusSquared);
-                z = this.radiusSquared - x;
-
-                this.obj.position.x = Math.sqrt(x) * (Math.random() > 0.5 ? 1 : -1);
-                this.obj.position.z = Math.sqrt(z) * (Math.random() > 0.5 ? 1 : -1);
-                this.obj.position.y = Math.random() * 200 + 50;// random values in the interval [50, 250)
-
-                theta = Math.atan(this.obj.position.z / this.obj.position.x);
-                this.obj.rotation.y = (Math.PI / 2) - theta;
-
-                this.vx = this.velocity * Math.cos(theta);
-                this.vz = this.velocity * Math.sin(theta);
+                this.trajectory.visible = true;
             },
             ProjectileCurve: function () {
                 function ProjectileCurve(p0, velocity, verticalAngle, horizontalAngle, gravity, scale) {
@@ -156,13 +226,8 @@
 
                 return ProjectileCurve
             }
-        });
 
-        AFRAME.registerComponent('showinfo', {
-            init: function () {
-                document.getElementById('info').style.display = 'block';
-            }
-        })
+        });
     </script>
 </head>
 
@@ -171,8 +236,8 @@
         <h2>Instructions: </h2>
         <p><b>Google Cardboard:</b> press the button to release the crate</p>
         <p><b>Joystick:</b> Press any button to release the crate</p>
-        <p><b>Keyboard:</b> Press space to release the crate</p>
-        <p><b>VR Mode:</b> Click in the VR button in the bottom right corner;</p>
+        <p><b>Mouse:</b> Click in the screen to release the crate</p>
+        <p><b>Start:</b> Press the VR button in the bottom right corner to enter in Virtual Reality mode and start.</p>
     </div>
 
     <a-scene id="scene" physics="friction: 0.8; restitution: 0.1">
@@ -181,36 +246,30 @@
             <img id="skyBoxMap" src="assets/textures/cloud.jpg">
             <img id="grass" src="assets/textures/grass.png">
             <img id="crateTexture" src="assets/textures/crate.png">
-
-            <audio id="airplaneSound" src="assets/sounds/airplane.wav"></audio>
-            <audio id="crateSound" src="assets/sounds/dropped-wood.wav"></audio>
         </a-assets>
 
-        <a-entity showinfo button-controls></a-entity>
+        <a-entity button-controls appcode></a-entity>
 
         <a-entity light=" type: ambient; color: #fff; intensity: 0.1">
         </a-entity>
         <a-entity light="color: #fff" position="65 110 52"></a-entity>
 
-        <a-sky id="skyBox" material="src: #skyBoxMap" radius="700"></a-sky>
+        <a-sky id="skyBox" material="src: #skyBoxMap" radius="850"></a-sky>
 
-        <a-plane id="ground" material="src: #grass; repeat: 140, 140" position="0 0 0" rotation="-90 0 0" width="1400"
-            height="1400" static-body>
+        <a-plane id="ground" material="src: #grass; repeat: 140, 140" position="0 0 0" rotation="-90 0 0" width="1700"
+            height="1700" static-body>
         </a-plane>
 
-        <a-box id="crate" src="#crateTexture" height="4" width="4" depth="4" position="-3 3 190" visible="false"
-            dynamic-body="linearDamping: 0; angularDamping: 0.01;"
-            sound="src: #crateSound; poolSize: 2; refDistance: 50; volume: 8; refDistance: 50; rolloffFactor: 1; distanceModel: exponential">
+        <a-box id="crate" src="#crateTexture" height="4" width="4" depth="4" position="0 2 0" visible="true"
+            dynamic-body="linearDamping: 0; angularDamping: 0.01;">
         </a-box>
 
-        <a-entity id="airplane" gltf-model="#airplaneModel" position="0 200 -70" rotation="0 90 0"
-            scale="0.25 0.25 0.25" body="type: dynamic; mass: 0; shape: none;"
-            sound="src: #airplaneSound; on: click; autoplay: true; loop: true;volume: 7; refDistance: 50; rolloffFactor: 1.2; distanceModel: exponential"
-            move>
+        <a-entity id="airplane" gltf-model="#airplaneModel" scale="0.25 0.25 0.25"
+            body="type: dynamic; mass: 0; shape: none;">
         </a-entity>
 
         <a-entity id="rig" position="0 0 0">
-            <a-entity id="camera" camera position="0 1.5 0" look-controls="pointerLockEnabled: true">
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
             </a-entity>
         </a-entity>
 
