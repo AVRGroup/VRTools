@@ -1,0 +1,226 @@
+{
+    "VRTools": {
+        "mainAddress": "https://avrgroup.github.io/vrtools/",
+        "mainImage": "img/vr.png",
+        "about": "Welcome! On this site we will provide links to popular Virtual Reality and Augmented Reality systems and projects developed by students from the UFJF computer science course. Feel free to contact us to suggest improvements and enjoy the content!"
+    },
+    "People": [
+        {
+            "name": "Rodrigo L. S. Silva",
+            "imageSrc": "img/vrtools_rodrigo.jpg", 
+            "profile": "Project coordinator and associate professor at UFJF. His main interests are Augmented Reality, Virtual Reality, Scientific Visualization and Computer Graphics."
+        },
+        {
+            "name": "Lucas D. da Costa",
+            "imageSrc": "img/vrtools_lucas.jpg", 
+            "profile": "Graduated in Exact Sciences at UFJF (2014-2019). Computer Science student at UFJF. Currently interested in Virtual Reality, Augmented Reality and Computer Graphics."
+        },
+        {
+            "name": "Paulo Victor de M. Rozatto",
+            "imageSrc": "img/vrtools_paulo.jpg", 
+            "profile": "Computer Science student at UFJF. He loves coffe and science in general. Currently interested in Augmented Reality, Virtual Reality, and Computer Graphics."
+        }
+    ],
+    "Projects":[
+        {
+            "name": "Platonic Solids",
+            "imageSrc": "img/platonic-solids/platonic-solids.jpeg",
+            "description": "Platonic solids, also called regular solids or regular polyhedra, are convex polyhedrons with identical faces composed of convex regular polygons. Euclid (ancient Greek mathematician) proved that there are five of such solids: the cube, dodecahedron, icosahedron, octahedron, and tetrahedron. The name of Platonic solids was given due the Athenian philosopher Plato, who in his dialogue Timaeus related four of the regular polyhedra with the four basic elements (fire, air, water, and earth), which were believed to compose all the matter through their combinations, and the fifth polyhedron was associated heaven and the constellations. The tetrahedron was assigned to fire, the cube to earth, the octahedron to air, the icosahedron to water, and the dodecahedron to heaven and constellations.",
+            "threejsSrc": "projects/src/platonic-solids-application.html",
+            "references": [
+                {
+                    "text": "Weisstein, Eric W. Platonic Solid. From MathWorld--A Wolfram Web Resource. https://mathworld.wolfram.com/PlatonicSolid.html"
+                },
+                {
+                    "text": "Heilbron, J.L. Platonic solid. From Encyclopædia Britannica, inc. Web resource https://www.britannica.com/science/Platonic-solid"
+                }
+            ],
+            "modes": [
+                {
+                    "name": "Fullscreen",
+                    "imageSrc": "projects/img/Platonic-Solids/blur.jpg",
+                    "modeSrc": "projects/src/platonic-solids-application.html",
+                    "instructions": "",
+                    "links": []
+                },
+                {
+                    "name": "Augmented Reality",
+                    "imageSrc": "projects/img/Platonic-Solids/blur-AR.jpg",
+                    "modeSrc": "projects/src/platonic-solids-application-AR.html",
+                    "instructions": "You must print a fiducial marker to use Augmented Reality mode (click here to download).",
+                    "links": [
+                        {
+                            "name": "HIRO Marker",
+                            "url": "https://avrgroup.github.io/vrtools/projects/data/markers/hiro.png" 
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Solar System",
+            "imageSrc": "img/solar-system/solar-system.png",
+            "description": "The Solar System was formed 4.6 billion years ago. The vast majority of the system's mass is in the Sun, with most of the remaining mass contained in Jupiter. It presents 8 planets around the sun, being Mercury, Venus, Earth, Mars with a solid surface and Jupiter, Saturn, Uranus, Neptune in the gaseous state and Pluto as a dwarf planet. The solar system has other interesting points, like a moon around the earth in which it has a strong influence on the tides and waves in the oceans. On Saturn, you can see a cloud made up of rocks and ring-shaped particles that orbit the planet.",
+            "threejsSrc": "projects/src/solar-system-application.html",
+            "references": [
+                {
+                    "text": "Alpha-Element, Saturn-Ring texture, Web resource: https://www.deviantart.com/alpha-element/art/Stock-Image-Saturn-Rings-393767006"
+                },
+                {
+                    "text": "Solar System Scope, Solar System textures, Web resource: https://www.solarsystemscope.com/textures/"
+                },
+                {
+                    "text": "Owen, T.C. Solar System. From Encyclopædia Britannica, inc. Web resource https://www.britannica.com/science/solar-system" 
+                }
+            ],
+            "modes":[
+                {
+                    "name": "Fullscreen - Medium Quality",
+                    "imageSrc": "projects/img/Solar-System/blur.png",
+                    "modeSrc": "projects/src/solar-system-application.html",
+                    "instructions": "",
+                    "links": []
+                },
+                {
+                    "name": "Fullscreen - High Quality",
+                    "imageSrc": "projects/img/Solar-System/blur.png",
+                    "modeSrc": "projects/src/solar-system-application.html?quality=1",
+                    "instructions": "In high quality, the download time can be considerably longer.",
+                    "links": []
+                },
+                {
+                    "name": "Augmented Reality",
+                    "imageSrc": "projects/img/Solar-System/blur-AR.png",
+                    "modeSrc": "projects/src/solar-system-application-AR.html",
+                    "instructions": "You must print a fiducial marker to use Augmented Reality mode (click here to download).",
+                    "links": [
+                        {
+                            "name": "HIRO Marker",
+                            "url": "https://avrgroup.github.io/vrtools/projects/data/markers/hiro.png" 
+                        }
+                    ]
+                },
+                {
+                    "name": "Virtual Reality",
+                    "imageSrc": "projects/img/Solar-System/blur-VR.png",
+                    "modeSrc": "projects/src/solar-systems-application-VR.html",
+                    "instructions": "Click in the VR button to enter in fullscreen VR mode in your mobile device (gyroscope sensor required).",
+                    "links": []
+                }
+            ]
+        },
+        {
+            "name": "Architecture",
+            "imageSrc": "img/architecture/architecture.jpg",
+            "description": "When architects present their ideas for the customers, they usually present their architectural plans and sketches to the customers. However, the customers may not actually understand the plans, as often they are laypeople, and the sketches are limited in how well they can represent a real house. It would be easier for common people to understand all of those plans and sketches if there were also a 3D representation of the building where they could walk through, mostly if it was in Virtual Reality. Architects often have 3D modeling skills already, but the various software they use to build their models usually do not have support for ease navigation nor augmented and virtual reality (AR and VR). This apps aims to solve that problem, supplying the 3D navigation and the AR and VR support for the already created 3D model.",
+            "threejsSrc": "projects/src/architecture-application.html",
+            "references": [],
+            "modes":[
+                {
+                    "name": "Fullscreen",
+                    "imageSrc": "projects/img/Architecture/blur.jpg",
+                    "modeSrc": "projects/src/platonic-solids-application.html",
+                    "instructions": "",
+                    "links": []
+                },
+                {
+                    "name": "Augmented Reality",
+                    "imageSrc": "projects/img/Architecture/blur-AR.jpg",
+                    "modeSrc": "projects/src/architecture-AR.html",
+                    "instructions": "You must print a fiducial marker to use Augmented Reality mode (click here to download).",
+                    "links": [
+                        {
+                            "name": "HIRO Marker",
+                            "url": "https://avrgroup.github.io/vrtools/projects/data/markers/hiro.png" 
+                        }
+                    ]
+                },
+                {
+                    "name": "Virtual Reality",
+                    "imageSrc": "projects/img/Architecture/blur-VR.jpg",
+                    "modeSrc": "projects/src/architecture-application-VR.html",
+                    "instructions": "In order to fully experience the VR mode, it is required one HMD (head-mounted display) and one joystick even though it is possible to use the app without those equipments. Using mobile devices, press the VR button in bottom right conner before inserting your device in the HMD. A circle will move as you look around and you can teleport to that circle pressing any joystick button. Alternatively, it is also possible to teleport pressing the spacebar or touching the screen if your device is sensitive to touch.",
+                    "links": []
+                }
+            ]
+        },
+        {
+            "name": "Projectile Motion",
+            "imageSrc": "img/projectile-motion/projectile-motion.jpg",
+            "description": "If an object thrown into the air and the only force which acts upon it is gravity, that object is under projectile motion. Surely, there will always be the air resistance force, but we usually assume it is negligible, since it is a good approximation when the object’s weight is large compared to the air resistance force. The motion can be split in two components: the vertical component (y) and the horizontal component (x). The gravity pulls the object down, thus this force acts only on the velocity of the vertical component (vy). The velocity in the horizontal component (vx) will remain constant along the object’s path.",
+            "threejsSrc": "projects/src/projectile-motion-application.html",
+            "references": [
+                {
+                    "text": "What is 2D projectile motion? From Khan Academy. Web Resource https://www.khanacademy.org/science/physics/two-dimensional-motion/two-dimensional-projectile-mot/a/what-is-2d-projectile-motion"
+                }
+            ],
+            "modes":[
+                {
+                    "name": "Fullscreen",
+                    "imageSrc": "projects/img/Projectile-Motion/blur.jpg",
+                    "modeSrc": "projects/src/projectile-motion-application.html",
+                    "instructions": "",
+                    "links": []
+                },
+                {
+                    "name": "Augmented Reality",
+                    "imageSrc": "projects/img/Projectile-Motion/blur-ar.jpg",
+                    "modeSrc": "projects/src/projectile-motion-application-AR.html",
+                    "instructions": "You must print a fiducial marker to use Augmented Reality mode (click here to download).",
+                    "links": [
+                        {
+                            "name": "HIRO Marker",
+                            "url": "https://avrgroup.github.io/vrtools/projects/data/markers/hiro.png" 
+                        },
+                        {
+                            "name": "KANJI Marker",
+                            "url": "https://avrgroup.github.io/vrtools/projects/data/markers/kanji.png" 
+                        }
+                    ]
+                },
+                {
+                    "name": "Virtual Reality",
+                    "imageSrc": "projects/img/Projectile-Motion/blur-vr.jpg",
+                    "modeSrc": "projects/src/projectile-motion-application-VR.html",
+                    "instructions": "Click in the VR button to enter in fullscreen VR mode in your mobile device (gyroscope sensor required).",
+                    "links": []
+                }
+            ]
+        },
+        {
+            "name": "Inclined Plane",
+            "imageSrc": "img/inclined-plane/inclined-plane.png",
+            "description": "This is a typical high school physics exercise. It involves a real situation of sliding of a block on an inclined plane and focuses on analyzing how the forces act on it in this scenario. It is usually guided by three basic forces: Weight, Normal and Friction. We have the decomposition of the Weight on the X axis and the Y axis. The Normal force will act in the opposite direction to the Weight in Y and the frictional force will be opposite to the weight in X, so the greater the frictional force, the less the block will move or remain stationary, however, otherwise, the block will descend the inclined plane with greater or lesser speed depending on the frictional force. The below application shows a simulation of this scenary with the forces diagram and the main equations.",
+            "threejsSrc": "projects/src/inclined-plane-application.html",
+            "references": [
+                {
+                    "text": "Tom Henderson, Inclined Planes. From The Physics Classroom. https://www.physicsclassroom.com/class/vectors/Lesson-3/Inclined-Planes"
+                },
+                {
+                    "text": "The Editors of Encyclopaedia Britannica, Inclined Plane From Encyclopædia Britannica, inc. Web resource https://www.britannica.com/technology/inclined-plane"
+                }
+            ],
+            "modes":[
+                {
+                    "name": "Fullscreen",
+                    "imageSrc": "projects/img/Inclined-Plane/blur.png",
+                    "modeSrc": "projects/src/projectile-motion-application.html",
+                    "instructions": "",
+                    "links": []
+                },
+                {
+                    "name": "Augmented Reality",
+                    "imageSrc": "projects/img/Inclined-Plane/blur-AR.png",
+                    "modeSrc": "projects/src/inclined-plane-application-AR.html",
+                    "instructions": "You must print a fiducial marker to use Augmented Reality mode (click here to download).",
+                    "links": [
+                        {
+                            "name": "HIRO Marker",
+                            "url": "https://avrgroup.github.io/vrtools/projects/data/markers/hiro.png" 
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
