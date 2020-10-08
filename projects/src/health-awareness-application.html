@@ -64,6 +64,10 @@
             padding: 0.3em;
         }
 
+        #panel a {
+            color: #736767;
+        }
+
         @media only screen and (min-width: 768px) {
             #panel {
                 position: absolute;
@@ -96,8 +100,8 @@
 
             #panel-content {
                 display: block;
-                height: 100vh;
-                max-height: 100vh;
+                /*Mais que 90vh corta o final do conteudo por algum motivo */
+                max-height: 90vh;
             }
         }
 
@@ -125,9 +129,9 @@
             display: block;
         }
 
-        #renderCanvas {
-            height: 100%;
-            width: 100%;
+        #credits::before {
+            content: '3D model credits';
+            font-weight: bold;
             display: block;
         }
     </style>
@@ -140,16 +144,11 @@
 
         <div id="panel-content">
             <select id="selector" onchange="changeContent()">
-                <option value="cardio" selected>Cardiovascular disease</option>
-                <!-- <option value="cancer">Cancer</option> -->
-                <!-- <option value="copd">COPD</option> -->
-                <!-- <option value="trauma">Trauma</option> -->
+                <option value="cardio" selected>Cardiovascular disease</option>>
                 <option value="stroke">Stroke</option>
-                <!-- <option value="alzheimer">Alzheimer's disease</option> -->
-                <!-- <option value="diabetes">Diabetes</option> -->
-                <!-- <option value="flu">Flu & Pneumonia</option> -->
-                <!-- <option value="kidney">Kidney disease</option> -->
-                <!-- <option value="Suicide">Suicide</option> -->
+                <option value="aneurysm">Aneurysm</option>
+                <option value="stenosis">Stenosis</option>
+                <option value="thrombus">Thrombus</option>
             </select>
 
             <p id="whatis">
@@ -168,7 +167,13 @@
                 stroke symptom is sudden weakness of the face, arm, or leg, most often on one side of the body..
             </p>
             <p id="source">
-                https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)
+                <a id="get" href="https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)"
+                    target="_blank">WHO</a>
+            </p>
+
+            <p id="credits">
+                <a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
+                    for Health</a>
             </p>
         </div>
     </div>

@@ -1,6 +1,6 @@
 let rendererStats, renderer, scene, camera, orbitControls, light, ambientLight, controls, gui, clock;
 
-let heart, stroke;
+let heart, stroke, aneurysm, stenosis, thrombus;
 
 const decoder = new THREE.DRACOLoader().setDecoderPath('../libs/draco/gltf/');
 
@@ -8,30 +8,31 @@ const ASSETS = {
     textures: {
         helper: {
             path: 'assets/textures/loader-helper.jpg',
-            fileSize: 461 + 304,
+            fileSize: 461 + 304 + 99 + 4282 + 3289,
         }
     },
     objects: {
         heart: {
             path: 'assets/models/health-awareness/heart.glb',
             fileSize: 461,
-            draco: decoder//new THREE.DRACOLoader().setDecoderPath('../libs/draco/gltf/')
+            draco: decoder // the first model needs to set the draco decoder
         },
-        // cancer: {
-        //     path: 'assets/models/health-awareness/cancer.glb',
-        //     fileSize: 37429,
-        //     draco: decoder
-        // },
-        // copd: {
-        //     path: 'assets/models/health-awareness/copd.glb',
-        //     fileSize: 37429,
-        //     draco: decoder
-        // },
         stroke: {
             path: 'assets/models/health-awareness/stroke.glb',
             fileSize: 304,
-            // draco: decoder
         },
+        aneurysm: {
+            path: 'assets/models/health-awareness/aneurysm.glb',
+            fileSize: 99,
+        },
+        stenosis: {
+            path: 'assets/models/health-awareness/stenosis.glb',
+            fileSize: 4282,
+        },
+        thrombus: {
+            path: 'assets/models/health-awareness/th.glb',
+            fileSize: 3289,
+        }
     }
 };
 
@@ -52,10 +53,10 @@ function init() {
     scene.add(camera);
     onResize();
 
-    ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+    ambientLight = new THREE.AmbientLight(0x323232, 1);
     scene.add(ambientLight);
 
-    light = new THREE.PointLight(0xfefefe, 1);
+    light = new THREE.PointLight(0xfefefe, 1.5);
     light.position.set(0, 0, 100);
     scene.add(light);
 
@@ -67,6 +68,7 @@ function init() {
     heart = ASSETS.objects.heart;
     heart.scale.set(0.5, 0.5, 0.5);
     heart.position.set(0, 0, 0);
+    content.cardio.model = heart;
     scene.add(heart);
 
     stroke = ASSETS.objects.stroke;
@@ -74,7 +76,30 @@ function init() {
     stroke.position.set(0, 15, 0);
     stroke.rotation.set(0, -Math.PI / 12, 0)
     stroke.visible = false;
+    content.stroke.model = stroke;
     scene.add(stroke);
+
+    aneurysm = ASSETS.objects.aneurysm;
+    aneurysm.scale.set(3, 3, 3);
+    aneurysm.position.set(-20, -40, 0);
+    aneurysm.visible = false;
+    content.aneurysm.model = aneurysm;
+    scene.add(aneurysm)
+
+    stenosis = ASSETS.objects.stenosis;
+    stenosis.scale.set(0.5, 0.5, 0.5);
+    stenosis.position.set(0, -10, 0);
+    stenosis.visible = false;
+    content.stenosis.model = stenosis;
+    scene.add(stenosis)
+
+    thrombus = ASSETS.objects.thrombus;
+    thrombus.scale.set(600, 600, 600);
+    thrombus.position.set(0, -20, 0);
+    thrombus.rotation.set(0, -Math.PI / 6, 0);
+    thrombus.visible = false;
+    content.thrombus.model = thrombus;
+    scene.add(thrombus)
 
     window.addEventListener('resize', onResize);
 
@@ -87,8 +112,6 @@ function animate() {
     requestAnimationFrame(animate);
 
     light.position.copy(camera.position);
-
-
 
     rendererStats.update();
     renderer.render(scene, camera);
@@ -121,59 +144,48 @@ function onResize() {
 }
 
 const content = {
+    //  <a href="" target="_blank" rel="noopener external"></a> 
     cardio: {
         whatis: 'Cardiovascular diseases (CVDs) are a group of disorders of the heart and vessels, such as coronary heart disease (disease of the vessels supplying the heart) and cerebrovascular disease (disease of the vessels supplying the brain). The CVDs are the number one cause of death worldwide.',
         risk: 'The main risk factors are unhealthy diet, physical inactivity, tobacco use and harmful use of alcohol.',
         symptoms: 'Often, the first symptoms are a heart attack or a stroke. Symptoms of a heart attack include pain or discomfort in the center of the chest, arms, left shoulder, elbows, jaws, or back. The most common stroke symptom is sudden weakness of the face, arm, or leg, most often on one side of the body.',
-        source: 'https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)'
+        source: `<a href="https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)" target="_blank" rel="noopener external">WHO</a>`,
+        credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
+        for Health</a>`,
     },
-    cancer: {
-        whatis: 'Cancer is a generic term to refer to diseases caused by the fast creation of abnormal cells that grow beyond their usual boundaries. Cancer is the number two cause of death worldwide and it can affect any part of the body. The model depicts a malignant chest wall tumor, which can be identified by the localized mass on the ribs.',
-        risk: 'The cancer risk factors include tobacco use, being overweight or orbese, unhealthy diet with low fruit and vegetable intake, alcohol intake, ionizing and ultraviolet radiation, and urban air pollution.',
-        symptoms: 'How cancer embraces a large number of diseases, it can cause almost any type of symptom. However, some general symptoms are unexplained weight loss, fever, fatigue, pain, and skin changes.',
-        source: 'https://www.who.int/news-room/fact-sheets/detail/cancer;\nhttps://www.saintjohnscancer.org/thoracic/conditions/chest-wall-tumors/;\nhttps://www.cancer.org/cancer/cancer-basics/signs-and-symptoms-of-cancer.html'
-    },
-    copd: {
-        whatis: 'Chronic obstructive pulmonary disease is a lung disease that is characterized by a persistent reduction of airflow. COPD is not curable and its symptoms are progressively worsening, but treatment can relieve symptoms, improve quality of life and reduce the risk of death.',
-        risk: 'The primary cause of COPD is tobacco smoke, but other risk factors are air pollution, occupational dust and chemicals, and frequently lower respiratory infections during childhood.',
-        symptoms: 'COPD develops slowly and usually becomes apparent after 40 or 50 years of age. The most common symptoms are breathlessness, chronic cough, and mucous production.',
-        source: 'https://www.who.int/news-room/fact-sheets/detail/chronic-obstructive-pulmonary-disease-(copd)'
-    },
-    // trauma: {
-    //     whatis: '',
-    //     risk: '',
-    //     symptoms: '',
-    //     source: ''
-    // },
     stroke: {
         whatis: 'A stroke occurs when the blood supply to part of your brain is interrupted or reduced, preventing brain tissue from getting oxygen and nutrients. Brain cells begin to die in minutes. A stroke is a medical emergency, and prompt treatment is crucial. Early action can reduce brain damage and other complications.',
         risk: 'The main risk factors are high blood pressure, or hypertension, nicotine and carbon monoxide in cigarette smoke, physical inactivity and a unhealthy diet that results in diabetes or high blood cholesterol.',
         symptoms: 'Trouble speaking and understanding what others are saying, paralysis or numbness of the face, arm or leg, problems seeing in one or both eyes, headache and trouble walking are the most common symptoms.',
-        source: 'https://www.nhlbi.nih.gov/health-topics/stroke \nhttps://www.stroke.org/en/about-stroke/stroke-risk-factors/stroke-risk-factors-you-can-control-treat-and-improve \nhttps://www.mayoclinic.org/diseases-conditions/stroke/symptoms-causes/syc-20350113'
+        source: `<a href="https://www.nhlbi.nih.gov/health-topics/stroke" target="_blank" rel="noopener external">NHLBI</a><br/>
+        <a href="https://www.stroke.org/en/about-stroke/stroke-risk-factors/stroke-risk-factors-you-can-control-treat-and-improve" target="_blank" rel="noopener external">Stroke.org</a><br/>
+        <a href="https://www.mayoclinic.org/diseases-conditions/stroke/symptoms-causes/syc-20350113" target="_blank" rel="noopener external">Mayo Clinic</a>`,
+        credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
+        for Health</a>`,
     },
-    alzheimer: {
-        whatis: 'A progressive disease that destroys memory and other important mental functions.The connections of brain cells and the cells themselves degenerate and die, eventually destroying memory and other important mental functions.',
-        risk: 'The risk of developing Alzheimer\'s appears to be increased by many conditions that damage the heart and blood vessels. These include heart disease, diabetes, stroke, high blood pressure, and high cholesterol.',
-        symptoms: 'Alzheimer\'s symptoms vary according to the evolution of the disease, but all are related to memory loss, whether to solve problems of reasoning or more common things in everyday life, such as remembering where you live.',
-        source: 'https://www.alz.org/alzheimers-dementia/what-is-alzheimers \nhttps://www.nhs.uk/conditions/alzheimers-disease/symptoms/'
+    aneurysm: {
+        whatis: 'An aneurysm occurs when part of an artery wall weakens, allowing it to balloon out or widen abnormally.Aneurysms can occur anywhere, but the most common are: Aortic aneurysm occurs in the major artery from the heart; Cerebral aneurysm occurs in the brain; Popliteal artery aneurysm occurs in the leg behind the knee; Mesenteric artery aneurysm occurs in the intestine; Splenic artery aneurysm occurs in an artery in the spleen;',
+        risk: 'SmokingHigh blood pressure (hypertension), strong family history of brain aneurysms (familial aneurysms), age (over 40), presence of an arteriovenous malformation (AVM), congenital abnormality in the artery wall, drug use, particularly cocaine ,excessive alcohol use and severe head trauma are some of the main rik factors.',
+        symptoms: 'If an aneurysm expands quickly or ruptures, symptoms may develop suddenly and include: pain, clammy skin, dizziness, nausea and vomiting, rapid heart rate, shock, low blood pressure.',
+        source: `<a href="https://bafound.org/about-brain-aneurysms/brain-aneurysm-basics/risk-factors/" target="_blank" rel="noopener external">Brain Aneurysm Foundantion</a><br/>
+        <a href="https://www.heart.org/en/health-topics/aortic-aneurysm/what-is-an-aneurysm" target="_blank" rel="noopener external">Heart.org</a>`,
+        credits: '<a href="https://sketchfab.com/3d-models/multiple-cerebral-aneurysms-cbea7bd87866445084deedd16d261baf" target="_blank" rel="noopener external">Dr. Samuel Damin</a> (adapted)',
     },
-    // diabetes: {
-    //     whatis: '',
-    //     risk: '',
-    //     symptoms: '',
-    //     source: ''
-    // },
-    // flu: {
-    //     whatis: '',
-    //     risk: '',
-    //     symptoms: '',
-    //     source: ''
-    // },
-    kidney: {
-        whatis: 'Kidney disease occurs when a disease or condition impairs kidney function, causing kidney damage to worsen over several months or years.',
-        risk: 'Diabetes, high blood pressure, heart and blood vessel(cardiovascular) disease, smoking, obesity, and family history of kidney disease are factors that increase the risk of kidney disease.',
-        symptoms: 'weight loss and poor appetite, swollen ankles, feet or hands – as a result of water retention, shortness of breath, tiredness, blood in the urine, an increased need to pee – particularly at night and headaches are the most common symptoms.',
-        source: 'https://www.nhs.uk/conditions/kidney-disease/symptoms/ \nhttps://www.mayoclinic.org/diseases-conditions/chronic-kidney-disease/symptoms-causes/syc-20354521'
+    stenosis: {
+        whatis: 'Stenosis is an abnormal narrowing of blood vessels, arterys, or other type of opening in the body. The 3D model represents a renal artery stenosis, which may damage the kidney tissues due the lack of the correct amount of oxygen-rich blood.',
+        risk: 'Risk factors of narrowed arteries from the kidneys and from other parts of the body includes:  aging, high blood pressure, diabetes, obesity, tobacco usage, family history of early heart disease, and lack of exercise.',
+        symptoms: 'Often there are no symptoms of renal artery stenosis until it’s advanced, but once the disease progresses there could be high blood pressure that is hard to control, elevated levels of protein in the urine, worsening of kidneys function during treatment for high blood pressure, fluid overload and swelling in your body’s tissues, and treatment-resistant heart failure.',
+        source: `<a href="https://www.mayoclinic.org/diseases-conditions/renal-artery-stenosis/symptoms-causes/syc-20352777#" target="_blank" rel="noopener external">Mayo Clinic</a><br>
+        <a href="https://www.health.harvard.edu/medical-dictionary-of-health-terms/q-through-z#S-terms" target="_blank" rel="noopener external">Harvad Health</a> `,
+        credits: `<a href="https://sketchfab.com/3d-models/transplant-renal-artery-stenosis-d296be9d273d452db34ef651befd4e6d" target="_blank" rel="noopener external">tl0615</a> (adapted)`,
+    },
+    thrombus: {
+        whatis: 'Deep vein thrombosis (DVT) occurs when a blood clot (thrombus) forms in one or more of the deep veins in your body, usually in your legs. Deep vein thrombosis can cause leg pain or swelling, but also can occur with no symptoms.',
+        risk: 'Deep vein thrombosis can develop if you have certain medical conditions that affect how your blood clots. It can also happen if you don\'t move for a long time, such as after surgery or an accident, or when you\'re confined to bed.',
+        symptoms: 'Deep vein thrombosis signs and symptoms can include:Swelling in the affected leg. Rarely, there\'s swelling in both legs, pain in the leg( the pain often starts in your calf and can feel like cramping or soreness), red or discolored skin on the leg, a feeling of warmth in the affected leg.Deep vein thrombosis can occur without noticeable symptoms.',
+        source: `<a href="https://www.mayoclinic.org/diseases-conditions/deep-vein-thrombosis/symptoms-causes/syc-20352557#:~:text=Blood%20clot%20in%20leg%20vein,-A%20blood%20clot&text=Deep%20vein%20thrombosis%20(DVT)%20occurs,can%20occur%20with%20no%20symptoms" target="_blank" rel="noopener external">Mayo Clinic</a><br>
+        <a href="https://natfonline.org/patients/what-is-thrombosis/" target="_blank" rel="noopener external">NAFT</a>`,
+        credits: '<a href="https://sketchfab.com/3d-models/thrombus-left-atrial-appendage-d552d0f38eb74e46837c718fede257f0" target="_blank" rel="noopener external">tl0615</a> (adapted)',
     },
 }
 
@@ -184,7 +196,13 @@ function changeContent() {
     document.querySelector('#risk').innerHTML = content[value].risk;
     document.querySelector('#symptoms').innerHTML = content[value].symptoms;
     document.querySelector('#source').innerHTML = content[value].source;
+    document.querySelector('#credits').innerHTML = content[value].credits;
 
-    heart.visible = !heart.visible;
-    stroke.visible = !stroke.visible;
+    heart.visible = false;
+    stroke.visible = false;
+    aneurysm.visible = false;
+    stenosis.visible = false;
+    thrombus.visible = false;
+
+    content[value].model.visible = true;
 }
