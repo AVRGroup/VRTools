@@ -1,6 +1,6 @@
 let rendererStats, renderer, scene, camera, orbitControls, light, ambientLight, controls, gui, clock;
 
-let heart, stroke, aneurysm, stenosis, thrombus;
+let heart, stroke, aneurysm, stenosis, thrombus, highlight;
 
 const decoder = new THREE.DRACOLoader().setDecoderPath('../libs/draco/gltf/');
 
@@ -10,6 +10,12 @@ const ASSETS = {
             path: 'assets/textures/loader-helper.jpg',
             fileSize: 461 + 304 + 99 + 4282 + 3289,
         }
+    },
+    geometries: {
+        sphereGeometry: new THREE.SphereGeometry(1, 20, 20),
+    },
+    materials: {
+        sphereMaterial: new THREE.MeshPhongMaterial({ color: 0x0D8CFF, transparent: true, opacity: 0.5, wireframe: false })
     },
     objects: {
         heart: {
@@ -32,6 +38,10 @@ const ASSETS = {
         thrombus: {
             path: 'assets/models/health-awareness/th.glb',
             fileSize: 3289,
+        },
+        highlight: {
+            geometry: 'sphereGeometry',
+            material: 'sphereMaterial',
         }
     }
 };
@@ -56,7 +66,7 @@ function init() {
     ambientLight = new THREE.AmbientLight(0x323232, 1);
     scene.add(ambientLight);
 
-    light = new THREE.PointLight(0xfefefe, 1.5);
+    light = new THREE.PointLight(0xffffff, 1.5);
     light.position.set(0, 0, 100);
     scene.add(light);
 
@@ -64,10 +74,12 @@ function init() {
     orbitControls.minDistance = 10;
     orbitControls.maxDistance = 120;
     orbitControls.update();
+    orbitControls.saveState();
 
     heart = ASSETS.objects.heart;
     heart.scale.set(0.5, 0.5, 0.5);
     heart.position.set(0, 0, 0);
+    heart.visible = false;
     content.cardio.model = heart;
     scene.add(heart);
 
@@ -87,9 +99,9 @@ function init() {
     scene.add(aneurysm)
 
     stenosis = ASSETS.objects.stenosis;
-    stenosis.scale.set(0.5, 0.5, 0.5);
+    stenosis.scale.set(0.6, 0.6, 0.6);
     stenosis.position.set(0, -10, 0);
-    stenosis.visible = false;
+    stenosis.visible = true;
     content.stenosis.model = stenosis;
     scene.add(stenosis)
 
@@ -100,6 +112,11 @@ function init() {
     thrombus.visible = false;
     content.thrombus.model = thrombus;
     scene.add(thrombus)
+
+    highlight = ASSETS.objects.highlight;
+    highlight.position.set(1, -5, 3);
+    highlight.scale.set(3, 3, 3);
+    scene.add(highlight);
 
     window.addEventListener('resize', onResize);
 
@@ -152,6 +169,10 @@ const content = {
         source: `<a href="https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)" target="_blank" rel="noopener external">WHO</a>`,
         credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
         for Health</a>`,
+        highlight: {
+            position: new THREE.Vector3(-3.5, -5, 7.5),
+            scale: new THREE.Vector3(4.2, 4.2, 4.3),
+        }
     },
     stroke: {
         whatis: 'A stroke occurs when the blood supply to part of your brain is interrupted or reduced, preventing brain tissue from getting oxygen and nutrients. Brain cells begin to die in minutes. A stroke is a medical emergency, and prompt treatment is crucial. Early action can reduce brain damage and other complications.',
@@ -162,6 +183,10 @@ const content = {
         <a href="https://www.mayoclinic.org/diseases-conditions/stroke/symptoms-causes/syc-20350113" target="_blank" rel="noopener external">Mayo Clinic</a>`,
         credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
         for Health</a>`,
+        highlight: {
+            position: new THREE.Vector3(-3.5, -2, 7.5),
+            scale: new THREE.Vector3(4.2, 4.2, 4.3),
+        }
     },
     aneurysm: {
         whatis: 'An aneurysm occurs when part of an artery wall weakens, allowing it to balloon out or widen abnormally.Aneurysms can occur anywhere, but the most common are: Aortic aneurysm occurs in the major artery from the heart; Cerebral aneurysm occurs in the brain; Popliteal artery aneurysm occurs in the leg behind the knee; Mesenteric artery aneurysm occurs in the intestine; Splenic artery aneurysm occurs in an artery in the spleen;',
@@ -170,6 +195,10 @@ const content = {
         source: `<a href="https://bafound.org/about-brain-aneurysms/brain-aneurysm-basics/risk-factors/" target="_blank" rel="noopener external">Brain Aneurysm Foundantion</a><br/>
         <a href="https://www.heart.org/en/health-topics/aortic-aneurysm/what-is-an-aneurysm" target="_blank" rel="noopener external">Heart.org</a>`,
         credits: '<a href="https://sketchfab.com/3d-models/multiple-cerebral-aneurysms-cbea7bd87866445084deedd16d261baf" target="_blank" rel="noopener external">Dr. Samuel Damin</a> (adapted)',
+        highlight: {
+            position: new THREE.Vector3(-3.5, -2, 7.5),
+            scale: new THREE.Vector3(4.2, 4.2, 4.3),
+        }
     },
     stenosis: {
         whatis: 'Stenosis is an abnormal narrowing of blood vessels, arterys, or other type of opening in the body. The 3D model represents a renal artery stenosis, which may damage the kidney tissues due the lack of the correct amount of oxygen-rich blood.',
@@ -178,6 +207,10 @@ const content = {
         source: `<a href="https://www.mayoclinic.org/diseases-conditions/renal-artery-stenosis/symptoms-causes/syc-20352777#" target="_blank" rel="noopener external">Mayo Clinic</a><br>
         <a href="https://www.health.harvard.edu/medical-dictionary-of-health-terms/q-through-z#S-terms" target="_blank" rel="noopener external">Harvad Health</a> `,
         credits: `<a href="https://sketchfab.com/3d-models/transplant-renal-artery-stenosis-d296be9d273d452db34ef651befd4e6d" target="_blank" rel="noopener external">tl0615</a> (adapted)`,
+        highlight: {
+            position: new THREE.Vector3(1, -5, 3),
+            scale: new THREE.Vector3(2, 2, 2),
+        }
     },
     thrombus: {
         whatis: 'Deep vein thrombosis (DVT) occurs when a blood clot (thrombus) forms in one or more of the deep veins in your body, usually in your legs. Deep vein thrombosis can cause leg pain or swelling, but also can occur with no symptoms.',
@@ -186,17 +219,22 @@ const content = {
         source: `<a href="https://www.mayoclinic.org/diseases-conditions/deep-vein-thrombosis/symptoms-causes/syc-20352557#:~:text=Blood%20clot%20in%20leg%20vein,-A%20blood%20clot&text=Deep%20vein%20thrombosis%20(DVT)%20occurs,can%20occur%20with%20no%20symptoms" target="_blank" rel="noopener external">Mayo Clinic</a><br>
         <a href="https://natfonline.org/patients/what-is-thrombosis/" target="_blank" rel="noopener external">NAFT</a>`,
         credits: '<a href="https://sketchfab.com/3d-models/thrombus-left-atrial-appendage-d552d0f38eb74e46837c718fede257f0" target="_blank" rel="noopener external">tl0615</a> (adapted)',
+        highlight: {
+            position: new THREE.Vector3(-3.5, -2, 7.5),
+            scale: new THREE.Vector3(4.2, 4.2, 4.3),
+        }
     },
 }
 
 function changeContent() {
     let value = document.querySelector('#selector').value;
+    let object = content[value];
 
-    document.querySelector('#whatis').innerHTML = content[value].whatis;
-    document.querySelector('#risk').innerHTML = content[value].risk;
-    document.querySelector('#symptoms').innerHTML = content[value].symptoms;
-    document.querySelector('#source').innerHTML = content[value].source;
-    document.querySelector('#credits').innerHTML = content[value].credits;
+    document.querySelector('#whatis').innerHTML = object.whatis;
+    document.querySelector('#risk').innerHTML = object.risk;
+    document.querySelector('#symptoms').innerHTML = object.symptoms;
+    document.querySelector('#source').innerHTML = object.source;
+    document.querySelector('#credits').innerHTML = object.credits;
 
     heart.visible = false;
     stroke.visible = false;
@@ -204,5 +242,15 @@ function changeContent() {
     stenosis.visible = false;
     thrombus.visible = false;
 
-    content[value].model.visible = true;
+    orbitControls.reset();
+    // console.log(highlight.scale)
+
+    highlight.position.copy(object.highlight.position);
+    highlight.scale.copy(object.highlight.scale);
+
+    object.model.visible = true;
+}
+
+function toggleHighlight() {
+    highlight.visible = !highlight.visible;
 }
