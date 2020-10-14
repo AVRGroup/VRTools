@@ -8,7 +8,7 @@ const ASSETS = {
     textures: {
         helper: {
             path: 'assets/textures/loader-helper.jpg',
-            fileSize: 461 + 304 + 99 + 4282 + 3289,
+            fileSize: 461 + 304 + 539 + 4282 + 3289,
         }
     },
     geometries: {
@@ -29,7 +29,7 @@ const ASSETS = {
         },
         aneurysm: {
             path: 'assets/models/health-awareness/aneurysm.glb',
-            fileSize: 99,
+            fileSize: 539,
         },
         stenosis: {
             path: 'assets/models/health-awareness/stenosis.glb',
@@ -92,8 +92,8 @@ function init() {
     scene.add(stroke);
 
     aneurysm = ASSETS.objects.aneurysm;
-    aneurysm.scale.set(3, 3, 3);
-    aneurysm.position.set(-20, -40, 0);
+    aneurysm.scale.set(30, 30, 30);
+    aneurysm.position.set(-30, -50, 0);
     aneurysm.visible = false;
     content.aneurysm.model = aneurysm;
     scene.add(aneurysm)
