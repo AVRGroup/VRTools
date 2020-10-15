@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Awareness</title>
+    <title>Vascular Diseases</title>
 
     <style>
         html,
@@ -144,12 +144,12 @@
 <body>
     <div id="three-stats"></div>
     <div id="panel">
-        <h3 id="panel-title" onclick="toggleContent()">Death Causes</h3>
+        <h3 id="panel-title" onclick="toggleContent()">Diseases</h3>
 
         <div id="panel-content">
             <select id="selector" onchange="changeContent()">
-                <option value="cardio" selected>Cardiovascular disease</option>>
-                <option value="stroke">Stroke</option>
+                <!-- <option value="cardio" selected>Cardiovascular disease</option> -->
+                <option value="stroke" selected>Stroke</option>
                 <option value="aneurysm">Aneurysm</option>
                 <option value="stenosis">Stenosis</option>
                 <option value="thrombus">Thrombus</option>
@@ -160,23 +160,30 @@
             <label for="toggleHighlight"> Toggle Highlight</label>
 
             <p id="whatis">
-                Cardiovascular diseases (CVDs) are a group of disorders of the heart and vessels, such as coronary heart
-                disease (disease of the vessels supplying the heart) and cerebrovascular disease (disease of the vessels
-                supplying the brain). The CVDs are the number one cause of death worldwide.
+                A stroke occurs when the blood supply to part of your brain is interrupted or reduced, preventing brain
+                tissue from getting oxygen and nutrients. Brain cells begin to die in minutes. A stroke is a medical
+                emergency, and prompt treatment is crucial. Early action can reduce brain damage and other
+                complications.
             </p>
 
             <p id="risk">
-                The main risk factors are unhealthy diet, physical inactivity, tobacco use and harmful use of alcohol.
+                The main risk factors are high blood pressure, or hypertension, nicotine and carbon monoxide in
+                cigarette smoke, physical inactivity and a unhealthy diet that results in diabetes or high blood
+                cholesterol.
             </p>
 
             <p id="symptoms">
-                Often, the first symptoms are a heart attack or a stroke. Symptoms of a heart attack include pain or
-                discomfort in the center of the chest, arms, left shoulder, elbows, jaws, or back. The most common
-                stroke symptom is sudden weakness of the face, arm, or leg, most often on one side of the body..
+                Trouble speaking and understanding what others are saying, paralysis or numbness of the face, arm or
+                leg, problems seeing in one or both eyes, headache and trouble walking are the most common symptoms.
             </p>
             <p id="source">
-                <a id="get" href="https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)"
-                    target="_blank">WHO</a>
+                <a href="https://www.nhlbi.nih.gov/health-topics/stroke" target="_blank"
+                    rel="noopener external">NHLBI</a><br />
+                <a href="https://www.stroke.org/en/about-stroke/stroke-risk-factors/stroke-risk-factors-you-can-control-treat-and-improve"
+                    target="_blank" rel="noopener external">Stroke.org</a><br />
+                <a href="https://www.mayoclinic.org/diseases-conditions/stroke/symptoms-causes/syc-20350113"
+                    target="_blank" rel="noopener external">Mayo Clinic</a>
+
             </p>
 
             <p id="credits">
@@ -208,7 +215,7 @@
     <script src="../libs/util/loadScreen/LoadScreenDraco.js"></script>
     <script src="../libs/loaders/GLTFLoader.js"></script>
     <script src="../libs/loaders/DRACOLoader.js"></script>
-    <script src="health-awareness.js"></script>
+    <script src="vascular-diseases.js"></script>
 </body>
 
 </html>

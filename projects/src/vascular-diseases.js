@@ -18,25 +18,26 @@ const ASSETS = {
         sphereMaterial: new THREE.MeshPhongMaterial({ color: 0x0D8CFF, transparent: true, opacity: 0.5, wireframe: false })
     },
     objects: {
-        heart: {
-            path: 'assets/models/health-awareness/heart.glb',
-            fileSize: 461,
+        // heart: {
+        //     path: 'assets/models/vascular-diseases/heart.glb',
+        //     fileSize: 461,
+        //     draco: decoder // the first model needs to set the draco decoder
+        // },
+        stroke: {
+            path: 'assets/models/vascular-diseases/stroke.glb',
+            fileSize: 304,
             draco: decoder // the first model needs to set the draco decoder
         },
-        stroke: {
-            path: 'assets/models/health-awareness/stroke.glb',
-            fileSize: 304,
-        },
         aneurysm: {
-            path: 'assets/models/health-awareness/aneurysm.glb',
+            path: 'assets/models/vascular-diseases/an.glb',
             fileSize: 539,
         },
         stenosis: {
-            path: 'assets/models/health-awareness/stenosis.glb',
+            path: 'assets/models/vascular-diseases/stenosis.glb',
             fileSize: 4282,
         },
         thrombus: {
-            path: 'assets/models/health-awareness/th.glb',
+            path: 'assets/models/vascular-diseases/th.glb',
             fileSize: 3289,
         },
         highlight: {
@@ -76,18 +77,18 @@ function init() {
     orbitControls.update();
     orbitControls.saveState();
 
-    heart = ASSETS.objects.heart;
-    heart.scale.set(0.5, 0.5, 0.5);
-    heart.position.set(0, 0, 0);
-    heart.visible = false;
-    content.cardio.model = heart;
-    scene.add(heart);
+    // heart = ASSETS.objects.heart;
+    // heart.scale.set(0.5, 0.5, 0.5);
+    // heart.position.set(0, 0, 0);
+    // heart.visible = false;
+    // content.cardio.model = heart;
+    // scene.add(heart);
 
     stroke = ASSETS.objects.stroke;
     stroke.scale.set(0.45, 0.45, 0.45);
     stroke.position.set(0, 15, 0);
     stroke.rotation.set(0, -Math.PI / 12, 0)
-    stroke.visible = false;
+    stroke.visible = true;
     content.stroke.model = stroke;
     scene.add(stroke);
 
@@ -101,7 +102,7 @@ function init() {
     stenosis = ASSETS.objects.stenosis;
     stenosis.scale.set(0.6, 0.6, 0.6);
     stenosis.position.set(0, -10, 0);
-    stenosis.visible = true;
+    stenosis.visible = false;
     content.stenosis.model = stenosis;
     scene.add(stenosis)
 
@@ -114,8 +115,8 @@ function init() {
     scene.add(thrombus)
 
     highlight = ASSETS.objects.highlight;
-    highlight.position.set(1, -5, 3);
-    highlight.scale.set(3, 3, 3);
+    highlight.position.set(-3.5, -2, 7.5);
+    highlight.scale.set(4.2, 4.2, 4.3);
     scene.add(highlight);
 
     window.addEventListener('resize', onResize);
@@ -162,18 +163,18 @@ function onResize() {
 
 const content = {
     //  <a href="" target="_blank" rel="noopener external"></a> 
-    cardio: {
-        whatis: 'Cardiovascular diseases (CVDs) are a group of disorders of the heart and vessels, such as coronary heart disease (disease of the vessels supplying the heart) and cerebrovascular disease (disease of the vessels supplying the brain). The CVDs are the number one cause of death worldwide.',
-        risk: 'The main risk factors are unhealthy diet, physical inactivity, tobacco use and harmful use of alcohol.',
-        symptoms: 'Often, the first symptoms are a heart attack or a stroke. Symptoms of a heart attack include pain or discomfort in the center of the chest, arms, left shoulder, elbows, jaws, or back. The most common stroke symptom is sudden weakness of the face, arm, or leg, most often on one side of the body.',
-        source: `<a href="https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)" target="_blank" rel="noopener external">WHO</a>`,
-        credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
-        for Health</a>`,
-        highlight: {
-            position: new THREE.Vector3(-3.5, -5, 7.5),
-            scale: new THREE.Vector3(4.2, 4.2, 4.3),
-        }
-    },
+    // cardio: {
+    //     whatis: 'Cardiovascular diseases (CVDs) are a group of disorders of the heart and vessels, such as coronary heart disease (disease of the vessels supplying the heart) and cerebrovascular disease (disease of the vessels supplying the brain). The CVDs are the number one cause of death worldwide.',
+    //     risk: 'The main risk factors are unhealthy diet, physical inactivity, tobacco use and harmful use of alcohol.',
+    //     symptoms: 'Often, the first symptoms are a heart attack or a stroke. Symptoms of a heart attack include pain or discomfort in the center of the chest, arms, left shoulder, elbows, jaws, or back. The most common stroke symptom is sudden weakness of the face, arm, or leg, most often on one side of the body.',
+    //     source: `<a href="https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)" target="_blank" rel="noopener external">WHO</a>`,
+    //     credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
+    //     for Health</a>`,
+    //     highlight: {
+    //         position: new THREE.Vector3(-3.5, -5, 7.5),
+    //         scale: new THREE.Vector3(4.2, 4.2, 4.3),
+    //     }
+    // },
     stroke: {
         whatis: 'A stroke occurs when the blood supply to part of your brain is interrupted or reduced, preventing brain tissue from getting oxygen and nutrients. Brain cells begin to die in minutes. A stroke is a medical emergency, and prompt treatment is crucial. Early action can reduce brain damage and other complications.',
         risk: 'The main risk factors are high blood pressure, or hypertension, nicotine and carbon monoxide in cigarette smoke, physical inactivity and a unhealthy diet that results in diabetes or high blood cholesterol.',
@@ -194,10 +195,10 @@ const content = {
         symptoms: 'If an aneurysm expands quickly or ruptures, symptoms may develop suddenly and include: pain, clammy skin, dizziness, nausea and vomiting, rapid heart rate, shock, low blood pressure.',
         source: `<a href="https://bafound.org/about-brain-aneurysms/brain-aneurysm-basics/risk-factors/" target="_blank" rel="noopener external">Brain Aneurysm Foundantion</a><br/>
         <a href="https://www.heart.org/en/health-topics/aortic-aneurysm/what-is-an-aneurysm" target="_blank" rel="noopener external">Heart.org</a>`,
-        credits: '<a href="https://sketchfab.com/3d-models/multiple-cerebral-aneurysms-cbea7bd87866445084deedd16d261baf" target="_blank" rel="noopener external">Dr. Samuel Damin</a> (adapted)',
+        credits: '<a href="https://sketchfab.com/3d-models/abdominal-aortic-aneurysm-e951550381ad49739a38f9ffb2370899" target="_blank" rel="noopener external">laurenwahl</a> (adapted)',
         highlight: {
-            position: new THREE.Vector3(-3.5, -2, 7.5),
-            scale: new THREE.Vector3(4.2, 4.2, 4.3),
+            position: new THREE.Vector3(2, -12, -6),
+            scale: new THREE.Vector3(10, 10, 10),
         }
     },
     stenosis: {
@@ -220,8 +221,8 @@ const content = {
         <a href="https://natfonline.org/patients/what-is-thrombosis/" target="_blank" rel="noopener external">NAFT</a>`,
         credits: '<a href="https://sketchfab.com/3d-models/thrombus-left-atrial-appendage-d552d0f38eb74e46837c718fede257f0" target="_blank" rel="noopener external">tl0615</a> (adapted)',
         highlight: {
-            position: new THREE.Vector3(-3.5, -2, 7.5),
-            scale: new THREE.Vector3(4.2, 4.2, 4.3),
+            position: new THREE.Vector3(5, -8, 18.5),
+            scale: new THREE.Vector3(11, 11, 11),
         }
     },
 }
@@ -236,7 +237,7 @@ function changeContent() {
     document.querySelector('#source').innerHTML = object.source;
     document.querySelector('#credits').innerHTML = object.credits;
 
-    heart.visible = false;
+    // heart.visible = false;
     stroke.visible = false;
     aneurysm.visible = false;
     stenosis.visible = false;
