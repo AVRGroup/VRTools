@@ -210,7 +210,7 @@ const content = {
         credits: `<a href="https://sketchfab.com/3d-models/transplant-renal-artery-stenosis-d296be9d273d452db34ef651befd4e6d" target="_blank" rel="noopener external">tl0615</a> (adapted)`,
         highlight: {
             position: new THREE.Vector3(1, -5, 3),
-            scale: new THREE.Vector3(2, 2, 2),
+            scale: new THREE.Vector3(3, 3, 3),
         }
     },
     thrombus: {
