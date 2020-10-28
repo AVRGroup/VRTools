@@ -1,6 +1,6 @@
 let rendererStats, renderer, scene, camera, orbitControls, light, ambientLight, controls, gui, clock;
 
-let heart, stroke, aneurysm, stenosis, thrombus, highlight;
+let heart, stroke, aneurysm, stenosis, thrombus, highlight, viewpoint;
 
 const decoder = new THREE.DRACOLoader().setDecoderPath('../libs/draco/gltf/');
 
@@ -17,6 +17,7 @@ const ASSETS = {
     materials: {
         sphereMaterial: new THREE.MeshPhongMaterial({ color: 0x0D8CFF, transparent: true, opacity: 0.5, wireframe: false })
     },
+
     objects: {
         // heart: {
         //     path: 'assets/models/vascular-diseases/heart.glb',
@@ -60,7 +61,7 @@ function init() {
 
     camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 700);
     camera.position.set(0, 0, 100);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    camera.lookAt(new THREE.Vector3(0,0,0));
     scene.add(camera);
     onResize();
 
@@ -114,10 +115,12 @@ function init() {
     content.thrombus.model = thrombus;
     scene.add(thrombus)
 
+
     highlight = ASSETS.objects.highlight;
     highlight.position.set(-3.5, -2, 7.5);
     highlight.scale.set(4.2, 4.2, 4.3);
-    scene.add(highlight);
+    highlight.pointView = new THREE.Vector3(2, 4, -8);
+    scene.add(highlight)
 
     window.addEventListener('resize', onResize);
 
@@ -184,9 +187,11 @@ const content = {
         <a href="https://www.mayoclinic.org/diseases-conditions/stroke/symptoms-causes/syc-20350113" target="_blank" rel="noopener external">Mayo Clinic</a>`,
         credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
         for Health</a>`,
+ 
         highlight: {
             position: new THREE.Vector3(-3.5, -2, 7.5),
             scale: new THREE.Vector3(4.2, 4.2, 4.3),
+            pointView: new THREE.Vector3(4, 2, -8), 
         }
     },
     aneurysm: {
@@ -199,6 +204,7 @@ const content = {
         highlight: {
             position: new THREE.Vector3(2, -12, -6),
             scale: new THREE.Vector3(10, 10, 10),
+            pointView: new THREE.Vector3(2, -10, -30), 
         }
     },
     stenosis: {
@@ -211,6 +217,7 @@ const content = {
         highlight: {
             position: new THREE.Vector3(1, -5, 3),
             scale: new THREE.Vector3(3, 3, 3),
+            pointView: new THREE.Vector3(4, -5, -8), 
         }
     },
     thrombus: {
@@ -223,6 +230,7 @@ const content = {
         highlight: {
             position: new THREE.Vector3(5, -8, 18.5),
             scale: new THREE.Vector3(11, 11, 11),
+            pointView: new THREE.Vector3(1, -6, 43), 
         }
     },
 }
@@ -248,10 +256,22 @@ function changeContent() {
 
     highlight.position.copy(object.highlight.position);
     highlight.scale.copy(object.highlight.scale);
+    highlight.pointView.copy(object.highlight.pointView);
+    camera.lookAt(object.highlight.position);
 
     object.model.visible = true;
 }
 
 function toggleHighlight() {
     highlight.visible = !highlight.visible;
+}
+
+function toggleProblemPosition() {
+    camera.position.copy(highlight.pointView);
+    camera.lookAt(highlight.position);
+}
+
+function toggleResetCamera() {
+    camera.position.set(0, 0, 100);
+    camera.lookAt(highlight.position);
 }

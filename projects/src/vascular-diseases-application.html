@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -70,6 +70,14 @@
 
         #toggleHighlight {
             margin-top: 10px;
+        }
+
+        #toggleProblemPosition{
+            margin-top: 20px;
+        }
+
+        #toggleResetCamera{
+            margin-top: 30px;
         }
 
         @media only screen and (min-width: 768px) {
@@ -156,8 +164,15 @@
             </select>
 
             <input type="checkbox" id="toggleHighlight" name="toggleHighlight" value="toggleHighlight" checked
-                onchange="toggleHighlight()">
+                   onchange="toggleHighlight()">
             <label for="toggleHighlight"> Toggle Highlight</label>
+
+            <input type="button" id="LookClose" name="LookClose" value="Look Close"
+                   onclick="toggleProblemPosition()" />
+
+            <input type="button" id="toggleResetCamera" name="toggleResetCamera" value="Reset Camera"
+                   onclick="toggleResetCamera()" />
+
 
             <p id="whatis">
                 A stroke occurs when the blood supply to part of your brain is interrupted or reduced, preventing brain
@@ -178,17 +193,19 @@
             </p>
             <p id="source">
                 <a href="https://www.nhlbi.nih.gov/health-topics/stroke" target="_blank"
-                    rel="noopener external">NHLBI</a><br />
+                   rel="noopener external">NHLBI</a><br />
                 <a href="https://www.stroke.org/en/about-stroke/stroke-risk-factors/stroke-risk-factors-you-can-control-treat-and-improve"
-                    target="_blank" rel="noopener external">Stroke.org</a><br />
+                   target="_blank" rel="noopener external">Stroke.org</a><br />
                 <a href="https://www.mayoclinic.org/diseases-conditions/stroke/symptoms-causes/syc-20350113"
-                    target="_blank" rel="noopener external">Mayo Clinic</a>
+                   target="_blank" rel="noopener external">Mayo Clinic</a>
 
             </p>
 
             <p id="credits">
-                <a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
-                    for Health</a>
+                <a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">
+                    3D Print
+                    for Health
+                </a>
             </p>
         </div>
     </div>
