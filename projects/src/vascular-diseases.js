@@ -266,12 +266,12 @@ function toggleHighlight() {
     highlight.visible = !highlight.visible;
 }
 
-function toggleProblemPosition() {
+function LookClose() {
     camera.position.copy(highlight.pointView);
     camera.lookAt(highlight.position);
 }
 
-function toggleResetCamera() {
+function ResetCamera() {
     camera.position.set(0, 0, 100);
     camera.lookAt(highlight.position);
 }

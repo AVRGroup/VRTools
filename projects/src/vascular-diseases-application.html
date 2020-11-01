@@ -71,13 +71,16 @@
         #toggleHighlight {
             margin-top: 10px;
         }
+        
+        #LookClose {
+            margin-top: 10px;
+            width: 55%;
 
-        #toggleProblemPosition{
-            margin-top: 20px;
         }
 
-        #toggleResetCamera{
-            margin-top: 30px;
+        #ResetCamera{
+            margin-top: 10px;
+            width: 55%;
         }
 
         @media only screen and (min-width: 768px) {
@@ -168,12 +171,12 @@
             <label for="toggleHighlight"> Toggle Highlight</label>
 
             <input type="button" id="LookClose" name="LookClose" value="Look Close"
-                   onclick="toggleProblemPosition()" />
+                   onclick="LookClose()" />
 
-            <input type="button" id="toggleResetCamera" name="toggleResetCamera" value="Reset Camera"
-                   onclick="toggleResetCamera()" />
+            <input type="button" id="ResetCamera" name="ResetCamera" value="Reset Camera"
+                   onclick="ResetCamera()" />
 
-
+            
             <p id="whatis">
                 A stroke occurs when the blood supply to part of your brain is interrupted or reduced, preventing brain
                 tissue from getting oxygen and nutrients. Brain cells begin to die in minutes. A stroke is a medical
