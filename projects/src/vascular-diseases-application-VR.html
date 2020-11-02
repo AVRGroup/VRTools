@@ -33,6 +33,7 @@
 
                 this.models = document.querySelectorAll('.menu-model');
                 this.modelIndex = 0;
+                this.rotate = false;
 
                 vrInterface.addButton('next', '#next', () => {
                     self.models[self.modelIndex].object3D.visible = false;
@@ -48,12 +49,14 @@
                 });
 
                 vrInterface.addButton('rotLeft', '#rotLeft', () => {
-                    self.models[self.modelIndex].object3D.rotation.y -= Math.PI * 0.25;
+                    // self.models[self.modelIndex].object3D.rotation.y -= Math.PI * 0.25;
+                    self.rotate = !self.rotate;
                 });
 
-                vrInterface.addButton('rotRight', '#rotRight', () => {
-                    self.models[self.modelIndex].object3D.rotation.y += Math.PI * 0.25;
-                });
+                // vrInterface.addButton('rotRight', '#rotRight', () => {
+                //     // self.models[self.modelIndex].object3D.rotation.y += Math.PI * 0.25;
+                //     self.rotate = false;
+                // });
 
                 vrInterface.addButton('zoomIn', '#zoomIn', () => {
                     if (self.models[self.modelIndex].object3D.position.z < - 1.2) {
@@ -66,6 +69,24 @@
                         self.models[self.modelIndex].object3D.position.z -= 0.8;
                     }
                 });
+
+                vrInterface.addButton('previous', '#previous', () => {
+                    self.models[self.modelIndex].object3D.visible = false;
+
+                    if (self.modelIndex == 0) {
+                        self.modelIndex = self.models.length - 1;
+                    }
+                    else {
+                        self.modelIndex--;
+                    }
+
+                    self.models[self.modelIndex].object3D.visible = true;
+                });
+            },
+            tick: function (time, delta) {
+                if (this.rotate) {
+                    this.models[this.modelIndex].object3D.rotation.y += 0.0008 * delta;
+                }
             }
         });
     </script>
@@ -75,14 +96,14 @@
     <a-scene main_scene id="scene" background="color: #323232" gltf-model="dracoDecoderPath: ../libs/draco/gltf/;">
         <a-assets timeout="3000">
             <a-asset-item id="strokeModel" src="assets/models/vascular-diseases/stroke.glb"></a-asset-item>
-            <a-asset-item id="aneurismModel" src="assets/models/vascular-diseases/an.glb"></a-asset-item>
+            <a-asset-item id="aneurismModel" src="assets/models/vascular-diseases/aneurism.glb"></a-asset-item>
             <a-asset-item id="stenosisModel" src="assets/models/vascular-diseases/stenosis.glb"></a-asset-item>
-            <a-asset-item id="thrombusModel" src="assets/models/vascular-diseases/th.glb"></a-asset-item>
+            <a-asset-item id="thrombusModel" src="assets/models/vascular-diseases/thrombus.glb"></a-asset-item>
 
             <img id="next" src="assets/icons/next.png">
-            <img id="rotLeft" src="assets/icons/rotleft.png">
-            <img id="rotRight" src="assets/icons/rotright.png">
-            <img id="zoomIn" src="assets/icons/zooin.png">
+            <img id="previous" src="assets/icons/previous.png">
+            <img id="rotLeft" src="assets/icons/rotation.png">
+            <img id="zoomIn" src="assets/icons/zoomin.png">
             <img id="zoomOut" src="assets/icons/zoomout.png">
         </a-assets>
 
@@ -93,10 +114,10 @@
         <a-entity id="stroke" class="menu-model" position="0 2 -2" scale="0.01 0.01 0.01" gltf-model="#strokeModel"
             visible="true">
         </a-entity>
-        <a-entity id="aneurism" class="menu-model" position="-1 0 -2" gltf-model="#aneurismModel" visible="false">
+        <a-entity id="aneurism" class="menu-model" position="0 1.6 -2" gltf-model="#aneurismModel" visible="false">
         </a-entity>
-        <a-entity id="stenosis" class="menu-model" position="0 1 -2" scale="0.02 0.02 0.02" gltf-model="#stenosisModel"
-            visible="false">
+        <a-entity id="stenosis" class="menu-model" position="0 1.5 -2" scale="0.015 0.015 0.015"
+            gltf-model="#stenosisModel" visible="false">
         </a-entity>
         <a-entity id="thrombus" class="menu-model" position="0 1.5 -2" scale="10 10 10" rotation="0 -10 0"
             gltf-model="#thrombusModel" visible="false">
@@ -110,7 +131,7 @@
         </a-entity>
 
         <a-entity
-            vr-interface="dimension: 5 1; rotation: 80; position: -0.9 0 -0.1; transparency: true; gap: 0.01 0.01; border: 2 rgb(0,0,3); raycaster: 0 1; centralize: true;"
+            vr-interface="dimension: 5 1; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1 #6d7584; raycaster: 0 1; centralize: true;"
             config></a-entity>
 
     </a-scene>
