@@ -22,18 +22,20 @@
 
     <!-- Library of Virtual Reality -->
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
-    <script type="text/javascript" charset="UTF-8" src="../libs/other/vr-interface.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/vr-interface.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-button-controls.js"></script>
 
     <script>
         AFRAME.registerComponent('config', {
             init: function () {
                 const self = this;
-                // const vrInterface = document.querySelector('[vr-interface]').components["vr-interface"];
                 const vrInterface = this.el.components['vr-interface'];
 
                 this.models = document.querySelectorAll('.menu-model');
                 this.modelIndex = 0;
                 this.rotate = false;
+
+                this.hide = false;
 
                 vrInterface.addButton('next', '#next', () => {
                     self.models[self.modelIndex].object3D.visible = false;
@@ -48,15 +50,9 @@
                     self.models[self.modelIndex].object3D.visible = true;
                 });
 
-                vrInterface.addButton('rotLeft', '#rotLeft', () => {
-                    // self.models[self.modelIndex].object3D.rotation.y -= Math.PI * 0.25;
+                vrInterface.addButton('rotation', '#rotation', () => {
                     self.rotate = !self.rotate;
                 });
-
-                // vrInterface.addButton('rotRight', '#rotRight', () => {
-                //     // self.models[self.modelIndex].object3D.rotation.y += Math.PI * 0.25;
-                //     self.rotate = false;
-                // });
 
                 vrInterface.addButton('zoomIn', '#zoomIn', () => {
                     if (self.models[self.modelIndex].object3D.position.z < - 1.2) {
@@ -82,6 +78,21 @@
 
                     self.models[self.modelIndex].object3D.visible = true;
                 });
+
+                document.addEventListener('pointerlockchange', (event) => {
+                    vrInterface.show();
+                    self.hide = false;
+                });
+
+                this.el.addEventListener('buttondown', () => {
+                    self.hide = !self.hide;
+                    if (self.hide) {
+                        vrInterface.hide();
+                    }
+                    else {
+                        vrInterface.show();
+                    }
+                });
             },
             tick: function (time, delta) {
                 if (this.rotate) {
@@ -102,7 +113,7 @@
 
             <img id="next" src="assets/icons/next.png">
             <img id="previous" src="assets/icons/previous.png">
-            <img id="rotLeft" src="assets/icons/rotation.png">
+            <img id="rotation" src="assets/icons/rotation.png">
             <img id="zoomIn" src="assets/icons/zoomin.png">
             <img id="zoomOut" src="assets/icons/zoomout.png">
         </a-assets>
@@ -132,7 +143,7 @@
 
         <a-entity
             vr-interface="dimension: 5 1; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1 #6d7584; raycaster: 0 1; centralize: true;"
-            config></a-entity>
+            config button-controls></a-entity>
 
     </a-scene>
 </body>

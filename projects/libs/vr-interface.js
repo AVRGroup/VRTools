@@ -17,6 +17,7 @@
     });
 
   Properties:
+  - visible: visibilty of the interface;
   - position: position relative to the camera;
   - rotation: button rotation in Y-Axis in degrees;
   - dimension: number of lines and columns of the imaginary matrix in which the buttons will be placed;
@@ -29,12 +30,18 @@
   - raycaster: defines near and far properties of the raycaster;
   - border: thickness and color of button border, if nothing is set, no border is added.
 
+  Functions:
+  - addButton(buttonName, idOfTexture, callback) - adds a button to the interface
+  - hide() - hide the interface
+  - show() - make interface visible
+  
   Observations:
   - if the scene's camera is not initialized before calling vr-interface or the number of buttons overflow the dimension property, the buttons may be misplaced. 
 */
 
 AFRAME.registerComponent('vr-interface', {
   schema: {
+    visible: { type: 'bool', default: true },
     position: { type: 'vec3', default: { x: -1, y: 0, z: 0 } },
     rotation: { type: 'number', default: 90 },
     dimension: { type: 'vec2', default: { x: 1, y: 1 } },
@@ -104,7 +111,6 @@ AFRAME.registerComponent('vr-interface', {
 
     this.data.rotation = data.rotation * Math.PI / 180; // converts deg to rad
 
-
     this.el.addEventListener('click', (evt) => self.clickHandle(evt)); // click == fuse click
   },
   update: function (oldData) {
@@ -113,6 +119,11 @@ AFRAME.registerComponent('vr-interface', {
 
     // If `oldData` is empty, then this means we're in the initialization process. No need to update.
     if (Object.keys(oldData).length === 0) { return; }
+
+    if (oldData.visible !== data.visible) {
+      if (data.visible) this.show();
+      else this.hide();
+    }
 
     if (oldData.rotation !== data.rotation) {
       this.data.rotation = data.rotation * Math.PI / 180; // converts deg to rad
@@ -257,5 +268,15 @@ AFRAME.registerComponent('vr-interface', {
     button.border.scale.copy(button.scale);
     button.border.position.copy(button.position);
     button.border.rotation.copy(button.rotation);
+  },
+  show: function () {
+    this.data.visible = true;
+    this.el.object3D.visible = true;
+    this.cursor.setAttribute('raycaster', { near: this.data.raycaster.near, far: this.data.raycaster.far });
+  },
+  hide: function () {
+    this.data.visible = false;
+    this.el.object3D.visible = false;
+    this.cursor.setAttribute('raycaster', { near: 0, far: 0 });
   }
 });
