@@ -19,18 +19,13 @@ const ASSETS = {
     },
 
     objects: {
-        // heart: {
-        //     path: 'assets/models/vascular-diseases/heart.glb',
-        //     fileSize: 461,
-        //     draco: decoder // the first model needs to set the draco decoder
-        // },
         stroke: {
             path: 'assets/models/vascular-diseases/stroke.glb',
             fileSize: 304,
             draco: decoder // the first model needs to set the draco decoder
         },
         aneurysm: {
-            path: 'assets/models/vascular-diseases/an.glb',
+            path: 'assets/models/vascular-diseases/aneurism.glb',
             fileSize: 539,
         },
         stenosis: {
@@ -38,7 +33,7 @@ const ASSETS = {
             fileSize: 4282,
         },
         thrombus: {
-            path: 'assets/models/vascular-diseases/th.glb',
+            path: 'assets/models/vascular-diseases/thrombus.glb',
             fileSize: 3289,
         },
         highlight: {
@@ -61,7 +56,7 @@ function init() {
 
     camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 700);
     camera.position.set(0, 0, 100);
-    camera.lookAt(new THREE.Vector3(0,0,0));
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
     onResize();
 
@@ -78,13 +73,6 @@ function init() {
     orbitControls.update();
     orbitControls.saveState();
 
-    // heart = ASSETS.objects.heart;
-    // heart.scale.set(0.5, 0.5, 0.5);
-    // heart.position.set(0, 0, 0);
-    // heart.visible = false;
-    // content.cardio.model = heart;
-    // scene.add(heart);
-
     stroke = ASSETS.objects.stroke;
     stroke.scale.set(0.45, 0.45, 0.45);
     stroke.position.set(0, 15, 0);
@@ -95,7 +83,7 @@ function init() {
 
     aneurysm = ASSETS.objects.aneurysm;
     aneurysm.scale.set(30, 30, 30);
-    aneurysm.position.set(-30, -50, 0);
+    aneurysm.position.set(5, -13.3, -7.5);
     aneurysm.visible = false;
     content.aneurysm.model = aneurysm;
     scene.add(aneurysm)
@@ -165,19 +153,6 @@ function onResize() {
 }
 
 const content = {
-    //  <a href="" target="_blank" rel="noopener external"></a> 
-    // cardio: {
-    //     whatis: 'Cardiovascular diseases (CVDs) are a group of disorders of the heart and vessels, such as coronary heart disease (disease of the vessels supplying the heart) and cerebrovascular disease (disease of the vessels supplying the brain). The CVDs are the number one cause of death worldwide.',
-    //     risk: 'The main risk factors are unhealthy diet, physical inactivity, tobacco use and harmful use of alcohol.',
-    //     symptoms: 'Often, the first symptoms are a heart attack or a stroke. Symptoms of a heart attack include pain or discomfort in the center of the chest, arms, left shoulder, elbows, jaws, or back. The most common stroke symptom is sudden weakness of the face, arm, or leg, most often on one side of the body.',
-    //     source: `<a href="https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)" target="_blank" rel="noopener external">WHO</a>`,
-    //     credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
-    //     for Health</a>`,
-    //     highlight: {
-    //         position: new THREE.Vector3(-3.5, -5, 7.5),
-    //         scale: new THREE.Vector3(4.2, 4.2, 4.3),
-    //     }
-    // },
     stroke: {
         whatis: 'A stroke occurs when the blood supply to part of your brain is interrupted or reduced, preventing brain tissue from getting oxygen and nutrients. Brain cells begin to die in minutes. A stroke is a medical emergency, and prompt treatment is crucial. Early action can reduce brain damage and other complications.',
         risk: 'The main risk factors are high blood pressure, or hypertension, nicotine and carbon monoxide in cigarette smoke, physical inactivity and a unhealthy diet that results in diabetes or high blood cholesterol.',
@@ -187,11 +162,11 @@ const content = {
         <a href="https://www.mayoclinic.org/diseases-conditions/stroke/symptoms-causes/syc-20350113" target="_blank" rel="noopener external">Mayo Clinic</a>`,
         credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
         for Health</a>`,
- 
+
         highlight: {
             position: new THREE.Vector3(-3.5, -2, 7.5),
             scale: new THREE.Vector3(4.2, 4.2, 4.3),
-            pointView: new THREE.Vector3(4, 2, -8), 
+            pointView: new THREE.Vector3(4, 2, -8),
         }
     },
     aneurysm: {
@@ -203,8 +178,8 @@ const content = {
         credits: '<a href="https://sketchfab.com/3d-models/abdominal-aortic-aneurysm-e951550381ad49739a38f9ffb2370899" target="_blank" rel="noopener external">laurenwahl</a> (adapted)',
         highlight: {
             position: new THREE.Vector3(2, -12, -6),
-            scale: new THREE.Vector3(10, 10, 10),
-            pointView: new THREE.Vector3(2, -10, -30), 
+            scale: new THREE.Vector3(10.5, 10.5, 10.5),
+            pointView: new THREE.Vector3(2, -10, -30),
         }
     },
     stenosis: {
@@ -217,7 +192,7 @@ const content = {
         highlight: {
             position: new THREE.Vector3(1, -5, 3),
             scale: new THREE.Vector3(3, 3, 3),
-            pointView: new THREE.Vector3(4, -5, -8), 
+            pointView: new THREE.Vector3(4, -5, -8),
         }
     },
     thrombus: {
@@ -230,7 +205,7 @@ const content = {
         highlight: {
             position: new THREE.Vector3(5, -8, 18.5),
             scale: new THREE.Vector3(11, 11, 11),
-            pointView: new THREE.Vector3(1, -6, 43), 
+            pointView: new THREE.Vector3(1, -6, 43),
         }
     },
 }
