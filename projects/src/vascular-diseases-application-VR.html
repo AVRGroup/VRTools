@@ -56,13 +56,13 @@
 
                 vrInterface.addButton('zoomIn', '#zoomIn', () => {
                     if (self.models[self.modelIndex].object3D.position.z < - 1.2) {
-                        self.models[self.modelIndex].object3D.position.z += 0.8;
+                        self.models[self.modelIndex].object3D.position.z += 0.5;
                     }
                 });
 
                 vrInterface.addButton('zoomOut', '#zoomOut', () => {
                     if (self.models[self.modelIndex].object3D.position.z > -2.4) {
-                        self.models[self.modelIndex].object3D.position.z -= 0.8;
+                        self.models[self.modelIndex].object3D.position.z -= 0.5;
                     }
                 });
 
