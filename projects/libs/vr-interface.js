@@ -43,6 +43,7 @@ AFRAME.registerComponent('vr-interface', {
   schema: {
     visible: { type: 'bool', default: true },
     position: { type: 'vec3', default: { x: -1, y: 0, z: 0 } },
+    updatePos: { type: 'bool', default: false },
     rotation: { type: 'number', default: 90 },
     dimension: { type: 'vec2', default: { x: 1, y: 1 } },
     centralize: { type: 'bool', default: true },
@@ -87,9 +88,15 @@ AFRAME.registerComponent('vr-interface', {
     this.buttons = [];
     this.buttonGeometry = new THREE.PlaneGeometry(1, 1);
     this.camera = document.querySelector('[camera]');
+    this.oldCameraPos = new THREE.Vector3().copy(this.camera.object3D.position);
+    this.referencePoint = new THREE.Vector3();
     this.cursor = document.createElement('a-entity');
     this.borderMaterial = null;
     this.borderGeometry;
+    this.height = this.camera.object3D.getWorldPosition(new THREE.Vector3()).y // this var is used to fix a aframe bug that zeros the camera height when enters in vr mode
+    this.isVr = false;
+
+    this.referencePoint.y = this.height + this.data.position.y;
 
     this.cursor.setAttribute('cursor', { fuse: true, fuseTimeout: 1000, });
     this.cursor.setAttribute('raycaster', { near: data.raycaster.near, far: data.raycaster.far, objects: '.vrInterface-button' });
@@ -112,6 +119,20 @@ AFRAME.registerComponent('vr-interface', {
     this.data.rotation = data.rotation * Math.PI / 180; // converts deg to rad
 
     this.el.addEventListener('click', (evt) => self.clickHandle(evt)); // click == fuse click
+    this.el.sceneEl.addEventListener('enter-vr', () => { self.isVr = true; });
+    this.el.sceneEl.addEventListener('exit-vr', () => { self.isVr = false; });
+  },
+  tick: function () {
+    if (this.data.updatePos) {
+      this.camera.object3D.getWorldPosition(this.referencePoint)
+      this.referencePoint.y = this.height + this.data.position.y;
+
+      for (let k = 0; k < this.buttons.length; k++) {
+        this.positionate(this.buttons[k], k);
+        if (this.data.centralize) this.centralize(this.buttons[k]);
+        this.positionateBorder(this.buttons[k]);
+      }
+    }
   },
   update: function (oldData) {
     const el = this.el;
@@ -247,10 +268,11 @@ AFRAME.registerComponent('vr-interface', {
     let i = Math.trunc(n / data.dimension.y); // index of the line
     let j = n - data.dimension.y * i; // index of the column
 
+    button.rotation.y = data.rotation;
     button.position.set(
-      (this.camera.object3D.position.x + data.position.x) + j * (data.buttonSize.x + data.gap.x) * Math.cos(data.rotation),
-      (this.camera.object3D.position.y + data.position.y) - i * (data.buttonSize.y + data.gap.y),
-      (this.camera.object3D.position.z + data.position.z) + j * (data.buttonSize.x + data.gap.x) * -Math.sin(data.rotation)
+      (this.referencePoint.x + data.position.x) + j * (data.buttonSize.x + data.gap.x) * Math.cos(data.rotation),
+      (this.referencePoint.y + data.position.y) - i * (data.buttonSize.y + data.gap.y),
+      (this.referencePoint.z + data.position.z) + j * (data.buttonSize.x + data.gap.x) * -Math.sin(data.rotation)
     );
 
   },
@@ -268,6 +290,28 @@ AFRAME.registerComponent('vr-interface', {
     button.border.scale.copy(button.scale);
     button.border.position.copy(button.position);
     button.border.rotation.copy(button.rotation);
+  },
+  setLocation: function (pos, rot) {
+    if (typeof rot === 'number') {
+      this.data.rotation = rot * Math.PI / 180;
+    }
+
+    if (typeof pos === 'string') {
+      pos = pos.split(' ');
+      if (pos.length >= 3) {
+        this.data.position.x = Number.parseFloat(pos[0]);
+        this.data.position.y = Number.parseFloat(pos[1]);
+        this.data.position.z = Number.parseFloat(pos[2]);
+      }
+    }
+
+    if (!this.data.updatePos) {
+      for (let k = 0; k < this.buttons.length; k++) {
+        this.positionate(this.buttons[k], k);
+        if (this.data.centralize) this.centralize(this.buttons[k]);
+        this.positionateBorder(this.buttons[k]);
+      }
+    }
   },
   show: function () {
     this.data.visible = true;

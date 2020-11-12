@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inclined Plane VR</title>
+    <link rel="stylesheet" href="../../css/w3.css">
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- Library of Virtual Reality -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/util/Aframe-Extras/aframe-extras.js"></script>
+    <!-- Physics libraries -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-physics-system.js"></script>
+    <!-- vr interface -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/vr-interface.js"></script>
+
+    <script>
+        AFRAME.registerComponent("app", {
+            init: function () {
+                const self = this;
+
+                // const vrInterface = this.el.components['vr-interface'];
+                const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
+                const camera = document.querySelector('#camera').object3D;
+                const rig = document.querySelector('#rig');
+
+                vrInterface.addButton('start', '#start', () => {
+                    self.startSimulation();
+                });
+
+                this.posIdx = 0;
+                this.positions = [
+                    { cameraPos: '5 0 0', interfacePos: '0 0 1', infoPos: '4.3 1.6 1', rotation: 180 },
+                    { cameraPos: '0 0 5', interfacePos: '-1 0 0', infoPos: '-1 1.6 4.3', rotation: 90 },
+                    { cameraPos: '5 5 5', interfacePos: '-0.7 2.5 0.7', infoPos: '3.75 6.6 5.2', rotation: 135 },
+                ]
+                vrInterface.addButton('changeCamera', '#changeCamera', () => {
+                    this.posIdx = this.posIdx == 2 ? 0 : this.posIdx + 1;
+
+                    let { cameraPos, interfacePos, infoPos, rotation } = this.positions[this.posIdx];
+
+                    rig.setAttribute('position', cameraPos);
+
+                    self.info.setAttribute('position', infoPos);
+                    self.info.setAttribute('rotation', '0 ' + rotation + ' 0');
+
+                    vrInterface.setLocation(interfacePos, rotation);
+                });
+
+                vrInterface.addButton('increaseFriction', '#increaseFriction', () => {
+                    self.changeFriction();
+                });
+
+                vrInterface.addButton('decreaseFriction', '#decreaseFriction', () => {
+                    self.changeFriction(-1);
+                });
+
+                vrInterface.addButton('increaseAngle', '#increaseAngle', () => {
+                    self.changeAngle();
+                });
+
+                vrInterface.addButton('decreaseAngle', '#decreaseAngle', () => {
+                    self.changeAngle(-1);
+                });
+
+                this.info = document.querySelector('#info');
+                this.gravity = -9.8;
+                this.angle = Math.PI / 12;
+                this.rampFriction = 0.002;
+
+
+                this.world = this.el.sceneEl.systems.physics.driver.world
+                this.cube = document.querySelector('#box');
+                this.cubeCannonMaterial = new CANNON.Material('cubeMaterial');
+
+                this.ramp = document.querySelector('#ramp');
+                this.rampCannonMaterial = new CANNON.Material('rampMaterial');
+                this.ramp.object3D.scale.set(5, 0.1, 5)
+
+                this.wall = document.querySelector('#wall');
+                this.wall.object3D.scale.set(5, 2, 0.1);
+
+                this.floor = document.querySelector('#floor');
+                this.floorCannonMaterial = new CANNON.Material('floorMaterial');
+
+                this.world.contactmaterials = [];
+                this.contactRamp = new CANNON.ContactMaterial(this.cubeCannonMaterial, this.rampCannonMaterial, { friction: this.rampFriction, restitution: 0.3 });
+                this.world.addContactMaterial(this.contactRamp);
+
+                this.contactFloor = new CANNON.ContactMaterial(this.cubeCannonMaterial, this.floorCannonMaterial, { friction: 0.5, restitution: 0.3 })
+                this.world.addContactMaterial(this.contactFloor);
+
+                this.cube.addEventListener('body-loaded', () => {
+                    self.cube.body.material = self.cubeCannonMaterial;
+                    self.changeAngle()
+                    this.updateInfo();
+                });
+
+
+                this.ramp.addEventListener('body-loaded', () => {
+                    self.ramp.body.material = self.rampCannonMaterial;
+                });
+
+                // window.addEventListener('keydown', (e) => {
+                //     // console.log(e.keyCode);
+                //     e.keyCode === 32 && this.changeAngle();
+                //     e.keyCode === 16 && this.changeAngle(-1);
+                //     e.keyCode === 67 && this.startSimulation();
+                // });
+            },
+            updateInfo: function () {
+                let string = ``;
+                string += `Status: ${this.world.gravity.y < 0 ? 'Running' : 'Paused'}\n`;
+                string += `Angle: ${Math.round(this.angle * 180 / Math.PI)} deg\n`;
+                string += `Friction coef: ${this.rampFriction * 250}\n`;
+                string += `Friction force: ${(this.rampFriction * this.cube.body.mass * this.gravity * -250 * Math.cos(this.angle)).toFixed(2)} N\n`;
+                string += `Weight: ${this.cube.body.mass * this.gravity * -1} N\n`;
+                string += `WeightX: ${(this.cube.body.mass * this.gravity * Math.sin(this.angle) * -1).toFixed(2)} N\n`;
+                string += `WeightY: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
+                string += `Normal: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
+                this.info.setAttribute('value', string);
+            },
+            changeAngle: function (increment) {
+
+                let ramp = this.ramp.object3D;
+                let wall = this.wall.object3D;
+                let cube = this.cube.object3D;
+                let sin;
+                let cos;
+
+                increment = increment < 0 ? -1 : 1;
+
+                if ((increment === 1 && this.angle > Math.PI / 4) || (increment === -1 && this.angle < Math.PI / 6)) {
+                    return;
+                }
+
+                this.angle += Math.PI / 12 * increment; // 15 deg
+                sin = Math.sin(this.angle) * ramp.scale.z
+                cos = Math.cos(this.angle) * -ramp.scale.z;
+
+                ramp.rotation.x = this.angle;
+                ramp.position.y = sin / 2;
+
+
+                wall.scale.set(5, sin, 0.1) //sin;
+                wall.position.y = wall.scale.y / 2;
+                wall.position.z = -Math.cos(this.angle) * ramp.scale.z / 2;
+
+                let z = wall.position.z + 0.7;
+                let y = sin - 0.11;
+
+                if (this.angle < Math.PI / 3) {
+                    y += 0.2;
+                }
+                if (this.angle < Math.PI / 4) {
+                    y += 0.15;
+                }
+                if (this.angle < Math.PI / 6) {
+                    y += 0.15;
+                }
+
+                // stop cube
+                this.cube.body.velocity.set(0, 0, 0);
+                this.cube.body.angularVelocity.set(0, 0, 0);
+                this.cube.body.vlambda.set(0, 0, 0);
+                this.cube.body.wlambda.set(0, 0, 0);
+
+                this.cube.body.quaternion.setFromEuler(this.angle, 0, 0);
+                this.cube.body.position.set(0, y, z);
+
+                this.world.gravity.y = 0;
+                this.updateInfo();
+            },
+            startSimulation: function () {
+                if (this.world.gravity.y == 0) {
+                    this.world.gravity.y = -9.8;
+                }
+                else {
+                    let ramp = this.ramp.object3D;
+                    let wall = this.wall.object3D;
+
+                    this.cube.body.velocity.set(0, 0, 0);
+                    this.cube.body.angularVelocity.set(0, 0, 0);
+                    this.cube.body.vlambda.set(0, 0, 0);
+                    this.cube.body.wlambda.set(0, 0, 0);
+
+                    this.cube.body.position.set(0, wall.scale.y + 0.2, wall.position.z + 0.75);
+                    this.cube.body.quaternion.setFromEuler(this.angle, 0, 0);
+                }
+                // this.force();
+                this.updateInfo();
+            },
+            changeFriction: function (increment) {
+                increment = increment < 0 ? -1 : 1;
+
+                if ((increment === 1 && this.rampFriction === 0.003) || (increment === -1 && this.rampFriction === 0.0)) {
+                    return;
+                }
+
+                this.rampFriction += 0.001 * increment;
+                this.contactRamp.friction = this.rampFriction;
+                this.updateInfo();
+            },
+        });
+    </script>
+
+</head>
+
+<body>
+    <a-scene main_scene id="scene" time light="defaultLightsEnabled: false" renderer="antialias: true;"
+        background="color: #000000" physics="gravity: 0; debug: false; debugDrawMode: 1;">
+        <a-assets timeout="3000">
+            <img id="wood" src="assets/textures/wood-2.jpg">
+            <img id="bathroom" src="assets/textures/bathroom.jpg">
+            <img id="stone" src="assets/textures/stone.jpg">
+            <img id="start" src="assets/icons/start.png">
+            <img id="changeCamera" src="assets/icons/change-camera.png">
+            <img id="increaseFriction" src="assets/icons/increase-friction.png">
+            <img id="decreaseFriction" src="assets/icons/decrease-friction.png">
+            <img id="increaseAngle" src="assets/icons/increase-angle.png">
+            <img id="decreaseAngle" src="assets/icons/decrease-angle.png">
+        </a-assets>
+
+        <a-box id="box" material="src: #stone" position="0 2.74 -1.46" rotation="30 0 90"
+            dynamic-body="shape: fit; mass: 1">
+        </a-box>
+
+        <a-entity id="ramp-wrap">
+            <a-box id="ramp" material="src: #bathroom; repeat: 3 3" width="1" height="1" depth="1" position="0 1 0"
+                rotation="15 0 0" body="type:static; mass: 0;" shadow="cast: true">
+            </a-box>
+
+            <a-box id="wall" material="src: #bathroom; repeat: 3 3" width="1" height="1" depth="1" position="0 1 -1.8">
+            </a-box>
+        </a-entity>
+
+        <a-text id="info" value="" align="center" position="4.3 1.6 1" rotation="0 180 0"
+            geometry="primitive: plane; height: 2; width: 2.2"
+            material="color: #647485; transparent: true; opacity: 0.75" scale="0.31 0.31">
+        </a-text>
+
+
+        <a-box id="borderLeft" position="-10 0.5 0" height="0.5" widht="1" depth="20" material="src: #wood" static-body>
+        </a-box>
+
+        <a-box id="borderRight" position="10 0.5 0" height="0.5" widht="1" depth="20" material="src: #wood" static-body>
+        </a-box>
+
+        <a-box id="borderFront" position="0 0.5 -10" rotation="0 90 0" height="0.5" widht="1" depth="20"
+            material="src: #wood" static-body></a-box>
+
+        <a-box id="borderBack" position="0 0.5 9.5" rotation="0 90 0" height="0.5" widht="1" depth="20"
+            material="src: #wood; repeat: 1 5" static-body></a-box>
+
+        <a-box id="floor" position="0 0 0" rotation="0 0 0" width="20" height="0.5" depth="20"
+            material="src: #wood; repeat: 3 3" body="type:static; mass: 0;" shadow="receive: true">
+        </a-box>
+
+        <!-- Lights -->
+        <!-- <a-entity position="0 40 70" light="type: spot; color: #ffffff; decay: 2; penumbra: 0.05; 
+        castShadow: true; shadowMapHeight: 2048; shadowMapWidth: 2048; shadowCameraFov: 20">
+        </a-entity> -->
+        <a-entity position="0 40 70" light="type: spot; color: #ffffff; penumbra: 0.05">
+        </a-entity>
+        <a-entity light="type: ambient; color: #343434;"></a-entity>
+
+        <a-entity id="rig" position="5 0 0" rotation="0 45 0">
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true"
+                wasd-controls="acceleration:500; fly: true; enabled: false">
+            </a-entity>
+        </a-entity>
+
+        <a-entity
+            vr-interface="dimension: 3 2; rotation: 180; position: 0 0 1; updatePos: true; transparency: true; gap: 0.01 0.01; border: 1 #6d7584;"
+            app>
+        </a-entity>
+
+    </a-scene>
+
+</body>
+
+</html>
