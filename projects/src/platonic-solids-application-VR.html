@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platonic Solids VR</title>
+    <link rel="stylesheet" href="../../css/w3.css">
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- Library of Virtual Reality -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/vr-interface.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-button-controls.js"></script>
+
+
+    <script>
+
+
+        AFRAME.registerComponent('config', {
+            init: function () {
+                const self = this;
+                const vrInterface = this.el.components['vr-interface'];
+                this.models = document.querySelectorAll('.menu-model');
+                this.modelIndex = 0;
+                this.rotate = true;
+
+                vrInterface.addButton('next', '#next', () => {
+                    self.models[self.modelIndex].object3D.visible = false;
+
+                    if (self.modelIndex == self.models.length - 1) {
+                        self.modelIndex = 0;
+                    }
+                    else {
+                        self.modelIndex++;
+                    }
+                    self.models[self.modelIndex].object3D.visible = true;
+                });
+
+                vrInterface.addButton('previous', '#previous', () => {
+                    self.models[self.modelIndex].object3D.visible = false;
+
+                    if (self.modelIndex == 0) {
+                        self.modelIndex = self.models.length - 1;
+                    }
+                    else {
+                        self.modelIndex--;
+                    }
+
+                    self.models[self.modelIndex].object3D.visible = true;
+                });
+
+
+                vrInterface.addButton('increase', '#increase', () => {
+                    if (self.models[self.modelIndex].object3D.position.y == 1) {
+                        self.models[self.modelIndex].object3D.scale.set(2, 2, 2);
+                        self.models[self.modelIndex].object3D.position.y = 2;
+                    }
+                    if (self.models[self.modelIndex].object3D.position.y == 0.5) {
+                        self.models[self.modelIndex].object3D.scale.set(1, 1, 1);
+                        self.models[self.modelIndex].object3D.position.y = 1;
+                    }
+                });
+
+                vrInterface.addButton('decrease', '#decrease', () => {
+                    if (self.models[self.modelIndex].object3D.position.y == 1) {
+                        self.models[self.modelIndex].object3D.scale.set(0.5, 0.5, 0.5);
+                        self.models[self.modelIndex].object3D.position.y = 0.5;
+                    }
+                    if (self.models[self.modelIndex].object3D.position.y == 2) {
+                        self.models[self.modelIndex].object3D.scale.set(1, 1, 1);
+                        self.models[self.modelIndex].object3D.position.y = 1;
+                    }
+                });
+
+                vrInterface.addButton('rotation', '#rotation', () => {
+                    self.rotate = !self.rotate;
+                });
+
+                vrInterface.addButton('wireframe', '#wireframe', () => {
+                    self.models[self.modelIndex].object3D.visible = false;
+                    createIcosahedron(1, 0);
+                });
+
+                document.addEventListener('pointerlockchange', (event) => {
+                    vrInterface.show();
+                    self.hide = false;
+                });
+
+                this.el.addEventListener('buttondown', () => {
+                    self.hide = !self.hide;
+                    if (self.hide) {
+                        vrInterface.hide();
+                    }
+                    else {
+                        vrInterface.show();
+                    }
+                });
+            },
+            tick: function (time, delta) {
+                if (this.rotate) {
+                    this.models[this.modelIndex].object3D.rotation.y += 0.015;
+                    this.models[this.modelIndex].object3D.rotation.x += 0.015;
+                    this.models[this.modelIndex].object3D.rotation.z += 0.015;
+                }
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <a-scene main_scene id="scene" background="color: #000000">
+        <a-assets timeout="3000">
+
+            <img id="next" src="assets/icons/next.png">
+            <img id="previous" src="assets/icons/previous.png">
+            <img id="rotation" src="assets/icons/rotation.png">
+            <img id="increase" src="assets/icons/increase.jpg">
+            <img id="decrease" src="assets/icons/decrease.jpg">
+            <img id="wireframe" src="assets/icons/wireframe.jpg">
+        </a-assets>
+
+
+        <a-entity light="type:directional; castShadow:true;" position="1 1 1"></a-entity>
+        <a-entity light="color: #fff" position="25 30 20"></a-entity>
+
+        <a-entity id="tetrahedron" class="menu-model" geometry="primitive: tetrahedron; radius: 1" material="color:#ff0000"  position="0 1 -3" shadow="receive: true"
+                  visible="true">
+        </a-entity>
+        <a-entity id="box" class="menu-model" geometry="primitive: box; width: 1; height: 1; depth: 1" position="0 1 -3" material="color:#ff0000" shadow="receive: true"
+                  visible="false">
+        </a-entity>
+        <a-entity id="octahedron" class="menu-model" geometry="primitive: octahedron; radius: 1" position="0 1 -3" material="color:#ff0000" shadow="receive: true"
+                  visible="false">
+        </a-entity>
+        <a-entity id="dodecahedron" class="menu-model" geometry="primitive: dodecahedron; radius: 1" position="0 1 -3" material="color:#ff0000" shadow="receive: true"
+                  visible="false">
+        </a-entity>
+        <a-entity id="icosahedron" class="menu-model" geometry="primitive: icosahedron; radius: 1" position="0 1 -3" material="color:#ff0000" shadow="receive: true"
+                  visible="false">
+        </a-entity>
+
+        <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" color="#666666" shadow="receive: true"></a-plane>
+
+        <a-entity id="rig" position="0 0 0" rotation="0 0 0">
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
+            </a-entity>
+        </a-entity>
+
+        <a-entity vr-interface="dimension: 3 2; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1 #6d7584; raycaster: 0 1; centralize: true;"
+                  config button-controls></a-entity>
+
+    </a-scene>
+</body>
+
+</html>

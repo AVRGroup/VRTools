@@ -50,6 +50,7 @@
                     self.models[self.modelIndex].object3D.visible = true;
                 });
 
+
                 vrInterface.addButton('rotation', '#rotation', () => {
                     self.rotate = !self.rotate;
                 });
@@ -125,7 +126,7 @@
         <a-entity id="stroke" class="menu-model" position="0 2 -2" scale="0.01 0.01 0.01" gltf-model="#strokeModel"
             visible="true">
         </a-entity>
-        <a-entity id="aneurism" class="menu-model" position="0 1.6 -2" gltf-model="#aneurismModel" visible="false">
+        <a-entity id="aneurism" class="menu-model" position="0 0.5 -2" scale="8 8 8" gltf-model="#aneurismModel" visible="false">
         </a-entity>
         <a-entity id="stenosis" class="menu-model" position="0 1.5 -2" scale="0.015 0.015 0.015"
             gltf-model="#stenosisModel" visible="false">

@@ -82,8 +82,8 @@ function init() {
     scene.add(stroke);
 
     aneurysm = ASSETS.objects.aneurysm;
-    aneurysm.scale.set(30, 30, 30);
-    aneurysm.position.set(5, -13.3, -7.5);
+    aneurysm.scale.set(180, 180, 180);
+    aneurysm.position.set(-10, -30, 30);
     aneurysm.visible = false;
     content.aneurysm.model = aneurysm;
     scene.add(aneurysm)
@@ -177,8 +177,8 @@ const content = {
         <a href="https://www.heart.org/en/health-topics/aortic-aneurysm/what-is-an-aneurysm" target="_blank" rel="noopener external">Heart.org</a>`,
         credits: '<a href="https://sketchfab.com/3d-models/abdominal-aortic-aneurysm-e951550381ad49739a38f9ffb2370899" target="_blank" rel="noopener external">laurenwahl</a> (adapted)',
         highlight: {
-            position: new THREE.Vector3(2, -12, -6),
-            scale: new THREE.Vector3(10.5, 10.5, 10.5),
+            position: new THREE.Vector3(-8.2, 3.7, 20),
+            scale: new THREE.Vector3(10, 10, 10),
             pointView: new THREE.Vector3(2, -10, -30),
         }
     },
