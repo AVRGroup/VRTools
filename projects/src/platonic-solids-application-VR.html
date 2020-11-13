@@ -36,7 +36,7 @@
                 this.models = document.querySelectorAll('.menu-model');
                 this.modelIndex = 0;
                 this.rotate = true;
-
+                
                 vrInterface.addButton('next', '#next', () => {
                     self.models[self.modelIndex].object3D.visible = false;
 
@@ -90,8 +90,7 @@
                 });
 
                 vrInterface.addButton('wireframe', '#wireframe', () => {
-                    self.models[self.modelIndex].object3D.visible = false;
-                    createIcosahedron(1, 0);
+                    self.models[self.modelIndex].object3D.material.wireframe = !self.models[self.modelIndex].object3D.material.wireframe;
                 });
 
                 document.addEventListener('pointerlockchange', (event) => {
