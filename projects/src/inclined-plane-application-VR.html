@@ -33,9 +33,89 @@
             init: function () {
                 const self = this;
 
-                // const vrInterface = this.el.components['vr-interface'];
+                this.info = document.querySelector('#info');
+                this.gravity = -9.8;
+                this.timeout = 0;
+                this.angle = Math.PI / 12;
+                this.arrowAngle = this.angle;
+                this.rampFriction = 0.002;
+
+                this.world = this.el.sceneEl.systems.physics.driver.world
+
+                this.cube = document.querySelector('#box');
+                this.cubeCannonMaterial = new CANNON.Material('cubeMaterial');
+                this.cube.addEventListener('body-loaded', () => {
+                    self.cube.body.material = self.cubeCannonMaterial;
+                    self.changeAngle()
+                    this.updateInfo();
+                });
+                this.cube.addEventListener('collide', function (e) {
+                    if (e.detail.contact.bj.el.id == "floor") {
+                        if (self.cube.body.quaternion.x > 0.4) {
+                            self.arrowAngle = 0//Math.PI / 4;
+                        }
+                    }
+                });
+
+                this.ramp = document.querySelector('#ramp');
+                this.rampCannonMaterial = new CANNON.Material('rampMaterial');
+                this.ramp.object3D.scale.set(5, 0.1, 5)
+                this.ramp.addEventListener('body-loaded', () => {
+                    self.ramp.body.material = self.rampCannonMaterial;
+                });
+
+                this.wall = document.querySelector('#wall');
+                this.wall.object3D.scale.set(5, 2, 0.1);
+
+                this.floor = document.querySelector('#floor');
+                this.floorCannonMaterial = new CANNON.Material('floorMaterial');
+
+                this.world.contactmaterials = [];
+                this.contactRamp = new CANNON.ContactMaterial(this.cubeCannonMaterial, this.rampCannonMaterial, { friction: this.rampFriction, restitution: 0.3 });
+                this.world.addContactMaterial(this.contactRamp);
+
+                this.contactFloor = new CANNON.ContactMaterial(this.cubeCannonMaterial, this.floorCannonMaterial, { friction: 0.5, restitution: 0.3 })
+                this.world.addContactMaterial(this.contactFloor);
+
+
+                this.groupForces = document.querySelector('#groupForces');
+                let origin = new THREE.Vector3(0, 0, 0);
+                let length = 1;
+
+                this.groupForces.setObject3D('center', new THREE.Mesh(
+                    new THREE.SphereGeometry(0.05),
+                    new THREE.MeshPhongMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.75 })
+                ));
+
+                this.weightArrow = new THREE.ArrowHelper(
+                    new THREE.Vector3(0, -1, 0), // dir
+                    origin,
+                    length,
+                    0xff0000
+                );
+                this.groupForces.setObject3D('weightArrow', this.weightArrow);
+
+                this.normalArrow = new THREE.ArrowHelper(
+                    new THREE.Vector3(0, 1, 0), // dir
+                    origin,
+                    length,
+                    0x00ff00
+                );
+                this.normalArrow.rotation.x = Math.PI / 6;
+                this.groupForces.setObject3D('normalArrow', this.normalArrow);
+
+                this.frictionArrow = new THREE.ArrowHelper(
+                    new THREE.Vector3(0, 0, -1), // dir
+                    origin,
+                    length,
+                    0x0000ff
+                );
+                this.frictionArrow.rotation.x = -Math.PI / 6;
+                this.groupForces.setObject3D('frictionArrow', this.frictionArrow);
+
+
+                // Setting up VR Interface
                 const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
-                const camera = document.querySelector('#camera').object3D;
                 const rig = document.querySelector('#rig');
 
                 vrInterface.addButton('start', '#start', () => {
@@ -77,50 +157,17 @@
                     self.changeAngle(-1);
                 });
 
-                this.info = document.querySelector('#info');
-                this.gravity = -9.8;
-                this.angle = Math.PI / 12;
-                this.rampFriction = 0.002;
-
-
-                this.world = this.el.sceneEl.systems.physics.driver.world
-                this.cube = document.querySelector('#box');
-                this.cubeCannonMaterial = new CANNON.Material('cubeMaterial');
-
-                this.ramp = document.querySelector('#ramp');
-                this.rampCannonMaterial = new CANNON.Material('rampMaterial');
-                this.ramp.object3D.scale.set(5, 0.1, 5)
-
-                this.wall = document.querySelector('#wall');
-                this.wall.object3D.scale.set(5, 2, 0.1);
-
-                this.floor = document.querySelector('#floor');
-                this.floorCannonMaterial = new CANNON.Material('floorMaterial');
-
-                this.world.contactmaterials = [];
-                this.contactRamp = new CANNON.ContactMaterial(this.cubeCannonMaterial, this.rampCannonMaterial, { friction: this.rampFriction, restitution: 0.3 });
-                this.world.addContactMaterial(this.contactRamp);
-
-                this.contactFloor = new CANNON.ContactMaterial(this.cubeCannonMaterial, this.floorCannonMaterial, { friction: 0.5, restitution: 0.3 })
-                this.world.addContactMaterial(this.contactFloor);
-
-                this.cube.addEventListener('body-loaded', () => {
-                    self.cube.body.material = self.cubeCannonMaterial;
-                    self.changeAngle()
-                    this.updateInfo();
-                });
-
-
-                this.ramp.addEventListener('body-loaded', () => {
-                    self.ramp.body.material = self.rampCannonMaterial;
-                });
-
                 // window.addEventListener('keydown', (e) => {
                 //     // console.log(e.keyCode);
                 //     e.keyCode === 32 && this.changeAngle();
                 //     e.keyCode === 16 && this.changeAngle(-1);
                 //     e.keyCode === 67 && this.startSimulation();
                 // });
+            },
+            tick: function (time, delta) {
+                if (this.world.gravity.y < 0) { // if its not paused
+                    this.updateArrows();
+                }
             },
             updateInfo: function () {
                 let string = ``;
@@ -133,6 +180,13 @@
                 string += `WeightY: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
                 string += `Normal: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
                 this.info.setAttribute('value', string);
+            },
+            updateArrows: function () {
+                this.groupForces.object3D.position.copy(this.cube.body.position)
+                this.groupForces.object3D.position.y += 2;
+
+                this.normalArrow.rotation.x = this.arrowAngle;
+                this.frictionArrow.rotation.x = this.arrowAngle - Math.PI / 2;
             },
             changeAngle: function (increment) {
 
@@ -151,6 +205,9 @@
                 this.angle += Math.PI / 12 * increment; // 15 deg
                 sin = Math.sin(this.angle) * ramp.scale.z
                 cos = Math.cos(this.angle) * -ramp.scale.z;
+
+                this.normalArrow.rotation.x = this.angle;
+                this.frictionArrow.rotation = -this.angle;
 
                 ramp.rotation.x = this.angle;
                 ramp.position.y = sin / 2;
@@ -183,25 +240,46 @@
                 this.cube.body.position.set(0, y, z);
 
                 this.world.gravity.y = 0;
+
+                this.arrowAngle = this.angle;
+
                 this.updateInfo();
+                this.updateArrows();
+
             },
             startSimulation: function () {
-                if (this.world.gravity.y == 0) {
-                    this.world.gravity.y = -9.8;
-                }
-                else {
-                    let ramp = this.ramp.object3D;
-                    let wall = this.wall.object3D;
+                let ramp = this.ramp.object3D;
+                let wall = this.wall.object3D;
 
-                    this.cube.body.velocity.set(0, 0, 0);
-                    this.cube.body.angularVelocity.set(0, 0, 0);
-                    this.cube.body.vlambda.set(0, 0, 0);
-                    this.cube.body.wlambda.set(0, 0, 0);
+                sin = Math.sin(this.angle) * ramp.scale.z
+                cos = Math.cos(this.angle) * -ramp.scale.z;
 
-                    this.cube.body.position.set(0, wall.scale.y + 0.2, wall.position.z + 0.75);
-                    this.cube.body.quaternion.setFromEuler(this.angle, 0, 0);
+                let z = wall.position.z + 0.7;
+                let y = sin - 0.11;
+
+                if (this.angle < Math.PI / 3) {
+                    y += 0.2;
                 }
-                // this.force();
+                if (this.angle < Math.PI / 4) {
+                    y += 0.15;
+                }
+                if (this.angle < Math.PI / 6) {
+                    y += 0.15;
+                }
+
+                // stop cube
+                this.cube.body.velocity.set(0, 0, 0);
+                this.cube.body.angularVelocity.set(0, 0, 0);
+                this.cube.body.vlambda.set(0, 0, 0);
+                this.cube.body.wlambda.set(0, 0, 0);
+
+                this.cube.body.quaternion.setFromEuler(this.angle, 0, 0);
+                this.cube.body.position.set(0, y, z);
+
+                this.world.gravity.y = -9.8;
+
+                this.arrowAngle = this.angle;
+
                 this.updateInfo();
             },
             changeFriction: function (increment) {
@@ -238,6 +316,8 @@
         <a-box id="box" material="src: #stone" position="0 2.74 -1.46" rotation="30 0 90"
             dynamic-body="shape: fit; mass: 1">
         </a-box>
+
+        <a-entity id="groupForces" position="0 4.74 -1.46"></a-entity>
 
         <a-entity id="ramp-wrap">
             <a-box id="ramp" material="src: #bathroom; repeat: 3 3" width="1" height="1" depth="1" position="0 1 0"
