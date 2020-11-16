@@ -11,20 +11,28 @@
       init: function () {
         const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
 
-        vrInterface.addButton('myButton', '#myTexture', callbackButtonAction);
-        vrInterface.addButton('myButton2', '#myTexture2', callbackButtonAction2);
+        vrInterface.addButton('myButton', '#myTexture', function() {
+          vrInterface.showMessage('Button pressed');
+        });
+        vrInterface.addButton('myButton2', '#myTexture2', function() {
+          vrInterface.showMessage('Button 2 pressed', 'bottom');
+        });
       },
     });
 
   Properties:
   - visible: visibilty of the interface;
   - position: position relative to the camera;
+  - updatePos: whether it is move vr interface with the camera or not;
   - rotation: button rotation in Y-Axis in degrees;
   - dimension: number of lines and columns of the imaginary matrix in which the buttons will be placed;
   - centralize: whether to align buttons to the center, if false they are aligned to the top-left; 
   - buttonSize: individual button size;
   - transparency: whether the textures have transparency;
   - gap: distance beteween the buttons in the x and y axis;
+  - messagePos: default position of the message box when it's called;
+  - messageColor: text color of the message box;
+  - messageBG: background color of the message box;
   - cursorColor: defines the color of the aim cursor;
   - cursorPosition: defines the positon of the aim cursor, usually it doesn't need to change;
   - raycaster: defines near and far properties of the raycaster;
@@ -32,11 +40,13 @@
 
   Functions:
   - addButton(buttonName, idOfTexture, callback) - adds a button to the interface
+  - showMessage(message, position) - shows message, position parameter is optional
   - hide() - hide the interface
   - show() - make interface visible
   
   Observations:
-  - if the scene's camera is not initialized before calling vr-interface or the number of buttons overflow the dimension property, the buttons may be misplaced. 
+  - Setting the dimension property correctly is important for displaying the vr interface elements correctly;
+  - If the scene's camera is not initialized before calling vr-interface or the number of buttons overflow the dimension property, the buttons may be misplaced. 
 */
 
 AFRAME.registerComponent('vr-interface', {
@@ -50,6 +60,12 @@ AFRAME.registerComponent('vr-interface', {
     buttonSize: { type: 'vec2', default: { x: 0.30, y: 0.20 } },
     transparency: { type: 'bool', default: false },
     gap: { type: 'vec2', default: { x: 0.00, y: 0.00 } },
+    messagePos: {
+      default: 'top',
+      oneof: ['top', 'bottom', 'left', 'right'],
+    },
+    messageColor: { type: 'color', default: 'white' },
+    messageBG: { type: 'color', default: '#232323' },
     cursorColor: { type: 'color', default: 'white' },
     cursorPosition: { type: 'vec3', default: { x: 0, y: 0, z: -0.9 } },
     raycaster: {
@@ -89,15 +105,13 @@ AFRAME.registerComponent('vr-interface', {
     this.buttonGeometry = new THREE.PlaneGeometry(1, 1);
     this.camera = document.querySelector('[camera]');
     this.oldCameraPos = new THREE.Vector3().copy(this.camera.object3D.position);
-    this.referencePoint = new THREE.Vector3();
-    this.cursor = document.createElement('a-entity');
-    this.borderMaterial = null;
-    this.borderGeometry;
     this.height = this.camera.object3D.getWorldPosition(new THREE.Vector3()).y // this var is used to fix a aframe bug that zeros the camera height when enters in vr mode
     this.isVr = false;
 
+    this.referencePoint = new THREE.Vector3();
     this.referencePoint.y = this.height + this.data.position.y;
 
+    this.cursor = document.createElement('a-entity');
     this.cursor.setAttribute('cursor', { fuse: true, fuseTimeout: 1000, });
     this.cursor.setAttribute('raycaster', { near: data.raycaster.near, far: data.raycaster.far, objects: '.vrInterface-button' });
     this.cursor.setAttribute('position', { x: data.cursorPosition.x, y: data.cursorPosition.y, z: data.cursorPosition.z });
@@ -109,6 +123,15 @@ AFRAME.registerComponent('vr-interface', {
 
     this.camera.appendChild(this.cursor);
 
+    this.message = document.createElement('a-entity');
+    this.message.setAttribute('text', { align: 'center', width: 1, height: 1, color: new THREE.Color(data.messageColor) });
+    this.message.setAttribute('geometry', { primitive: 'plane', height: 0.1, width: 1 });
+    this.message.setAttribute('material', { color: new THREE.Color(data.messageBG), transparent: data.transparency, opacity: 0.75 });
+    this.message.object3D.visible = false;
+    this.el.appendChild(this.message);
+
+    this.borderMaterial = null;
+    this.borderGeometry;
     if (data.border.color) {
       this.borderMaterial = new THREE.LineBasicMaterial({
         color: new THREE.Color(data.border.color),
@@ -260,6 +283,46 @@ AFRAME.registerComponent('vr-interface', {
     entity.classList.add('vrInterface-button');
     this.buttons.push(button);
     this.el.appendChild(entity);
+  },
+  showMessage: function (text, pos) {
+    const msg = this.message.object3D;
+
+    if (!pos && pos !== 'top' && pos !== 'bottom') {
+      pos = this.data.messagePos;
+    }
+
+    msg.el.setAttribute('text', { value: text });
+    msg.children[1].scale.x = text.length * 0.025;
+
+    msg.rotation.y = this.data.rotation;
+    msg.position.copy(this.buttons[0].position);
+
+    if (pos === 'top') {
+      msg.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.cos(this.data.rotation);
+      msg.position.z -= this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.sin(this.data.rotation);
+      msg.position.y += (this.data.buttonSize.y + 0.1) * 0.55;
+    }
+    else if (pos === 'bottom') {
+      let offset = (this.data.dimension.x - 1) * (this.data.buttonSize.y + this.data.gap.y);
+      msg.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.cos(this.data.rotation);
+      msg.position.z -= this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.sin(this.data.rotation);
+      msg.position.y -= (this.data.buttonSize.y + 0.1) * 0.55 + offset;
+    }
+    else if (pos === 'left') {
+      msg.position.x -= (msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 * Math.cos(this.data.rotation);
+      msg.position.z += (msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 * Math.sin(this.data.rotation);
+      msg.position.y -= this.data.buttonSize.y * (this.data.dimension.x - 1) * 0.5;
+    }
+    else if (pos === 'right') {
+      let offset = (this.data.dimension.y - 1) * (this.data.buttonSize.x + this.data.gap.x);
+      msg.position.x += ((msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 + offset) * Math.cos(this.data.rotation);
+      msg.position.z -= ((msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 + offset) * Math.sin(this.data.rotation);
+      msg.position.y -= this.data.buttonSize.y * (this.data.dimension.x - 1) * 0.5;
+    }
+
+    msg.visible = true;
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => msg.visible = false, 3000);
   },
   positionate: function (button, length) {
     const data = this.data;
