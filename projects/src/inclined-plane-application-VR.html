@@ -117,6 +117,7 @@
                 // Setting up VR Interface
                 const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
                 const rig = document.querySelector('#rig');
+                const camera = document.querySelector('#camera').object3D;
 
                 vrInterface.addButton('start', '#start', () => {
                     self.startSimulation();
@@ -124,9 +125,9 @@
 
                 this.posIdx = 0;
                 this.positions = [
-                    { cameraPos: '5 0 0', interfacePos: '0 0 1', infoPos: '4.3 1.6 1', rotation: 180 },
-                    { cameraPos: '0 0 5', interfacePos: '-1 0 0', infoPos: '-1 1.6 4.3', rotation: 90 },
-                    { cameraPos: '5 5 5', interfacePos: '-0.7 2.5 0.7', infoPos: '3.75 6.6 5.2', rotation: 135 },
+                    { cameraPos: '5 3.4 5', interfacePos: '-0.7 0 0.7', infoPos: '3.75 5 5.2', rotation: 135 },
+                    { cameraPos: '5 0 3', interfacePos: '0 0 1', infoPos: '4.3 1.6 4', rotation: 180 },
+                    { cameraPos: '0 0 7', interfacePos: '-1 0 0', infoPos: '-1 1.6 6.3', rotation: 90 },
                 ]
                 vrInterface.addButton('changeCamera', '#changeCamera', () => {
                     this.posIdx = this.posIdx == 2 ? 0 : this.posIdx + 1;
@@ -134,6 +135,7 @@
                     let { cameraPos, interfacePos, infoPos, rotation } = this.positions[this.posIdx];
 
                     rig.setAttribute('position', cameraPos);
+                    rig.setAttribute('rotation', { x: 0, y: rotation - (camera.rotation.y * 180 / Math.PI), z: 0 });
 
                     self.info.setAttribute('position', infoPos);
                     self.info.setAttribute('rotation', '0 ' + rotation + ' 0');
@@ -328,7 +330,7 @@
             </a-box>
         </a-entity>
 
-        <a-text id="info" value="" align="center" position="4.3 1.6 1" rotation="0 180 0"
+        <a-text id="info" value="" align="center" position="3.75 5 5.2" rotation="0 135 0"
             geometry="primitive: plane; height: 2; width: 2.2"
             material="color: #647485; transparent: true; opacity: 0.75" scale="0.31 0.31">
         </a-text>
@@ -358,14 +360,14 @@
         </a-entity>
         <a-entity light="type: ambient; color: #343434;"></a-entity>
 
-        <a-entity id="rig" position="5 0 0" rotation="0 45 0">
+        <a-entity id="rig" position="5 3.4 5" rotation="0 0 0">
             <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true"
                 wasd-controls="acceleration:500; fly: true; enabled: false">
             </a-entity>
         </a-entity>
 
         <a-entity
-            vr-interface="dimension: 3 2; rotation: 180; position: 0 0 1; updatePos: true; transparency: true; gap: 0.01 0.01; border: 1 #6d7584;"
+            vr-interface="dimension: 3 2; rotation: 135; position: -0.7 0 0.7; updatePos: true; transparency: true; gap: 0.01 0.01; border: 1 #6d7584;"
             app>
         </a-entity>
 

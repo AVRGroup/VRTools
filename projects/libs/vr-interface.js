@@ -105,11 +105,10 @@ AFRAME.registerComponent('vr-interface', {
     this.buttonGeometry = new THREE.PlaneGeometry(1, 1);
     this.camera = document.querySelector('[camera]');
     this.oldCameraPos = new THREE.Vector3().copy(this.camera.object3D.position);
-    this.height = this.camera.object3D.getWorldPosition(new THREE.Vector3()).y // this var is used to fix a aframe bug that zeros the camera height when enters in vr mode
-    this.isVr = false;
+    this.toleratedDifference = 0.01;
 
     this.referencePoint = new THREE.Vector3();
-    this.referencePoint.y = this.height + this.data.position.y;
+    this.camera.object3D.getWorldPosition(this.referencePoint);
 
     this.cursor = document.createElement('a-entity');
     this.cursor.setAttribute('cursor', { fuse: true, fuseTimeout: 1000, });
@@ -142,18 +141,32 @@ AFRAME.registerComponent('vr-interface', {
     this.data.rotation = data.rotation * Math.PI / 180; // converts deg to rad
 
     this.el.addEventListener('click', (evt) => self.clickHandle(evt)); // click == fuse click
-    this.el.sceneEl.addEventListener('enter-vr', () => { self.isVr = true; });
+    this.el.sceneEl.addEventListener('enter-vr', () => { self.isVr = true; console.log(this.camera.object3D.position) });
     this.el.sceneEl.addEventListener('exit-vr', () => { self.isVr = false; });
   },
   tick: function () {
     if (this.data.updatePos) {
-      this.camera.object3D.getWorldPosition(this.referencePoint)
-      this.referencePoint.y = this.height + this.data.position.y;
+      this.camera.object3D.getWorldPosition(this.referencePoint);
 
-      for (let k = 0; k < this.buttons.length; k++) {
-        this.positionate(this.buttons[k], k);
-        if (this.data.centralize) this.centralize(this.buttons[k]);
-        this.positionateBorder(this.buttons[k]);
+      if (Math.abs(this.oldCameraPos.x - this.referencePoint.x) > this.toleratedDifference
+        || Math.abs(this.oldCameraPos.y - this.referencePoint.y) > this.toleratedDifference
+        || Math.abs(this.oldCameraPos.z - this.referencePoint.z) > this.toleratedDifference
+      ) {
+        this.oldCameraPos.copy(this.referencePoint);
+
+        if (AFRAME.utils.device.isMobile() && this.isVr) {
+          this.referencePoint.y += this.camera.object3D.position.y;
+        }
+
+        for (let k = 0; k < this.buttons.length; k++) {
+          this.positionate(this.buttons[k], k);
+          if (this.data.centralize) this.centralize(this.buttons[k]);
+          this.positionateBorder(this.buttons[k]);
+        }
+
+        if (this.message.object3D.visible) {
+          this.positionateMessage(this.pos);
+        }
       }
     }
   },
@@ -288,13 +301,40 @@ AFRAME.registerComponent('vr-interface', {
     const msg = this.message.object3D;
 
     if (!pos && pos !== 'top' && pos !== 'bottom') {
-      pos = this.data.messagePos;
+      this.pos = this.data.messagePos;
+    }
+    else {
+      this.pos = pos;
     }
 
     msg.el.setAttribute('text', { value: text });
     msg.children[1].scale.x = text.length * 0.025;
-
     msg.rotation.y = this.data.rotation;
+
+    this.positionateMessage(this.pos);
+
+    msg.visible = true;
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => msg.visible = false, 3000);
+  },
+  positionate: function (button, length) {
+    const data = this.data;
+
+    let n = typeof length === 'number' ? length : this.buttons.length; // index of the n-th button
+    let i = Math.trunc(n / data.dimension.y); // index of the line
+    let j = n - data.dimension.y * i; // index of the column
+
+    button.rotation.y = data.rotation;
+    button.position.set(
+      (this.referencePoint.x + data.position.x) + j * (data.buttonSize.x + data.gap.x) * Math.cos(data.rotation),
+      (this.referencePoint.y + data.position.y) - i * (data.buttonSize.y + data.gap.y),
+      (this.referencePoint.z + data.position.z) + j * (data.buttonSize.x + data.gap.x) * -Math.sin(data.rotation)
+    );
+
+  },
+  positionateMessage: function (pos) {
+    const msg = this.message.object3D;
+
     msg.position.copy(this.buttons[0].position);
 
     if (pos === 'top') {
@@ -319,25 +359,11 @@ AFRAME.registerComponent('vr-interface', {
       msg.position.z -= ((msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 + offset) * Math.sin(this.data.rotation);
       msg.position.y -= this.data.buttonSize.y * (this.data.dimension.x - 1) * 0.5;
     }
-
-    msg.visible = true;
-    clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => msg.visible = false, 3000);
   },
-  positionate: function (button, length) {
-    const data = this.data;
-
-    let n = typeof length === 'number' ? length : this.buttons.length; // index of the n-th button
-    let i = Math.trunc(n / data.dimension.y); // index of the line
-    let j = n - data.dimension.y * i; // index of the column
-
-    button.rotation.y = data.rotation;
-    button.position.set(
-      (this.referencePoint.x + data.position.x) + j * (data.buttonSize.x + data.gap.x) * Math.cos(data.rotation),
-      (this.referencePoint.y + data.position.y) - i * (data.buttonSize.y + data.gap.y),
-      (this.referencePoint.z + data.position.z) + j * (data.buttonSize.x + data.gap.x) * -Math.sin(data.rotation)
-    );
-
+  positionateBorder: function (button) {
+    button.border.scale.copy(button.scale);
+    button.border.position.copy(button.position);
+    button.border.rotation.copy(button.rotation);
   },
   centralize: function (button) {
     button.position.y += this.data.buttonSize.y * 0.5 * (this.data.dimension.x - 1); // data.dimension.x == lines
@@ -348,11 +374,6 @@ AFRAME.registerComponent('vr-interface', {
     button.position.y -= this.data.buttonSize.y * 0.5 * (this.data.dimension.x - 1); // data.dimension.x == lines
     button.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.cos(this.data.rotation); // data.dimension.y == columns
     button.position.z -= this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.sin(this.data.rotation); // data.dimension.y == columns
-  },
-  positionateBorder: function (button) {
-    button.border.scale.copy(button.scale);
-    button.border.position.copy(button.position);
-    button.border.rotation.copy(button.rotation);
   },
   setLocation: function (pos, rot) {
     if (typeof rot === 'number') {
