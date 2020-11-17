@@ -36,7 +36,7 @@
                 this.models = document.querySelectorAll('.menu-model');
                 this.modelIndex = 0;
                 this.rotate = true;
- 
+
                 vrInterface.addButton('next', '#next', () => {
                     self.models[self.modelIndex].object3D.visible = false;
 
@@ -47,6 +47,7 @@
                         self.modelIndex++;
                     }
                     self.models[self.modelIndex].object3D.visible = true;
+                    vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
                 });
 
                 vrInterface.addButton('previous', '#previous', () => {
@@ -60,6 +61,7 @@
                     }
 
                     self.models[self.modelIndex].object3D.visible = true;
+                    vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
                 });
 
 
@@ -72,6 +74,8 @@
                         self.models[self.modelIndex].object3D.scale.set(1, 1, 1);
                         self.models[self.modelIndex].object3D.position.y = 1;
                     }
+
+                    vrInterface.showMessage('Size increased');
                 });
 
                 vrInterface.addButton('decrease', '#decrease', () => {
@@ -83,14 +87,19 @@
                         self.models[self.modelIndex].object3D.scale.set(1, 1, 1);
                         self.models[self.modelIndex].object3D.position.y = 1;
                     }
+
+                    vrInterface.showMessage('Size decreased')
                 });
 
                 vrInterface.addButton('rotation', '#rotation', () => {
                     self.rotate = !self.rotate;
+
+                    vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
                 });
 
                 vrInterface.addButton('wireframe', '#wireframe', () => {
                     self.models[self.modelIndex].object3D.children[0].material.wireframe = !self.models[self.modelIndex].object3D.children[0].material.wireframe;
+                    vrInterface.showMessage(`Wireframe is ${self.rotate ? 'on' : 'off'}`);
                 });
 
                 document.addEventListener('pointerlockchange', (event) => {
@@ -135,31 +144,33 @@
         <a-entity light="type:directional" position="1 1 1"></a-entity>
         <a-entity light="color: #fff; castShadow:true;" position="25 30 20"></a-entity>
 
-        <a-entity id="tetrahedron" class="menu-model" geometry="primitive: tetrahedron; radius: 1" material="color:#ff0000"  position="0 1 -3" shadow="receive: true"
-                  visible="true">
+        <a-entity id="tetrahedron" name="Tetrahedron" class="menu-model" geometry="primitive: tetrahedron; radius: 1"
+            material="color:#ff0000" position="0 1 -3" shadow="receive: true" visible="true">
         </a-entity>
-        <a-entity id="box" class="menu-model" geometry="primitive: box; width: 1; height: 1; depth: 1" position="0 1 -3" material="color:#ff0000" shadow="receive: true"
-                  visible="false">
+        <a-entity id="box" name="Cube" class="menu-model" geometry="primitive: box; width: 1; height: 1; depth: 1"
+            position="0 1 -3" material="color:#ff0000" shadow="receive: true" visible="false">
         </a-entity>
-        <a-entity id="octahedron" class="menu-model" geometry="primitive: octahedron; radius: 1" position="0 1 -3" material="color:#ff0000" shadow="receive: true"
-                  visible="false">
+        <a-entity id="octahedron" name="Octahedron" class="menu-model" geometry="primitive: octahedron; radius: 1"
+            position="0 1 -3" material="color:#ff0000" shadow="receive: true" visible="false">
         </a-entity>
-        <a-entity id="dodecahedron" class="menu-model" geometry="primitive: dodecahedron; radius: 1" position="0 1 -3" material="color:#ff0000" shadow="receive: true"
-                  visible="false">
+        <a-entity id="dodecahedron" name="Dodecahedron" class="menu-model" geometry="primitive: dodecahedron; radius: 1"
+            position="0 1 -3" material="color:#ff0000" shadow="receive: true" visible="false">
         </a-entity>
-        <a-entity id="icosahedron" class="menu-model" geometry="primitive: icosahedron; radius: 1" position="0 1 -3" material="color:#ff0000" shadow="receive: true"
-                  visible="false">
+        <a-entity id="icosahedron" name="Icosahedron" class="menu-model" geometry="primitive: icosahedron; radius: 1"
+            position="0 1 -3" material="color:#ff0000" shadow="receive: true" visible="false">
         </a-entity>
 
-        <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" color="#666666" shadow="receive: true"></a-plane>
+        <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" color="#666666" shadow="receive: true">
+        </a-plane>
 
         <a-entity id="rig" position="0 0 0" rotation="0 0 0">
             <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
             </a-entity>
         </a-entity>
 
-        <a-entity vr-interface="dimension: 3 2; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1 #6d7584; raycaster: 0 1; centralize: true;"
-                  config button-controls></a-entity>
+        <a-entity
+            vr-interface="dimension: 3 2; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1 #6d7584; messageBG: #121212"
+            config button-controls></a-entity>
 
     </a-scene>
 </body>

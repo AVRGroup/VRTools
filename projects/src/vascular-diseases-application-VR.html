@@ -34,6 +34,7 @@
                 this.models = document.querySelectorAll('.menu-model');
                 this.modelIndex = 0;
                 this.rotate = false;
+                this.zoomLevel = 0;
 
                 this.hide = false;
 
@@ -48,22 +49,41 @@
                     }
 
                     self.models[self.modelIndex].object3D.visible = true;
+
+                    vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
                 });
 
 
                 vrInterface.addButton('rotation', '#rotation', () => {
                     self.rotate = !self.rotate;
+                    vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
                 });
 
                 vrInterface.addButton('zoomIn', '#zoomIn', () => {
-                    if (self.models[self.modelIndex].object3D.position.z < - 1.2) {
-                        self.models[self.modelIndex].object3D.position.z += 0.5;
+                    if (self.zoomLevel < 1) {
+                        for (let i = 0; i < self.models.length; i++) {
+                            self.models[i].object3D.position.z += 0.5;
+
+                        }
+                        self.zoomLevel++;
+                        vrInterface.showMessage('Zoomed in');
+                    }
+                    else {
+                        vrInterface.showMessage('Max zoom reached already');
                     }
                 });
 
                 vrInterface.addButton('zoomOut', '#zoomOut', () => {
-                    if (self.models[self.modelIndex].object3D.position.z > -2.4) {
-                        self.models[self.modelIndex].object3D.position.z -= 0.5;
+                    if (self.zoomLevel > -1) {
+                        for (let i = 0; i < self.models.length; i++) {
+                            self.models[i].object3D.position.z -= 0.5;
+
+                        }
+                        vrInterface.showMessage('Zoomed off', 'bottom');
+                        self.zoomLevel--;
+                    }
+                    else {
+                        vrInterface.showMessage('Min zoom reached already', 'bottom');
                     }
                 });
 
@@ -78,6 +98,7 @@
                     }
 
                     self.models[self.modelIndex].object3D.visible = true;
+                    vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`, 'bottom');
                 });
 
                 document.addEventListener('pointerlockchange', (event) => {
@@ -123,16 +144,17 @@
         <a-entity light="type: point; color: #fff; intensity: 0.7" position="0 1.6 0"></a-entity>
         <a-entity light="color: #fff" position="-5 110 0"></a-entity>
 
-        <a-entity id="stroke" class="menu-model" position="0 2 -2" scale="0.01 0.01 0.01" gltf-model="#strokeModel"
-            visible="true">
+        <a-entity id="stroke" name="Stroke" class="menu-model" position="0 2 -2" scale="0.01 0.01 0.01"
+            gltf-model="#strokeModel" visible="true">
         </a-entity>
-        <a-entity id="aneurism" class="menu-model" position="0 0.5 -2" scale="8 8 8" gltf-model="#aneurismModel" visible="false">
+        <a-entity id="aneurism" name="Aneurism" class="menu-model" position="0 0.5 -2" scale="8 8 8"
+            gltf-model="#aneurismModel" visible="false">
         </a-entity>
-        <a-entity id="stenosis" class="menu-model" position="0 1.5 -2" scale="0.015 0.015 0.015"
+        <a-entity id="stenosis" name="Stenosis" class="menu-model" position="0 1.5 -2" scale="0.015 0.015 0.015"
             gltf-model="#stenosisModel" visible="false">
         </a-entity>
-        <a-entity id="thrombus" class="menu-model" position="0 1.5 -2" scale="10 10 10" rotation="0 -10 0"
-            gltf-model="#thrombusModel" visible="false">
+        <a-entity id="thrombus" name="Thrombus" class="menu-model" position="0 1.5 -2" scale="10 10 10"
+            rotation="0 -10 0" gltf-model="#thrombusModel" visible="false">
         </a-entity>
 
         <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" color="#666666"></a-plane>
@@ -143,7 +165,7 @@
         </a-entity>
 
         <a-entity
-            vr-interface="dimension: 5 1; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1 #6d7584; raycaster: 0 1; centralize: true;"
+            vr-interface="dimension: 5 1; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1 #6d7584;"
             config button-controls></a-entity>
 
     </a-scene>
