@@ -129,8 +129,11 @@ function setRenderer() {
     renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(0xA1ACB3);
     renderer.setPixelRatio(devicePixelRatio);
-    renderer.setSize(innerWidth, innerHeight);
-
+    if (window.innerWidth >= 768) {
+        renderer.setSize(window.innerWidth * 0.75, window.innerHeight);
+    } else {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
     document.body.appendChild(renderer.domElement);
 }
 
@@ -146,9 +149,15 @@ function initStats() {
 }
 
 function onResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (window.innerWidth >= 768) {
+        camera.aspect = window.innerWidth * 0.75 / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth * 0.75, window.innerHeight);
+    } else {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
 }
 
 const content = {
