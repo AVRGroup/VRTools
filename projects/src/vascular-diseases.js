@@ -25,7 +25,7 @@ const ASSETS = {
             draco: decoder // the first model needs to set the draco decoder
         },
         aneurysm: {
-            path: 'assets/models/vascular-diseases/aneurism.glb',
+            path: 'assets/models/vascular-diseases/aneurysm.glb',
             fileSize: 539,
         },
         stenosis: {
@@ -60,10 +60,10 @@ function init() {
     scene.add(camera);
     onResize();
 
-    ambientLight = new THREE.AmbientLight(0x323232, 1);
+    ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
     scene.add(ambientLight);
 
-    light = new THREE.PointLight(0xffffff, 1.5);
+    light = new THREE.PointLight(0xffffff, 1);
     light.position.set(0, 0, 100);
     scene.add(light);
 
@@ -83,7 +83,7 @@ function init() {
 
     aneurysm = ASSETS.objects.aneurysm;
     aneurysm.scale.set(200, 200, 200);
-    aneurysm.position.set(-5, -35, -25);
+    aneurysm.position.set(-5, -35, 10);
     aneurysm.visible = false;
     content.aneurysm.model = aneurysm;
     scene.add(aneurysm)
@@ -129,6 +129,7 @@ function setRenderer() {
     renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(0xA1ACB3);
     renderer.setPixelRatio(devicePixelRatio);
+    renderer.outputEncoding = THREE.sRGBEncoding;
     if (window.innerWidth >= 768) {
         renderer.setSize(window.innerWidth * 0.75, window.innerHeight);
     } else {
@@ -168,7 +169,7 @@ const content = {
         source: `<a href="https://www.nhlbi.nih.gov/health-topics/stroke" target="_blank" rel="noopener external">NHLBI</a><br/>
         <a href="https://www.stroke.org/en/about-stroke/stroke-risk-factors/stroke-risk-factors-you-can-control-treat-and-improve" target="_blank" rel="noopener external">Stroke.org</a><br/>
         <a href="https://www.mayoclinic.org/diseases-conditions/stroke/symptoms-causes/syc-20350113" target="_blank" rel="noopener external">Mayo Clinic</a>`,
-        credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001549" target="_blank" rel="noopener external">3D Print
+        credits: `<a href="https://3dprint.nih.gov/discover/3DPX-001564" target="_blank" rel="noopener external">3D Print
         for Health</a>`,
 
         highlight: {

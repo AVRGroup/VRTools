@@ -126,29 +126,30 @@
 </head>
 
 <body>
-    <a-scene main_scene id="scene" background="color: #323232" gltf-model="dracoDecoderPath: ../libs/draco/gltf/;">
+    <a-scene main_scene id="scene" renderer="colorManagement: true;" background="color: #202020"
+        gltf-model="dracoDecoderPath: ../libs/draco/gltf/;">
         <a-assets timeout="3000">
             <a-asset-item id="strokeModel" src="assets/models/vascular-diseases/stroke.glb"></a-asset-item>
-            <a-asset-item id="aneurismModel" src="assets/models/vascular-diseases/aneurism.glb"></a-asset-item>
+            <a-asset-item id="aneurysmModel" src="assets/models/vascular-diseases/aneurysm.glb"></a-asset-item>
             <a-asset-item id="stenosisModel" src="assets/models/vascular-diseases/stenosis.glb"></a-asset-item>
             <a-asset-item id="thrombusModel" src="assets/models/vascular-diseases/thrombus.glb"></a-asset-item>
 
             <img id="next" src="assets/icons/next.png">
-            <img id="previous" src="assets/icons/previous.png">
             <img id="rotation" src="assets/icons/rotation.png">
             <img id="zoomIn" src="assets/icons/zoomin.png">
             <img id="zoomOut" src="assets/icons/zoomout.png">
+            <img id="previous" src="assets/icons/previous.png">
         </a-assets>
 
         <a-entity light="type: ambient; color: #fff; intensity: 0.3"></a-entity>
-        <a-entity light="type: point; color: #fff; intensity: 0.7" position="0 1.6 0"></a-entity>
+        <a-entity light="type: directional; color: #fff; intensity: 0.7" position="7 3.6 10"></a-entity>
         <a-entity light="color: #fff" position="-5 110 0"></a-entity>
 
         <a-entity id="stroke" name="Stroke" class="menu-model" position="0 2 -2" scale="0.01 0.01 0.01"
             gltf-model="#strokeModel" visible="true">
         </a-entity>
-        <a-entity id="aneurism" name="Aneurism" class="menu-model" position="0 0.5 -2" scale="8 8 8"
-            gltf-model="#aneurismModel" visible="false">
+        <a-entity id="aneurysm" name="Aneurysm" class="menu-model" position="0 0.5 -2" scale="8 8 8"
+            gltf-model="#aneurysmModel" visible="false">
         </a-entity>
         <a-entity id="stenosis" name="Stenosis" class="menu-model" position="0 1.5 -2" scale="0.015 0.015 0.015"
             gltf-model="#stenosisModel" visible="false">
@@ -165,7 +166,7 @@
         </a-entity>
 
         <a-entity
-            vr-interface="dimension: 5 1; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1 #6d7584;"
+            vr-interface="dimension: 5 1; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1.2 #6d7584;"
             config button-controls></a-entity>
 
     </a-scene>
