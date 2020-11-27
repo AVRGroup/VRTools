@@ -72,16 +72,32 @@
             margin-top: 10px;
         }
 
-        #LookClose {
-            margin-top: 10px;
-            width: 60%;
+        #lookClose {
             display: block;
+            width: 100%;
+            margin-top: 10px;
         }
 
-        #ResetCamera {
-            margin-top: 10px;
-            width: 60%;
+        #resetCamera {
             display: block;
+            width: 100%;
+            margin-top: 10px
+        }
+
+        .btn {
+            padding-top: 0.2em;
+            padding-bottom: 0.2em;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #E2E5E7;
+            background-color: #CCBEB8;
+            border: none;
+            border-radius: 0.25em;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #D9CAC3;
         }
 
         @media only screen and (min-width: 768px) {
@@ -164,13 +180,16 @@
                 <option value="thrombus">Thrombus</option>
             </select>
 
+
+
+            <input type="button" id="lookClose" class="btn" name="LookClose" value="Look Close" onclick="LookClose()" />
+
+            <input type="button" id="resetCamera" class="btn" name="ResetCamera" value="Reset Camera"
+                onclick="ResetCamera()" />
+
             <input type="checkbox" id="toggleHighlight" name="toggleHighlight" value="toggleHighlight" checked
                 onchange="toggleHighlight()">
             <label for="toggleHighlight"> Toggle Highlight</label>
-
-            <input type="button" id="LookClose" name="LookClose" value="Look Close" onclick="LookClose()" />
-
-            <input type="button" id="ResetCamera" name="ResetCamera" value="Reset Camera" onclick="ResetCamera()" />
 
             <p id="whatis">
                 A stroke occurs when the blood supply to part of your brain is interrupted or reduced, preventing brain
