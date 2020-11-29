@@ -40,23 +40,7 @@
                 this.wireframe = false;
                 this.wireframeColor = '#000';
 
-                vrInterface.addButton('next', '#next', () => {
-                    self.models[self.modelIndex].object3D.visible = false;
 
-                    if (self.modelIndex == self.models.length - 1) {
-                        self.modelIndex = 0;
-                    }
-                    else {
-                        self.modelIndex++;
-                    }
-                    self.models[self.modelIndex].object3D.visible = true;
-                    self.models[self.modelIndex].object3D.visible = true;
-                    self.models[self.modelIndex].object3D.scale.set(self.info, self.info, self.info);
-                    self.models[self.modelIndex].object3D.position.y = self.info;
-                    self.models[self.modelIndex].object3D.children[0].material.wireframe = self.wireframe;
-                    self.models[self.modelIndex].object3D.children[0].material.emissive.set(self.wireframeColor);
-                    vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
-                });
 
                 vrInterface.addButton('previous', '#previous', () => {
                     self.models[self.modelIndex].object3D.visible = false;
@@ -73,6 +57,24 @@
                     self.models[self.modelIndex].object3D.scale.set(self.info, self.info, self.info);
                     self.models[self.modelIndex].object3D.position.y = self.info;
                     self.models[self.modelIndex].object3D.children[0].material.wireframe = self.wireframe;
+                    vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
+                });
+
+                vrInterface.addButton('next', '#next', () => {
+                    self.models[self.modelIndex].object3D.visible = false;
+
+                    if (self.modelIndex == self.models.length - 1) {
+                        self.modelIndex = 0;
+                    }
+                    else {
+                        self.modelIndex++;
+                    }
+                    self.models[self.modelIndex].object3D.visible = true;
+                    self.models[self.modelIndex].object3D.visible = true;
+                    self.models[self.modelIndex].object3D.scale.set(self.info, self.info, self.info);
+                    self.models[self.modelIndex].object3D.position.y = self.info;
+                    self.models[self.modelIndex].object3D.children[0].material.wireframe = self.wireframe;
+                    self.models[self.modelIndex].object3D.children[0].material.emissive.set(self.wireframeColor);
                     vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
                 });
 
