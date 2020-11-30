@@ -1,6 +1,6 @@
-let rendererStats, renderer, scene, camera, orbitControls, light, ambientLight, controls, gui, clock;
+let rendererStats, renderer, scene, camera, trackballControls, light, ambientLight, controls, gui, clock;
 
-let heart, stroke, aneurysm, stenosis, thrombus, highlight, viewpoint;
+let stroke, aneurysm, stenosis, thrombus, highlight, viewpoint, isMouseOut;
 
 const decoder = new THREE.DRACOLoader().setDecoderPath('../libs/draco/gltf/');
 
@@ -67,11 +67,10 @@ function init() {
     light.position.set(0, 0, 100);
     scene.add(light);
 
-    orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-    orbitControls.minDistance = 10;
-    orbitControls.maxDistance = 120;
-    orbitControls.update();
-    orbitControls.saveState();
+    trackballControls = new THREE.TrackballControls(camera, renderer.domElement);
+    trackballControls.minDistance = 10;
+    trackballControls.maxDistance = 120;
+    trackballControls.rotateSpeed = 4;
 
     stroke = ASSETS.objects.stroke;
     stroke.scale.set(0.45, 0.45, 0.45);
@@ -111,6 +110,10 @@ function init() {
 
     window.addEventListener('resize', onResize);
 
+    window.parent.addEventListener('mouseup', (e) => {
+        trackballControls.handleParentKeyUp(e);
+    });
+
     ls.remove(() => {
         animate();
     });
@@ -119,6 +122,7 @@ function init() {
 function animate() {
     requestAnimationFrame(animate);
 
+    trackballControls.update();
     light.position.copy(camera.position);
 
     rendererStats.update();
@@ -135,7 +139,8 @@ function setRenderer() {
     } else {
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
-    document.body.appendChild(renderer.domElement);
+    // document.body.appendChild(renderer.domElement);
+    document.querySelector("#output").appendChild(renderer.domElement);
 }
 
 function initStats() {
@@ -229,19 +234,18 @@ function changeContent() {
     document.querySelector('#source').innerHTML = object.source;
     document.querySelector('#credits').innerHTML = object.credits;
 
-    // heart.visible = false;
     stroke.visible = false;
     aneurysm.visible = false;
     stenosis.visible = false;
     thrombus.visible = false;
 
-    orbitControls.reset();
-    // console.log(highlight.scale)
+    trackballControls.reset();
 
     highlight.position.copy(object.highlight.position);
     highlight.scale.copy(object.highlight.scale);
     highlight.pointView.copy(object.highlight.pointView);
     camera.lookAt(object.highlight.position);
+    trackballControls.update();
 
     object.model.visible = true;
 }
@@ -253,9 +257,12 @@ function toggleHighlight() {
 function LookClose() {
     camera.position.copy(highlight.pointView);
     camera.lookAt(highlight.position);
+    trackballControls.update();
 }
 
 function ResetCamera() {
     camera.position.set(0, 0, 100);
     camera.lookAt(highlight.position);
+    trackballControls.reset();
+    trackballControls.update();
 }
