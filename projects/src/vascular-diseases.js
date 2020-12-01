@@ -8,7 +8,7 @@ const ASSETS = {
     textures: {
         helper: {
             path: 'assets/textures/loader-helper.jpg',
-            fileSize: 461 + 304 + 539 + 4282 + 3289,
+            fileSize: 7749 + 515 + 143 + 3323,
         }
     },
     geometries: {
@@ -21,20 +21,20 @@ const ASSETS = {
     objects: {
         stroke: {
             path: 'assets/models/vascular-diseases/stroke.glb',
-            fileSize: 304,
+            fileSize: 7749,
             draco: decoder // the first model needs to set the draco decoder
         },
         aneurysm: {
             path: 'assets/models/vascular-diseases/aneurysm.glb',
-            fileSize: 539,
+            fileSize: 515,
         },
         stenosis: {
             path: 'assets/models/vascular-diseases/stenosis.glb',
-            fileSize: 4282,
+            fileSize: 143,
         },
         thrombus: {
             path: 'assets/models/vascular-diseases/thrombus.glb',
-            fileSize: 3289,
+            fileSize: 3.323,
         },
         highlight: {
             geometry: 'sphereGeometry',

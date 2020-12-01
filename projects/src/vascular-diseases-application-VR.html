@@ -36,10 +36,49 @@
                 this.rotate = false;
                 this.zoomLevel = 0;
 
+                this.highlight = document.querySelector("#highlight").object3D.children[0];
+                this.highlightSettings = [
+                    { pos: new THREE.Vector3(-3, -38, 18), scale: new THREE.Vector3(10, 10, 10) }, // stroke
+                    { pos: new THREE.Vector3(0, 0.185, -0.05), scale: new THREE.Vector3(0.05, 0.05, 0.05) }, // aneurysm
+                    { pos: new THREE.Vector3(1, 10, 5), scale: new THREE.Vector3(7, 7, 7) }, // stenosis
+                    { pos: new THREE.Vector3(0.02, 0.016, 0.018), scale: new THREE.Vector3(0.019, 0.019, 0.019) }, // thrombus
+                ]
+
+                this.highlight.position.copy(self.highlightSettings[0].pos);
+                this.highlight.scale.copy(self.highlightSettings[0].scale);
+                this.models[0].object3D.add(this.highlight);
+
                 this.hide = false;
 
+                vrInterface.addButton('previous', '#previous', () => {
+                    let model = self.models[self.modelIndex];
+
+                    model.object3D.remove(self.highlight);
+                    model.object3D.visible = false;
+
+                    if (self.modelIndex == 0) {
+                        self.modelIndex = self.models.length - 1;
+                    }
+                    else {
+                        self.modelIndex--;
+                    }
+
+                    model = self.models[self.modelIndex];
+                    model.object3D.add(self.highlight);
+
+                    self.highlight.position.copy(self.highlightSettings[self.modelIndex].pos);
+                    self.highlight.scale.copy(self.highlightSettings[self.modelIndex].scale);
+
+                    model.object3D.visible = true;
+
+                    vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
+                });
+
                 vrInterface.addButton('next', '#next', () => {
-                    self.models[self.modelIndex].object3D.visible = false;
+                    let model = self.models[self.modelIndex];
+
+                    model.object3D.remove(self.highlight);
+                    model.object3D.visible = false;
 
                     if (self.modelIndex == self.models.length - 1) {
                         self.modelIndex = 0;
@@ -48,15 +87,15 @@
                         self.modelIndex++;
                     }
 
-                    self.models[self.modelIndex].object3D.visible = true;
+                    model = self.models[self.modelIndex];
+                    model.object3D.add(self.highlight);
 
-                    vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
-                });
+                    self.highlight.position.copy(self.highlightSettings[self.modelIndex].pos);
+                    self.highlight.scale.copy(self.highlightSettings[self.modelIndex].scale);
 
+                    model.object3D.visible = true;
 
-                vrInterface.addButton('rotation', '#rotation', () => {
-                    self.rotate = !self.rotate;
-                    vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
+                    vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
                 });
 
                 vrInterface.addButton('zoomIn', '#zoomIn', () => {
@@ -79,26 +118,22 @@
                             self.models[i].object3D.position.z -= 0.5;
 
                         }
-                        vrInterface.showMessage('Zoomed off', 'bottom');
+                        vrInterface.showMessage('Zoomed off');
                         self.zoomLevel--;
                     }
                     else {
-                        vrInterface.showMessage('Min zoom reached already', 'bottom');
+                        vrInterface.showMessage('Min zoom reached already');
                     }
                 });
 
-                vrInterface.addButton('previous', '#previous', () => {
-                    self.models[self.modelIndex].object3D.visible = false;
+                vrInterface.addButton('rotation', '#rotation', () => {
+                    self.rotate = !self.rotate;
+                    vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
+                });
 
-                    if (self.modelIndex == 0) {
-                        self.modelIndex = self.models.length - 1;
-                    }
-                    else {
-                        self.modelIndex--;
-                    }
-
-                    self.models[self.modelIndex].object3D.visible = true;
-                    vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`, 'bottom');
+                vrInterface.addButton('toggleHighlight', '#toggleHighlight', () => {
+                    self.highlight.visible = !self.highlight.visible;
+                    vrInterface.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
                 });
 
                 document.addEventListener('pointerlockchange', (event) => {
@@ -118,7 +153,9 @@
             },
             tick: function (time, delta) {
                 if (this.rotate) {
+                    let rot;
                     this.models[this.modelIndex].object3D.rotation.y += 0.0008 * delta;
+                    rot = this.models[this.modelIndex].object3D.rotation.y
                 }
             }
         });
@@ -135,15 +172,20 @@
             <a-asset-item id="thrombusModel" src="assets/models/vascular-diseases/thrombus.glb"></a-asset-item>
 
             <img id="next" src="assets/icons/next.png">
+            <img id="previous" src="assets/icons/previous.png">
             <img id="rotation" src="assets/icons/rotation.png">
             <img id="zoomIn" src="assets/icons/zoomin.png">
             <img id="zoomOut" src="assets/icons/zoomout.png">
-            <img id="previous" src="assets/icons/previous.png">
+            <img id="toggleHighlight" src="assets/icons/highlight.png">
         </a-assets>
 
         <a-entity light="type: ambient; color: #fff; intensity: 0.3"></a-entity>
         <a-entity light="type: directional; color: #fff; intensity: 0.7" position="7 3.6 10"></a-entity>
         <a-entity light="color: #fff" position="-5 110 0"></a-entity>
+
+        <a-sphere id="highlight" radius="1"
+            material="color: #0D8CFF; depthTest: true; transparent: true; opacity: 0.5;">
+        </a-sphere>
 
         <a-entity id="stroke" name="Stroke" class="menu-model" position="0 2 -2" scale="0.01 0.01 0.01"
             gltf-model="#strokeModel" visible="true">
@@ -161,12 +203,13 @@
         <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" color="#666666"></a-plane>
 
         <a-entity id="rig" position="0 0 0" rotation="0 0 0">
-            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true"
+                wasd-controls="acceleration:150; fly: true; enabled: true">
             </a-entity>
         </a-entity>
 
         <a-entity
-            vr-interface="dimension: 5 1; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1.2 #6d7584;"
+            vr-interface="dimension: 3 2; rotation: 90; position: -1 0 0; transparency: true; gap: 0.01 0.01; border: 1.2 #6d7584;"
             config button-controls></a-entity>
 
     </a-scene>
