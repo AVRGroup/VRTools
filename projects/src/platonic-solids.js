@@ -128,8 +128,10 @@ function init() {
         this.wireframeController = function() {
             if (this.wireframe) {
                 objectMaterial.wireframe = true;
+                objectMaterial.emissive.set(controls.color);
             } else {
                 objectMaterial.wireframe = false;
+                objectMaterial.emissive.set('#000');
             }
         }
     }
