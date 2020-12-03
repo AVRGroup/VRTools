@@ -30,6 +30,7 @@ function init() {
 
     // Object Material for all objects
     var objectMaterial = new THREE.MeshPhongMaterial({ color: "rgb(255, 0, 0)" });
+    var wireframe = new THREE.LineBasicMaterial({ color: "rgb(255, 0, 0)" });
 
     // Add objects to scene
     var objectArray = new Array();
@@ -39,11 +40,18 @@ function init() {
     scene.add(createDodecahedron(4.0, 0));
     scene.add(createIcosahedron(4.0, 0));
 
+    scene.add(createTetrahedronWireframe(4.0, 0));
+    scene.add(createCubeWireframe(5.0));
+    scene.add(createOctahedronWireframe(4.0, 0));
+    scene.add(createDodecahedronWireframe(4.0, 0));
+    scene.add(createIcosahedronWireframe(4.0, 0));
+
     // Position of the cube
     objectArray[1].position.y = 5;
+    objectArray[6].position.y = 5;
 
     // Controls of sidebar
-    var controls = new function() {
+    var controls = new function () {
         var self = this;
 
         // Axes
@@ -58,6 +66,7 @@ function init() {
         this.animation = true;
         this.rotation = 0.015;
         this.wireframe = false;
+        this.wireframeStatus = false;
         this.color = "rgb(255, 0, 0)";
 
         // Geometry
@@ -68,39 +77,73 @@ function init() {
         this.type = 'Tetrahedron';
         this.size = 1.0;
 
-        this.choosePoligon = function() {
+        this.choosePoligon = function () {
             objectArray[this.meshNumber].visible = false;
-            switch (this.type) {
-                case 'Tetrahedron':
-                    this.meshNumber = 0;
-                    break;
-                case 'Cube':
-                    this.meshNumber = 1;
-                    break;
-                case 'Octahedron':
-                    this.meshNumber = 2;
-                    break;
-                case 'Dodecahedron':
-                    this.meshNumber = 3;
-                    break;
-                case 'Icosahedron':
-                    this.meshNumber = 4;
-                    break;
+
+            if (this.wireframe) {
+                switch (this.type) {
+                    case 'Tetrahedron':
+                        this.type = 'TetrahedronWireframe';
+                        this.meshNumber = 5;
+                        break;
+                    case 'Cube':
+                        this.type = 'CubeWireframe';
+                        this.meshNumber = 6;
+                        break;
+                    case 'Octahedron':
+                        this.type = 'OctahedronWireframe';
+                        this.meshNumber = 7;
+                        break;
+                    case 'Dodecahedron':
+                        this.type = 'DodecahedronWireframe';
+                        this.meshNumber = 8;
+                        break;
+                    case 'Icosahedron':
+                        this.type = 'IcosahedronWireframe';
+                        this.meshNumber = 9;
+                        break;
+                }
+            } else {
+                switch (this.type) {
+                    case 'Tetrahedron':
+                        this.meshNumber = 0;
+                        break;
+                    case 'Cube':
+                        this.meshNumber = 1;
+                        break;
+                    case 'Octahedron':
+                        this.meshNumber = 2;
+                        break;
+                    case 'Dodecahedron':
+                        this.meshNumber = 3;
+                        break;
+                    case 'Icosahedron':
+                        this.meshNumber = 4;
+                        break;
+                }
             }
             objectArray[this.meshNumber].visible = true;
             this.mesh = objectArray[this.meshNumber];
         }
 
-        this.resizePoligon = function() {
-            const poligon = objectArray[this.meshNumber]
-            const radius = poligon.name === "Cube" ? poligon.geometry.parameters.height : poligon.geometry.parameters.radius
+        this.resizePoligon = function () {
 
-            poligon.scale.set(this.size, this.size, this.size)
-                // console.log(poligon)
-            poligon.position.y = radius * this.size * 1.1
+            const poligon = objectArray[this.meshNumber];
+
+            poligon.scale.set(this.size, this.size, this.size);
+            // console.log(poligon)
+            if (this.size < 1.4 && this.size >= 1) {
+                poligon.position.y = this.size * 3 + 1.8;
+            }
+            if (this.size >= 0.5 && this.size < 1) {
+                poligon.position.y = this.size * 3 + 1;
+            }
+            if (this.size >= 1.4 && this.size <= 2) {
+                poligon.position.y = this.size * 3 + 2.5;
+            }
         }
 
-        this.updateColor = function() {
+        this.updateColor = function () {
             // removing the objects with the old material color
             for (let i = 0; i < objectArray.length; i++) {
                 //scene.remove(scene.getObjectByName("particles1"));
@@ -108,6 +151,7 @@ function init() {
             }
             objectArray = new Array();
             objectMaterial = new THREE.MeshPhongMaterial({ color: controls.color }); // Setting the material with new color
+            wireframe = new THREE.LineBasicMaterial({ color: controls.color });
 
             // Recreating those objects
             scene.add(createTetrahedron(4.0, 0));
@@ -116,23 +160,45 @@ function init() {
             scene.add(createDodecahedron(4.0, 0));
             scene.add(createIcosahedron(4.0, 0));
 
+            scene.add(createTetrahedronWireframe(4.0, 0));
+            scene.add(createCubeWireframe(5.0));
+            scene.add(createOctahedronWireframe(4.0, 0));
+            scene.add(createDodecahedronWireframe(4.0, 0));
+            scene.add(createIcosahedronWireframe(4.0, 0));
+
             // Position of the cube
             objectArray[1].position.y = 5;
+            objectArray[6].position.y = 5;
 
-            controls.choosePoligon();
+            this.choosePoligon();
+
+            this.resizePoligon();
 
             // Correcting if the wireframe option is tick
             this.wireframeController();
         }
 
-        this.wireframeController = function() {
+        this.wireframeController = function () {
+
             if (this.wireframe) {
-                objectMaterial.wireframe = true;
-                objectMaterial.emissive.set(controls.color);
+                objectArray[this.meshNumber].visible = false;
+                if (this.meshNumber < 5) {
+                    this.meshNumber += 5;
+                }
+                objectArray[this.meshNumber].visible = true;
+                objectArray[this.meshNumber].scale.set(this.size, this.size, this.size);
+                this.wireframeStatus = true;
             } else {
-                objectMaterial.wireframe = false;
-                objectMaterial.emissive.set('#000');
+                objectArray[this.meshNumber].visible = false;
+                if (this.meshNumber > 4) {
+                    this.meshNumber -= 5;
+                }
+                objectArray[this.meshNumber].visible = true;
+                objectMaterial.visible = true;
+                this.wireframeStatus = false;
             }
+            this.choosePoligon();
+            this.resizePoligon();
         }
     }
 
@@ -141,11 +207,11 @@ function init() {
 
     var guiFolder = gui.addFolder("Properties");
     guiFolder.open(); // Open the folder
-    guiFolder.add(controls, "animation").listen().onChange(function(e) {
+    guiFolder.add(controls, "animation").listen().onChange(function (e) {
         if (controls.animation) {
             controls.rotation = 0.015;
-        } 
-        else{
+        }
+        else {
             controls.rotation = 0;
         }
     });
@@ -160,24 +226,29 @@ function init() {
     //guiFolder.add(controls, 'rotation', 0, 0.5).onChange();
     //gui.add(controls, 'radius', 0, 40).step(1).onChange(controls.redraw);
     //gui.add(controls, 'detail', 0, 3).step(1).onChange(controls.redraw);
-    guiFolder.addColor(controls, 'color').onChange(function(e) {
+    guiFolder.addColor(controls, 'color').onChange(function (e) {
         controls.updateColor();
     });
 
-    guiFolder.add(controls, 'wireframe').listen().onChange(function(e) {
+    guiFolder.add(controls, 'wireframe').listen().onChange(function (e) {
         controls.wireframeController();
+
     });
 
-    guiFolder.add(controls, 'type', ['Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e) {
+    guiFolder.add(controls, 'type', ['Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function (e) {
+        if (this.wireframeStatus) {
+            this.meshNumber -= 5;
+        }
         controls.choosePoligon();
-        controls.resizePoligon()
+        controls.resizePoligon();
     });
 
-    gui.add(controls, 'size', 0.5, 2).listen().onChange(function(e) {
+    gui.add(controls, 'size', 0.5, 2).listen().onChange(function (e) {
         controls.resizePoligon()
     })
-
+    controls.wireframeController();
     controls.choosePoligon(); // Update de selection of the polygon
+
 
     // 4 faces
     function createTetrahedron(radius, detail) {
@@ -239,8 +310,64 @@ function init() {
         return object;
     }
 
+    function createTetrahedronWireframe(radius, detail) {
+        let edges = new THREE.EdgesGeometry(new THREE.TetrahedronGeometry(radius, detail));
+        let object = new THREE.LineSegments(edges, wireframe);
+        object.castShadow = true;
+        object.position.set(0.0, radius * 1.1, 0.0);
+        object.visible = false;
+        object.name = "TetrahedronWireframe";
+        object.rotation.x += 0.15;
+        objectArray.push(object);
+        return object;
+    }
+
+    function createCubeWireframe(s) {
+        let edges = new THREE.EdgesGeometry(new THREE.BoxGeometry(s, s, s));
+        let object = new THREE.LineSegments(edges, wireframe);
+        object.castShadow = true;
+        object.position.set(0.0, s / 2.0, 0.0);
+        object.name = "CubeWireframe";
+        object.visible = false;
+        objectArray.push(object);
+        return object;
+    }
+
+    function createOctahedronWireframe(radius, detail) {
+        const edges = new THREE.EdgesGeometry(new THREE.OctahedronGeometry(radius, detail));
+        const edgesMesh = new THREE.LineSegments(edges, wireframe);
+        edgesMesh.castShadow = true;
+        edgesMesh.position.set(0.0, radius, 0.0);
+        edgesMesh.name = "OcatahedronWireframe";
+        edgesMesh.visible = false;
+        objectArray.push(edgesMesh);
+        return edgesMesh;
+    }
+
+    function createDodecahedronWireframe(radius, detail) {
+        const edges = new THREE.EdgesGeometry(new THREE.DodecahedronGeometry(radius, detail));
+        const edgesMesh = new THREE.LineSegments(edges, wireframe);
+        edgesMesh.castShadow = true;
+        edgesMesh.position.set(0.0, radius, 0.0);
+        edgesMesh.name = "DodecahedronWireframe";
+        edgesMesh.visible = false;
+        objectArray.push(edgesMesh);
+        return edgesMesh;
+    }
+
+    function createIcosahedronWireframe(radius, detail) {
+        const edges = new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(radius, detail));
+        const edgesMesh = new THREE.LineSegments(edges, wireframe);
+        edgesMesh.castShadow = true;
+        edgesMesh.position.set(0.0, radius, 0.0);
+        edgesMesh.name = "IcosahedronWireframe";
+        edgesMesh.visible = false;
+        objectArray.push(edgesMesh);
+        return edgesMesh;
+    }
+
     // Reajuste da renderização com base na mudança da janela
-    function onResize(){
+    function onResize() {
         camera.aspect = window.innerWidth / window.innerHeight;  //Atualiza o aspect da camera com relação as novas dimensões
         camera.updateProjectionMatrix();                         //Atualiza a matriz de projeção
         renderer.setSize(window.innerWidth, window.innerHeight); //Define os novos valores para o renderizador
@@ -254,10 +381,12 @@ function init() {
 
     function render() {
         //stats.update();
-        orbitControls.update();                 // Atualiza o controle da câmera
+        orbitControls.update();
+        // Atualiza o controle da câmera
         //orbitControls.update(clock.getDelta());
 
         // Rotating the mesh selected
+
         controls.mesh.rotation.x += controls.rotation;
         controls.mesh.rotation.y += controls.rotation;
         controls.mesh.rotation.z += controls.rotation;
