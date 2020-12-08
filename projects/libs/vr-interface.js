@@ -4,9 +4,9 @@
     <script type="text/javascript" charset="UTF-8" src="path/to/vr-interface.js"></script>
 
   - Call it in an aframe entity and pass the options to config like the example below:
-     <a-entity vr-interface="position: -1 0 0; rotation: 90; dimension: 5 1; gap: 0 0.02; border: 2 #ff0000"></a-entity>
+      <a-entity vr-interface="dimension: 3 2; theta: 90; rho: 0; transparency: true; gap: 0.01 0.01; border: 1.2 #6d7584;"</a-entity>
 
-  - To add buttons create a component in your code
+  - To add buttons and use functions create a component in your code
     AFRAME.registerComponent('my-component', {
       init: function () {
         const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
@@ -14,8 +14,13 @@
         vrInterface.addButton('myButton', '#myTexture', function() {
           vrInterface.showMessage('Button pressed');
         });
+
         vrInterface.addButton('myButton2', '#myTexture2', function() {
           vrInterface.showMessage('Button 2 pressed', 'bottom');
+        });
+
+        vrInterface.addButton('myButtonRotate', '#myTexture3', function(){
+          vrInterface.updatePostion({theta: 180, rho: 15})
         });
       },
     });
@@ -23,6 +28,9 @@
   Properties:
   - visible: visibilty of the interface;
   - position: position relative to the camera;
+  - radius: distance from the camera
+  - theta: horizontal rotation in degrees
+  - rho: vertical rotation in degrees
   - updatePos: whether it is move vr interface with the camera or not;
   - rotation: button rotation in Y-Axis in degrees;
   - dimension: number of lines and columns of the imaginary matrix in which the buttons will be placed;
@@ -41,24 +49,25 @@
   Functions:
   - addButton(buttonName, idOfTexture, callback) - adds a button to the interface
   - showMessage(message, position) - shows message, position parameter is optional
+  - updatePosition({radius, theta, rho}) - should be called if the camera position changes or if you want to change one parameter. All parameters are optional.
   - hide() - hide the interface
   - show() - make interface visible
   
   Observations:
   - Setting the dimension property correctly is important for displaying the vr interface elements correctly;
-  - If the scene's camera is not initialized before calling vr-interface or the number of buttons overflow the dimension property, the buttons may be misplaced. 
 */
 
 AFRAME.registerComponent('vr-interface', {
   schema: {
-    visible: { type: 'bool', default: true },
-    position: { type: 'vec3', default: { x: -1, y: 0, z: 0 } },
-    updatePos: { type: 'bool', default: false },
-    rotation: { type: 'number', default: 90 },
     dimension: { type: 'vec2', default: { x: 1, y: 1 } },
+    radius: { type: 'number', default: 1 },
+    theta: { type: 'number', default: 90 },
+    rho: { type: 'number', default: 0 },
+    updatePos: { type: 'bool', default: false },
     centralize: { type: 'bool', default: true },
     buttonSize: { type: 'vec2', default: { x: 0.30, y: 0.20 } },
     transparency: { type: 'bool', default: false },
+    visible: { type: 'bool', default: true },
     gap: { type: 'vec2', default: { x: 0.00, y: 0.00 } },
     messagePos: {
       default: 'top',
@@ -69,7 +78,7 @@ AFRAME.registerComponent('vr-interface', {
     cursorColor: { type: 'color', default: 'white' },
     cursorPosition: { type: 'vec3', default: { x: 0, y: 0, z: -0.9 } },
     raycaster: {
-      default: { near: 0, far: 1 },
+      default: { near: 0, far: null },
       parse: function (value) {
         if (typeof value === 'string') {
           let props = value.split(' ');
@@ -103,12 +112,16 @@ AFRAME.registerComponent('vr-interface', {
 
     this.buttons = [];
     this.buttonGeometry = new THREE.PlaneGeometry(1, 1);
+    this.rig = document.querySelector('#rig');
     this.camera = document.querySelector('[camera]');
     this.oldCameraPos = new THREE.Vector3().copy(this.camera.object3D.position);
     this.toleratedDifference = 0.01;
-
     this.referencePoint = new THREE.Vector3();
-    this.camera.object3D.getWorldPosition(this.referencePoint);
+
+    if (typeof data.raycaster.far === 'null') {
+      data.raycaster.far = data.radius;
+      data.raycaster.far = data.radius / 2;
+    }
 
     this.cursor = document.createElement('a-entity');
     this.cursor.setAttribute('cursor', { fuse: true, fuseTimeout: 1000, });
@@ -129,8 +142,6 @@ AFRAME.registerComponent('vr-interface', {
     this.message.object3D.visible = false;
     this.el.appendChild(this.message);
 
-    this.borderMaterial = null;
-    this.borderGeometry;
     if (data.border.color) {
       this.borderMaterial = new THREE.LineBasicMaterial({
         color: new THREE.Color(data.border.color),
@@ -138,11 +149,17 @@ AFRAME.registerComponent('vr-interface', {
       })
     }
 
-    this.data.rotation = data.rotation * Math.PI / 180; // converts deg to rad
+    // converts deg to rad
+    data.theta = data.theta * Math.PI / 180;
+    data.rho = data.rho * Math.PI / 180;
+
+    this.el.object3D.rotation.y = data.theta;
+
+    this.el.sceneEl.addEventListener('loaded', () => {
+      self.updatePostion();
+    }, { once: true });
 
     this.el.addEventListener('click', (evt) => self.clickHandle(evt)); // click == fuse click
-    this.el.sceneEl.addEventListener('enter-vr', () => { self.isVr = true; console.log(this.camera.object3D.position) });
-    this.el.sceneEl.addEventListener('exit-vr', () => { self.isVr = false; });
   },
   tick: function () {
     if (this.data.updatePos) {
@@ -152,96 +169,84 @@ AFRAME.registerComponent('vr-interface', {
         || Math.abs(this.oldCameraPos.y - this.referencePoint.y) > this.toleratedDifference
         || Math.abs(this.oldCameraPos.z - this.referencePoint.z) > this.toleratedDifference
       ) {
-        this.oldCameraPos.copy(this.referencePoint);
-
-        if (AFRAME.utils.device.isMobile() && this.isVr) {
-          this.referencePoint.y += this.camera.object3D.position.y;
-        }
-
-        for (let k = 0; k < this.buttons.length; k++) {
-          this.positionate(this.buttons[k], k);
-          if (this.data.centralize) this.centralize(this.buttons[k]);
-          this.positionateBorder(this.buttons[k]);
-        }
-
-        if (this.message.object3D.visible) {
-          this.positionateMessage(this.pos);
-        }
+        this.updatePostion();
       }
     }
   },
   update: function (oldData) {
-    const el = this.el;
-    const data = this.data;
+    //TODO - refactor this function
 
-    // If `oldData` is empty, then this means we're in the initialization process. No need to update.
-    if (Object.keys(oldData).length === 0) { return; }
+    // const el = this.el;
+    // const data = this.data;
 
-    if (oldData.visible !== data.visible) {
-      if (data.visible) this.show();
-      else this.hide();
-    }
+    // // If `oldData` is empty, then this means we're in the initialization process. No need to update.
+    // if (Object.keys(oldData).length === 0) { return; }
 
-    if (oldData.rotation !== data.rotation) {
-      this.data.rotation = data.rotation * Math.PI / 180; // converts deg to rad
-    }
+    // if (oldData.visible !== data.visible) {
+    //   if (data.visible) this.show();
+    //   else this.hide();
+    // }
 
-    // if position, dimension, button size, gap, or rotation changes it's the same processes to change the buttons
-    if (
-      oldData.position.x !== data.position.x || oldData.position.y !== data.position.y || oldData.position.z !== data.position.z ||
-      oldData.dimension.x !== data.dimension.x || oldData.dimension.y !== data.dimension.y ||
-      oldData.buttonSize.x !== data.buttonSize.x || oldData.buttonSize.y !== data.buttonSize.y ||
-      oldData.gap.x !== data.gap.x || oldData.gap.y !== data.gap.y ||
-      oldData.rotation !== data.rotation
-    ) {
-      for (let k = 0; k < this.buttons.length; k++) {
-        this.buttons[k].rotation.y = data.rotation;
+    // if (oldData.rotation !== data.rotation) {
+    //   this.data.rotation = data.rotation * Math.PI / 180; // converts deg to rad
+    // }
 
-        this.positionate(this.buttons[k], k);
-        if (oldData.buttonSize.x !== data.buttonSize.x || oldData.buttonSize.y !== data.buttonSize.y) {
-          this.buttons[k].scale.set(data.buttonSize.x, data.buttonSize.y, 1);
-        }
+    // // if position, dimension, button size, gap, or rotation changes it's the same processes to change the buttons
+    // if (
+    //   oldData.position.x !== data.position.x || oldData.position.y !== data.position.y || oldData.position.z !== data.position.z ||
+    //   oldData.dimension.x !== data.dimension.x || oldData.dimension.y !== data.dimension.y ||
+    //   oldData.buttonSize.x !== data.buttonSize.x || oldData.buttonSize.y !== data.buttonSize.y ||
+    //   oldData.gap.x !== data.gap.x || oldData.gap.y !== data.gap.y ||
+    //   oldData.rotation !== data.rotation
+    // ) {
+    //   for (let k = 0; k < this.buttons.length; k++) {
+    //     this.buttons[k].rotation.y = data.rotation;
 
-        if (data.centralize) {
-          this.centralize(this.buttons[k]);
-        }
+    //     this.positionate(this.buttons[k], k);
+    //     if (oldData.buttonSize.x !== data.buttonSize.x || oldData.buttonSize.y !== data.buttonSize.y) {
+    //       this.buttons[k].scale.set(data.buttonSize.x, data.buttonSize.y, 1);
+    //     }
 
-        if (this.borderMaterial) {
-          this.positionateBorder(this.buttons[k])
-        }
-      }
-    }
-    else if (oldData.centralize !== data.centralize) { // the previous option updates the centralization already
-      for (let k = 0; k < this.buttons.length; k++) {
-        if (data.centralize) {
-          this.centralize(this.buttons[k]);
-        }
-        else {
-          this.decentralize(this.buttons[k]);
-        }
-        if (this.borderMaterial) {
-          this.positionateBorder(this.buttons[k])
-        }
-      }
-    }
+    //     if (data.centralize) {
+    //       this.centralize(this.buttons[k]);
+    //     }
 
-    if (oldData.cursorColor !== data.cursorColor) {
-      this.cursor.setAttribute('material', { color: data.cursorColor, shader: 'flat' });
-    }
+    //     if (this.borderMaterial) {
+    //       this.positionateBorder(this.buttons[k])
+    //     }
+    //   }
+    // }
+    // else if (oldData.centralize !== data.centralize) { // the previous option updates the centralization already
+    //   for (let k = 0; k < this.buttons.length; k++) {
+    //     if (data.centralize) {
+    //       this.centralize(this.buttons[k]);
+    //     }
+    //     else {
+    //       this.decentralize(this.buttons[k]);
+    //     }
+    //     if (this.borderMaterial) {
+    //       this.positionateBorder(this.buttons[k])
+    //     }
+    //   }
+    // }
 
-    if (oldData.cursorPosition !== data.cursorPosition) {
-      this.cursor.setAttribute('position', { x: data.cursorPosition.x, y: data.cursorPosition.y, z: data.cursorPosition.z });
-    }
+    // if (oldData.cursorColor !== data.cursorColor) {
+    //   this.cursor.setAttribute('material', { color: data.cursorColor, shader: 'flat' });
+    // }
 
-    if (oldData.raycaster.near !== data.raycaster.near || oldData.raycaster.far !== data.raycaster.far) {
-      this.cursor.setAttribute('raycaster', { near: data.raycaster.near, far: data.raycaster.far });
-    }
+    // if (oldData.cursorPosition !== data.cursorPosition) {
+    //   this.cursor.setAttribute('position', { x: data.cursorPosition.x, y: data.cursorPosition.y, z: data.cursorPosition.z });
+    // }
 
-    if (oldData.border.thickness !== data.border.thickness || oldData.border.color !== data.border.color) {
-      this.borderMaterial.linewidth = data.border.thickness;
-      this.borderMaterial.color = new THREE.Color(data.border.color);
-      this.borderMaterial.needsUpdate = true;
-    }
+    // if (oldData.raycaster.near !== data.raycaster.near || oldData.raycaster.far !== data.raycaster.far) {
+    //   this.cursor.setAttribute('raycaster', { near: data.raycaster.near, far: data.raycaster.far });
+    // }
+
+    // if (oldData.border.thickness !== data.border.thickness || oldData.border.color !== data.border.color) {
+    //   this.borderMaterial.linewidth = data.border.thickness;
+    //   this.borderMaterial.color = new THREE.Color(data.border.color);
+    //   this.borderMaterial.needsUpdate = true;
+    // }
 
   },
   clickHandle: function (evt) {
@@ -275,10 +280,12 @@ AFRAME.registerComponent('vr-interface', {
     button.name = name;
     button.onClick = callback;
     button.scale.set(data.buttonSize.x, data.buttonSize.y, 1);
-    button.rotation.y = data.rotation;
 
     this.positionate(button);
-    this.centralize(button);
+
+    if (data.centralize) {
+      this.centralize(button);
+    }
 
     const entity = document.createElement('a-entity');
     entity.setObject3D(button.name, button);
@@ -309,7 +316,6 @@ AFRAME.registerComponent('vr-interface', {
 
     msg.el.setAttribute('text', { value: text });
     msg.children[1].scale.x = text.length * 0.025;
-    msg.rotation.y = this.data.rotation;
 
     this.positionateMessage(this.pos);
 
@@ -318,45 +324,62 @@ AFRAME.registerComponent('vr-interface', {
     this.timeout = setTimeout(() => msg.visible = false, 3000);
   },
   positionate: function (button, length) {
+    /*
+      The buttons are placed in negative z-axis, where the camere is looking by default.
+      To determine the button position, it's used the following formulas
+      x = x0 + rcos(rho)cos(theta)
+      y = y0 + rsin(rho)
+      z = z0 + rcos(rho)sin(theta)
+
+      As the camera is looking to negative z-axis, theta = -90 deg
+      x = x0
+      y = y0 + rsin(rho)
+      z = z0 - rcos(rho)
+
+      As the buttons are inclined at the angle of rho, it's need alignment correction in z-axis
+      z = z0 - rcos(rho) - lineIndex * buttonHeight * sin(rho)
+     */
     const data = this.data;
 
-    let n = typeof length === 'number' ? length : this.buttons.length; // index of the n-th button
+    let n = typeof length === 'number' ? length : this.buttons.length; // index of the n-th button, checks if length was passed as parameter
     let i = Math.trunc(n / data.dimension.y); // index of the line
     let j = n - data.dimension.y * i; // index of the column
 
-    button.rotation.y = data.rotation;
-    button.position.set(
-      (this.referencePoint.x + data.position.x) + j * (data.buttonSize.x + data.gap.x) * Math.cos(data.rotation),
-      (this.referencePoint.y + data.position.y) - i * (data.buttonSize.y + data.gap.y),
-      (this.referencePoint.z + data.position.z) + j * (data.buttonSize.x + data.gap.x) * -Math.sin(data.rotation)
-    );
+    button.rotation.x = data.rho;
 
+    button.position.set(
+      j * (data.buttonSize.x + data.gap.x),
+      this.referencePoint.y - i * (data.buttonSize.y + data.gap.y) + data.radius * Math.sin(data.rho),
+      -data.radius * Math.cos(data.rho) - (i * (data.buttonSize.y + data.gap.y) * Math.sin(data.rho))
+    );
   },
   positionateMessage: function (pos) {
     const msg = this.message.object3D;
 
     msg.position.copy(this.buttons[0].position);
+    msg.rotation.copy(this.buttons[0].rotation);
+
+    // hypotenuse of the imaginary triangle made by button and message, 0.05 is half of the message fixed height, and 0.01 is a gap
+    let hyp = (this.data.buttonSize.y / 2) + 0.05 + 0.01;
 
     if (pos === 'top') {
-      msg.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.cos(this.data.rotation);
-      msg.position.z -= this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.sin(this.data.rotation);
-      msg.position.y += (this.data.buttonSize.y + 0.1) * 0.55;
+      msg.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1);
+      msg.position.z += Math.sin(this.data.rho) * hyp;
+      msg.position.y += Math.cos(this.data.rho) * hyp;
     }
     else if (pos === 'bottom') {
       let offset = (this.data.dimension.x - 1) * (this.data.buttonSize.y + this.data.gap.y);
-      msg.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.cos(this.data.rotation);
-      msg.position.z -= this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.sin(this.data.rotation);
-      msg.position.y -= (this.data.buttonSize.y + 0.1) * 0.55 + offset;
+      msg.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1);
+      msg.position.z -= Math.sin(this.data.rho) * hyp * (this.data.dimension.x);
+      msg.position.y -= Math.cos(this.data.rho) * hyp + offset;
     }
     else if (pos === 'left') {
-      msg.position.x -= (msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 * Math.cos(this.data.rotation);
-      msg.position.z += (msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 * Math.sin(this.data.rotation);
+      msg.position.x -= (msg.children[1].scale.x + this.data.buttonSize.x) * 0.51;
       msg.position.y -= this.data.buttonSize.y * (this.data.dimension.x - 1) * 0.5;
     }
     else if (pos === 'right') {
       let offset = (this.data.dimension.y - 1) * (this.data.buttonSize.x + this.data.gap.x);
-      msg.position.x += ((msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 + offset) * Math.cos(this.data.rotation);
-      msg.position.z -= ((msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 + offset) * Math.sin(this.data.rotation);
+      msg.position.x += ((msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 + offset);
       msg.position.y -= this.data.buttonSize.y * (this.data.dimension.x - 1) * 0.5;
     }
   },
@@ -367,34 +390,48 @@ AFRAME.registerComponent('vr-interface', {
   },
   centralize: function (button) {
     button.position.y += this.data.buttonSize.y * 0.5 * (this.data.dimension.x - 1); // data.dimension.x == lines
-    button.position.x -= this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.cos(this.data.rotation); // data.dimension.y == columns
-    button.position.z += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.sin(this.data.rotation); // data.dimension.y == columns
+    button.position.x -= this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1); // data.dimension.y == columns
   },
   decentralize: function (button) {
     button.position.y -= this.data.buttonSize.y * 0.5 * (this.data.dimension.x - 1); // data.dimension.x == lines
-    button.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.cos(this.data.rotation); // data.dimension.y == columns
-    button.position.z -= this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1) * Math.sin(this.data.rotation); // data.dimension.y == columns
+    button.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1); // data.dimension.y == columns
   },
-  setLocation: function (pos, rot) {
-    if (typeof rot === 'number') {
-      this.data.rotation = rot * Math.PI / 180;
-    }
-
-    if (typeof pos === 'string') {
-      pos = pos.split(' ');
-      if (pos.length >= 3) {
-        this.data.position.x = Number.parseFloat(pos[0]);
-        this.data.position.y = Number.parseFloat(pos[1]);
-        this.data.position.z = Number.parseFloat(pos[2]);
+  updatePostion: function (args) {
+    if (args) {
+      if (typeof args.radius === 'number') {
+        this.data.radius = args.radius;
+        this.data.raycaster.far = args.radius;
+        this.cursor.setAttribute('raycaster', { far: this.data.raycaster.far, near: this.data.raycaster.far / 2 });
+      }
+      if (typeof args.theta === 'number') {
+        this.data.theta = args.theta * Math.PI / 180;
+        this.el.object3D.rotation.y = this.data.theta;
+      }
+      if (typeof args.rho === 'number') {
+        this.data.rho = args.rho * Math.PI / 180;
       }
     }
 
-    if (!this.data.updatePos) {
-      for (let k = 0; k < this.buttons.length; k++) {
-        this.positionate(this.buttons[k], k);
-        if (this.data.centralize) this.centralize(this.buttons[k]);
-        this.positionateBorder(this.buttons[k]);
-      }
+    if (this.rig) {
+      this.rig.object3D.getWorldPosition(this.referencePoint);
+      this.referencePoint.y += this.camera.object3D.position.y;
+    }
+    else {
+      this.camera.object3D.getWorldPosition(this.referencePoint);
+    }
+    this.oldCameraPos.copy(this.referencePoint);
+
+    this.el.object3D.position.x = this.referencePoint.x;
+    this.el.object3D.position.z = this.referencePoint.z;
+
+    for (let k = 0; k < this.buttons.length; k++) {
+      this.positionate(this.buttons[k], k);
+      if (this.data.centralize) this.centralize(this.buttons[k]);
+      this.positionateBorder(this.buttons[k]);
+    }
+
+    if (this.message.object3D.visible) {
+      this.positionateMessage(this.pos);
     }
   },
   show: function () {

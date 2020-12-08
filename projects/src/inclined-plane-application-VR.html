@@ -140,7 +140,7 @@
                     self.info.setAttribute('position', infoPos);
                     self.info.setAttribute('rotation', '0 ' + rotation + ' 0');
 
-                    vrInterface.setLocation(interfacePos, rotation);
+                    vrInterface.updatePostion({ theta: rotation });
                 });
 
                 vrInterface.addButton('increaseFriction', '#increaseFriction', () => {
@@ -367,7 +367,7 @@
         </a-entity>
 
         <a-entity
-            vr-interface="dimension: 3 2; rotation: 135; position: -0.7 0 0.7; updatePos: true; transparency: true; gap: 0.01 0.01; border: 1 #6d7584;"
+            vr-interface="dimension: 3 2; theta: 135; position: -0.7 0 0.7; transparency: true; gap: 0.01 0.01; border: 1 #6d7584;"
             app>
         </a-entity>
 
