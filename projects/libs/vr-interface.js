@@ -27,10 +27,10 @@
 
   Properties:
   - visible: visibilty of the interface;
-  - radius: distance from the camera***
   - orbits: distances from the camera;
-  - theta: horizontal rotation in degrees
-  - rho: vertical rotation in degrees
+  - theta: horizontal rotation in degrees;
+  - rho: vertical rotation in degrees;
+  - movementBar: whether to display move bar or not;
   - updatePos: whether it is move vr interface with the camera or not;
   - rotation: button rotation in Y-Axis in degrees;
   - dimension: number of lines and columns of the imaginary matrix in which the buttons will be placed;
@@ -82,6 +82,7 @@ AFRAME.registerComponent('vr-interface', {
     },
     theta: { type: 'number', default: 90 },
     rho: { type: 'number', default: 0 },
+    movementBar: { type: 'bool', default: false },
     updatePos: { type: 'bool', default: false },
     centralize: { type: 'bool', default: true },
     buttonSize: { type: 'vec2', default: { x: 0.30, y: 0.20 } },
@@ -139,34 +140,13 @@ AFRAME.registerComponent('vr-interface', {
     this.orbitIndex = 0;
     this.radius = data.orbits[this.orbitIndex];
 
-    this.isToChangeTheta = false;
-    this.isToChangeRho = false;
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'z') {
-        console.log('oi')
-
-        self.orbitIndex++;
-        if (self.orbitIndex == data.orbits.length) {
-          self.orbitIndex = 0;
-        }
-        self.radius = data.orbits[self.orbitIndex];
-        self.updatePostion();
-      }
-
-      if (e.key === 'x') {
-        self.isToChangeTheta = !self.isToChangeTheta;
-      }
-
-      if (e.key === 'c') {
-        self.isToChangeRho = !self.isToChangeRho;
-      }
-    });
-
     if (typeof data.raycaster.far === 'null') {
       data.raycaster.far = this.radius;
       data.raycaster.far = this.radius / 2;
     }
+
+    this.buttonGroup = document.createElement('a-entity');
+    this.el.appendChild(this.buttonGroup);
 
     this.cursor = document.createElement('a-entity');
     this.cursor.setAttribute('cursor', { fuse: true, fuseTimeout: 1000, });
@@ -185,7 +165,7 @@ AFRAME.registerComponent('vr-interface', {
     this.message.setAttribute('geometry', { primitive: 'plane', height: 0.1, width: 1 });
     this.message.setAttribute('material', { color: new THREE.Color(data.messageBG), transparent: data.transparency, opacity: 0.75 });
     this.message.object3D.visible = false;
-    this.el.appendChild(this.message);
+    this.buttonGroup.appendChild(this.message);
 
     if (data.border.color) {
       this.borderMaterial = new THREE.LineBasicMaterial({
@@ -199,6 +179,102 @@ AFRAME.registerComponent('vr-interface', {
     data.rho = data.rho * Math.PI / 180;
 
     this.el.object3D.rotation.y = data.theta;
+    this.buttonGroup.object3D.rotation.x = data.rho;
+
+    //--------------------Creating movement bar--------------------------------------------
+    this.isToChangeTheta = false;
+    this.isToChangeRho = false;
+
+    this.moveBar = document.createElement('a-entity');
+
+    if (data.movementBar) {
+      this.buttonGroup.appendChild(this.moveBar);
+    }
+
+    const moveBarButtonGeometry = new THREE.PlaneGeometry(0.1, 0.1);
+
+    const oTexture = new THREE.TextureLoader().load('../src/assets/icons/orbits.png');
+
+    this.orbitButton = document.createElement('a-entity');
+    this.orbitButton.setObject3D('orbitButton', new THREE.Mesh(
+      moveBarButtonGeometry,
+      new THREE.MeshBasicMaterial({ map: oTexture })
+    ));
+    this.orbitButton.object3D.position.y = 0.05;
+    this.orbitButton.object3D.children[0].name = 'orbitButton';
+    this.orbitButton.onClick = () => {
+      self.orbitIndex++;
+      if (self.orbitIndex == data.orbits.length) {
+        self.orbitIndex = 0;
+      }
+      self.radius = data.orbits[self.orbitIndex];
+      self.updatePostion();
+    }
+    this.orbitButton.classList.add('vrInterface-button')
+    this.moveBar.appendChild(this.orbitButton);
+
+    // -
+    const hTexture = new THREE.TextureLoader().load('../src/assets/icons/horizontal-move.png');
+
+    this.horizMovButton = document.createElement('a-entity');
+    this.horizMovButton.setObject3D('horizMovButton', new THREE.Mesh(
+      moveBarButtonGeometry,
+      new THREE.MeshBasicMaterial({ map: hTexture, transparent: true })
+    ));
+    this.horizMovButton.object3D.position.y = -0.05;
+    this.horizMovButton.object3D.children[0].name = 'horizMovButton';
+    this.horizMovButton.onClick = () => {
+      self.isToChangeTheta = true;
+
+      self.stopButton.object3D.visible = true;
+      self.stopButton.object3D.position.set((data.dimension.y / 2 * data.buttonSize.x + 0.06), 0, 0.01);
+      self.stopButton.object3D.rotation.z = Math.PI / 2;
+      self.stopButton.classList.add('vrInterface-button');
+    }
+    this.horizMovButton.classList.add('vrInterface-button')
+    this.moveBar.appendChild(this.horizMovButton);
+
+    // -
+    const vTexture = new THREE.TextureLoader().load('../src/assets/icons/vertical-move.png');
+
+    this.vertiMovButton = document.createElement('a-entity');
+    this.vertiMovButton.setObject3D('vertiMovButton', new THREE.Mesh(
+      moveBarButtonGeometry,
+      new THREE.MeshBasicMaterial({ map: vTexture, transparent: true })
+    ));
+    this.vertiMovButton.object3D.position.y = -0.15;
+    this.vertiMovButton.object3D.children[0].name = 'vertiMovButton';
+    this.vertiMovButton.onClick = () => {
+      self.isToChangeRho = true;
+
+      self.stopButton.object3D.visible = true;
+      self.stopButton.object3D.position.set((data.dimension.y / 2 * data.buttonSize.x + 0.06), (-data.dimension.x * data.buttonSize.y) / 4 - 0.05, 0.01);
+      self.stopButton.object3D.rotation.z = 0;
+      self.stopButton.classList.add('vrInterface-button');
+    }
+    this.vertiMovButton.classList.add('vrInterface-button')
+    this.moveBar.appendChild(this.vertiMovButton);
+
+    // -
+    const sTexture = new THREE.TextureLoader().load('../src/assets/icons/stop.png');
+
+    this.stopButton = document.createElement('a-entity');
+    this.stopButton.setObject3D('stopButton', new THREE.Mesh(
+      moveBarButtonGeometry,
+      new THREE.MeshBasicMaterial({ map: sTexture, transparent: true })
+    ));
+    this.stopButton.object3D.children[0].name = 'stopButton';
+    this.stopButton.object3D.visible = false;
+    this.stopButton.onClick = () => {
+      self.isToChangeTheta = false;
+      self.isToChangeRho = false;
+
+      self.stopButton.object3D.visible = false;
+      self.stopButton.classList.remove('vrInterface-button');
+    }
+    this.moveBar.appendChild(this.stopButton);
+
+    //--------------------------------------------------------------------
 
     this.el.sceneEl.addEventListener('loaded', () => {
       self.updatePostion();
@@ -219,13 +295,13 @@ AFRAME.registerComponent('vr-interface', {
     }
 
     if (this.isToChangeTheta) {
-      this.data.theta = this.camera.object3D.rotation.y;
+      this.data.theta = this.camera.object3D.rotation.y + this.rig.object3D.rotation.y;
       this.el.object3D.rotation.y = this.data.theta;
     }
 
     if (this.isToChangeRho) {
       this.data.rho = this.camera.object3D.rotation.x;
-      this.updatePostion();
+      this.buttonGroup.object3D.rotation.x = this.data.rho;
     }
   },
   update: function (oldData) {
@@ -307,9 +383,23 @@ AFRAME.registerComponent('vr-interface', {
   clickHandle: function (evt) {
     let name = evt.detail.intersection.object.name;
 
-    for (let button of this.buttons) {
-      if (button.name === name && typeof button.onClick === 'function') {
-        button.onClick();
+    if (name === 'orbitButton') {
+      this.orbitButton.onClick();
+    }
+    else if (name === 'horizMovButton') {
+      this.horizMovButton.onClick();
+    }
+    else if (name === 'vertiMovButton') {
+      this.vertiMovButton.onClick();
+    }
+    else if (name === 'stopButton') {
+      this.stopButton.onClick();
+    }
+    else if (!this.isToChangeTheta && !this.isToChangeRho) {
+      for (let button of this.buttons) {
+        if (button.name === name && typeof button.onClick === 'function') {
+          button.onClick();
+        }
       }
     }
   },
@@ -352,12 +442,12 @@ AFRAME.registerComponent('vr-interface', {
       )
       button.border = border;
       this.positionateBorder(button);
-      this.el.setObject3D(button.name + '-border', border);
+      this.buttonGroup.setObject3D(button.name + '-border', border);
     }
 
     entity.classList.add('vrInterface-button');
     this.buttons.push(button);
-    this.el.appendChild(entity);
+    this.buttonGroup.appendChild(entity);
   },
   showMessage: function (text, pos) {
     const msg = this.message.object3D;
@@ -401,33 +491,28 @@ AFRAME.registerComponent('vr-interface', {
     let i = Math.trunc(n / data.dimension.y); // index of the line
     let j = n - data.dimension.y * i; // index of the column
 
-    button.rotation.x = data.rho;
+    // button.rotation.x = data.rho;
 
     button.position.set(
       j * (data.buttonSize.x + data.gap.x),
-      this.referencePoint.y + this.radius * Math.sin(data.rho) - i * (data.buttonSize.y + data.gap.y) * Math.cos(data.rho),
-      -this.radius * Math.cos(data.rho) - (i * (data.buttonSize.y + data.gap.y) * Math.sin(data.rho))
+      - (i * (data.buttonSize.y + data.gap.y)), //* Math.cos(data.rho)),
+      -this.radius  //- (i * (data.buttonSize.y + data.gap.y) * Math.sin(data.rho))
     );
   },
   positionateMessage: function (pos) {
     const msg = this.message.object3D;
 
     msg.position.copy(this.buttons[0].position);
-    msg.rotation.copy(this.buttons[0].rotation);
-
-    // hypotenuse of the imaginary triangle made by button and message, 0.05 is half of the message fixed height, and 0.01 is a gap
-    let hyp = (this.data.buttonSize.y / 2) + 0.05 + 0.01;
 
     if (pos === 'top') {
       msg.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1);
-      msg.position.z += Math.sin(this.data.rho) * hyp;
-      msg.position.y += Math.cos(this.data.rho) * hyp;
+      msg.position.y += this.data.buttonSize.y / 2 + 0.06;
     }
     else if (pos === 'bottom') {
       let offset = (this.data.dimension.x - 1) * (this.data.buttonSize.y + this.data.gap.y);
+
       msg.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1);
-      msg.position.z -= Math.sin(this.data.rho) * hyp * (this.data.dimension.x);
-      msg.position.y -= Math.cos(this.data.rho) * hyp + offset;
+      msg.position.y -= this.data.buttonSize.y / 2 + 0.06 + offset;
     }
     else if (pos === 'left') {
       msg.position.x -= (msg.children[1].scale.x + this.data.buttonSize.x) * 0.51;
@@ -445,7 +530,7 @@ AFRAME.registerComponent('vr-interface', {
     button.border.rotation.copy(button.rotation);
   },
   centralize: function (button) {
-    button.position.y += this.data.buttonSize.y * 0.5 * (this.data.dimension.x - 1); // data.dimension.x == lines
+    button.position.y += this.data.buttonSize.y * 0.5 * (this.data.dimension.x - 1) * Math.cos(this.data.rho); // data.dimension.x == lines
     button.position.x -= this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1); // data.dimension.y == columns
   },
   decentralize: function (button) {
@@ -478,6 +563,7 @@ AFRAME.registerComponent('vr-interface', {
     this.oldCameraPos.copy(this.referencePoint);
 
     this.el.object3D.position.x = this.referencePoint.x;
+    this.el.object3D.position.y = this.referencePoint.y;
     this.el.object3D.position.z = this.referencePoint.z;
 
     for (let k = 0; k < this.buttons.length; k++) {
@@ -489,6 +575,14 @@ AFRAME.registerComponent('vr-interface', {
     if (this.message.object3D.visible) {
       this.positionateMessage(this.pos);
     }
+
+    if (this.data.movementBar) {
+      this.moveBar.object3D.position.x = this.buttons[0].position.x - this.data.buttonSize.x / 2 - 0.06;
+      this.moveBar.object3D.position.y = this.buttons[0].position.y;
+      this.moveBar.object3D.position.z = this.buttons[0].position.z;
+      this.moveBar.object3D.rotation.x = this.buttons[0].rotation.x;
+    }
+
   },
   show: function () {
     this.data.visible = true;
