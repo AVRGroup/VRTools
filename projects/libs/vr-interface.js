@@ -27,8 +27,8 @@
 
   Properties:
   - visible: visibilty of the interface;
-  - position: position relative to the camera;
-  - radius: distance from the camera
+  - radius: distance from the camera***
+  - orbits: distances from the camera;
   - theta: horizontal rotation in degrees
   - rho: vertical rotation in degrees
   - updatePos: whether it is move vr interface with the camera or not;
@@ -61,6 +61,25 @@ AFRAME.registerComponent('vr-interface', {
   schema: {
     dimension: { type: 'vec2', default: { x: 1, y: 1 } },
     radius: { type: 'number', default: 1 },
+    orbits: {
+      default: [1],
+      parse: function (value) {
+        let orbits;
+        if (typeof value === 'string') {
+          orbits = value.split(' ').map(v => parseFloat(v)).filter(v => typeof v === 'number')
+        }
+        else if (Array.isArray(value)) {
+          orbits = value.map(v => parseFloat(v)).filter(v => typeof v === 'number')
+        }
+        else {
+          orbits = [1];
+        }
+        return orbits;
+      },
+      stringify: function (value) {
+        return value.join(' ');
+      }
+    },
     theta: { type: 'number', default: 90 },
     rho: { type: 'number', default: 0 },
     updatePos: { type: 'bool', default: false },
@@ -89,7 +108,6 @@ AFRAME.registerComponent('vr-interface', {
       stringify: function (value) {
         return `${value.near} ${value.far}`
       }
-
     },
     border: {
       default: { thickness: 1, color: null },
@@ -118,9 +136,36 @@ AFRAME.registerComponent('vr-interface', {
     this.toleratedDifference = 0.01;
     this.referencePoint = new THREE.Vector3();
 
+    this.orbitIndex = 0;
+    this.radius = data.orbits[this.orbitIndex];
+
+    this.isToChangeTheta = false;
+    this.isToChangeRho = false;
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'z') {
+        console.log('oi')
+
+        self.orbitIndex++;
+        if (self.orbitIndex == data.orbits.length) {
+          self.orbitIndex = 0;
+        }
+        self.radius = data.orbits[self.orbitIndex];
+        self.updatePostion();
+      }
+
+      if (e.key === 'x') {
+        self.isToChangeTheta = !self.isToChangeTheta;
+      }
+
+      if (e.key === 'c') {
+        self.isToChangeRho = !self.isToChangeRho;
+      }
+    });
+
     if (typeof data.raycaster.far === 'null') {
-      data.raycaster.far = data.radius;
-      data.raycaster.far = data.radius / 2;
+      data.raycaster.far = this.radius;
+      data.raycaster.far = this.radius / 2;
     }
 
     this.cursor = document.createElement('a-entity');
@@ -171,6 +216,16 @@ AFRAME.registerComponent('vr-interface', {
       ) {
         this.updatePostion();
       }
+    }
+
+    if (this.isToChangeTheta) {
+      this.data.theta = this.camera.object3D.rotation.y;
+      this.el.object3D.rotation.y = this.data.theta;
+    }
+
+    if (this.isToChangeRho) {
+      this.data.rho = this.camera.object3D.rotation.x;
+      this.updatePostion();
     }
   },
   update: function (oldData) {
@@ -330,14 +385,15 @@ AFRAME.registerComponent('vr-interface', {
       x = x0 + rcos(rho)cos(theta)
       y = y0 + rsin(rho)
       z = z0 + rcos(rho)sin(theta)
-
-      As the camera is looking to negative z-axis, theta = -90 deg
+  
+      As the camera is looking to negative z-axis, theta = 90 deg, and z0 = 0
       x = x0
       y = y0 + rsin(rho)
-      z = z0 - rcos(rho)
-
-      As the buttons are inclined at the angle of rho, it's need alignment correction in z-axis
-      z = z0 - rcos(rho) - lineIndex * buttonHeight * sin(rho)
+      z = -rcos(rho)
+  
+      As the buttons are inclined at the angle of rho, it's need alignment correction in y-axis and z-axis
+      y = y0 + rsin(rho) - lineIndex * buttonHeight * cos(rho)
+      z = -rcos(rho) - lineIndex * buttonHeight * sin(rho)
      */
     const data = this.data;
 
@@ -349,8 +405,8 @@ AFRAME.registerComponent('vr-interface', {
 
     button.position.set(
       j * (data.buttonSize.x + data.gap.x),
-      this.referencePoint.y - i * (data.buttonSize.y + data.gap.y) + data.radius * Math.sin(data.rho),
-      -data.radius * Math.cos(data.rho) - (i * (data.buttonSize.y + data.gap.y) * Math.sin(data.rho))
+      this.referencePoint.y + this.radius * Math.sin(data.rho) - i * (data.buttonSize.y + data.gap.y) * Math.cos(data.rho),
+      -this.radius * Math.cos(data.rho) - (i * (data.buttonSize.y + data.gap.y) * Math.sin(data.rho))
     );
   },
   positionateMessage: function (pos) {
@@ -399,7 +455,7 @@ AFRAME.registerComponent('vr-interface', {
   updatePostion: function (args) {
     if (args) {
       if (typeof args.radius === 'number') {
-        this.data.radius = args.radius;
+        this.radius = args.radius;
         this.data.raycaster.far = args.radius;
         this.cursor.setAttribute('raycaster', { far: this.data.raycaster.far, near: this.data.raycaster.far / 2 });
       }
