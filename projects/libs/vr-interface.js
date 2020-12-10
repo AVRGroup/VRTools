@@ -62,7 +62,7 @@ AFRAME.registerComponent('vr-interface', {
     dimension: { type: 'vec2', default: { x: 1, y: 1 } },
     radius: { type: 'number', default: 1 },
     orbits: {
-      default: [1],
+      default: [1.1],
       parse: function (value) {
         let orbits;
         if (typeof value === 'string') {
