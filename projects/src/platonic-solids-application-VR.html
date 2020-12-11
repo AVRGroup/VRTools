@@ -40,7 +40,65 @@
                 this.wireframe = false;
                 this.wireframeColor = '#000';
 
+                function createTetrahedronWireframe(radius, detail) {
+                    var wireframe = new THREE.LineBasicMaterial();
+                    let edges = new THREE.EdgesGeometry(new THREE.TetrahedronGeometry(radius, detail));
+                    let object = new THREE.LineSegments(edges, wireframe);
+                    object.castShadow = true;
+                    object.position.set(0, 0, 0);
+                    object.visible = false;
+                    object.name = "TetrahedronWireframe";
+                    return object;
+                }
+                function createCubeWireframe(s) {
+                    var wireframe = new THREE.LineBasicMaterial();
+                    let edges = new THREE.EdgesGeometry(new THREE.BoxGeometry(s, s, s));
+                    let object = new THREE.LineSegments(edges, wireframe);
+                    object.castShadow = true;
+                    object.position.set(0.0, 0, 0.0);
+                    object.name = "CubeWireframe";
+                    object.visible = false;
+                    return object;
+                }
 
+                function createOctahedronWireframe(radius, detail) {
+                    var wireframe = new THREE.LineBasicMaterial();
+                    const edges = new THREE.EdgesGeometry(new THREE.OctahedronGeometry(radius, detail));
+                    const object = new THREE.LineSegments(edges, wireframe);
+                    object.castShadow = true;
+                    object.position.set(0.0, 0, 0.0);
+                    object.name = "OcatahedronWireframe";
+                    object.visible = false;
+                    return object;
+                }
+
+                function createDodecahedronWireframe(radius, detail) {
+                    var wireframe = new THREE.LineBasicMaterial();
+                    const edges = new THREE.EdgesGeometry(new THREE.DodecahedronGeometry(radius, detail));
+                    const object = new THREE.LineSegments(edges, wireframe);
+                    object.castShadow = true;
+                    object.position.set(0.0, 0, 0.0);
+                    object.name = "DodecahedronWireframe";
+                    object.visible = false;
+                    return object;
+                }
+
+                function createIcosahedronWireframe(radius, detail) {
+                    var wireframe = new THREE.LineBasicMaterial();
+                    const edges = new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(radius, detail));
+                    const object = new THREE.LineSegments(edges, wireframe);
+                    object.castShadow = true;
+                    object.position.set(0.0, 0, 0.0);
+                    object.name = "IcosahedronWireframe";
+                    object.visible = false;
+                    return object;
+                }
+
+                this.models[0].setObject3D("Wireframe", createTetrahedronWireframe(1.0, 0));
+                this.models[1].setObject3D("Wireframe", createCubeWireframe(1.0));
+                this.models[2].setObject3D("Wireframe", createOctahedronWireframe(1.0, 0));
+                this.models[3].setObject3D("Wireframe", createDodecahedronWireframe(1.0, 0));
+                this.models[4].setObject3D("Wireframe", createIcosahedronWireframe(1.0, 0));
 
                 vrInterface.addButton('previous', '#previous', () => {
                     self.models[self.modelIndex].object3D.visible = false;
@@ -52,11 +110,16 @@
                         self.modelIndex--;
                     }
 
-                    self.models[self.modelIndex].object3D.visible = true;
-                    self.models[self.modelIndex].object3D.visible = true;
                     self.models[self.modelIndex].object3D.scale.set(self.info, self.info, self.info);
                     self.models[self.modelIndex].object3D.position.y = self.info;
-                    self.models[self.modelIndex].object3D.children[0].material.wireframe = self.wireframe;
+                    self.models[self.modelIndex].object3D.visible = true;
+                    if (this.wireframe) {
+                        self.models[self.modelIndex].object3D.children[0].visible = false;
+                        self.models[self.modelIndex].object3D.children[1].visible = true;
+                    } else {
+                        self.models[self.modelIndex].object3D.children[0].visible = true;
+                        self.models[self.modelIndex].object3D.children[1].visible = false;
+                    }
                     vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
                 });
 
@@ -70,11 +133,15 @@
                         self.modelIndex++;
                     }
                     self.models[self.modelIndex].object3D.visible = true;
-                    self.models[self.modelIndex].object3D.visible = true;
                     self.models[self.modelIndex].object3D.scale.set(self.info, self.info, self.info);
                     self.models[self.modelIndex].object3D.position.y = self.info;
-                    self.models[self.modelIndex].object3D.children[0].material.wireframe = self.wireframe;
-                    self.models[self.modelIndex].object3D.children[0].material.emissive.set(self.wireframeColor);
+                    if (this.wireframe) {
+                        self.models[self.modelIndex].object3D.children[0].visible = false;
+                        self.models[self.modelIndex].object3D.children[1].visible = true;
+                    } else {
+                        self.models[self.modelIndex].object3D.children[0].visible = true;
+                        self.models[self.modelIndex].object3D.children[1].visible = false;
+                    }
                     vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
                 });
 
@@ -125,16 +192,19 @@
                 });
 
                 vrInterface.addButton('wireframe', '#wireframe', () => {
-                    if (self.models[self.modelIndex].object3D.children[0].material.wireframe) {
-                        self.models[self.modelIndex].object3D.children[0].material.wireframe = false;
-                        self.models[self.modelIndex].object3D.children[0].material.emissive.set('#000');
-                        this.wireframeColor = '#000';
+                    if (this.wireframe) {
+                        self.models[self.modelIndex].object3D.children[0].visible = true;
+                        self.models[self.modelIndex].object3D.children[1].visible = false;
+                        this.wireframe = false;
                     } else {
+                        self.models[self.modelIndex].object3D.children[0].visible = false;
+                        self.models[self.modelIndex].object3D.children[1].visible = true;
+                        this.wireframe = true;
+
                         self.models[self.modelIndex].object3D.children[0].material.wireframe = true;
                         self.models[self.modelIndex].object3D.children[0].material.emissive.set('#ffffff');
                         this.wireframeColor = '#ffffff';
                     }
-                    this.wireframe = self.models[self.modelIndex].object3D.children[0].material.wireframe;
                     vrInterface.showMessage(`Wireframe is ${self.models[self.modelIndex].object3D.children[0].material.wireframe ? 'on' : 'off'}`);
                 });
 
