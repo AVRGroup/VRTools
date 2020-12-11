@@ -47,7 +47,7 @@ function main() {
     // Object Material for all objects -- MeshNormalMaterial
     var objectMaterial = new THREE.MeshBasicMaterial({ color: "rgb(255, 0, 0)" });
     objectMaterial.side = THREE.DoubleSide;
-    var wireframe = "rgb(255,0,0)";
+    var wireframe = new THREE.LineBasicMaterial({ color: "rgb(255, 0, 0)" });
     // Add objects to scene
     var objectArray = new Array();
 
@@ -59,8 +59,13 @@ function main() {
         scene.add(createOctahedron(0.28, 0));
         scene.add(createDodecahedron(0.28, 0));
         scene.add(createIcosahedron(0.28, 0));
-    }
 
+        scene.add(createTetrahedronWireframe(0.35, 0));
+        scene.add(createCubeWireframe(0.50));
+        scene.add(createOctahedronWireframe(0.28, 0));
+        scene.add(createDodecahedronWireframe(0.28, 0));
+        scene.add(createIcosahedronWireframe(0.28, 0));
+    }
     // Controls of sidebar
     var controls = new function() {
 
@@ -83,28 +88,50 @@ function main() {
 
         this.choosePoligon = function() {
             objectArray[this.meshNumber].visible = false;
-            switch (this.type) {
-                case 'Tetrahedron':
-                    this.meshNumber = 0;
-                    break;
-                case 'Cube':
-                    this.meshNumber = 1;
-                    break;
-                case 'Octahedron':
-                    this.meshNumber = 2;
-                    break;
-                case 'Dodecahedron':
-                    this.meshNumber = 3;
-                    break;
-                case 'Icosahedron':
-                    this.meshNumber = 4;
-                    break;
+            if (this.wireframe) {
+                switch (this.type) {
+                    case 'Tetrahedron':
+                        this.type = 'TetrahedronWireframe';
+                        this.meshNumber = 5;
+                        break;
+                    case 'Cube':
+                        this.type = 'CubeWireframe';
+                        this.meshNumber = 6;
+                        break;
+                    case 'Octahedron':
+                        this.type = 'OctahedronWireframe';
+                        this.meshNumber = 7;
+                        break;
+                    case 'Dodecahedron':
+                        this.type = 'DodecahedronWireframe';
+                        this.meshNumber = 8;
+                        break;
+                    case 'Icosahedron':
+                        this.type = 'IcosahedronWireframe';
+                        this.meshNumber = 9;
+                        break;
+                }
+            } else {
+                switch (this.type) {
+                    case 'Tetrahedron':
+                        this.meshNumber = 0;
+                        break;
+                    case 'Cube':
+                        this.meshNumber = 1;
+                        break;
+                    case 'Octahedron':
+                        this.meshNumber = 2;
+                        break;
+                    case 'Dodecahedron':
+                        this.meshNumber = 3;
+                        break;
+                    case 'Icosahedron':
+                        this.meshNumber = 4;
+                        break;
+                }
             }
             objectArray[this.meshNumber].visible = true;
             this.mesh = objectArray[this.meshNumber];
-            if (this.wireframe) {
-                controls.mesh.children[0].visible = false; //Black line
-            }
         }
 
         this.resizePoligon = function() {
@@ -112,7 +139,6 @@ function main() {
             const radius = this.type === "Cube" ? poligon.geometry.parameters.height : poligon.geometry.parameters.radius
 
             poligon.scale.set(this.size, this.size, this.size)
-
             switch (this.type) {
                 case 'Tetrahedron':
                     poligon.position.y = radius / 3 * this.size;
@@ -138,11 +164,13 @@ function main() {
             objectArray = new Array();
             objectMaterial = new THREE.MeshBasicMaterial({ color: controls.color });
             objectMaterial.side = THREE.DoubleSide;
-            wireframe = controls.color;
+            wireframe = new THREE.LineBasicMaterial({ color: controls.color });
             // Recreating those objects
             criationObjects();
 
-            controls.choosePoligon();
+            this.choosePoligon();
+
+            this.resizePoligon();
 
             // Correcting if the wireframe option is tick
             this.wireframeController();
@@ -150,13 +178,24 @@ function main() {
 
         this.wireframeController = function() {
             if (this.wireframe) {
-                objectMaterial.wireframe = false;
-                objectMaterial.visible = false;
-                this.mesh.children[0].visible = true; //Black line
+                objectArray[this.meshNumber].visible = false;
+                if (this.meshNumber < 5) {
+                    this.meshNumber += 5;
+                }
+                objectArray[this.meshNumber].visible = true;
+                objectArray[this.meshNumber].scale.set(this.size, this.size, this.size);
+                this.wireframeStatus = true;
             } else {
+                objectArray[this.meshNumber].visible = false;
+                if (this.meshNumber > 4) {
+                    this.meshNumber -= 5;
+                }
+                objectArray[this.meshNumber].visible = true;
                 objectMaterial.visible = true;
-                this.mesh.children[0].visible = true;
+                this.wireframeStatus = false;
             }
+            this.choosePoligon();
+            this.resizePoligon();
         }
     }
 
@@ -189,14 +228,17 @@ function main() {
     guiFolder.add(controls, 'wireframe').listen().onChange(function(e) {
         controls.wireframeController();
     });
-    guiFolder.add(controls, 'type', ['Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function(e) {
+    guiFolder.add(controls, 'type', ['Tetrahedron', 'Cube', 'Octahedron', 'Dodecahedron', 'Icosahedron']).onChange(function (e) {
+        if (this.wireframeStatus) {
+            this.meshNumber -= 5;
+        }
         controls.choosePoligon();
         controls.resizePoligon()
     });
     guiFolder.add(controls, 'size', 0.5, 4).listen().onChange(function(e) {
         controls.resizePoligon()
     })
-
+    controls.wireframeController();
     controls.choosePoligon(); // Update de selection of the polygon
 
     // 4 faces
@@ -215,7 +257,7 @@ function main() {
 
         // Border -- Black line
         var geo = new THREE.EdgesGeometry(object.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: wireframe });
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
         var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
@@ -235,7 +277,7 @@ function main() {
 
         // Border
         var geo = new THREE.EdgesGeometry(object.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: wireframe });
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
         var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
@@ -256,7 +298,7 @@ function main() {
 
         // Border
         var geo = new THREE.EdgesGeometry(object.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: wireframe });
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
         var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
@@ -276,7 +318,7 @@ function main() {
 
         // Border
         var geo = new THREE.EdgesGeometry(object.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: wireframe });
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
         var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
@@ -296,7 +338,7 @@ function main() {
 
         // Border
         var geo = new THREE.EdgesGeometry(object.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: wireframe });
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
         var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
@@ -305,6 +347,76 @@ function main() {
         objectArray.push(object);
         return object;
     }
+
+
+    // 4 faces
+    function createTetrahedronWireframe(radius, detail) {
+
+        let edges = new THREE.EdgesGeometry(new THREE.TetrahedronGeometry(radius, detail));
+        let object = new THREE.LineSegments(edges, wireframe);
+        object.castShadow = true;
+        object.position.set(0.0, radius / 3, 0.0); //Color Axe (Red, Green, Blue)
+        object.visible = false;
+        object.name = "TetrahedronWireframe";
+        object.rotation.x += 0.15;
+        objectArray.push(object);
+
+
+        object.rotation.x = degreesToRadians(-41.12);
+        object.rotation.y = degreesToRadians(-42.26);
+        object.rotation.z = degreesToRadians(0.1);
+
+        return object;
+    }
+
+    // 6 faces
+    function createCubeWireframe(s) {
+        let edges = new THREE.EdgesGeometry(new THREE.BoxGeometry(s, s, s));
+        let object = new THREE.LineSegments(edges, wireframe);
+        object.castShadow = true;
+        object.position.set(0.0, s / 2, 0.0);
+        object.name = "CubeWireframe";
+        object.visible = false;
+        objectArray.push(object);
+        return object;
+    }
+
+    // 8 faces
+    function createOctahedronWireframe(radius, detail) {
+        const edges = new THREE.EdgesGeometry(new THREE.OctahedronGeometry(radius, detail));
+        const edgesMesh = new THREE.LineSegments(edges, wireframe);
+        edgesMesh.castShadow = true;
+        edgesMesh.position.set(0.0, radius, 0.0);
+        edgesMesh.name = "OcatahedronWireframe";
+        edgesMesh.visible = false;
+        objectArray.push(edgesMesh);
+        return edgesMesh;
+    }
+
+    // 12 faces
+    function createDodecahedronWireframe(radius, detail) {
+        const edges = new THREE.EdgesGeometry(new THREE.DodecahedronGeometry(radius, detail));
+        const edgesMesh = new THREE.LineSegments(edges, wireframe);
+        edgesMesh.castShadow = true;
+        edgesMesh.position.set(0.0, radius, 0.0);
+        edgesMesh.name = "DodecahedronWireframe";
+        edgesMesh.visible = false;
+        objectArray.push(edgesMesh);
+        return edgesMesh;
+    }
+
+    // 20 faces
+    function createIcosahedronWireframe(radius, detail) {
+        const edges = new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(radius, detail));
+        const edgesMesh = new THREE.LineSegments(edges, wireframe);
+        edgesMesh.castShadow = true;
+        edgesMesh.position.set(0.0, radius, 0.0);
+        edgesMesh.name = "IcosahedronWireframe";
+        edgesMesh.visible = false;
+        objectArray.push(edgesMesh);
+        return edgesMesh;
+    }
+
 
 
     ////////////////////////////////////////////////////////////////////////////////
