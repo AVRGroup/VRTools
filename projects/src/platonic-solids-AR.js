@@ -47,7 +47,7 @@ function main() {
     // Object Material for all objects -- MeshNormalMaterial
     var objectMaterial = new THREE.MeshBasicMaterial({ color: "rgb(255, 0, 0)" });
     objectMaterial.side = THREE.DoubleSide;
-
+    var wireframe = "rgb(255,0,0)";
     // Add objects to scene
     var objectArray = new Array();
 
@@ -138,7 +138,7 @@ function main() {
             objectArray = new Array();
             objectMaterial = new THREE.MeshBasicMaterial({ color: controls.color });
             objectMaterial.side = THREE.DoubleSide;
-
+            wireframe = controls.color;
             // Recreating those objects
             criationObjects();
 
@@ -150,10 +150,11 @@ function main() {
 
         this.wireframeController = function() {
             if (this.wireframe) {
-                objectMaterial.wireframe = true;
-                this.mesh.children[0].visible = false; //Black line
-            } else {
                 objectMaterial.wireframe = false;
+                objectMaterial.visible = false;
+                this.mesh.children[0].visible = true; //Black line
+            } else {
+                objectMaterial.visible = true;
                 this.mesh.children[0].visible = true;
             }
         }
@@ -214,7 +215,7 @@ function main() {
 
         // Border -- Black line
         var geo = new THREE.EdgesGeometry(object.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
+        var mat = new THREE.LineBasicMaterial({ color: wireframe });
         var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
@@ -234,10 +235,11 @@ function main() {
 
         // Border
         var geo = new THREE.EdgesGeometry(object.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
+        var mat = new THREE.LineBasicMaterial({ color: wireframe });
         var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
+        borderLine.transparent = false;
         object.add(borderLine);
 
         objectArray.push(object);
@@ -254,7 +256,7 @@ function main() {
 
         // Border
         var geo = new THREE.EdgesGeometry(object.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
+        var mat = new THREE.LineBasicMaterial({ color: wireframe });
         var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
@@ -274,7 +276,7 @@ function main() {
 
         // Border
         var geo = new THREE.EdgesGeometry(object.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
+        var mat = new THREE.LineBasicMaterial({ color: wireframe });
         var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
@@ -294,7 +296,7 @@ function main() {
 
         // Border
         var geo = new THREE.EdgesGeometry(object.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4 });
+        var mat = new THREE.LineBasicMaterial({ color: wireframe });
         var borderLine = new THREE.LineSegments(geo, mat);
         borderLine.renderOrder = 1; // make sure wireframes are rendered 2nd
         borderLine.name = "borderLine";
