@@ -49,6 +49,8 @@
   Functions:
   - addButton(buttonName, idOfTexture, callback) - adds a button to the interface
   - showMessage(message, position) - shows message, position parameter is optional
+  - showSideText() - shows a permanent multiline message to the right of the interface
+  - hideSideText() - hides side text
   - updatePosition({radius, theta, rho}) - should be called if the camera position changes or if you want to change one parameter. All parameters are optional.
   - hide() - hide the interface
   - show() - make interface visible
@@ -163,9 +165,16 @@ AFRAME.registerComponent('vr-interface', {
     this.message = document.createElement('a-entity');
     this.message.setAttribute('text', { align: 'center', width: 1, height: 1, color: new THREE.Color(data.messageColor) });
     this.message.setAttribute('geometry', { primitive: 'plane', height: 0.1, width: 1 });
-    this.message.setAttribute('material', { color: new THREE.Color(data.messageBG), transparent: data.transparency, opacity: 0.75 });
+    this.message.setAttribute('material', { color: new THREE.Color(data.messageBG), transparent: data.transparency, opacity: data.transparency ? 0.75 : 1 });
     this.message.object3D.visible = false;
     this.buttonGroup.appendChild(this.message);
+
+    this.sideText = document.createElement('a-entity');
+    this.sideText.setAttribute('text', { align: 'center', width: 1, height: 1, color: new THREE.Color(data.messageColor) });
+    this.sideText.setAttribute('geometry', { primitive: 'plane', height: 1, width: 1 });
+    this.sideText.setAttribute('material', { color: new THREE.Color(data.messageBG), transparent: data.transparency, opacity: data.transparency ? 0.75 : 1 });
+    this.sideText.object3D.visible = false;
+    this.buttonGroup.appendChild(this.sideText);
 
     if (data.border.color) {
       this.borderMaterial = new THREE.LineBasicMaterial({
@@ -210,7 +219,7 @@ AFRAME.registerComponent('vr-interface', {
     this.orbitButton.object3D.children[0].name = 'orbitButton';
     this.orbitButton.onClick = () => {
       self.orbitIndex++;
-      if (self.orbitIndex == data.orbits.length) {
+      if (self.orbitIndex >= data.orbits.length) {
         self.orbitIndex = 0;
       }
       self.radius = data.orbits[self.orbitIndex];
@@ -289,8 +298,9 @@ AFRAME.registerComponent('vr-interface', {
     this.moveBar.appendChild(this.stopButton);
 
     //--------------------------------------------------------------------
-
+    this.isLoaded = false;
     this.el.sceneEl.addEventListener('loaded', () => {
+      self.isLoaded = true;
       self.updatePostion();
     }, { once: true });
 
@@ -482,6 +492,24 @@ AFRAME.registerComponent('vr-interface', {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => msg.visible = false, 3000);
   },
+  showSideText: function (text) {
+    const sideText = this.sideText.object3D;
+
+    if (!this.sideText.object3D.visible) {
+      this.sideText.object3D.visible = true;
+    }
+
+    text = text.split('\n');
+
+    sideText.el.setAttribute('text', { value: text.join('\n') });
+    sideText.children[1].scale.x = text.reduce((prev, curr) => curr.length > prev.length ? curr : prev).length * 0.0275;
+    sideText.children[1].scale.y = text.length * 0.05;
+
+    this.positionateSideText();
+  },
+  hideSideText: function () {
+    this.sideText.object3D.visible = false;
+  },
   positionate: function (button, length) {
     /*
       The buttons are placed in negative z-axis, where the camere is looking by default.
@@ -489,12 +517,12 @@ AFRAME.registerComponent('vr-interface', {
       x = x0 + rcos(rho)cos(theta)
       y = y0 + rsin(rho)
       z = z0 + rcos(rho)sin(theta)
-  
+   
       As the camera is looking to negative z-axis, theta = 90 deg, and z0 = 0
       x = x0
       y = y0 + rsin(rho)
       z = -rcos(rho)
-  
+   
       As the buttons are inclined at the angle of rho, it's need alignment correction in y-axis and z-axis
       y = y0 + rsin(rho) - lineIndex * buttonHeight * cos(rho)
       z = -rcos(rho) - lineIndex * buttonHeight * sin(rho)
@@ -528,15 +556,13 @@ AFRAME.registerComponent('vr-interface', {
       msg.position.x += this.data.buttonSize.x * 0.5 * (this.data.dimension.y - 1);
       msg.position.y -= this.data.buttonSize.y / 2 + 0.06 + offset;
     }
-    else if (pos === 'left') {
-      msg.position.x -= (msg.children[1].scale.x + this.data.buttonSize.x) * 0.51;
-      msg.position.y -= this.data.buttonSize.y * (this.data.dimension.x - 1) * 0.5;
-    }
-    else if (pos === 'right') {
-      let offset = (this.data.dimension.y - 1) * (this.data.buttonSize.x + this.data.gap.x);
-      msg.position.x += ((msg.children[1].scale.x + this.data.buttonSize.x) * 0.51 + offset);
-      msg.position.y -= this.data.buttonSize.y * (this.data.dimension.x - 1) * 0.5;
-    }
+  },
+  positionateSideText: function () {
+    const sideText = this.sideText.object3D;
+
+    let offset = (this.data.dimension.y - 1) * (this.data.buttonSize.x + this.data.gap.x) + 0.01;
+    sideText.position.x = sideText.children[1].scale.x * 0.5 + offset
+    sideText.position.z = this.buttons[0].position.z;
   },
   positionateBorder: function (button) {
     button.border.scale.copy(button.scale);
@@ -588,6 +614,10 @@ AFRAME.registerComponent('vr-interface', {
 
     if (this.message.object3D.visible) {
       this.positionateMessage(this.pos);
+    }
+
+    if (this.sideText.object3D.visible) {
+      this.positionateSideText();
     }
 
     if (this.data.movementBar) {
