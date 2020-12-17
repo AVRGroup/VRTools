@@ -33,9 +33,7 @@
             init: function () {
                 const self = this;
 
-                this.info = document.querySelector('#info');
                 this.gravity = -9.8;
-                this.timeout = 0;
                 this.angle = Math.PI / 12;
                 this.arrowAngle = this.angle;
                 this.rampFriction = 0.002;
@@ -115,11 +113,11 @@
 
 
                 // Setting up VR Interface
-                const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
+                this.vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
                 const rig = document.querySelector('#rig');
                 const camera = document.querySelector('#camera').object3D;
 
-                vrInterface.addButton('start', '#start', () => {
+                this.vrInterface.addButton('start', '#start', () => {
                     self.startSimulation();
                 });
 
@@ -129,7 +127,7 @@
                     { cameraPos: '5 0 3', interfacePos: '0 0 1', infoPos: '4.3 1.6 4', rotation: 180 },
                     { cameraPos: '0 0 7', interfacePos: '-1 0 0', infoPos: '-1 1.6 6.3', rotation: 90 },
                 ]
-                vrInterface.addButton('changeCamera', '#changeCamera', () => {
+                this.vrInterface.addButton('changeCamera', '#changeCamera', () => {
                     this.posIdx = this.posIdx == 2 ? 0 : this.posIdx + 1;
 
                     let { cameraPos, interfacePos, infoPos, rotation } = this.positions[this.posIdx];
@@ -137,25 +135,22 @@
                     rig.setAttribute('position', cameraPos);
                     rig.setAttribute('rotation', { x: 0, y: rotation - (camera.rotation.y * 180 / Math.PI), z: 0 });
 
-                    self.info.setAttribute('position', infoPos);
-                    self.info.setAttribute('rotation', '0 ' + rotation + ' 0');
-
-                    vrInterface.updatePostion({ theta: rotation });
+                    this.vrInterface.updatePostion({ theta: rotation });
                 });
 
-                vrInterface.addButton('increaseFriction', '#increaseFriction', () => {
+                this.vrInterface.addButton('increaseFriction', '#increaseFriction', () => {
                     self.changeFriction();
                 });
 
-                vrInterface.addButton('decreaseFriction', '#decreaseFriction', () => {
+                this.vrInterface.addButton('decreaseFriction', '#decreaseFriction', () => {
                     self.changeFriction(-1);
                 });
 
-                vrInterface.addButton('increaseAngle', '#increaseAngle', () => {
+                this.vrInterface.addButton('increaseAngle', '#increaseAngle', () => {
                     self.changeAngle();
                 });
 
-                vrInterface.addButton('decreaseAngle', '#decreaseAngle', () => {
+                this.vrInterface.addButton('decreaseAngle', '#decreaseAngle', () => {
                     self.changeAngle(-1);
                 });
 
@@ -181,7 +176,8 @@
                 string += `WeightX: ${(this.cube.body.mass * this.gravity * Math.sin(this.angle) * -1).toFixed(2)} N\n`;
                 string += `WeightY: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
                 string += `Normal: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
-                this.info.setAttribute('value', string);
+
+                this.vrInterface.showSideText(string);
             },
             updateArrows: function () {
                 this.groupForces.object3D.position.copy(this.cube.body.position)
@@ -330,10 +326,10 @@
             </a-box>
         </a-entity>
 
-        <a-text id="info" value="" align="center" position="3.75 5 5.2" rotation="0 135 0"
+        <!-- <a-text id="info" value="" align="center" position="3.75 5 5.2" rotation="0 135 0"
             geometry="primitive: plane; height: 2; width: 2.2"
             material="color: #647485; transparent: true; opacity: 0.75" scale="0.31 0.31">
-        </a-text>
+        </a-text> -->
 
 
         <a-box id="borderLeft" position="-10 0.5 0" height="0.5" widht="1" depth="20" material="src: #wood" static-body>
