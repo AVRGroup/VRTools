@@ -45,9 +45,9 @@ function main() {
 	scene.add(groundPlane);*/
 
     // Object Material for all objects -- MeshNormalMaterial
-    var objectMaterial = new THREE.MeshBasicMaterial({ color: "rgb(255, 0, 0)" });
+    var objectMaterial = new THREE.MeshBasicMaterial({ color: "rgb(255, 0, 0)"});
     objectMaterial.side = THREE.DoubleSide;
-    var wireframe = new THREE.LineBasicMaterial({ color: "rgb(255, 0, 0)" });
+    var wireframe = new THREE.LineBasicMaterial({ color: "rgb(255, 0, 0)", linewidth: 2 });
     // Add objects to scene
     var objectArray = new Array();
 
@@ -134,25 +134,53 @@ function main() {
             this.mesh = objectArray[this.meshNumber];
         }
 
-        this.resizePoligon = function() {
+        this.resizePoligon = function () {
+            if (this.wireframeStatus) {
+                this.meshNumber -= 5;
+            }
+
             const poligon = objectArray[this.meshNumber]
-            const radius = this.type === "Cube" ? poligon.geometry.parameters.height : poligon.geometry.parameters.radius
+            const radius = this.type === "Cube" || this.type === "CubeWireframe" ? poligon.geometry.parameters.height : poligon.geometry.parameters.radius
+          
 
             poligon.scale.set(this.size, this.size, this.size)
             switch (this.type) {
                 case 'Tetrahedron':
                     poligon.position.y = radius / 3 * this.size;
                     break;
+                case 'TetrahedronWireframe':
+                    poligon.position.y = radius / 3 * this.size;
+                    break;
+
                 case 'Cube':
                     poligon.position.y = radius / 2 * this.size;
                     break;
+                case 'CubeWireframe':
+                    poligon.position.y = radius / 2 * this.size;
+                    break;
+
                 case 'Octahedron':
+                case 'OctahedronWireframe':
+
                 case 'Dodecahedron':
                     poligon.position.y = radius * this.size;
                     break;
+                case 'DodecahedronWireframe':
+                    poligon.position.y = radius * this.size;
+                    break;
+
                 case 'Icosahedron':
                     poligon.position.y = (radius - 0.05) * this.size;
                     break;
+                case 'IcosahedronWireframe':
+                    poligon.position.y = (radius - 0.05) * this.size;
+                    break;
+            }
+            if (this.wireframeStatus) {
+                this.meshNumber += 5;
+                objectArray[this.meshNumber].scale.set(this.size, this.size, this.size);
+                objectArray[this.meshNumber].position.y = poligon.position.y;
+
             }
         }
 
@@ -354,13 +382,12 @@ function main() {
 
         let edges = new THREE.EdgesGeometry(new THREE.TetrahedronGeometry(radius, detail));
         let object = new THREE.LineSegments(edges, wireframe);
+        object.material.linewidth = 2;
         object.castShadow = true;
         object.position.set(0.0, radius / 3, 0.0); //Color Axe (Red, Green, Blue)
         object.visible = false;
         object.name = "TetrahedronWireframe";
-        object.rotation.x += 0.15;
         objectArray.push(object);
-
 
         object.rotation.x = degreesToRadians(-41.12);
         object.rotation.y = degreesToRadians(-42.26);
