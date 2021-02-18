@@ -52,14 +52,10 @@ function main(language) {
     let speedAnimation = 1.8;   // 1.5
 
     // Raycaster and mouse Controllers 
-    let objectRaycaster = [];
-    let objectRaycasterClonePictures = [];
-    let objectLooked = null;
-    let selectedImage = null;
-    let pointCollisionRayCaster = null;  
+    let objectRaycaster = [], objectRaycasterClonePictures = [];
+    let objectLooked = null, objectImagePlane = null, selectedImage = null;
     let dragControls;
     
-
     // Controls of sidebar
     var controls = new function() {
         this.book = new THREE.Group(),
@@ -120,7 +116,7 @@ function main(language) {
         // bookAttributes
         this.angleBeginPage = 0,        
         this.angleFinishPage = 180,        
-        this.angleRatePage = 0.75,      //0.15  
+        this.angleRatePage = 0.75,     
 
         // page and sheet attributes
         this.widthPage = 12,         
@@ -133,7 +129,7 @@ function main(language) {
         // Button Read / Exit
         this.buttons = [],              // Read(Left sheet, Right sheet), Exit, ZoomIn, ZoomOut
         this.sizeButton = 1.75,
-        this.cameraOption = 0,                // 0 => rotationCamera, 1 => bookCamera
+        this.cameraOption = 0,                // 0 => rotationCamera, 1 => bookCamera, 2 => pictureCamera
 
         // Functions
         this.adjustbuttons = function(){
@@ -278,20 +274,15 @@ function main(language) {
         },
         this.createMessages = function(){       // Victory and Loose
             let messageVictoryGeometry = new THREE.PlaneGeometry(26, 8, 0.1, 0.1);
-            let messageVictoryMaterial = new THREE.MeshStandardMaterial({
-                map: textureLoader.load("./assets/textures/historical-figures/messageVictory.png"), side: THREE.DoubleSide
-            });
+            let messageVictoryMaterial = new THREE.MeshStandardMaterial({map: textureLoader.load("./assets/textures/historical-figures/messageVictory.png"), side: THREE.DoubleSide});
             this.messageVictory = new THREE.Mesh(messageVictoryGeometry, messageVictoryMaterial);
-            this.messageVictory.position.set(0, 9, -12);
+            this.messageVictory.position.set(0, 9, -11.9);
             this.messageVictory.visible = false;
             scene.add(this.messageVictory); 
-
             let messageLooseGeometry = new THREE.PlaneGeometry(26, 8, 0.1, 0.1);
-            let messageLooseMaterial = new THREE.MeshStandardMaterial({
-                map: textureLoader.load("./assets/textures/historical-figures/messageLoose.png"), side: THREE.DoubleSide
-            });
+            let messageLooseMaterial = new THREE.MeshStandardMaterial({map: textureLoader.load("./assets/textures/historical-figures/messageLoose.png"), side: THREE.DoubleSide});
             this.messageLoose = new THREE.Mesh(messageLooseGeometry, messageLooseMaterial);
-            this.messageLoose.position.set(0, 9, -12);
+            this.messageLoose.position.set(0, 9, -11.9);
             this.messageLoose.visible = false;
             scene.add(this.messageLoose); 
         },
@@ -309,7 +300,7 @@ function main(language) {
 
                 // Page Background
                 let pageGeometry = new THREE.PlaneGeometry(this.widthPage, this.lengthPage, 0.1, 0.1);
-                let pageMaterial = new THREE.MeshStandardMaterial({
+                let pageMaterial = new THREE.MeshBasicMaterial({
                     transparent: true, //opacity: 0.5,
                     map: textureLoader.load("./assets/textures/page.png"), side:THREE.DoubleSide
                 });
@@ -365,8 +356,8 @@ function main(language) {
                 
                 // Page Background
                 let pageGeometry = new THREE.PlaneGeometry(this.widthPage, this.lengthPage, 0.1, 0.1);
-                let pageMaterial = new THREE.MeshStandardMaterial({
-                    transparent: true, //opacity: 0.5,
+                let pageMaterial = new THREE.MeshBasicMaterial({
+                    transparent: true,
                     map: textureLoader.load("./assets/textures/page.png"), side:THREE.DoubleSide
                 });
                 let page = new THREE.Mesh(pageGeometry, pageMaterial);
@@ -396,8 +387,7 @@ function main(language) {
                 // Informations block
                 let informationGeometry = new THREE.PlaneGeometry(9.6, 6.08, 0.1, 0.1);
                 let informationMaterial = new THREE.MeshBasicMaterial({
-                    transparent: true, /*opacity: 0.9,*/
-                    //color: "white",
+                    transparent: true,
                     side: THREE.DoubleSide,
                     map: textureLoader.load("./assets/textures/historical-figures/pictures/information/"+language+"/"+indexPicture+".png")
                 });
@@ -421,9 +411,7 @@ function main(language) {
             panelPlane.position.set(0, 9.75, -15.1);
             scene.add(panelPlane);
             let skyboxGeometry = new THREE.SphereGeometry(100, 64, 64);
-            let skyboxMaterial = new THREE.MeshBasicMaterial({
-                map: textureLoader.load("./assets/textures/museum.jpg"), side: THREE.DoubleSide   
-            });
+            let skyboxMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/museum.jpg"), side: THREE.DoubleSide});
             let skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
             scene.add(skybox);
     
@@ -520,9 +508,7 @@ function main(language) {
             nameBox.position.set(10, 7.5, -12);
             scene.add(nameBox);
             pictureGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
-            pictureMaterial = new THREE.MeshBasicMaterial({
-                map: textureLoader.load("./assets/textures/historical-figures/pictures/7.jpg"), side: THREE.DoubleSide
-            });
+            pictureMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/7.jpg"), side: THREE.DoubleSide});
             picture = new THREE.Mesh(pictureGeometry, pictureMaterial);
             picture.position.set(-10, 16.5, -12);
             picture.objectType = 1;          //Image type
@@ -566,7 +552,6 @@ function main(language) {
             nameBox = new THREE.Mesh(nameBoxGeometry, nameBoxMaterial);
             nameBox.position.set(10, 13.5, -12);
             scene.add(nameBox);
-            //console.log(this.orderPicturesBook);
         },
         this.createScenary = function(){
             var spotLight = new THREE.SpotLight(0xffffff);
@@ -582,17 +567,9 @@ function main(language) {
             var ambientLight = new THREE.AmbientLight(0x343434);
             ambientLight.name = "ambientLight";
             scene.add(ambientLight);
-
-            // Show axes (parameter is size of each axis)
-            /*var axes = new THREE.AxesHelper(24);
-            axes.name = "AXES";
-            axes.visible = true;
-            scene.add(axes);*/
-
             var groundPlane = createGroundPlane(30, 30); // width and height
             groundPlane.rotateX(THREE.Math.degToRad(-90));
             scene.add(groundPlane);
-
             this.createMenu();
             this.createImageClone();
             this.createPicturesPanel(scene);
@@ -607,7 +584,13 @@ function main(language) {
             objectRaycasterClonePictures = [];
 
             // Recreate DragControls
-            dragControls = new THREE.DragControls([controls.imageClone], rotationCamera, renderer.domElement ); //dragControls = new DragControls( objects, camera, renderer.domElement );
+            dragControls = new THREE.DragControls([controls.imageClone], rotationCamera, renderer.domElement );
+            dragControls.addEventListener ( 'drag', function( event ){
+                if(event.object.position.y < 1){        // Stay about the page
+                    event.object.position.y = 1.45;
+                }
+                event.object.position.z = -3.35; // This will prevent moving z axis, but will be on -3.35 line. change this to your object position of z axis.
+            });
 
             // Pages of book
             for (let i = 0; i < this.book.children.length; i++) {
@@ -631,8 +614,7 @@ function main(language) {
 
             // Raycaster and mouse Controllers 
             objectLooked = null;
-            selectedImage = null;
-            pointCollisionRayCaster = null;   
+            selectedImage = null;  
         },
         this.emptyScene = function(){
             //console.log("Empty Scene");
@@ -718,21 +700,12 @@ function main(language) {
                 let randomIndex = Math.floor(Math.random() * auxList.length);
                 auxOrderList.push(auxList[randomIndex]);
                 auxList.splice(randomIndex, 1);
-                i--;                    // FIX remove when works with ".length"
+                i--;                    // FIX index when 'remove' works with ".length"
             };
             return auxOrderList;
         }
     }
     controls.createScenary();
-    
-    // DragControls functions
-
-    //dragControls.addEventListener( 'dragstart', function ( event ) {  console.log("dragstart");});
-    //dragControls.addEventListener( 'dragend', function ( event ) { console.log('drag end');});
-    dragControls.addEventListener ( 'drag', function( event ){
-        //console.log('drag');
-        event.object.position.z = -3.35; // This will prevent moving z axis, but will be on -3.35 line. change this to your object position of z axis.
-    });
     
     // Reajuste da renderização com base na mudança da janela
     function onResize(){
@@ -787,12 +760,13 @@ function main(language) {
                             controls.fails++;
                             if(controls.fails > 2){
                                 controls.state = 2;
-                                //console.log("You lose");
                                 controls.removeAllPictures();
                                 controls.messageLoose.visible = true;
 
                             } 
                         }
+                        objectImagePlane.material.color = new THREE.Color("rgb(255,255,255)");
+                        objectImagePlane = null;
                     }
                 }
                 if(selectedImage != null){       // Drop the picture
@@ -921,16 +895,11 @@ function main(language) {
                                 controls.cameraOption = 0;
                                 defaultCamera = rotationCamera;
                                 controls.createScenary();
-                                /*controls.buttons[3].position.z = -11.9;
-                                controls.buttons[4].position.z = -11.8;
-                                controls.buttons[3].visible = true;
-                                controls.buttons[4].visible = false;*/
                                 break;
                         }
                     }
                         break;
                 }
-               
             }
         }
     }    
@@ -970,11 +939,23 @@ function main(language) {
         }
     }
 
+    function checkRaycasterOnImageAtPages(){
+        if(objectLooked != null && selectedImage != null && objectLooked.objectType == 2){
+            objectImagePlane = objectLooked;
+            objectImagePlane.material.color = new THREE.Color("rgb(0,180,0)");
+        }
+        else{
+            if(objectImagePlane != null){
+                objectImagePlane.material.color = new THREE.Color("rgb(255,255,255)");
+                objectImagePlane = null;
+            }
+        }
+    }
+
     requestAnimationFrame(render);
 
     function render(t) {
         dt = (t - timeAfter) / 1000;
-        //stats.update();
         orbitControls.update(clock.getDelta());
         checkRaycaster();
         controls.animationScenary();
@@ -982,6 +963,7 @@ function main(language) {
             case 0:         // Game Running
                 controls.timer.updateTime(dt);
                 if(controls.cameraOption == 0){
+                    checkRaycasterOnImageAtPages();
                     checkRaycasterClonePictures();
                 }
                 break;
