@@ -1,8 +1,5 @@
 function main(language) {
     
-    // TODO: Ao clicar, transladar o centro da imagem rotacionada para o local do cursor para facilitar a colagem (deixar por último) --
-    // TODO: bloco da imagem na página fica em cor “verde” quando o usuário for movimentar a imagem e estiver na posição correta.
-
     var scene = new THREE.Scene();
     //var stats = new Stats();
     //stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -318,9 +315,7 @@ function main(language) {
 
                 // Image plane
                 let imageGeometry = new THREE.PlaneGeometry(9, 4.5, 0.1, 0.1);
-                let imageMaterial = new THREE.MeshStandardMaterial({
-                    color:"rgb(255, 255, 255)", side: THREE.DoubleSide
-                });
+                let imageMaterial = new THREE.MeshBasicMaterial({color:"rgb(255, 255, 255)", side: THREE.DoubleSide});
                 let imagePlane = new THREE.Mesh(imageGeometry, imageMaterial);
                 imagePlane.position.set(0, this.lengthPage/4.5, 0.01);
                 imagePlane.objectType = 2;
@@ -373,9 +368,7 @@ function main(language) {
 
                 // Image plane
                 let imageGeometry = new THREE.PlaneGeometry(this.widthPage/1.5, this.lengthPage/3, 0.1, 0.1);
-                let imageMaterial = new THREE.MeshStandardMaterial({
-                    color:"rgb(255, 255, 255)", side:THREE.DoubleSide
-                });
+                let imageMaterial = new THREE.MeshBasicMaterial({color:"rgb(255, 255, 255)", side:THREE.DoubleSide});
                 let imagePlane = new THREE.Mesh(imageGeometry, imageMaterial);
                 imagePlane.position.set(0, this.lengthPage/4.5, -0.01);
                 imagePlane.rotateY(THREE.Math.degToRad(180));
@@ -982,10 +975,11 @@ function main(language) {
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(width, height, 10, 10);
         var planeMaterial = new THREE.MeshStandardMaterial({
-            color:"rgb(200,200,200)",
-            side:THREE.DoubleSide, 
-            transparent: true,
-            opacity: 0.5
+            //color: "rgb(200,200,200)",
+            side: THREE.DoubleSide, 
+            map: textureLoader.load("./assets/textures/floor-wood.jpg")
+            //transparent: true,
+            //opacity: 0.5
         });
         var plane = new THREE.Mesh(planeGeometry, planeMaterial);
         plane.receiveShadow = true;
