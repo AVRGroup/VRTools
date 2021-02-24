@@ -1,9 +1,6 @@
 function main(language) {
     
     var scene = new THREE.Scene();
-    //var stats = new Stats();
-    //stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-    //document.body.appendChild(stats.dom);
     var clock = new THREE.Clock();
     var textureLoader = new THREE.TextureLoader();
     var renderer = new THREE.WebGLRenderer({
@@ -206,7 +203,7 @@ function main(language) {
             this.buttons[1].rotateX(THREE.Math.degToRad(-70));
             scene.add(this.buttons[1]);
             let backButtonGeometry = new THREE.PlaneGeometry(this.sizeButton, this.sizeButton, 0.1, 0.1);
-            let backButtonMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/icons/previous.png"), side: THREE.DoubleSide});
+            let backButtonMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/icons/back.png"), side: THREE.DoubleSide});
             let backButton = new THREE.Mesh(backButtonGeometry, backButtonMaterial);
             backButton.position.set(0, this.book.position.y + 1.5, 0);
             backButton.rotateX(THREE.Math.degToRad(-90));
@@ -217,26 +214,26 @@ function main(language) {
             if(this.amountSheets > 0){
                 this.buttons[1].visible = true;
             }
-            let zoomInButtonGeometry = new THREE.PlaneGeometry(this.sizeButton, this.sizeButton, 0.1, 0.1);
-            let zoomInButtonMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/icons/zoomin.png"), side: THREE.DoubleSide});
+            let zoomInButtonGeometry = new THREE.PlaneGeometry(this.sizeButton+0.65, this.sizeButton+0.65, 0.1, 0.1);
+            let zoomInButtonMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/icons/zoomin-2.png"), side: THREE.DoubleSide});
             let zoomInButton = new THREE.Mesh(zoomInButtonGeometry, zoomInButtonMaterial);
             this.buttons.push(zoomInButton);
-            this.buttons[3].position.set(10, 20.25, -11.8);
+            this.buttons[3].position.set(9, 20.38, -11.8);
             this.buttons[3].objectType = 6;
             scene.add(this.buttons[3]);
-            let zoomOutButtonGeometry = new THREE.PlaneGeometry(this.sizeButton, this.sizeButton, 0.1, 0.1);
+            let zoomOutButtonGeometry = new THREE.PlaneGeometry(this.sizeButton+0.65, this.sizeButton+0.65, 0.1, 0.1);
             let zoomOutButtonMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/icons/zoomout.png"), side: THREE.DoubleSide});
             let zoomOutButton = new THREE.Mesh(zoomOutButtonGeometry, zoomOutButtonMaterial);
             this.buttons.push(zoomOutButton);
-            this.buttons[4].position.set(10, 20.25, -11.9);
+            this.buttons[4].position.set(9, 20.38, -11.9);
             this.buttons[4].objectType = 7;
             this.buttons[4].visible = false;
             scene.add(this.buttons[4]);
-            let buttonRetryGeometry = new THREE.PlaneGeometry(3, 1.5, 0.1, 0.1);
+            let buttonRetryGeometry = new THREE.PlaneGeometry(3.5, 1.75, 0.1, 0.1);
             let buttonRetryMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/icons/retry.png"), side: THREE.DoubleSide});
             let buttonRetry = new THREE.Mesh(buttonRetryGeometry, buttonRetryMaterial);
             this.buttons.push(buttonRetry);
-            this.buttons[5].position.set(13, 20.25, -11.9);
+            this.buttons[5].position.set(12.5, 20.25, -11.9);
             this.buttons[5].objectType = 8;
             scene.add(this.buttons[5]); 
         },
@@ -301,7 +298,6 @@ function main(language) {
                     transparent: true, //opacity: 0.5,
                     map: textureLoader.load("./assets/textures/page.png"), side:THREE.DoubleSide
                 });
-                //pageMaterial.depthWrite = false;            // FIX the bug of transparency  --- https://github.com/mrdoob/three.js/issues/9977
                 let page = new THREE.Mesh(pageGeometry, pageMaterial);
                 page.name = "page_" + this.amountPages;
                 page.position.set(this.widthPage / 2, 0, 0);
@@ -975,11 +971,8 @@ function main(language) {
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(width, height, 10, 10);
         var planeMaterial = new THREE.MeshStandardMaterial({
-            //color: "rgb(200,200,200)",
             side: THREE.DoubleSide, 
             map: textureLoader.load("./assets/textures/floor-wood.jpg")
-            //transparent: true,
-            //opacity: 0.5
         });
         var plane = new THREE.Mesh(planeGeometry, planeMaterial);
         plane.receiveShadow = true;
