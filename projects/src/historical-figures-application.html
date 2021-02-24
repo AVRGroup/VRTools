@@ -19,8 +19,23 @@
 <body>
     <div id="webgl-output"></div>
     <script type="text/javascript">
-        var language = "en-US";     // "pt-BR", "en-US"
-        main(language);
+        var language = location.search;
+        if(language.length != 0){
+            let aux = "?language=";
+            language = language.substring(aux.length, language.length);
+            switch(language){
+                case "en-US":            
+                    main_en_US(language);
+                    break;
+                case "pt-BR":            
+                    main_pt_BR(language);
+                    break;
+            }
+        }
+        else{                            
+            language = "en-US";
+            main_en_US(language);
+        }
     </script>
 </body>
 </html>
