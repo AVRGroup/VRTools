@@ -94,7 +94,7 @@ class Navbar extends HTMLElement {
             <div class="w3-right w3-hide-small w3-hide-medium">
                 <a id="navFlag" href="javascript:void(0);" onclick="toggleNavFlag()"
                     class="w3-bar-item w3-button ">
-                    <img id="select-flag" class="flag" src="/img/flags/us-icon.png">
+                    <img id="select-flag" class="flag" src="${prevPath}img/flags/us-icon.png">
                 </a>
 
                 <a href="javascript: TRANSLATION.redirect('${prevPath}', '#projects')" class="w3-bar-item w3-button menu-projects">Projects</a>
@@ -120,11 +120,11 @@ class Navbar extends HTMLElement {
                 <a href="javascript:void(0)" class="w3-border-top w3-bar-item "></a>
                 <a href="javascript:void(0)" class="nav-lang-option us-option selected"
                     onclick="selectFlag('en-US'); TRANSLATION.changeSelectedLanguage('en-US');">
-                    <img class="flag" src="/img/flags/us-icon.png">
+                    <img class="flag" src="${prevPath}img/flags/us-icon.png">
                 </a>
                 <a href="javascript:void(0)" class="nav-lang-option pt-option"
                     onclick="TselectFlag('pt-BR'); TRANSLATION.changeSelectedLanguage('pt-BR');">
-                    <img class="flag" src="/img/flags/br-icon.png">
+                    <img class="flag" src="${prevPath}img/flags/br-icon.png">
                 </a>
             </div>
         </div>
@@ -132,12 +132,12 @@ class Navbar extends HTMLElement {
         <div id="lang-options" class="w3-hide w3-hide-medium w3-hide-small w3-card">
             <a href="javascript:void(0)" onclick="selectFlag('en-US'); TRANSLATION.changeSelectedLanguage('en-US');"
                 class="us-option selected">
-                <img class="flag" src="/img/flags/us-icon.png"/>
+                <img class="flag" src="${prevPath}img/flags/us-icon.png"/>
                 English
             </a>
             <a href="javascript:void(0)" onclick="selectFlag('pt-BR'); TRANSLATION.changeSelectedLanguage('pt-BR');"
                 class="pt-option">
-                <img class="flag" src="/img/flags/br-icon.png"/>
+                <img class="flag" src="${prevPath}img/flags/br-icon.png"/>
                 Portuguese
             </a>
         </div>
@@ -161,12 +161,13 @@ function toggleNavFlag() {
 }
 
 function selectFlag(lang) {
+    const prevPath = window.location.origin === "https://avrgroup.github.io" ? '/vrtools/' : '/';
     if (lang !== TRANSLATION.currentLang) {
         if (lang === 'pt-BR') {
-            document.querySelector('#select-flag').src = '/img/flags/br-icon.png';
+            document.querySelector('#select-flag').src = `${prevPath}img/flags/br-icon.png`;
         }
         else {
-            document.querySelector('#select-flag').src = '/img/flags/us-icon.png';
+            document.querySelector('#select-flag').src = `${prevPath}img/flags/us-icon.png`;
         }
     }
 }
