@@ -99,13 +99,8 @@ class Translation {
         if (!hash) {
             hash = '';
         }
-        if (!path) {
-            window.location.hash = hash
-        }
-        else {
-            const newURL = window.location.origin + prevPath + path + '?lang=' + this.currentLang + hash;
-            window.location.href = newURL;
-        }
+        const newURL = window.location.origin + prevPath + path + '?lang=' + this.currentLang + hash;
+        window.location.href = newURL;
     }
 }
 
