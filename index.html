@@ -4,151 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/w3.css">
-<link rel="stylesheet" href="css/menu.css">
+<!-- <link rel="stylesheet" href="css/menu.css"> -->
 <link rel="shortcut icon" href="img/favicon.ico">
+<script src="components/navbar.js"></script>
+<script src="js/translation.js"></script>
 
 <style>
     .project-title {
         color: white;
         background-color: rgba(0, 0, 0, 0.6);
     }
-
-    .bar1,
-    .bar2,
-    .bar3 {
-        width: 25px;
-        height: 3px;
-        background-color: #333;
-        margin: 3px 0;
-        transition: 0.4s;
-    }
-
-    /* Rotate first bar */
-    .change .bar1 {
-        -webkit-transform: translateY(6px) rotate(-45deg);
-        transform: translateY(6px) rotate(-45deg);
-    }
-
-    /* Fade out the second bar */
-    .change .bar2 {
-        opacity: 0;
-    }
-
-    /* Rotate last bar */
-    .change .bar3 {
-        -webkit-transform: translateY(-6px) rotate(45deg);
-        transform: translateY(-6px) rotate(45deg);
-    }
-
-    @media only screen and (min-width: 992px) {
-
-        #rs-info,
-        #lc-info,
-        #pr-info,
-        #ao-info {
-            min-height: 8em;
-            max-height: 16em;
-        }
-    }
-
-    .selected {
-        background-color: lightgray;
-    }
-
-    .nav-lang-option {
-        display: inline-block;
-        text-align: center;
-        width: 47.5%;
-        padding: 0.25em;
-        text-decoration: none;
-    }
-
-    #navFlag {
-        width: 5em;
-        text-align: center;
-        --margin-right: 0.5em;
-    }
-
-    #navFlag::before {
-        position: relative;
-        content: "";
-        top: 0.75em;
-        right: var(--margin-right);
-        border: 6px solid transparent;
-        border-color: #000 transparent transparent transparent;
-    }
-
-    #navFlag.active:before {
-        border-color: transparent transparent #000 transparent;
-        top: -0.75em;
-    }
-
-    #lang-options {
-        position: absolute;
-        right: 19em;
-        width: 12em;
-        background-color: white;
-    }
-
-    #lang-options a {
-        display: block;
-        text-align: center;
-        text-decoration: none;
-        padding: 5px;
-    }
 </style>
 
 <body>
-
     <!-- Navbar (sit on top) -->
-    <div class="w3-top">
-        <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-            <a href="#home" class="w3-bar-item w3-button"><b>VR</b> Tools</a>
-
-            <!-- Float links to the right. Hide them on small screens -->
-            <div class="w3-right w3-hide-small w3-hide-medium">
-                <a id="navFlag" href="javascript:void(0);" onclick="TRANSLATION.toggleNavFlag()"
-                    class="w3-bar-item w3-button ">&#127482;&#127480;</a>
-
-                <a href="#projects" class="w3-bar-item w3-button menu-projects">Projects</a>
-                <a href="#about" class="w3-bar-item w3-button menu-about">About</a>
-                <a href="#contact" class="w3-bar-item w3-button menu-contact">Contact</a>
-            </div>
-
-            <!-- Burger Menu-->
-            <a class=" menu-icon w3-bar-item w3-hide-large w3-right" href="javascript:void(0);"
-                onclick="toggleFunction()" title="Toggle Navigation Menu">
-                <div class="bar1"></div>
-                <div class="bar2"></div>
-                <div class="bar3"></div>
-            </a>
-
-            <!-- Navbar on small screens -->
-            <div id="navSmall" class="w3-bar-block w3-hide w3-hide-large">
-                <a href="#projects" class="w3-bar-item w3-button menu-projects" onclick="toggleFunction()">Projects</a>
-                <a href="#about" class="w3-bar-item w3-button menu-about" onclick="toggleFunction()">About</a>
-                <a href="#contact" class="w3-bar-item w3-button menu-contact" onclick="toggleFunction()">Contact</a>
-
-                <!-- Languages sub-section -->
-                <a href="javascript:void(0)" class="w3-border-top w3-bar-item "></a>
-                <a href="javascript:void(0)" class="nav-lang-option us-option selected"
-                    onclick="TRANSLATION.changeSelectedLanguage('enus')">&#127482;&#127480;</a>
-                <a href="javascript:void(0)" class="nav-lang-option pt-option"
-                    onclick="TRANSLATION.changeSelectedLanguage('ptbr')">&#x1F1E7;&#x1F1F7;</a>
-            </div>
-        </div>
-
-        <div id="lang-options" class="w3-hide w3-card">
-            <a href="javascript:void(0)" onclick="TRANSLATION.changeSelectedLanguage('enus')"
-                class="us-option selected">&#127482;&#127480;
-                English
-            </a>
-            <a href="javascript:void(0)" onclick="TRANSLATION.changeSelectedLanguage('ptbr')"
-                class="pt-option">&#x1F1E7;&#x1F1F7;
-                Portuguese
-            </a>
-        </div>
-    </div>
+    <navbar-component></navbar-component>
 
     <!-- Header -->
     <header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
@@ -410,7 +280,6 @@
                 class="w3-hover-text-green">w3.css</a></p>
     </footer>
 
-    <script src="js/translation.js"></script>
     <script>
         function submitForm() {
             document.getElementById("gform").submit()
@@ -425,17 +294,8 @@
             document.getElementById("modal").style.display = "block"
         }
 
-        function toggleFunction() {
-            const nav = document.getElementById("navSmall");
-            const icon = document.querySelector('.menu-icon');
+        function redirectTo(url) {
 
-            icon.classList.toggle('change');
-
-            if (nav.className.indexOf("w3-show") == -1) {
-                nav.className += " w3-show";
-            } else {
-                nav.className = nav.className.replace(" w3-show", "");
-            }
         }
 
         TRANSLATION.add(

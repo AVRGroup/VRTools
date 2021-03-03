@@ -16,7 +16,7 @@ class Translation {
 
         this.PT_BR = 0;
         this.EN_US = 1;
-        this.currentLang = 'enus';
+        this.currentLang = 'en-US';
     }
 
 
@@ -63,11 +63,6 @@ class Translation {
         }
     }
 
-    toggleNavFlag() {
-        document.querySelector('#navFlag').classList.toggle('active');
-        document.querySelector('#lang-options').classList.toggle('w3-show');
-    }
-
     changeSelectedLanguage(lang) {
         const flag = document.querySelector('#navFlag');
 
@@ -75,12 +70,10 @@ class Translation {
             const pt = document.querySelectorAll('.pt-option');
             const us = document.querySelectorAll('.us-option');
 
-            if (lang === 'ptbr') {
-                flag.innerHTML = '&#x1F1E7;&#x1F1F7;';
+            if (lang === 'pt-BR') {
                 TRANSLATION.translateDocument(TRANSLATION.PT_BR)
             }
-            else if (lang === 'enus') {
-                flag.innerHTML = '&#127482;&#127480;';
+            else if (lang === 'en-US') {
                 TRANSLATION.translateDocument(TRANSLATION.EN_US);
             }
 
@@ -88,24 +81,28 @@ class Translation {
             us.forEach(e => { e.classList.toggle('selected'); });
 
             this.currentLang = lang;
+
+            if (window.history.pushState) {
+                const newURL = window.location.origin + window.location.pathname + '?lang=' + this.currentLang + window.location.hash;
+                window.history.pushState({ path: newURL }, '', newURL)
+            }
+
         }
 
         flag.classList.remove('active');
         document.querySelector('#lang-options').classList.remove('w3-show');
     }
+
+    redirect(path, hash) {
+        if (!path) {
+            window.location.hash = hash
+        }
+        else {
+            const newURL = window.location.origin + path + '?lang=' + this.currentLang + hash;
+            window.location.href = newURL;
+        }
+    }
 }
 
 const TRANSLATION = new Translation();
 
-window.onload = function () {
-    const url = new URLSearchParams(window.location.search);
-    const lang = url.get('lang');
-
-    if (lang && lang === 'pt-BR') {
-        TRANSLATION.changeSelectedLanguage('ptbr')
-        TRANSLATION.translateDocument(TRANSLATION.PT_BR);
-    }
-    // else {
-    //     TRANSLATION.translateDocument(TRANSLATION.EN_US);
-    // }
-}
