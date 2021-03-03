@@ -94,6 +94,8 @@ class Translation {
     }
 
     redirect(path, hash) {
+        const prevPath = window.location.origin === "https://avrgroup.github.io" ? '/vrtools/' : '/';
+
         if (!hash) {
             hash = '';
         }
@@ -101,7 +103,7 @@ class Translation {
             window.location.hash = hash
         }
         else {
-            const newURL = window.location.origin + path + '?lang=' + this.currentLang + hash;
+            const newURL = window.location.origin + prevPath + path + '?lang=' + this.currentLang + hash;
             window.location.href = newURL;
         }
     }

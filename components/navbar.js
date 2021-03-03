@@ -4,6 +4,8 @@ class Navbar extends HTMLElement {
     }
 
     connectedCallback() {
+        const prevPath = window.location.origin === "https://avrgroup.github.io" ? '/vrtools/' : '/';
+
         this.innerHTML = `
     <style>
         .bar1,
@@ -86,7 +88,7 @@ class Navbar extends HTMLElement {
 
     <div class="w3-top">
         <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-            <a href="javascript: TRANSLATION.redirect('/', '#projects')" class="w3-bar-item w3-button"><b>VR</b> Tools</a>
+            <a href="javascript: TRANSLATION.redirect('${prevPath}', '#projects')" class="w3-bar-item w3-button"><b>VR</b> Tools</a>
 
             <!-- Float links to the right. Hide them on small screens -->
             <div class="w3-right w3-hide-small w3-hide-medium">
@@ -95,9 +97,9 @@ class Navbar extends HTMLElement {
                     <img id="select-flag" class="flag" src="/img/flags/us-icon.png">
                 </a>
 
-                <a href="javascript: TRANSLATION.redirect('/', '#projects')" class="w3-bar-item w3-button menu-projects">Projects</a>
-                <a href="javascript: TRANSLATION.redirect('/', '#about')" class="w3-bar-item w3-button menu-about">About</a>
-                <a href="javascript: TRANSLATION.redirect('/', '#contact')" class="w3-bar-item w3-button menu-contact">Contact</a>
+                <a href="javascript: TRANSLATION.redirect('${prevPath}', '#projects')" class="w3-bar-item w3-button menu-projects">Projects</a>
+                <a href="javascript: TRANSLATION.redirect('${prevPath}', '#about')" class="w3-bar-item w3-button menu-about">About</a>
+                <a href="javascript: TRANSLATION.redirect('${prevPath}', '#contact')" class="w3-bar-item w3-button menu-contact">Contact</a>
             </div>
 
             <!-- Burger Menu-->
@@ -110,18 +112,18 @@ class Navbar extends HTMLElement {
 
             <!-- Navbar on small screens -->
             <div id="navSmall" class="w3-bar-block w3-hide w3-hide-large">
-                <a href="/#projects" class="w3-bar-item w3-button menu-projects" onclick="toggleFunction()">Projects</a>
-                <a href="/#about" class="w3-bar-item w3-button menu-about" onclick="toggleFunction()">About</a>
-                <a href="/#contact" class="w3-bar-item w3-button menu-contact" onclick="toggleFunction()">Contact</a>
+                <a href="javascript: TRANSLATION.redirect('${prevPath}', '#projects')" class="w3-bar-item w3-button menu-projects" onclick="toggleFunction()">Projects</a>
+                <a href="javascript: TRANSLATION.redirect('${prevPath}', '#about')" class="w3-bar-item w3-button menu-about" onclick="toggleFunction()">About</a>
+                <a href="javascript: TRANSLATION.redirect('${prevPath}', '#contact')" class="w3-bar-item w3-button menu-contact" onclick="toggleFunction()">Contact</a>
 
                 <!-- Languages sub-section -->
                 <a href="javascript:void(0)" class="w3-border-top w3-bar-item "></a>
                 <a href="javascript:void(0)" class="nav-lang-option us-option selected"
-                    onclick="TRANSLATION.changeSelectedLanguage('enus')">
+                    onclick="selectFlag('en-US'); TRANSLATION.changeSelectedLanguage('en-US');">
                     <img class="flag" src="/img/flags/us-icon.png">
                 </a>
                 <a href="javascript:void(0)" class="nav-lang-option pt-option"
-                    onclick="TRANSLATION.changeSelectedLanguage('ptbr')">
+                    onclick="TselectFlag('pt-BR'); TRANSLATION.changeSelectedLanguage('pt-BR');">
                     <img class="flag" src="/img/flags/br-icon.png">
                 </a>
             </div>
