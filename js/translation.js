@@ -5,7 +5,6 @@ class Translation {
             { element: '.menu-projects', content: 'Projetos' },
             { element: '.menu-about', content: 'Sobre' },
             { element: '.menu-contact', content: 'Contato' },
-            { element: '.menu-languages', content: 'Idiomas' }
         ];
 
         this.enUS = [
@@ -13,7 +12,6 @@ class Translation {
             { element: '.menu-projects', content: 'Projects' },
             { element: '.menu-about', content: 'About' },
             { element: '.menu-contact', content: 'Contact' },
-            { element: '.menu-languages', content: 'Languages' }
         ];
 
         this.PT_BR = 0;
@@ -80,12 +78,10 @@ class Translation {
             if (lang === 'ptbr') {
                 flag.innerHTML = '&#x1F1E7;&#x1F1F7;';
                 TRANSLATION.translateDocument(TRANSLATION.PT_BR)
-                flag.style.setProperty("--margin-right", '37em');
             }
             else if (lang === 'enus') {
                 flag.innerHTML = '&#127482;&#127480;';
                 TRANSLATION.translateDocument(TRANSLATION.EN_US);
-                flag.style.setProperty("--margin-right", '34.5em');
             }
 
             pt.forEach(e => { e.classList.toggle('selected'); });

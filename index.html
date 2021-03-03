@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/w3.css">
+<link rel="stylesheet" href="css/menu.css">
 <link rel="shortcut icon" href="img/favicon.ico">
 
 <style>
@@ -64,14 +65,14 @@
 
     #navFlag {
         width: 5em;
-        text-align: right;
-        --margin-right: 34.5em;
+        text-align: center;
+        --margin-right: 0.5em;
     }
 
     #navFlag::before {
-        position: absolute;
+        position: relative;
         content: "";
-        top: 1.5em;
+        top: 0.75em;
         right: var(--margin-right);
         border: 6px solid transparent;
         border-color: #000 transparent transparent transparent;
@@ -79,12 +80,12 @@
 
     #navFlag.active:before {
         border-color: transparent transparent #000 transparent;
-        top: 1.2em;
+        top: -0.75em;
     }
 
     #lang-options {
         position: absolute;
-        right: 26em;
+        right: 19em;
         width: 12em;
         background-color: white;
     }
@@ -109,7 +110,6 @@
                 <a id="navFlag" href="javascript:void(0);" onclick="TRANSLATION.toggleNavFlag()"
                     class="w3-bar-item w3-button ">&#127482;&#127480;</a>
 
-                <a href="#vr-apps" class="w3-bar-item w3-button menu-vrapps">VR Apps</a>
                 <a href="#projects" class="w3-bar-item w3-button menu-projects">Projects</a>
                 <a href="#about" class="w3-bar-item w3-button menu-about">About</a>
                 <a href="#contact" class="w3-bar-item w3-button menu-contact">Contact</a>
@@ -125,14 +125,12 @@
 
             <!-- Navbar on small screens -->
             <div id="navSmall" class="w3-bar-block w3-hide w3-hide-large">
-                <a href="#vr-apps" class="w3-bar-item w3-button w3-border-top menu-vrapps" onclick="toggleFunction()">VR
-                    Apps</a>
                 <a href="#projects" class="w3-bar-item w3-button menu-projects" onclick="toggleFunction()">Projects</a>
                 <a href="#about" class="w3-bar-item w3-button menu-about" onclick="toggleFunction()">About</a>
                 <a href="#contact" class="w3-bar-item w3-button menu-contact" onclick="toggleFunction()">Contact</a>
 
                 <!-- Languages sub-section -->
-                <a href="javascript:void(0)" class="w3-border-top w3-bar-item w3-button menu-languages">Languages:</a>
+                <a href="javascript:void(0)" class="w3-border-top w3-bar-item "></a>
                 <a href="javascript:void(0)" class="nav-lang-option us-option selected"
                     onclick="TRANSLATION.changeSelectedLanguage('enus')">&#127482;&#127480;</a>
                 <a href="javascript:void(0)" class="nav-lang-option pt-option"
@@ -164,47 +162,6 @@
 
     <!-- Page content -->
     <div class="w3-content w3-padding" style="max-width:1564px">
-
-        <!-- VR apps Section -->
-        <div class="w3-container w3-padding-32" id="vr-apps">
-            <h3 id="vrapps-header" class="w3-border-bottom w3-border-light-grey w3-padding-16">VR Apps</h3>
-        </div>
-
-        <div class="w3-row-padding">
-            <div class="w3-col l3 m6 w3-margin-bottom">
-                <a href="vrapps/gartsculture.html" target="_">
-                    <div class="w3-display-container">
-                        <div class="project-title w3-display-topleft w3-padding">Google Arts & Culture</div>
-                        <img src="img/gartsculture/gartculture.jpg" alt="Google Arts and Culture logo"
-                            style="width:100%">
-                    </div>
-                </a>
-            </div>
-            <div class="w3-col l3 m6 w3-margin-bottom">
-                <a href="vrapps/gexpeditions.html" target="_">
-                    <div class="w3-display-container">
-                        <div class="project-title w3-display-topleft w3-padding">Google Expeditions</div>
-                        <img src="img/gexpeditions/gexpeditions.png" alt="Google Expeditions logo" style="width:100%">
-                    </div>
-                </a>
-            </div>
-            <div class="w3-col l3 m6 w3-margin-bottom">
-                <a href="vrapps/sitesinvr.html" target="_">
-                    <div class="w3-display-container">
-                        <div class="project-title w3-display-topleft w3-padding">Sites in VR</div>
-                        <img src="img/sitesinvr/sitesvr.jpg" alt="Sites in VR logo" style="width:100%">
-                    </div>
-                </a>
-            </div>
-            <div class="w3-col l3 m6 w3-margin-bottom">
-                <a href="vrapps/matterportvr.html" target="_">
-                    <div class="w3-display-container">
-                        <div class="project-title w3-display-topleft w3-padding">Matterport VR</div>
-                        <img src="img/matterportvr/matterport.jpg" alt="Matterport VR logo" style="width:100%">
-                    </div>
-                </a>
-            </div>
-        </div>
 
         <!-- Project Section -->
         <div class="w3-container w3-padding-32" id="projects">
@@ -290,6 +247,47 @@
                             Figures</div>
                         <img src="img/projects-main-images/historical-figures.png"
                             alt="example of important historical figures" style="width:100%;">
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- External Apps Section -->
+        <div class="w3-container w3-padding-32" id="vr-apps">
+            <h3 id="external-apps-header" class="w3-border-bottom w3-border-light-grey w3-padding-16">External Apps</h3>
+        </div>
+
+        <div class="w3-row-padding">
+            <div class="w3-col l3 m6 w3-margin-bottom">
+                <a href="external-apps/gartsculture.html" target="_">
+                    <div class="w3-display-container">
+                        <div class="project-title w3-display-topleft w3-padding">Google Arts & Culture</div>
+                        <img src="img/gartsculture/gartculture.jpg" alt="Google Arts and Culture logo"
+                            style="width:100%">
+                    </div>
+                </a>
+            </div>
+            <div class="w3-col l3 m6 w3-margin-bottom">
+                <a href="external-apps/gexpeditions.html" target="_">
+                    <div class="w3-display-container">
+                        <div class="project-title w3-display-topleft w3-padding">Google Expeditions</div>
+                        <img src="img/gexpeditions/gexpeditions.png" alt="Google Expeditions logo" style="width:100%">
+                    </div>
+                </a>
+            </div>
+            <div class="w3-col l3 m6 w3-margin-bottom">
+                <a href="external-apps/sitesinvr.html" target="_">
+                    <div class="w3-display-container">
+                        <div class="project-title w3-display-topleft w3-padding">Sites in VR</div>
+                        <img src="img/sitesinvr/sitesvr.jpg" alt="Sites in VR logo" style="width:100%">
+                    </div>
+                </a>
+            </div>
+            <div class="w3-col l3 m6 w3-margin-bottom">
+                <a href="external-apps/matterportvr.html" target="_">
+                    <div class="w3-display-container">
+                        <div class="project-title w3-display-topleft w3-padding">Matterport VR</div>
+                        <img src="img/matterportvr/matterport.jpg" alt="Matterport VR logo" style="width:100%">
                     </div>
                 </a>
             </div>
@@ -441,9 +439,9 @@
         }
 
         TRANSLATION.add(
-            '#vrapps-header',
-            'VR Apps',
-            'Apps em RV'
+            '#external-apps-header',
+            'External Apps',
+            'Aplicativos externos'
         );
 
         TRANSLATION.add(
@@ -524,7 +522,7 @@
 
         TRANSLATION.add(
             '#lc-info',
-            'Graduated in Exact Sciences at UFJF (2014-2019). Computer Science student at UFJF. Currently interested in Virtual Reality , Augmented Reality' +
+            'Graduated in Exact Sciences at UFJF (2014-2019). Computer Science student at UFJF. Currently interested in Virtual Reality, Augmented Reality' +
             ' and Computer Graphics.',
             'Graduado em Ciências Exatas pela UFJF(2014-2019). Estudante de Ciência da Computação da UFJF. Atualmente seus principais interesses são' +
             'Realidade Virtual, Realidade Aumentada e Computação Gráfica.',
