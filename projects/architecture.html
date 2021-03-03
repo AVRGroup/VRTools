@@ -7,33 +7,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../css/w3.css">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="/js/translation.js"></script>
+    <script src="/components/navbar.js"></script>
 </head>
 
 <body>
 
     <!-- Navbar (sit on top) -->
-    <div class="w3-top ">
-        <div class="w3-bar w3-white w3-wide w3-padding w3-card ">
-            <a href="../index.html#home " class="w3-bar-item w3-button "><b>VR</b> Tools</a>
-            <!-- Float links to the right. Hide them on small screens -->
-            <div class="w3-right w3-hide-small ">
-                <a href="../index.html#vr-apps" class="w3-bar-item w3-button">VR Apps</a>
-                <a href="../index.html#projects" class="w3-bar-item w3-button">Projects</a>
-                <a href="../index.html#about " class="w3-bar-item w3-button ">About</a>
-                <a href="../index.html#contact " class="w3-bar-item w3-button ">Contact</a>
-            </div>
-        </div>
-    </div>
+    <navbar-component></navbar-component>
 
     <!-- Page content -->
     <div class="w3-content w3-padding " style="max-width:1564px ">
 
         <div class="w3-container w3-padding-32 " id="projects">
-            <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Architecture</h1>
+            <h1 id="header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Architecture</h1>
         </div>
 
         <div class="w3-container" id="about" style="text-align:justify;">
-            <p>
+            <p id="p1">
                 When architects present their ideas for the customers, they usually present their architectural plans
                 and sketches to the customers. However, the customers may not actually understand the plans, as often
                 they are laypeople, and
@@ -42,7 +33,7 @@
                 building where they could walk through, mostly if it was in Virtual Reality.
             </p>
 
-            <p>
+            <p id="p2">
                 Architects often have 3D modeling skills already, but the various software they use to build their
                 models usually do not have support for ease navigation nor augmented and virtual reality (AR and VR).
                 This apps aims to solve that problem, supplying the 3D navigation and the AR and VR support for the
@@ -74,7 +65,7 @@
 
         <!-- More modes -->
         <div class="w3-container w3-padding-32 ">
-            <h3 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
+            <h3 id="more-modes-header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
         </div>
         <div class="w3-row-padding">
 
@@ -85,7 +76,8 @@
                         style="background: url('img/Architecture/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br />Fullscreen
+                            <br />
+                            <div id="fullscreen">Fullscreen</div>
                         </div>
                     </div>
                 </a>
@@ -97,16 +89,19 @@
                         style="background: url('img/Architecture/blur-AR.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/ar-icon.png" alt="Augmented Reality" style="width: 64px;" />
-                            <br />Augmented Reality
+                            <br />
+                            <div id="ar">Augmented Reality</div>
                         </div>
                     </div>
                 </a>
 
                 <p class="more-modes-text">
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                <div id="warning-fiducial">
                     You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
                         target="_blank">click here</a> to
                     download).
+                </div>
                 </p>
             </div>
 
@@ -116,22 +111,27 @@
                         style="background: url('img/Architecture/blur-VR.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="Augmented Reality" style="width: 64px;" />
-                            <br />Virtual Reality
+                            <br />
+                            <div id="vr">Virtual Reality</div>
                         </div>
                     </div>
                 </a>
 
                 <p class="more-modes-text">
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                <div id="warning-hmd-1">
                     In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one
                     joystick even
                     though it is possible to use the app without those equipments.
+                </div>
                 </p>
                 <p class="more-modes-text">
+                <div id="warning-hmd-2">
                     Using mobile devices, press the VR button in bottom right conner before inserting your device in the
                     HMD. A circle will move as you look around and you can teleport to that circle pressing any joystick
                     button. Alternatively, it is also possible to teleport pressisng the spacebar or touching the screen
                     if your device is sensitive to touch.
+                </div>
                 </p>
 
             </div>
@@ -140,7 +140,7 @@
         <!-- End of more modes -->
 
         <div class="w3-container w3-padding-32 ">
-            <h3 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">
+            <h3 id="images-header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">
                 Images in Augmented and Virtual Reality
             </h3>
         </div>
@@ -183,6 +183,96 @@
                 class="w3-hover-text-green ">w3.css</a></p>
     </footer>
     <script src="../js/script.js"></script>
+    <script>
+        TRANSLATION.add(
+            '#header',
+            'Architecture',
+            'Arquitetura'
+        );
+
+        TRANSLATION.add(
+            '#p1',
+            `When architects present their ideas for the customers, they usually present their architectural plans
+                and sketches to the customers. However, the customers may not actually understand the plans, as often
+                they are laypeople, and
+                the sketches are limited in how well they can represent a real house. It would be easier for common
+                people to understand all of those plans and sketches if there were also a 3D representation of the
+                building where they could walk through, mostly if it was in Virtual Reality`,
+            `Para apresentar suas ideias aos clientes, os arquitetos costumam usar suas plantas e esboços. No entanto,
+            os clientes podem não entender de fato os planos, pois sao, frequentemente, leigos e os esboços são limitados
+            em quão bem eles podem representar uma casa de verdade. Seria mais fácil para as pessoas comuns entenderem todos
+            esses planos e esboços se houvesse também uma representação 3D da construação pela qual eles pudessem andar, ainda
+            mais se fosse em Realidade Virtual.`
+        );
+
+        TRANSLATION.add(
+            '#p2',
+            ` Architects often have 3D modeling skills already, but the various software they use to build their
+                models usually do not have support for ease navigation nor augmented and virtual reality (AR and VR).
+                This apps aims to solve that problem, supplying the 3D navigation and the AR and VR support for the
+                already created 3D model.`,
+            `Arquitetos costuma ter expertise em modelagem 3D, mas os softwares que usam para construir seus modelos geralmente
+            não têm suporte para uma fácil navegação pelo modelo nem para realidade virtual ou aumentada. Esse aplicativo tem por
+            objetivo resolver esse problema, fornecendo navegação 3D e suporte a RA e RV para modelos 3D já criados.`
+        );
+
+        TRANSLATION.add(
+            '#fullscreen',
+            'Fullscreen',
+            'Tela cheia'
+        );
+
+        TRANSLATION.add(
+            '#ar',
+            'Augmented Reality',
+            'Realidade Aumentada',
+        );
+
+        TRANSLATION.add(
+            '#vr',
+            'Virtual Reality',
+            'Realidade Virtual'
+        );
+
+        TRANSLATION.add(
+            '#warning-fiducial',
+            `You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png" target="_blank">click here</a> to download).`,
+            `É nescessário imprimir o marcador fiduciário para usar o modo de Realidade Aumentada (<a href="data/markers/hiro.png" target="_blank">
+            Clique aqui</a> par baixar).`
+        );
+
+        TRANSLATION.add(
+            '#warning-hmd-1',
+            `In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one joystick even though it is possible to use the 
+            app without those equipments.`,
+            `Para uma experiência completa no modo RV, é nescessário um HMD (head-mounted display, ou capacete de visualização em português) e um controle 
+            joystick, apesar de ser possível usar o aplicativo sem esses equipamentos.`
+        )
+
+        TRANSLATION.add(
+            '#warning-hmd-2',
+            `Using mobile devices, press the VR button in bottom right conner before inserting your device in the
+            HMD. A circle will move as you look around and you can teleport to that circle pressing any joystick
+            button. Alternatively, it is also possible to teleport pressisng the spacebar or touching the screen
+            if your device is sensitive to touch.`,
+            `Quando usando um dispositivo móvel, aperte o botão "VR" no canto inferior direito da tela antes de inserir seu dispositivo no HMD. 
+            Um círculo irá aparecer no chão quando pressionar algum botão do controle joystick e você irá ser teleportado para o círculo ao soltar o botão. 
+            Alternativamente, também é possível se teleportar pressionado a barra de espaço caso esteja usando teclado, tocando na tela se seu dispositivo
+            for sensível ao toque.`
+        );
+
+        TRANSLATION.add(
+            '#more-modes-header',
+            'More modes',
+            'Mais modos'
+        );
+
+        TRANSLATION.add(
+            '#images-header',
+            'Images in Augmented and Virtual Reality',
+            'Imagens em Realidade Virtual e Aumentada'
+        );
+    </script>
 </body>
 
 </html>

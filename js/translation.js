@@ -94,6 +94,9 @@ class Translation {
     }
 
     redirect(path, hash) {
+        if (!hash) {
+            hash = '';
+        }
         if (!path) {
             window.location.hash = hash
         }
