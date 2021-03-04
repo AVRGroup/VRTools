@@ -202,7 +202,7 @@
                         this.wireframe = true;
 
                     }
-                    vrInterface.showMessage(`Wireframe is ${self.models[self.modelIndex].object3D.children[0].material.wireframe ? 'on' : 'off'}`);
+                    vrInterface.showMessage(`Wireframe is ${this.wireframe ? 'on' : 'off'}`);
                 });
 
                 document.addEventListener('pointerlockchange', (event) => {
