@@ -2,45 +2,36 @@
 <html>
 
 <head>
-    <title>Projectile motion</title>
+    <title id="title">Projectile motion</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../css/w3.css">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/translation.js"></script>
+    <script src="../components/navbar.js"></script>
 </head>
 
 <body>
 
     <!-- Navbar (sit on top) -->
-    <div class="w3-top ">
-        <div class="w3-bar w3-white w3-wide w3-padding w3-card ">
-            <a href="../index.html#home " class="w3-bar-item w3-button "><b>VR</b> Tools</a>
-            <!-- Float links to the right. Hide them on small screens -->
-            <div class="w3-right w3-hide-small ">
-                <a href="../index.html#vr-apps" class="w3-bar-item w3-button">VR Apps</a>
-                <a href="../index.html#projects" class="w3-bar-item w3-button">Projects</a>
-                <a href="../index.html#about " class="w3-bar-item w3-button ">About</a>
-                <a href="../index.html#contact " class="w3-bar-item w3-button ">Contact</a>
-            </div>
-        </div>
-    </div>
+    <navbar-component></navbar-component>
 
     <!-- Page content -->
     <div class="w3-content w3-padding " style="max-width:1564px ">
 
         <div class="w3-container w3-padding-32 " id="projects">
-            <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Projectile Motion</h1>
+            <h1 id="header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Projectile Motion</h1>
         </div>
 
         <div class="w3-container" id="about" style="text-align:justify;">
-            <p>
+            <p id="p1">
                 If an object thrown into the air and the only force which acts upon it is gravity, that object is under
                 projectile motion. Surely, there will always be the air resistance force, but we usually assume it is
                 negligible, since it is a good approximation when the object’s weight is large compared to the air
                 resistance force.
             </p>
 
-            <p>
+            <p id="p2">
                 The motion can be split in two components: the vertical component (y) and the horizontal component (x).
                 The gravity pulls the object down, thus this force acts only on the velocity of the vertical component
                 (vy). The velocity in the horizontal component (vx) will remain constant along the object’s path.
@@ -70,7 +61,7 @@
 
         <!-- More modes -->
         <div class="w3-container w3-padding-32 ">
-            <h3 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
+            <h3 id="more-modes-header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
         </div>
         <div class="w3-row-padding">
 
@@ -81,7 +72,8 @@
                         style="background: url('img/Projectile-Motion/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br />Fullscreen
+                            <br />
+                            <div id="fullscreen">Fullscreen</div>
                         </div>
                     </div>
                 </a>
@@ -95,10 +87,20 @@
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="Augmented Reality icon"
                                 style="width: 64px;" />
-                            <br />Augmented Reality
+                            <br />
+                            <div id="ar">Augmented Reality</div>
                         </div>
                     </div>
                 </a>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                <div id="warning-fiducial">
+                    You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
+                        target="_blank">click here</a> to
+                    download).
+                </div>
+                </p>
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
@@ -108,16 +110,25 @@
                         style="background: url('img/Projectile-Motion/blur-vr.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br />Virtual Reality
+                            <br />
+                            <div id="vr">Virtual Reality</div>
                         </div>
                     </div>
                 </a>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                <div id="warning-hmd-1">
+                    In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one
+                    joystick even though it is possible to use the app without those equipments.
+                </div>
+                </p>
             </div>
 
         </div>
 
         <div class="w3-panel w3-leftbar w3-serif">
-            <h5><b>Reference:</b></h5>
+            <h5><b id="refer">Reference:</b></h5>
             <p>
                 <i> "What is 2D projectile motion?" From Khan Academy. Web Resource
                     https://www.khanacademy.org/science/physics/two-dimensional-motion/two-dimensional-projectile-mot/a/what-is-2d-projectile-motion</i>
@@ -170,6 +181,88 @@
                 class="w3-hover-text-green ">w3.css</a></p>
     </footer>
     <script src="../js/script.js"></script>
+    <script>
+        // ã
+
+        TRANSLATION.add(
+            '#title',
+            'Projectile Motion',
+            'Movimento de projéteis',
+        );
+
+        TRANSLATION.add(
+            '#header',
+            'Projectile Motion',
+            'Movimento de Projéteis',
+        );
+
+        TRANSLATION.add(
+            '#p1',
+            `If an object thrown into the air and the only force which acts upon it is gravity, that object is under
+            projectile motion. Surely, there will always be the air resistance force, but we usually assume it is
+            negligible, since it is a good approximation when the object’s weight is large compared to the air
+            resistance force.`,
+            `Um objeto arremessado no ar que tem apenas a força da gravidade agindo sobre ele está sob um movimento
+            de projétil. Sempre haverá a força da resistência do ar, é claro, mas geralmente assumimos que tal
+            força seja desprezível, uma vez que mesmo fazendo isso temos uma boa aproximação quando o peso do objeto
+            comparado à resistência do ar.`,
+        );
+
+        TRANSLATION.add(
+            '#p2',
+            `The motion can be split in two components: the vertical component (y) and the horizontal component (x).
+            The gravity pulls the object down, thus this force acts only on the velocity of the vertical component
+            (vy). The velocity in the horizontal component (vx) will remain constant along the object’s path.`,
+            `O movimento pode ser dividio em duas componentes: a componente verticl (y) e a componente horizontal (x).
+            A gravidade puxa o objeto para baixo, portanto essa força age somente na velocidade da componente vertical
+            (vy). A velocidade na componente horizontal (vx) permanece constante durate toda a trajetória do objeto.`,
+        );
+
+        TRANSLATION.add(
+            '#fullscreen',
+            'Fullscreen',
+            'Tela cheia'
+        );
+
+        TRANSLATION.add(
+            '#ar',
+            'Augmented Reality',
+            'Realidade Aumentada',
+        );
+
+        TRANSLATION.add(
+            '#vr',
+            'Virtual Reality',
+            'Realidade Virtual'
+        );
+
+        TRANSLATION.add(
+            '#warning-fiducial',
+            `You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png" target="_blank">click here</a> to download).`,
+            `É nescessário imprimir o marcador fiduciário para usar o modo de Realidade Aumentada (<a href="data/markers/hiro.png" target="_blank">
+                Clique aqui</a> par baixar).`
+        );
+
+        TRANSLATION.add(
+            '#warning-hmd-1',
+            `In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one joystick even though it is possible to use the
+                app without those equipments.`,
+            `Para uma experiência completa no modo RV, é nescessário um HMD (head-mounted display, ou capacete de visualização em português) e um controle
+                joystick, apesar de ser possível usar o aplicativo sem esses equipamentos.`
+        );
+
+        TRANSLATION.add(
+            '#more-modes-header',
+            'More modes',
+            'Mais modos'
+        );
+
+        TRANSLATION.add(
+            '#refer',
+            'Reference',
+            'Referências'
+        );
+    </script>
 </body>
 
 </html>

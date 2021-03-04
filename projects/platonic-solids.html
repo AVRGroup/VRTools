@@ -52,7 +52,7 @@
                 <p></p>
             </div>
             <iframe id="scene" class="w3-col l8" src="./src/platonic-solids-application.html" height="400"
-                    style="border:2px solid black;"></iframe>
+                style="border:2px solid black;"></iframe>
             <script>
                 // iOS iframe auto-resize workaround
 
@@ -75,10 +75,11 @@
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a href="./src/platonic-solids-application.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Platonic-Solids/blur.jpg') center;">
+                        style="background: url('img/Platonic-Solids/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br /> <div id="fullscreen">Fullscreen</div>
+                            <br />
+                            <div id="fullscreen">Fullscreen</div>
                         </div>
                     </div>
                 </a>
@@ -87,31 +88,33 @@
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a href="./src/platonic-solids-application-AR.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Platonic-Solids/blur-AR.jpg') center;">
+                        style="background: url('img/Platonic-Solids/blur-AR.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/ar-icon.png" alt="Augmented Reality" style="width: 64px;" />
-                            <br /><div id="ar">Augmented Reality</div>
+                            <br />
+                            <div id="ar">Augmented Reality</div>
                         </div>
                     </div>
                 </a>
 
                 <p class="more-modes-text">
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
-                    <div id="warning-fiducial">
-                        You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
-                                                                                           target="_blank">click here</a> to
-                        download).
-                    </div>
+                <div id="warning-fiducial">
+                    You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
+                        target="_blank">click here</a> to
+                    download).
+                </div>
                 </p>
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a href="./src/platonic-solids-application-VR.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Platonic-Solids/blur.jpg') center;">
+                        style="background: url('img/Platonic-Solids/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br /> <div id="vr">Virtual Reality</div>
+                            <br />
+                            <div id="vr">Virtual Reality</div>
                         </div>
                     </div>
                 </a>
@@ -121,7 +124,8 @@
         <!-- End of more modes -->
 
         <div class="w3-container w3-padding-32 ">
-            <h3 id="images-header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Images in Augmented Reality</h3>
+            <h3 id="images-header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Images in Augmented
+                Reality</h3>
         </div>
 
         <div class="w3-content w3-display-container w3-center w3-row ">
@@ -131,8 +135,7 @@
             <img class="slide " src="./img/Platonic-Solids/screenshot3-AR.png " onclick="openModal(3)">
             <img class="slide " src="./img/Platonic-Solids/screenshot4-AR.png" onclick="openModal(4)">
 
-            <button id="btn-left " class="w3-button w3-black w3-display-left w3-hide-large "
-                    onclick="plusDivs(-1) ">
+            <button id="btn-left " class="w3-button w3-black w3-display-left w3-hide-large " onclick="plusDivs(-1) ">
                 &#10094;
             </button>
             <button class="w3-button w3-black w3-display-right w3-hide-large " onclick="plusDivs(1) ">&#10095;</button>
@@ -141,20 +144,21 @@
         <div id="modal-slideshow" class="w3-modal w3-black">
             <div class="w3-content w3-center" style="height: 80%;">
                 <img class="slide-modal w3-display-middle" src="./img/Platonic-Solids/screenshot1-AR.png"
-                     style="height: 100%;">
+                    style="height: 100%;">
                 <img class="slide-modal w3-display-middle" src="./img/Platonic-Solids/screenshot2-AR.png"
-                     style="height: 100%;">
+                    style="height: 100%;">
                 <img class="slide-modal w3-display-middle" src="./img/Platonic-Solids/screenshot3-AR.png"
-                     style="height: 100%;">
+                    style="height: 100%;">
                 <img class="slide-modal w3-display-middle" src="./img/Platonic-Solids/screenshot4-AR.png"
-                     style="height: 100%;">
+                    style="height: 100%;">
 
                 <span class="w3-black w3-text-white w3-opacity w3-display-left w3-btn" onclick="plusModal(-1)">❮</span>
                 <span class="w3-black w3-text-white w3-opacity w3-display-right w3-btn" onclick="plusModal(1)">❯</span>
             </div>
 
-            <span class="w3-black w3-text-white w3-opacity w3-xxlarge w3-hover-text-grey w3-container w3-display-topright"
-                  onclick="closeModal()" style="cursor:pointer">×</span>
+            <span
+                class="w3-black w3-text-white w3-opacity w3-xxlarge w3-hover-text-grey w3-container w3-display-topright"
+                onclick="closeModal()" style="cursor:pointer">×</span>
         </div>
 
         <div class="w3-panel w3-leftbar w3-serif">
@@ -178,10 +182,10 @@
 
     <!-- Footer -->
     <footer class="w3-center w3-black w3-padding-16 ">
-        <h5 id="bottom"><b>Powered by:</b></h5>
-
+        <!-- <h5 id="bottom"><b>Powered by:</b></h5> -->
+        <b>Powered by:</b>
         <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank "
-           class="w3-hover-text-green ">w3.css</a>
+            class="w3-hover-text-green ">w3.css</a>
     </footer>
     <script src="../js/script.js"></script>
     <script>
@@ -271,11 +275,11 @@
             'Sólidos Platônicos'
         );
 
-        TRANSLATION.add(
-            '#bottom',
-            'Powered by ',
-            'Distribuído por '
-        );
+        // TRANSLATION.add(
+        //     '#bottom',
+        //     'Powered by ',
+        //     'Distribuído por '
+        // );
 
     </script>
 </body>

@@ -48,7 +48,7 @@
                 <p></p>
             </div>
             <iframe id="scene" class="w3-col l8" src="./src/architecture-application.html" height="500"
-                    style="border:2px solid black;"></iframe>
+                style="border:2px solid black;"></iframe>
             <script>
                 // iOS iframe auto-resize workaround
 
@@ -73,7 +73,7 @@
 
                 <a href="./src/architecture-application.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Architecture/blur.jpg') center;">
+                        style="background: url('img/Architecture/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
                             <br />
@@ -86,7 +86,7 @@
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a href="./src/architecture-AR.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Architecture/blur-AR.jpg') center;">
+                        style="background: url('img/Architecture/blur-AR.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/ar-icon.png" alt="Augmented Reality" style="width: 64px;" />
                             <br />
@@ -97,18 +97,18 @@
 
                 <p class="more-modes-text">
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
-                    <div id="warning-fiducial">
-                        You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
-                                                                                           target="_blank">click here</a> to
-                        download).
-                    </div>
+                <div id="warning-fiducial">
+                    You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
+                        target="_blank">click here</a> to
+                    download).
+                </div>
                 </p>
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a href="./src/architecture-application-VR.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Architecture/blur-VR.jpg') center;">
+                        style="background: url('img/Architecture/blur-VR.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="Augmented Reality" style="width: 64px;" />
                             <br />
@@ -119,19 +119,19 @@
 
                 <p class="more-modes-text">
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
-                    <div id="warning-hmd-1">
-                        In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one
-                        joystick even
-                        though it is possible to use the app without those equipments.
-                    </div>
+                <div id="warning-hmd-1">
+                    In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one
+                    joystick even
+                    though it is possible to use the app without those equipments.
+                </div>
                 </p>
                 <p class="more-modes-text">
-                    <div id="warning-hmd-2">
-                        Using mobile devices, press the VR button in bottom right conner before inserting your device in the
-                        HMD. A circle will move as you look around and you can teleport to that circle pressing any joystick
-                        button. Alternatively, it is also possible to teleport pressisng the spacebar or touching the screen
-                        if your device is sensitive to touch.
-                    </div>
+                <div id="warning-hmd-2">
+                    Using mobile devices, press the VR button in bottom right conner before inserting your device in the
+                    HMD. A circle will move as you look around and you can teleport to that circle pressing any joystick
+                    button. Alternatively, it is also possible to teleport pressisng the spacebar or touching the screen
+                    if your device is sensitive to touch.
+                </div>
                 </p>
 
             </div>
@@ -151,8 +151,7 @@
             <img class="slide " src="./img/Architecture/screenshot2-AR.jpg" onclick="openModal(2)">
             <img class="slide " src="./img/Architecture/example-VR.jpg" onclick="openModal(3)">
 
-            <button id="btn-left " class="w3-button w3-black w3-display-left w3-hide-large "
-                    onclick="plusDivs(-1) ">
+            <button id="btn-left " class="w3-button w3-black w3-display-left w3-hide-large " onclick="plusDivs(-1) ">
                 &#10094;
             </button>
             <button class="w3-button w3-black w3-display-right w3-hide-large " onclick="plusDivs(1) ">&#10095;</button>
@@ -161,28 +160,29 @@
         <div id="modal-slideshow" class="w3-modal w3-black">
             <div class="w3-content w3-center" style="height: 80%;">
                 <img class="slide-modal w3-display-middle" src="./img/Architecture/screenshot1-AR.jpg"
-                     style="height: 100%;">
+                    style="height: 100%;">
                 <img class="slide-modal w3-display-middle" src="./img/Architecture/screenshot2-AR.jpg"
-                     style="height: 100%;">
+                    style="height: 100%;">
                 <img class="slide-modal w3-display-middle" src="./img/Architecture/example-VR.jpg"
-                     style="height: 100%;">
+                    style="height: 100%;">
 
                 <span class="w3-black w3-text-white w3-opacity w3-display-left w3-btn" onclick="plusModal(-1)">❮</span>
                 <span class="w3-black w3-text-white w3-opacity w3-display-right w3-btn" onclick="plusModal(1)">❯</span>
             </div>
 
-            <span class="w3-black w3-text-white w3-opacity w3-xxlarge w3-hover-text-grey w3-container w3-display-topright"
-                  onclick="closeModal()" style="cursor:pointer">×</span>
+            <span
+                class="w3-black w3-text-white w3-opacity w3-xxlarge w3-hover-text-grey w3-container w3-display-topright"
+                onclick="closeModal()" style="cursor:pointer">×</span>
         </div>
 
         <!-- End page content -->
     </div>
 
     <footer class="w3-center w3-black w3-padding-16 ">
-        <h5 id="bottom"><b>Powered by:</b></h5>
-
+        <!-- <h5 id="bottom"><b>Powered by:</b></h5> -->
+        <b>Powered by:</b>
         <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank "
-           class="w3-hover-text-green ">w3.css</a>
+            class="w3-hover-text-green ">w3.css</a>
     </footer>
     <script src="../js/script.js"></script>
     <script>
@@ -283,11 +283,11 @@
             'Arquitetura'
         );
 
-        TRANSLATION.add(
-            '#bottom',
-            'Powered by ',
-            'Distribuído por '
-        );
+        // TRANSLATION.add(
+        //     '#bottom',
+        //     'Powered by ',
+        //     'Distribuído por '
+        // );
 
     </script>
 </body>
