@@ -123,7 +123,7 @@ class Navbar extends HTMLElement {
                     <img class="flag" src="${prevPath}img/flags/us-icon.png">
                 </a>
                 <a href="javascript:void(0)" class="nav-lang-option pt-option"
-                    onclick="TselectFlag('pt-BR'); TRANSLATION.changeSelectedLanguage('pt-BR');">
+                    onclick="selectFlag('pt-BR'); TRANSLATION.changeSelectedLanguage('pt-BR');">
                     <img class="flag" src="${prevPath}img/flags/br-icon.png">
                 </a>
             </div>
