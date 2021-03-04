@@ -2,45 +2,40 @@
 <html>
 
 <head>
-    <title>Platonic Solids</title>
+    <title id="title">Platonic Solids</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../css/w3.css">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/translation.js"></script>
+    <script src="../components/navbar.js"></script>
 </head>
 
 <body>
 
+
     <!-- Navbar (sit on top) -->
-    <div class="w3-top ">
-        <div class="w3-bar w3-white w3-wide w3-padding w3-card ">
-            <a href="../index.html#home " class="w3-bar-item w3-button "><b>VR</b> Tools</a>
-            <!-- Float links to the right. Hide them on small screens -->
-            <div class="w3-right w3-hide-small ">
-                <a href="../index.html#vr-apps" class="w3-bar-item w3-button">VR Apps</a>
-                <a href="../index.html#projects" class="w3-bar-item w3-button">Projects</a>
-                <a href="../index.html#about " class="w3-bar-item w3-button ">About</a>
-                <a href="../index.html#contact " class="w3-bar-item w3-button ">Contact</a>
-            </div>
-        </div>
-    </div>
+
+    <navbar-component></navbar-component>
+
+
 
     <!-- Page content -->
     <div class="w3-content w3-padding " style="max-width:1564px ">
 
         <div class="w3-container w3-padding-32 " id="projects">
-            <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Platonics solids</h1>
+            <h1 id="header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Platonics solids</h1>
         </div>
 
         <div class="w3-container" id="about" style="text-align:justify;">
-            <p>
+            <p id="p1">
                 Platonic solids, also called regular solids or regular polyhedra, are convex polyhedrons with identical
                 faces composed of convex regular polygons. Euclid (ancient Greek mathematician) proved that there are
                 five of such solids: the cube, dodecahedron,
                 icosahedron, octahedron, and tetrahedron.
             </p>
 
-            <p>
+            <p id="p2">
                 The name of Platonic solids was given due the Athenian philosopher Plato, who in his dialogue Timaeus
                 related four of the regular polyhedra with the four basic elements (fire, air, water, and earth), which
                 were believed to compose all the matter through
@@ -57,7 +52,7 @@
                 <p></p>
             </div>
             <iframe id="scene" class="w3-col l8" src="./src/platonic-solids-application.html" height="400"
-                style="border:2px solid black;"></iframe>
+                    style="border:2px solid black;"></iframe>
             <script>
                 // iOS iframe auto-resize workaround
 
@@ -74,7 +69,7 @@
 
         <!-- More modes -->
         <div class="w3-container w3-padding-32 ">
-            <h3 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
+            <h3 id="more-modes-header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
         </div>
         <div class="w3-row-padding">
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
@@ -83,7 +78,7 @@
                          style="background: url('img/Platonic-Solids/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br />Fullscreen
+                            <br /> <div id="fullscreen">Fullscreen</div>
                         </div>
                     </div>
                 </a>
@@ -95,26 +90,28 @@
                          style="background: url('img/Platonic-Solids/blur-AR.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/ar-icon.png" alt="Augmented Reality" style="width: 64px;" />
-                            <br />Augmented Reality
+                            <br /><div id="ar">Augmented Reality</div>
                         </div>
                     </div>
                 </a>
 
                 <p class="more-modes-text">
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
-                    You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
-                                                                                       target="_blank">click here</a> to
-                    download).
+                    <div id="warning-fiducial">
+                        You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
+                                                                                           target="_blank">click here</a> to
+                        download).
+                    </div>
                 </p>
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a href="./src/platonic-solids-application-VR.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                        style="background: url('img/Platonic-Solids/blur.jpg') center;">
+                         style="background: url('img/Platonic-Solids/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br />Virtual Reality
+                            <br /> <div id="vr">Virtual Reality</div>
                         </div>
                     </div>
                 </a>
@@ -124,7 +121,7 @@
         <!-- End of more modes -->
 
         <div class="w3-container w3-padding-32 ">
-            <h3 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Images in Augmented Reality</h3>
+            <h3 id="images-header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Images in Augmented Reality</h3>
         </div>
 
         <div class="w3-content w3-display-container w3-center w3-row ">
@@ -135,36 +132,45 @@
             <img class="slide " src="./img/Platonic-Solids/screenshot4-AR.png" onclick="openModal(4)">
 
             <button id="btn-left " class="w3-button w3-black w3-display-left w3-hide-large "
-                onclick="plusDivs(-1) ">&#10094;</button>
+                    onclick="plusDivs(-1) ">
+                &#10094;
+            </button>
             <button class="w3-button w3-black w3-display-right w3-hide-large " onclick="plusDivs(1) ">&#10095;</button>
         </div>
 
         <div id="modal-slideshow" class="w3-modal w3-black">
             <div class="w3-content w3-center" style="height: 80%;">
                 <img class="slide-modal w3-display-middle" src="./img/Platonic-Solids/screenshot1-AR.png"
-                    style="height: 100%;">
+                     style="height: 100%;">
                 <img class="slide-modal w3-display-middle" src="./img/Platonic-Solids/screenshot2-AR.png"
-                    style="height: 100%;">
+                     style="height: 100%;">
                 <img class="slide-modal w3-display-middle" src="./img/Platonic-Solids/screenshot3-AR.png"
-                    style="height: 100%;">
+                     style="height: 100%;">
                 <img class="slide-modal w3-display-middle" src="./img/Platonic-Solids/screenshot4-AR.png"
-                    style="height: 100%;">
+                     style="height: 100%;">
 
                 <span class="w3-black w3-text-white w3-opacity w3-display-left w3-btn" onclick="plusModal(-1)">❮</span>
                 <span class="w3-black w3-text-white w3-opacity w3-display-right w3-btn" onclick="plusModal(1)">❯</span>
             </div>
 
-            <span
-                class="w3-black w3-text-white w3-opacity w3-xxlarge w3-hover-text-grey w3-container w3-display-topright"
-                onclick="closeModal()" style="cursor:pointer">×</span>
+            <span class="w3-black w3-text-white w3-opacity w3-xxlarge w3-hover-text-grey w3-container w3-display-topright"
+                  onclick="closeModal()" style="cursor:pointer">×</span>
         </div>
 
         <div class="w3-panel w3-leftbar w3-serif">
-            <h5><b>Reference:</b></h5>
-            <p><i> Weisstein, Eric W. "Platonic Solid." From MathWorld--A Wolfram Web Resource.
-                    https://mathworld.wolfram.com/PlatonicSolid.html </i></p>
-            <p><i>Heilbron, J.L. "Platonic solid." From Encyclopædia Britannica, inc. Web resource
-                    https://www.britannica.com/science/Platonic-solid</i></p>
+            <h5 id="refer"><b>Reference:</b></h5>
+            <p>
+                <i>
+                    Weisstein, Eric W. "Platonic Solid." From MathWorld--A Wolfram Web Resource.
+                    https://mathworld.wolfram.com/PlatonicSolid.html
+                </i>
+            </p>
+            <p>
+                <i>
+                    Heilbron, J.L. "Platonic solid." From Encyclopædia Britannica, inc. Web resource
+                    https://www.britannica.com/science/Platonic-solid
+                </i>
+            </p>
         </div>
 
         <!-- End page content -->
@@ -172,10 +178,106 @@
 
     <!-- Footer -->
     <footer class="w3-center w3-black w3-padding-16 ">
-        <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp " title="W3.CSS " target="_blank "
-                class="w3-hover-text-green ">w3.css</a></p>
+        <h5 id="bottom"><b>Powered by:</b></h5>
+
+        <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank "
+           class="w3-hover-text-green ">w3.css</a>
     </footer>
     <script src="../js/script.js"></script>
+    <script>
+        TRANSLATION.add(
+            '#header',
+            'Platonic Solids',
+            'Sólidos Platônicos'
+        );
+
+        TRANSLATION.add(
+            '#p1',
+            `Platonic solids, also called regular solids or regular polyhedra, are convex polyhedrons with identical
+                    faces composed of convex regular polygons. Euclid (ancient Greek mathematician) proved that there are
+                    five of such solids: the cube, dodecahedron,
+                    icosahedron, octahedron, and tetrahedron.`,
+
+            `Os sólidos platônicos, também chamados de sólidos regulares ou poliedros regulares, são poliedros convexos com idênticas
+                    faces compostas por polígonos regulares convexos. Euclides (matemático grego antigo) provou que existem
+                    cinco desses sólidos: o cubo, dodecaedro,
+                    icosaedro, octaedro e tetraedro.`
+        );
+
+        TRANSLATION.add(
+            '#p2',
+            ` The name of Platonic solids was given due the Athenian philosopher Plato, who in his dialogue Timaeus
+                    related four of the regular polyhedra with the four basic elements (fire, air, water, and earth), which
+                    were believed to compose all the matter through
+                    their combinations, and the fifth polyhedron was associated heaven and the constellations. The
+                    tetrahedron was assigned to fire, the cube to earth, the octahedron to air, the icosahedron to water,
+                    and the dodecahedron to heaven and constellations.`,
+
+            `O nome de sólidos platônicos foi dado ao filósofo ateniense Platão, que em seu diálogo Timeu
+                    relacionou quatro dos poliedros regulares com os quatro elementos básicos (fogo, ar, água e terra), que
+                    foram acreditados para compor toda a matéria através
+                    suas combinações, e o quinto poliedro foi associado o céu e as constelações. O
+                    o tetraedro foi atribuído ao fogo, o cubo à terra, o octaedro ao ar, o icosaedro à água,
+                    e o dodecaedro para o céu e constelações.`
+        );
+
+        TRANSLATION.add(
+            '#fullscreen',
+            'Fullscreen',
+            'Tela cheia'
+        );
+
+        TRANSLATION.add(
+            '#ar',
+            'Augmented Reality',
+            'Realidade Aumentada',
+        );
+
+        TRANSLATION.add(
+            '#vr',
+            'Virtual Reality',
+            'Realidade Virtual'
+        );
+
+        TRANSLATION.add(
+            '#warning-fiducial',
+            `You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png" target="_blank">click here</a> to download).`,
+            `É nescessário imprimir o marcador fiduciário para usar o modo de Realidade Aumentada (<a href="data/markers/hiro.png" target="_blank">
+                        Clique aqui</a> par baixar).`
+        );
+
+
+        TRANSLATION.add(
+            '#more-modes-header',
+            'More modes',
+            'Mais modos'
+        );
+
+        TRANSLATION.add(
+            '#images-header',
+            'Images in Augmented Reality',
+            'Imagens em Realidade Aumentada'
+        );
+
+        TRANSLATION.add(
+            '#refer',
+            'Reference',
+            'Referências'
+        );
+
+        TRANSLATION.add(
+            '#title',
+            'Platonic Solids',
+            'Sólidos Platônicos'
+        );
+
+        TRANSLATION.add(
+            '#bottom',
+            'Powered by ',
+            'Distribuído por '
+        );
+
+    </script>
 </body>
 
 </html>
