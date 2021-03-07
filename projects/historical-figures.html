@@ -33,23 +33,39 @@
 
         <div class="w3-container w3-row w3-mobile" style="text-align:center;">
             <!-- workaround to center iframe -->
-            
+            <div class="w3-col m2 l2 w3-hide-small">
+                <p></p>
+            </div>
             <iframe id="scene" class="w3-col l8" src="./src/historical-figures-application.html" height="400"
                 style="border:2px solid black;">
             </iframe>
 
 
             <script>
-                /*function translationApplication(){
+                // Check page is changed and reload the application with another language
+                // store url on load
+                let currentPage = location.href;
+
+                // listen for changes
+                setInterval(function()
+                {
+                    if (currentPage != location.href)
+                    {
+                        // page has changed, set new page as 'current'
+                        currentPage = location.href;
+                        
+                        // do your thing..
+                        translationApplication();
+                    }
+                }, 500);
+
+                function translationApplication(){
                     var language = location.search;
                     if(language.length != 0){
-                        let aux = "?lang=";
                         document.getElementById("scene").src = "./src/historical-figures-application.html"  + location.search; 
                     }
                 }
-                window.onload = function(){
-                    translationApplication();
-                }*/
+                translationApplication();
 
                 // iOS iframe auto-resize workaround
 
