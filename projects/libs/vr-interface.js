@@ -98,6 +98,7 @@ AFRAME.registerComponent('vr-interface', {
     sideTextRotation: { type: 'number', default: 0 },
     messageColor: { type: 'color', default: 'white' },
     messageBG: { type: 'color', default: '#232323' },
+    bgTransparency: { type: 'bool', default: true },
     messageSize: { type: 'number', default: 1 },
     cursorColor: { type: 'color', default: 'white' },
     cursorPosition: { type: 'vec3', default: { x: 0, y: 0, z: -0.9 } },
@@ -202,7 +203,7 @@ AFRAME.registerComponent('vr-interface', {
     this.sideText = document.createElement('a-entity');
     this.sideText.setAttribute('text', { align: 'center', width: data.messageSize, height: data.messageSize, transparent: true, color: new THREE.Color(data.messageColor) });
     this.sideText.setAttribute('geometry', { primitive: 'plane', height: data.sideTextSize.y, width: data.sideTextSize.x });
-    this.sideText.setAttribute('material', { color: new THREE.Color(data.messageBG), transparent: data.transparency, opacity: data.transparency ? 0.75 : 1 });
+    this.sideText.setAttribute('material', { color: new THREE.Color(data.messageBG), transparent: data.bgTransparency, opacity: data.bgTransparency ? 0.75 : 1 });
     this.sideText.object3D.visible = false;
     this.pivot.appendChild(this.sideText);
     this.buttonGroup.appendChild(this.pivot);
@@ -528,9 +529,15 @@ AFRAME.registerComponent('vr-interface', {
 
     pivot.position.z = this.buttons[0].position.z;
     pivot.position.x = this.buttons[this.data.dimension.y - 1].position.x + this.data.buttonSize.x * 0.5 + 0.02;
-      pivot.rotation.y = this.data.sideTextRotation * Math.PI / 180;
-      sideText.position.x = + sideText.children[1].scale.x * this.data.sideTextSize.x * 0.5;
-      //sideText.position.x = + sideText.children[1].scale.x * this.data.messageSize * 0.5;
+    pivot.rotation.y = this.data.sideTextRotation * Math.PI / 180;
+    sideText.position.x = + sideText.children[1].scale.x * this.data.sideTextSize.x * 0.5;
+    //sideText.position.x = + sideText.children[1].scale.x * this.data.messageSize * 0.5;
+  },
+  rotateSideText: function (theta) {
+    if (!isNaN(theta)) {
+      this.data.sideTextRotation = theta;
+      this.pivot.object3D.rotation.y = this.data.sideTextRotation * Math.PI / 180;
+    }
   },
   positionateBorder: function (button) {
     button.border.scale.copy(button.scale);
