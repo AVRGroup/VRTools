@@ -71,24 +71,24 @@
 
         <div class="w3-row-padding">
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/solar-system-application.html?quality=0" target="_blank" style="text-decoration: none;">
+                <a id="fullscreenMediumQuality_link" href="./src/solar-system-application.html?quality=0" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
                          style="background: url('img/Solar-System/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br /><div id="fullscreen">Fullscreen - Medium Qulity</div>
+                            <br /><div id="fullscreen">Fullscreen - Medium Quality</div>
                         </div>
                     </div>
                 </a>
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/solar-system-application.html?quality=1" target="_blank" style="text-decoration: none;">
+                <a id="fullscreenHighQuality_link" href="./src/solar-system-application.html?quality=1" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
                          style="background: url('img/Solar-System/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br /><div id="fullscreen2">Fullscreen - High Qulity</div>
+                            <br /><div id="fullscreen2">Fullscreen - High Quality</div>
                         </div>
                     </div>
                 </a>
@@ -245,14 +245,10 @@
     </div>
 
     <!-- Footer -->
-    <footer class="w3-center w3-black w3-padding-16 ">
-        
+    <footer class="w3-center w3-black w3-padding-16 ">        
             <h5 id="bottom"><b>Powered by:</b></h5>
-            
-                <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank "
-                   class="w3-hover-text-green ">w3.css</a>
-
-      
+            <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank "
+                class="w3-hover-text-green ">w3.css</a>
     </footer>
     <script type="text/javascript" src="../js/script.js"></script>
     <script type="text/javascript">
@@ -317,6 +313,42 @@
         }
     </script>
     <script>
+
+        // Check page is changed and reload the application with another language
+        // store url on load
+        let currentPage = location.href;
+
+        // listen for changes
+        setInterval(function()
+        {
+            if (currentPage != location.href)
+            {
+                // page has changed, set new page as 'current'
+                currentPage = location.href;
+                
+                changeLanguageApp();
+                
+            }
+        }, 500);
+
+        function changeLanguageApp(){
+            var language = location.search;
+            if(language.length != 0){
+                document.getElementById("scene").src = ("./src/solar-system-application.html" + language + "&quality=0");
+                document.getElementById("fullscreenMediumQuality_link").href = ("./src/solar-system-application.html" + language + "&quality=0"); 
+                document.getElementById("fullscreenHighQuality_link").href = ("./src/solar-system-application.html" + language + "&quality=1"); 
+            }
+            else{
+                document.getElementById("scene").src = ("./src/solar-system-application.html?lang=en-US&quality=0");
+                document.getElementById("fullscreenMediumQuality_link").href = ("./src/solar-system-application.html?lang=en-US&quality=0"); 
+                document.getElementById("fullscreenHighQuality_link").href = ("./src/solar-system-application.html?lang=en-US&quality=1"); 
+            }
+        }
+
+        changeLanguageApp();
+
+        // Translation controller
+
         TRANSLATION.add(
             '#header',
             'Solar System',

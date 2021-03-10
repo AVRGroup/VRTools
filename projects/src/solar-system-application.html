@@ -55,9 +55,28 @@
     <script type="text/javascript">
 
         // Seed to Medium or High Quality
-        var quality = location.search;
+        var searchBar = location.search;
+        
+        if(searchBar.length != 0){
+            let langPattern = "?lang=";
+            let separatorIndex = searchBar.indexOf("&");
+            let qualityPattern = "&quality=";
+            let lang = searchBar.substring(langPattern.length, separatorIndex);
+            let quality = parseInt(searchBar.substring(separatorIndex + qualityPattern.length, searchBar.length));
+            switch(quality){
+                case 0:             // Medium Quality
+                    mainMediumQuality(lang);
+                    break;
+                case 1:             // High Quality
+                    mainHighQuality(lang);
+                    break;
+            }
+        }
+        else{                                           //NOT QUALITY SETTED
+            mainMediumQuality("en-US");
+        }
 
-        if(quality.length != 0){                   //QUALITY PASSED BY URL
+        /*if(quality.length != 0){                   //QUALITY PASSED BY URL
             let aux = "?quality=";
             quality = quality.substring(aux.length, quality.length);
             quality = parseInt(quality);
@@ -72,7 +91,7 @@
         }
         else{                                           //NOT QUALITY SETTED
             mainMediumQuality();
-        }
+        }*/
     </script>
 </body>
 

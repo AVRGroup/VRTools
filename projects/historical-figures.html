@@ -42,30 +42,6 @@
 
 
             <script>
-                // Check page is changed and reload the application with another language
-                // store url on load
-                let currentPage = location.href;
-
-                // listen for changes
-                setInterval(function()
-                {
-                    if (currentPage != location.href)
-                    {
-                        // page has changed, set new page as 'current'
-                        currentPage = location.href;
-                        
-                        // do your thing..
-                        translationApplication();
-                    }
-                }, 500);
-
-                function translationApplication(){
-                    var language = location.search;
-                    if(language.length != 0){
-                        document.getElementById("scene").src = "./src/historical-figures-application.html"  + location.search; 
-                    }
-                }
-                translationApplication();
 
                 // iOS iframe auto-resize workaround
 
@@ -87,7 +63,7 @@
         </div>
         <div class="w3-row-padding">
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/historical-figures-application.html" target="_blank" style="text-decoration: none;">
+                <a id="fullscreen_link" href="./src/historical-figures-application.html" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
                         style="background: url('img/Historical-Figures/blur.png') center;">
                         <div class="w3-padding" style="width:100%">
@@ -192,6 +168,36 @@
                 class="w3-hover-text-green ">w3.css</a></p>
     </footer>
     <script type="text/javascript">
+
+        // Check page is changed and reload the application with another language
+        // store url on load
+        let currentPage = location.href;
+
+        // listen for changes
+        setInterval(function()
+        {
+            if (currentPage != location.href)
+            {
+                // page has changed, set new page as 'current'
+                currentPage = location.href;
+                
+                changeLanguageApp();
+                console.clear();    
+            }
+        }, 500);
+
+        function changeLanguageApp(){
+            var language = location.search;
+            if(language.length != 0){
+                document.getElementById("scene").src = "./src/historical-figures-application.html"  + language; 
+                document.getElementById("fullscreen_link").href = ("./src/historical-figures-application.html" + language); 
+            }
+        }
+
+        changeLanguageApp();
+
+        // Translation controller
+
         TRANSLATION.add(
             '#header',
             'Historical Figures',
