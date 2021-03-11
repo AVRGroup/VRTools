@@ -7,39 +7,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../css/w3.css">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/translation.js"></script>
+    <script src="../components/navbar.js"></script>
 </head>
 
 <body>
 
     <!-- Navbar (sit on top) -->
-    <div class="w3-top ">
-        <div class="w3-bar w3-white w3-wide w3-padding w3-card ">
-            <a href="../index.html#home " class="w3-bar-item w3-button "><b>VR</b> Tools</a>
-            <!-- Float links to the right. Hide them on small screens -->
-            <div class="w3-right w3-hide-small ">
-                <a href="../index.html#vr-apps" class="w3-bar-item w3-button">VR Apps</a>
-                <a href="../index.html#projects" class="w3-bar-item w3-button">Projects</a>
-                <a href="../index.html#about " class="w3-bar-item w3-button ">About</a>
-                <a href="../index.html#contact " class="w3-bar-item w3-button ">Contact</a>
-            </div>
-        </div>
-    </div>
+    <navbar-component></navbar-component>
 
     <!-- Page content -->
     <div class="w3-content w3-padding " style="max-width:1564px ">
 
         <div class="w3-container w3-padding-32 " id="projects">
-            <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Vascular Diseases</h1>
+            <h1 id="header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Vascular Diseases</h1>
         </div>
 
         <div class="w3-container" id="about" style="text-align:justify;">
-            <p>The vascular diseases are a class of diseases of the blood vessels – the arteries and veins of the
+            <p id="p1">
+                The vascular diseases are a class of diseases of the blood vessels – the arteries and veins of the
                 circulatory system.
                 There are several types of those diseases and they can affect almost any part of the body.
                 Stroke, aneurysm, and deep vein thrombosis are some of the most common vascular diseases and their signs
                 and symptoms vary from each type to another.
                 The vascular diseases commonly occurs at sites of turbulent blood flow, such as the arteries when the
-                blood flow changes direction abruptly.</p>
+                blood flow changes direction abruptamente.
+            </p>
         </div>
 
         <div class="w3-container w3-row ">
@@ -65,34 +58,24 @@
 
         <!-- More modes -->
         <div class="w3-container w3-padding-32 ">
-            <h3 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
+            <h3 id="more-modes-header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
         </div>
         <div class="w3-row-padding">
-
+            <!--  ./src/vascular-diseases-application.html  -->
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/vascular-diseases-application.html" target="_" style="text-decoration: none;">
+                <a href="javascript: TRANSLATION.redirect('projects/src/vascular-diseases-application.html', '', true);"
+                    style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
                         style="background: url('img/Vascular-Disieses/blur.png') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br />Fullscreen
+                            <br />
+                            <div id="fullscreen">Fullscreen</div>
                         </div>
                     </div>
                 </a>
             </div>
 
-            <!-- <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/projectile-motion-application-AR.html" target="_" style="text-decoration: none;">
-                    <div class="more-modes w3-display-container"
-                        style="background: url('img/Projectile-Motion/blur-ar.jpg') center;">
-                        <div class="w3-padding" style="width:100%">
-                            <img src="img/icons/fullscreen-icon.png" alt="Augmented Reality icon"
-                                style="width: 64px;" />
-                            <br />Augmented Reality
-                        </div>
-                    </div>
-                </a>
-            </div> -->
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a href="./src/vascular-diseases-application-VR.html" target="_" style="text-decoration: none;">
@@ -100,7 +83,8 @@
                         style="background: url('img/Vascular-Disieses/blur-vr.jpeg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br />Virtual Reality
+                            <br />
+                            <div id="vr">Virtual Reality</div>
                         </div>
                     </div>
                 </a>
@@ -108,13 +92,6 @@
 
         </div>
 
-        <!-- <div class="w3-panel w3-leftbar w3-serif">
-            <h5><b>Reference:</b></h5>
-            <p>
-                <i> "What is 2D projectile motion?" From Khan Academy. Web Resource
-                    https://www.khanacademy.org/science/physics/two-dimensional-motion/two-dimensional-projectile-mot/a/what-is-2d-projectile-motion</i>
-            </p>
-        </div> -->
         <!-- End of more modes -->
 
         <!-- <div class="w3-container w3-padding-32 ">
@@ -162,6 +139,52 @@
                 class="w3-hover-text-green ">w3.css</a></p>
     </footer>
     <!-- <script src="../js/script.js"></script> -->
+    <script>
+        TRANSLATION.onTranslate = function () {
+            // document.querySelector('#scene').src = 'src/vascular-diseases-application.html?lang=' + TRANSLATION.currentLang;
+            document.querySelector('#scene').contentWindow.changeLanguage(TRANSLATION.currentLang);
+        }
+        TRANSLATION.add(
+            '#header',
+            'Vascular Diseases',
+            'Doenças Vasculares'
+        );
+
+        TRANSLATION.add(
+            '#p1',
+            `The vascular diseases are a class of diseases of the blood vessels – the arteries and veins of the circulatory system.
+                There are several types of those diseases and they can affect almost any part of the body.
+                Stroke, aneurysm, and deep vein thrombosis are some of the most common vascular diseases and their signs
+                and symptoms vary from each type to another.
+                The vascular diseases commonly occurs at sites of turbulent blood flow, such as the arteries when the
+                blood flow changes direction abruptly.`,
+
+            `As doenças vasculares são uma classe de doenças dos vasos sanguíneos - as artérias e veias do sistema circulatório.
+            Há diversos tipos dessas enfermidades e elas podem afetar quase qualquer parte do corpo.
+            Derrame, aneurisma e trombose venosa profunda são algumas das doenças vasculares mais comuns e seus indícios e sintomas
+            variam de um tipo para outro.
+            As doenças vasculares costuma ocorrer em lugares de turbulento fluxo sanguíneo, como nas artérias quando o fluxo muda de
+            direção abruptamente.`
+        );
+
+        TRANSLATION.add(
+            '#fullscreen',
+            'Fullscreen',
+            'Tela cheia'
+        );
+
+        TRANSLATION.add(
+            '#more-modes-header',
+            'More modes',
+            'Mais modos'
+        );
+
+        TRANSLATION.add(
+            '#vr',
+            'Virtual Reality',
+            'Realidade Virtual'
+        );
+    </script>
 </body>
 
 </html>

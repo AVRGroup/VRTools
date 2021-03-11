@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vascular Diseases</title>
+    <title id="page-title">Vascular Diseases</title>
 
     <style>
         html,
@@ -100,6 +100,17 @@
             background-color: #D9CAC3;
         }
 
+
+        .content-title {
+            margin-top: 1em;
+            margin-bottom: 0;
+            display: block;
+        }
+
+        .content {
+            margin-top: 0;
+        }
+
         @media only screen and (min-width: 768px) {
             #panel {
                 position: absolute;
@@ -133,36 +144,6 @@
                 max-height: 90vh;
             }
         }
-
-        #whatis::before {
-            content: 'What is';
-            font-weight: bold;
-            display: block;
-        }
-
-        #risk::before {
-            content: 'Risk Factors';
-            font-weight: bold;
-            display: block;
-        }
-
-        #symptoms::before {
-            content: 'Symptoms';
-            font-weight: bold;
-            display: block;
-        }
-
-        #source::before {
-            content: 'Source';
-            font-weight: bold;
-            display: block;
-        }
-
-        #credits::before {
-            content: '3D model credits';
-            font-weight: bold;
-            display: block;
-        }
     </style>
 </head>
 
@@ -174,41 +155,47 @@
         <div id="panel-content">
             <select id="selector" onchange="changeContent()">
                 <!-- <option value="cardio" selected>Cardiovascular disease</option> -->
-                <option value="stroke" selected>Stroke</option>
-                <option value="aneurysm">Aneurysm</option>
-                <option value="stenosis">Stenosis</option>
-                <option value="thrombus">Thrombus</option>
+                <option id="opt-stroke" value="stroke" selected>Stroke</option>
+                <option id="opt-aneurism" value="aneurysm">Aneurysm</option>
+                <option id="opt-stenosis" value="stenosis">Stenosis</option>
+                <option id="opt-thrombus" value="thrombus">Thrombus</option>
             </select>
 
 
 
-            <input type="button" id="lookClose" class="btn" name="LookClose" value="Look Close" onclick="LookClose()" />
+            <input type="button" id="lookClose" class="btn" name="LookClose" value="Look Closer"
+                onclick="LookClose()" />
 
             <input type="button" id="resetCamera" class="btn" name="ResetCamera" value="Reset Camera"
                 onclick="ResetCamera()" />
 
             <input type="checkbox" id="toggleHighlight" name="toggleHighlight" value="toggleHighlight" checked
                 onchange="toggleHighlight()">
-            <label for="toggleHighlight"> Toggle Highlight</label>
+            <label id="label-highlight" for="toggleHighlight"> Toggle Highlight</label>
 
-            <p id="whatis">
+            <b id="whatis-title" class="content-title">What is</b>
+            <p id="whatis" class="content">
                 A stroke occurs when the blood supply to part of your brain is interrupted or reduced, preventing brain
                 tissue from getting oxygen and nutrients. Brain cells begin to die in minutes. A stroke is a medical
                 emergency, and prompt treatment is crucial. Early action can reduce brain damage and other
                 complications.
             </p>
 
-            <p id="risk">
+            <b id="risk-title" class="content-title">Risk Factors</b>
+            <p id="risk" class="content">
                 The main risk factors are high blood pressure, or hypertension, nicotine and carbon monoxide in
                 cigarette smoke, physical inactivity and a unhealthy diet that results in diabetes or high blood
                 cholesterol.
             </p>
 
-            <p id="symptoms">
+            <b id="symptoms-title" class="content-title">Symptoms</b>
+            <p id="symptoms" class="content">
                 Trouble speaking and understanding what others are saying, paralysis or numbness of the face, arm or
                 leg, problems seeing in one or both eyes, headache and trouble walking are the most common symptoms.
             </p>
-            <p id="source">
+
+            <b id="source-title" class="content-title">Source</b>
+            <p id="source" class="content">
                 <a href="https://www.nhlbi.nih.gov/health-topics/stroke" target="_blank"
                     rel="noopener external">NHLBI</a><br />
                 <a href="https://www.stroke.org/en/about-stroke/stroke-risk-factors/stroke-risk-factors-you-can-control-treat-and-improve"
@@ -218,7 +205,8 @@
 
             </p>
 
-            <p id="credits">
+            <b id="credits-title" class="content-title">3D Model Credits</b>
+            <p id="credits" class="content">
                 <a href="https://3dprint.nih.gov/discover/3DPX-001564" target="_blank" rel="noopener external">
                     3D Print
                     for Health

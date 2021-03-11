@@ -14,6 +14,8 @@ class Translation {
             { element: '.menu-contact', content: 'Contact' },
         ];
 
+        this.onTranslate = null;
+
         this.PT_BR = 0;
         this.EN_US = 1;
         this.currentLang = 'en-US';
@@ -91,16 +93,21 @@ class Translation {
 
         flag.classList.remove('active');
         document.querySelector('#lang-options').classList.remove('w3-show');
+
+        if (this.onTranslate) {
+            this.onTranslate();
+        }
     }
 
-    redirect(path, hash) {
+    redirect(path, hash, newTab) {
         const prevPath = window.location.origin === "https://avrgroup.github.io" ? '/vrtools/' : '/';
 
         if (!hash) {
             hash = '';
         }
         const newURL = window.location.origin + prevPath + path + '?lang=' + this.currentLang + hash;
-        window.location.href = newURL;
+        if (newTab) window.open(newURL, '_blank');
+        else window.location.href = newURL;
     }
 }
 
