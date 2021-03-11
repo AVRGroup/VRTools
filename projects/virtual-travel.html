@@ -2,38 +2,30 @@
 <html lang="en">
 
 <head>
-    <title>Virtual Travel</title>
+    <title id="title">Virtual Travel</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../css/w3.css">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/translation.js"></script>
+    <script src="../components/navbar.js"></script>
 </head>
 
 <body>
 
     <!-- Navbar (sit on top) -->
-    <div class="w3-top ">
-        <div class="w3-bar w3-white w3-wide w3-padding w3-card ">
-            <a href="../index.html#home " class="w3-bar-item w3-button "><b>VR</b> Tools</a>
-            <!-- Float links to the right. Hide them on small screens -->
-            <div class="w3-right w3-hide-small ">
-                <a href="../index.html#vr-apps" class="w3-bar-item w3-button">VR Apps</a>
-                <a href="../index.html#projects" class="w3-bar-item w3-button">Projects</a>
-                <a href="../index.html#about " class="w3-bar-item w3-button ">About</a>
-                <a href="../index.html#contact " class="w3-bar-item w3-button ">Contact</a>
-            </div>
-        </div>
-    </div>
+
+    <navbar-component></navbar-component>
 
     <!-- Page content -->
     <div class="w3-content w3-padding " style="max-width:1564px ">
 
         <div class="w3-container w3-padding-32 " id="projects">
-            <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Virtual Travel</h1>
+            <h1 id="header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Virtual Travel</h1>
         </div>
 
         <div class="w3-container" id="about" style="text-align:justify;">
-            <p>
+            <p id="p1">
 
                 "Virtual Travel" is a project that aims to provide a trip around the world without you having to leave your home. With a Virtual Reality mode, you can view several incredible places around the world and still find out some curiosities about each one.
             </p>
@@ -62,7 +54,7 @@
 
         <!-- More modes -->
         <div class="w3-container w3-padding-32 ">
-            <h3 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
+            <h3 id="more-modes-header"class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
         </div>
         <div class="w3-row-padding">
 
@@ -72,7 +64,7 @@
                          style="background: url('img/Know-the-world/vr-background.png') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="fullscreen" style="width: 64px;" />
-                            <br />Virtual Reality Full Screen
+                            <br /><div id="vrfs">Virtual Reality Full Screen</div>
                         </div>
                     </div>
                 </a>
@@ -82,7 +74,7 @@
 
     </div>
     <div class="w3-panel w3-leftbar w3-serif">
-        <h5><b>Images credit:</b></h5>
+        <h5 id="credit"><b>Images credit:</b></h5>
         <p>
             <i>
                 Used images from the websites:
@@ -98,6 +90,54 @@
         </p>
     </footer>
     <!-- <script src="../js/script.js"></script> -->
+    <script>
+        TRANSLATION.add(
+            '#header',
+            'Virtual Travel',
+            'Viagem Virtual'
+        );
+
+        TRANSLATION.add(
+            '#p1',
+            `"Virtual Travel" is a project that aims to provide a trip around the world without you having to leave your home. 
+              With a Virtual Reality mode, you can view several incredible places around the world and still find out some curiosities about each one.`,
+
+            `"Viagem Virtual" é um projeto que visa proporcionar uma viagem ao redor do mundo sem você ter que sair de casa.
+              Com o modo de Realidade Virtual, você pode visualizar vários lugares incríveis ao redor do mundo e ainda descobrir algumas curiosidades sobre cada um deles.`
+        );
+
+        TRANSLATION.add(
+            '#vrfs',
+            'Virtual Reality Full Screen',
+            'Realidade Virtual Tela Cheia'
+        );
+
+        TRANSLATION.add(
+            '#more-modes-header',
+            'More modes',
+            'Mais modos'
+        );
+
+        TRANSLATION.add(
+            '#credit',
+            'Images Credit:',
+            'Crédito das Imagens:'
+        );
+
+
+        TRANSLATION.add(
+            '#title',
+            'Virtual Travel',
+            'Viagem Virtual'
+        );
+
+            // TRANSLATION.add(
+            //     '#bottom',
+            //     'Powered by ',
+            //     'Distribuído por '
+            // );
+
+    </script>
 </body>
 
 </html>
