@@ -73,7 +73,7 @@
         </div>
         <div class="w3-row-padding">
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/platonic-solids-application.html" target="_" style="text-decoration: none;">
+                <a id="fullscreen_link" href="./src/platonic-solids-application.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
                         style="background: url('img/Platonic-Solids/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
@@ -189,6 +189,29 @@
     </footer>
     <script src="../js/script.js"></script>
     <script>
+        let currentPage = location.href;
+
+        // listen for changes
+        setInterval(function () {
+            if (currentPage != location.href) {
+                // page has changed, set new page as 'current'
+                currentPage = location.href;
+
+                changeLanguageApp();
+                console.clear();
+            }
+        }, 500);
+
+        function changeLanguageApp() {
+            var language = location.search;
+            if (language.length != 0) {
+                document.getElementById("scene").src = "./src/platonic-solids-application.html" + language;
+                document.getElementById("fullscreen_link").href = ("./src/platonic-solids-application.html" + language);
+            }
+        }
+
+        changeLanguageApp();
+
         TRANSLATION.add(
             '#header',
             'Platonic Solids',

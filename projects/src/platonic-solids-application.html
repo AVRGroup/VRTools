@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="pt">
 
 <head>
     <title>Platonic Solids</title>
@@ -62,14 +62,19 @@
         if (language.length != 0) {
             let aux = "?lang=";
             language = language.substring(aux.length, language.length);
-            console.log(language);
-            init(language);
+            switch (language) {
+                case "en-US":
+                    init("en-US")
+                    break;
+                case "pt-BR":
+                    init("pt-BR");
+                    break;
+            }
         }
         else {
-            language = 'en-US';
+            language = "en-US";
             init(language);
         }
-        console.log(language);
     </script>
 </body>
 
