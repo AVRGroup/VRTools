@@ -59,7 +59,7 @@
         <div class="w3-row-padding">
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/virtual-travel-application.html" target="_" style="text-decoration: none;">
+                <a id="fullscreen_link" href="./src/virtual-travel-application.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
                          style="background: url('img/Know-the-world/vr-background.png') center;">
                         <div class="w3-padding" style="width:100%">
@@ -91,6 +91,29 @@
     </footer>
     <!-- <script src="../js/script.js"></script> -->
     <script>
+        let currentPage = location.href;
+
+        // listen for changes
+        setInterval(function () {
+            if (currentPage != location.href) {
+                // page has changed, set new page as 'current'
+                currentPage = location.href;
+
+                changeLanguageApp();
+                console.clear();
+            }
+        }, 500);
+
+        function changeLanguageApp() {
+            var language = location.search;
+            if (language.length != 0) {
+                document.getElementById("scene").src = "./src/virtual-travel-application.html" + language;
+                document.getElementById("fullscreen_link").href = ("./src/virtual-travel-application.html" + language);
+            }
+        }
+
+        changeLanguageApp();
+
         TRANSLATION.add(
             '#header',
             'Virtual Travel',
@@ -102,7 +125,7 @@
             `"Virtual Travel" is a project that aims to provide a trip around the world without you having to leave your home. 
               With a Virtual Reality mode, you can view several incredible places around the world and still find out some curiosities about each one.`,
 
-            `"Viagem Virtual" é um projeto que visa proporcionar uma viagem ao redor do mundo sem você tenha de sair de casa.
+            `"Viagem Virtual" é um projeto que visa proporcionar uma viagem ao redor do mundo sem que você tenha de sair de casa.
               Com o modo de Realidade Virtual, você pode visualizar vários lugares incríveis ao redor do mundo e ainda descobrir algumas curiosidades sobre cada um deles.`
         );
 
