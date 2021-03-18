@@ -44,7 +44,7 @@
 
     <!-- Library of example -->
     <script type="text/javascript" src="platonic-solids.js"></script>
-
+    <script src="../../js/translation.js"></script>
 
 </head>
 
@@ -58,9 +58,18 @@
     -->
     <div id="webgl-output"></div>
     <script type="text/javascript">
-        (function() {
-            init()
-        })();
+        var language = location.search;
+        if (language.length != 0) {
+            let aux = "?lang=";
+            language = language.substring(aux.length, language.length);
+            console.log(language);
+            init(language);
+        }
+        else {
+            language = 'en-US';
+            init(language);
+        }
+        console.log(language);
     </script>
 </body>
 
