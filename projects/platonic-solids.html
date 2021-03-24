@@ -110,7 +110,7 @@
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a href="./src/platonic-solids-application-VR.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                        style="background: url('img/Platonic-Solids/blur.jpg') center;">
+                         style="background: url('img/Platonic-Solids/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="fullscreen" style="width: 64px;" />
                             <br />
@@ -118,6 +118,14 @@
                         </div>
                     </div>
                 </a>
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-vr">
+                        It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                             target="_blank">Google Virtual Reality services</a>
+                        on the first access.
+                    </div>
+                </p>
             </div>
 
         </div>
@@ -270,6 +278,16 @@
             '#warning-fiducial',
             `You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png" target="_blank">click here</a> to download).`,
             `É necessário imprimir o marcador fiducial para usar o modo de Realidade Aumentada (<a href="data/markers/hiro.png" target="_blank">Clique aqui</a> para baixar).`
+        );
+
+        TRANSLATION.add(
+            '#warning-vr',
+            ` It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                        target="_blank">Google Virtual Reality services</a>
+                        on the first access. `,
+            `  Pode ser necessário aceitar a instalação dos <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                        target="_blank">serviços de Realidade Virtual da Google</a>
+                        no primeiro acesso. `
         );
 
 

@@ -108,7 +108,7 @@
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a href="./src/architecture-application-VR.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                        style="background: url('img/Architecture/blur-VR.jpg') center;">
+                         style="background: url('img/Architecture/blur-VR.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="Augmented Reality" style="width: 64px;" />
                             <br />
@@ -119,19 +119,27 @@
 
                 <p class="more-modes-text">
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
-                <div id="warning-hmd-1">
-                    In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one
-                    joystick even
-                    though it is possible to use the app without those equipments.
-                </div>
+                    <div id="warning-hmd-1">
+                        In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one
+                        joystick even
+                        though it is possible to use the app without those equipments.
+                    </div>
                 </p>
                 <p class="more-modes-text">
-                <div id="warning-hmd-2">
-                    Using mobile devices, press the VR button in bottom right conner before inserting your device in the
-                    HMD. A circle will move as you look around and you can teleport to that circle pressing any joystick
-                    button. Alternatively, it is also possible to teleport pressisng the spacebar or touching the screen
-                    if your device is sensitive to touch.
-                </div>
+                    <div id="warning-hmd-2">
+                        Using mobile devices, press the VR button in bottom right conner before inserting your device in the
+                        HMD. A circle will move as you look around and you can teleport to that circle pressing any joystick
+                        button. Alternatively, it is also possible to teleport pressisng the spacebar or touching the screen
+                        if your device is sensitive to touch.
+                    </div>
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-vr">
+                        It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                             target="_blank">Google Virtual Reality services</a>
+                        on the first access.
+                    </div>
+                </p>
                 </p>
 
             </div>
@@ -243,6 +251,16 @@
             `You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png" target="_blank">click here</a> to download).`,
             `É necessário imprimir o marcador fiducial para usar o modo de Realidade Aumentada (<a href="data/markers/hiro.png" target="_blank">
                 Clique aqui</a> par baixar).`
+        );
+
+        TRANSLATION.add(
+            '#warning-vr',
+            ` It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                        target="_blank">Google Virtual Reality services</a>
+                        on the first access. `,
+            `  Pode ser necessário aceitar a instalação dos <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                        target="_blank">serviços de Realidade Virtual da Google</a>
+                        no primeiro acesso. `
         );
 
         TRANSLATION.add(

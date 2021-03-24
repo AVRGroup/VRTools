@@ -107,7 +107,7 @@
 
                 <a href="./src/projectile-motion-application-VR.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                        style="background: url('img/Projectile-Motion/blur-vr.jpg') center;">
+                         style="background: url('img/Projectile-Motion/blur-vr.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="fullscreen" style="width: 64px;" />
                             <br />
@@ -118,10 +118,19 @@
 
                 <p class="more-modes-text">
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
-                <div id="warning-hmd-1">
-                    In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one
-                    joystick even though it is possible to use the app without those equipments.
-                </div>
+                    <div id="warning-hmd-1">
+                        In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one
+                        joystick even though it is possible to use the app without those equipments.
+                    </div>
+                </p>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-vr">
+                        It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                             target="_blank">Google Virtual Reality services</a>
+                        on the first access.
+                    </div>
                 </p>
             </div>
 
@@ -249,6 +258,16 @@
                 app without those equipments.`,
             `Para uma experiência completa no modo RV, é necessário um HMD (head-mounted display, ou capacete de visualização em português) e um controle
                 joystick, apesar de ser possível usar o aplicativo sem esses equipamentos.`
+        );
+
+        TRANSLATION.add(
+            '#warning-vr',
+            ` It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                        target="_blank">Google Virtual Reality services</a>
+                        on the first access. `,
+            `  Pode ser necessário aceitar a instalação dos <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                        target="_blank">serviços de Realidade Virtual da Google</a>
+                        no primeiro acesso. `
         );
 
         TRANSLATION.add(
