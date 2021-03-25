@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <title>Platonic Solids - AR</title>
@@ -50,7 +50,23 @@
     <body>
         <div id="webgl-output" ></div>
         <script type="text/javascript" charset="UTF-8"> 
-            main();
+            var language = location.search;
+            if (language.length != 0) {
+                let aux = "?lang=";
+                language = language.substring(aux.length, language.length);
+                switch (language) {
+                    case "en-US":
+                        main("en-US")
+                        break;
+                    case "pt-BR":
+                        main("pt-BR");
+                        break;
+                }
+            }
+            else {
+                language = "en-US";
+                main(language);
+            }
         </script>
     </body>
 </html>
