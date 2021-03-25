@@ -648,7 +648,7 @@ function main(lang) {
                 this.choosePoligon = function () {
                     objectArray[this.meshNumber].visible = false;
                     if (this.wireframe) {
-                        switch (this.type) {
+                        switch (this.tipo) {
                             case 'Tetraedro':
                                 this.type = 'TetrahedronWireframe';
                                 this.meshNumber = 5;
@@ -671,7 +671,7 @@ function main(lang) {
                                 break;
                         }
                     } else {
-                        switch (this.type) {
+                        switch (this.tipo) {
                             case 'Tetraedro':
                                 this.meshNumber = 0;
                                 break;
