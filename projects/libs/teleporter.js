@@ -129,6 +129,12 @@ AFRAME.registerComponent('teleporter', {
         if (data.fireTeleporterOnTouch && !oldData.fireTeleporterOnTouch) {
             window.addEventListener('touchstart', this.events.handleTouchStart, false);
             window.addEventListener('touchend', this.events.handleTouchEnd, false);
+
+            let buttonControls = document.querySelector('[button-controls]');
+            if (buttonControls) {
+                buttonControls.addEventListener('buttondown', this.events.handleTouchStart, false);
+                buttonControls.addEventListener('buttonup', this.events.handleTouchEnd, false);
+            }
         }
         else if (!data.fireTeleporterOnTouch && oldData.fireTeleporterOnTouch) {
             window.removeEventListener('touchstart', this.events.handleTouchStart, false);
