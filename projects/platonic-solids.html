@@ -219,6 +219,12 @@
                 document.getElementById("vr_link").href = ("./src/platonic-solids-application-VR.html" + language);
                 document.getElementById("ar_link").href = ("./src/platonic-solids-application-AR.html" + language);
             }
+            else {
+                document.getElementById("scene").src = "./src/platonic-solids-application.html";
+                document.getElementById("fullscreen_link").href = ("./src/platonic-solids-application.html");
+                document.getElementById("vr_link").href = ("./src/platonic-solids-application-VR.html");
+                document.getElementById("ar_link").href = ("./src/platonic-solids-application-AR.html");
+            }
         }
 
         changeLanguageApp();
