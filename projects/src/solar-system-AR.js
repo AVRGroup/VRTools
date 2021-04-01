@@ -5,7 +5,7 @@
  *****************************/
 
 
-function mainMediumQuality() {
+function mainMediumQuality(lang) {
     console.log("Medium Quality of the textures");
 
     // It's necessary to create renderer before than load Assets because they use the renderer
@@ -286,88 +286,183 @@ function mainMediumQuality() {
         insertSolarObjectsOnScene(objectArray);
     
         // Controls of sidebar
-        var controls = new function() {
-            // Axes
-            this.axes = false;
-    
-            // Physics
-            this.rotation = 0.01;
-    
-            // Geometry
-            this.meshNumber = 4;//4;
-            this.mesh = objectArray[this.meshNumber];
-            this.animation = true;
-            this.size = 0.5;
-            this.type = "Earth";//"Earth";
-    
-            this.chooseObject = function() {
-                objectArray[this.meshNumber].visible = false;
-                switch (this.type) {
-                    case 'Sun':
-                        this.meshNumber = 0;
-                        break;
-                    case 'Mercury':
-                        this.meshNumber = 1;
-                        break;
-                    case 'Venus':
-                        this.meshNumber = 2;
-                        break;
-                    case 'Moon':
-                        this.meshNumber = 3;
-                        break;
-                    case 'Earth':
-                        this.meshNumber = 4;
-                        break;
-                    case 'Mars':
-                        this.meshNumber = 5;
-                        break;
-                    case 'Jupiter':
-                        this.meshNumber = 6;
-                        break;
-                    case 'Saturn':
-                        this.meshNumber = 7;
-                        break;
-                    case 'Uranus':
-                        this.meshNumber = 8;
-                        break;
-                    case 'Neptune':
-                        this.meshNumber = 9;
-                        break;
+
+        switch (lang) {
+            case "en-US":
+                {
+                    var controls = new function () {
+                        // Axes
+                        this.axes = false;
+
+                        // Physics
+                        this.rotation = 0.01;
+
+                        // Geometry
+                        this.meshNumber = 4;//4;
+                        this.mesh = objectArray[this.meshNumber];
+                        this.animation = true;
+                        this.size = 0.5;
+                        this.type = "Earth";//"Earth";
+
+                        this.chooseObject = function () {
+                            objectArray[this.meshNumber].visible = false;
+                            switch (this.type) {
+                                case 'Sun':
+                                    this.meshNumber = 0;
+                                    break;
+                                case 'Mercury':
+                                    this.meshNumber = 1;
+                                    break;
+                                case 'Venus':
+                                    this.meshNumber = 2;
+                                    break;
+                                case 'Moon':
+                                    this.meshNumber = 3;
+                                    break;
+                                case 'Earth':
+                                    this.meshNumber = 4;
+                                    break;
+                                case 'Mars':
+                                    this.meshNumber = 5;
+                                    break;
+                                case 'Jupiter':
+                                    this.meshNumber = 6;
+                                    break;
+                                case 'Saturn':
+                                    this.meshNumber = 7;
+                                    break;
+                                case 'Uranus':
+                                    this.meshNumber = 8;
+                                    break;
+                                case 'Neptune':
+                                    this.meshNumber = 9;
+                                    break;
+                            }
+                            objectArray[this.meshNumber].visible = true;
+                            this.mesh = objectArray[this.meshNumber];
+                        }
+                    }
+
+                    // First object is visible
+                    controls.mesh.visible = true;
+
+                    // GUI de controle e ajuste de valores especificos da geometria do objeto
+                    var gui = new dat.GUI();
+
+                    var guiFolder = gui.addFolder("Properties");
+                    guiFolder.open(); // Open the folder
+
+                    /*guiFolder.add(controls, "axes").listen().onChange(function(e) {
+                        if (controls.axes) {
+                            axes.visible = true;
+                        } else {
+                            axes.visible = false;
+                        }
+                    });*/
+
+                    guiFolder.add(controls, "animation").listen().onChange(function (e) {
+                        if (controls.animation) {
+                            controls.rotation = 0.01;
+                        }
+                        else {
+                            controls.rotation = 0;
+                        }
+                    });
+
+                    guiFolder.add(controls, 'type', ['Sun', 'Mercury', 'Venus', 'Moon', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']).onChange(function (e) {
+                        controls.chooseObject();
+                    });
+                    break;
                 }
-                objectArray[this.meshNumber].visible = true;
-                this.mesh = objectArray[this.meshNumber];
-            }
+            case "pt-BR":
+                {
+                    var controls = new function () {
+                        // Axes
+                        this.axes = false;
+
+                        // Physics
+                        this.rotation = 0.01;
+
+                        // Geometry
+                        this.meshNumber = 4;//4;
+                        this.mesh = objectArray[this.meshNumber];
+                        this.animação = true;
+                        this.tamanho = 0.5;
+                        this.tipo = "Terra";//"Earth";
+
+                        this.chooseObject = function () {
+                            objectArray[this.meshNumber].visible = false;
+                            switch (this.tipo) {
+                                case 'Sol':
+                                    this.meshNumber = 0;
+                                    break;
+                                case 'Mercúrio':
+                                    this.meshNumber = 1;
+                                    break;
+                                case 'Vênus':
+                                    this.meshNumber = 2;
+                                    break;
+                                case 'Lua':
+                                    this.meshNumber = 3;
+                                    break;
+                                case 'Terra':
+                                    this.meshNumber = 4;
+                                    break;
+                                case 'Marte':
+                                    this.meshNumber = 5;
+                                    break;
+                                case 'Júpiter':
+                                    this.meshNumber = 6;
+                                    break;
+                                case 'Saturno':
+                                    this.meshNumber = 7;
+                                    break;
+                                case 'Urano':
+                                    this.meshNumber = 8;
+                                    break;
+                                case 'Netuno':
+                                    this.meshNumber = 9;
+                                    break;
+                            }
+                            objectArray[this.meshNumber].visible = true;
+                            this.mesh = objectArray[this.meshNumber];
+                        }
+                    }
+
+                    // First object is visible
+                    controls.mesh.visible = true;
+
+                    // GUI de controle e ajuste de valores especificos da geometria do objeto
+                    var gui = new dat.GUI();
+
+                    var guiFolder = gui.addFolder("Propriedades");
+                    guiFolder.open(); // Open the folder
+
+                    /*guiFolder.add(controls, "axes").listen().onChange(function(e) {
+                        if (controls.axes) {
+                            axes.visible = true;
+                        } else {
+                            axes.visible = false;
+                        }
+                    });*/
+
+                    guiFolder.add(controls, "animação").listen().onChange(function (e) {
+                        if (controls.animação) {
+                            controls.rotation = 0.01;
+                        }
+                        else {
+                            controls.rotation = 0;
+                        }
+                    });
+
+                    guiFolder.add(controls, 'tipo', ['Sol', 'Mercúrio', 'Vênus', 'Lua', 'Terra', 'Marte', 'Júpiter', 'Saturno', 'Urano', 'Netuno']).onChange(function (e) {
+                        controls.chooseObject();
+                    });
+                    break;
+                }
         }
+
     
-        // First object is visible
-        controls.mesh.visible = true;
-    
-        // GUI de controle e ajuste de valores especificos da geometria do objeto
-        var gui = new dat.GUI();
-    
-        var guiFolder = gui.addFolder("Properties");
-        guiFolder.open(); // Open the folder
-        
-        /*guiFolder.add(controls, "axes").listen().onChange(function(e) {
-            if (controls.axes) {
-                axes.visible = true;
-            } else {
-                axes.visible = false;
-            }
-        });*/
-        
-        guiFolder.add(controls, "animation").listen().onChange(function(e) {
-            if (controls.animation) {
-                controls.rotation = 0.01;
-            } 
-            else{
-                controls.rotation = 0;
-            }
-        });
-    
-        guiFolder.add(controls, 'type', ['Sun', 'Mercury', 'Venus', 'Moon', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']).onChange(function(e) {
-            controls.chooseObject();
-        });
 
         ////////////////////////////////////////////////////////////////////////////////
         //          Handler arToolkitSource

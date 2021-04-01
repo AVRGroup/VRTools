@@ -465,7 +465,7 @@ function init(lang) {
                     this.groundPlaneVisible = true;
 
                     //Physics
-                    this.animation = true;
+                    this.animação = true;
                     this.rotation = 0.015;
                     this.wireframe = false;
                     this.wireframeStatus = false;
@@ -609,8 +609,8 @@ function init(lang) {
 
                 var guiFolder = gui.addFolder("Propriedades");
                 guiFolder.open(); // Open the folder
-                guiFolder.add(controls, "animation").listen().onChange(function (e) {
-                    if (controls.animation) {
+                guiFolder.add(controls, "animação").listen().onChange(function (e) {
+                    if (controls.animação) {
                         controls.rotation = 0.015;
                     }
                     else {

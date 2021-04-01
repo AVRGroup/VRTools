@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -34,6 +34,7 @@
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-button-controls.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-physics-system.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/other/howler.js"></script>
+    <script src="../../js/translation.js"></script>
 
     <script>
         AFRAME.registerComponent('appcode', {
@@ -74,7 +75,7 @@
                 // ----- Setting trajectory object ----- //
 
                 this.Curve = this.ProjectileCurve(); // Personalized curve class
-                this.path = new this.Curve(new THREE.Vector3(0, -1, 0), 0, 0, 0, 0); // instantiate Curve in an object that can be used to create a geomety 
+                this.path = new this.Curve(new THREE.Vector3(0, -1, 0), 0, 0, 0, 0); // instantiate Curve in an object that can be used to create a geomety
                 this.material = new THREE.LineBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.5 });
 
                 this.trajectory = new THREE.Line(
@@ -234,7 +235,10 @@
 <body>
     <div id="info">
         <h2>Instructions: </h2>
-        <p><b>Google Cardboard:</b> press the button to release the crate</p>
+        <div class="w3">
+              <p id="p1"><b>Google Cardboard:</b> press the button to release the crate</p>
+        </div>
+      
         <p><b>Joystick:</b> Press any button to release the crate</p>
         <p><b>Mouse:</b> Click in the screen to release the crate</p>
         <p><b>Start:</b> Press the VR button in the bottom right corner to enter in Virtual Reality mode and start.</p>
@@ -272,6 +276,14 @@
             <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
             </a-entity>
         </a-entity>
+        <script type="text/javascript">
+            TRANSLATION.add(      
+                '#p1',
+                'Projectile Motion',
+                'Movimento de projéteis',
+            );
+        </script>
+
 
     </a-scene>
 </body>
