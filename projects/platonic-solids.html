@@ -120,6 +120,14 @@
                 </a>
                 <p class="more-modes-text">
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-hmd-1">
+                        In order to fully experiece the VR mode, it is required one HMD (head-mounted display) and one
+                        joystick even though it is possible to use the app without those equipments.
+                    </div>
+                </p>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
                     <div id="warning-vr">
                         It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
                                                                              target="_blank">Google Virtual Reality services</a>
@@ -292,13 +300,19 @@
         );
 
         TRANSLATION.add(
+            '#warning-hmd-1',
+            `In order to fully experiece the VR mode, it is required one HMD (head-mounted display).`,
+            `Para uma experiência completa no modo RV, é necessário usar um HMD (head-mounted display).`
+        );
+
+        TRANSLATION.add(
             '#warning-vr',
             ` It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
-                                                                            target="_blank">Google Virtual Reality services</a>
-                            on the first access. `,
+                                                                        target="_blank">Google Virtual Reality services</a>
+                        on the first access. `,
             `  Pode ser necessário aceitar a instalação dos <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
-                                                                            target="_blank">serviços de Realidade Virtual da Google</a>
-                            no primeiro acesso. `
+                                                                        target="_blank">serviços de Realidade Virtual da Google</a>
+                        no primeiro acesso. `
         );
 
 
