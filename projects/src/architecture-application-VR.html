@@ -23,9 +23,7 @@
     <!-- Library of Virtual Reality -->
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/util/Aframe-Extras/aframe-extras.js"></script>
-    <!-- Details about aframe-extras "controls" here:
-        https://github.com/donmccurdy/aframe-extras/tree/master/src/controls
-    -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-button-controls.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/teleporter.js"></script>
 
     <script>
@@ -67,6 +65,8 @@
                     fireTeleporterOnSpacebar: true,
                     fireTeleporterOnTouch: true
                 });
+
+                console.log(rig.getAttribute('teleporter'))
             }
         });
     </script>
@@ -87,7 +87,7 @@
 
         <a-entity id="house" gltf-model="#house" modify-materials></a-entity>
 
-        <a-entity id="rig" position="-3 0 18" setteleport>
+        <a-entity id="rig" position="-3 0 18" button-controls setteleport>
             <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
             </a-entity>
         </a-entity>
