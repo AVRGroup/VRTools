@@ -328,7 +328,7 @@ function init() {
                     lookDirection = new THREE.Vector3(0, -1, 0);
                     airplaneRange = 175;
                     airplane = ASSETS.objects.airplane;
-                    airplane.position.set(-150, controls.height, 0);
+                    airplane.position.set(-150, controls.altura, 0);
                     airplane.rotation.y = Math.PI * 0.5;
                     airplane.scale.set(0.15, 0.15, 0.15)
                     scene.add(airplane);
@@ -422,7 +422,7 @@ function init() {
                         box.isReleased = true;
                         drawTrajectory();
 
-                        totalTime = quadraticTime(-4.9, 0, controls.height)
+                        totalTime = quadraticTime(-4.9, 0, controls.altura)
                         let aux = totalTime
                         time = 0;
                         xTotalDis = controls.velocidade * parseFloat(aux.toFixed(2));

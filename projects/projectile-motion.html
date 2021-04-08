@@ -224,6 +224,11 @@
         changeLanguageApp();
         // ã
 
+        TRANSLATION.onTranslate = function () {
+            // document.querySelector('#scene').src = 'src/vascular-diseases-application.html?lang=' + TRANSLATION.currentLang;
+            document.querySelector('#scene').contentWindow.changeLanguage(TRANSLATION.currentLang);
+        }
+
         TRANSLATION.add(
             '#title',
             'Projectile Motion',

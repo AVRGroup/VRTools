@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>Projectile Motion</title>
-
+    <script src="../../js/translation.js"></script>
     <style>
         html,
         body {
@@ -53,11 +53,11 @@
             list-style-type: none;
         }
 
-        #vars li {
-            font-size: 1.2em;
-            background-color: rgba(220, 220, 220, 0.7);
-            padding: 3px;
-        }
+            #vars li {
+                font-size: 1.2em;
+                background-color: rgba(220, 220, 220, 0.7);
+                padding: 3px;
+            }
 
         #drop {
             margin-top: 3px;
@@ -75,7 +75,7 @@
     <div id="gui"></div>
 
     <ul id="vars">
-        <li class="top">Displacement:</li>
+        <li id="top">Displacement:</li>
         <li id="x" class="middle">x: -</li>
         <li id="y" class="middle">y: -</li>
         <li id="time" class="middle">Time:</li>
@@ -98,6 +98,51 @@
     <script src="../libs/loaders/GLTFLoader.js"></script>
     <script src="../libs/other/physijs/physi.js"></script>
     <script src="projectile-motion.js"></script>
+    <script type="text/javascript">
+        function changeLanguage(lang) {
+            switch (lang) {
+                case 'pt-BR':
+                    {
+                        TRANSLATION.translateDocument(TRANSLATION.PT_BR)
+                        break;
+                    }
+                case 'en-US':
+                    {
+                        TRANSLATION.translateDocument(TRANSLATION.EN_US)
+                        break;
+                    }
+            }
+        }
+
+        TRANSLATION.add(
+            '#top',
+            'Displacement',
+            'Deslocamento'
+        );
+
+        TRANSLATION.add(
+            '#time',
+            'Time',
+            'Tempo',
+        );
+
+        TRANSLATION.add(
+            '#drop',
+            'Drop Box',
+            'Soltar Caixa'
+        );
+
+        TRANSLATION.add(
+            '#info',
+            'The displacement along x-axis and y-axis formulas are given below:
+        $$ \Delta x = v_xt.$$
+        $$ \Delta y = { v }_{ 0y }t -\frac{ 1}{ 2}{ \mathrm{ gt }}^ { 2}\\ .$$',
+            'As fórmulas de deslocamento ao longo dos eixos x e y são fornecidas abaixo:
+        $$ \Delta x = v_xt.$$
+        $$ \Delta y = { v }_{ 0y }t -\frac{ 1}{ 2}{ \mathrm{ gt }}^ { 2}\\ .$$'
+        );
+
+    </script>
 </body>
 
 </html>
