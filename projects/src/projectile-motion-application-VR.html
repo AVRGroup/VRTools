@@ -234,14 +234,14 @@
 
 <body>
     <div id="info">
-        <h2>Instructions: </h2>
+        <h2 id="inst">Instructions: </h2>
         <div class="w3">
               <p id="p1"><b>Google Cardboard:</b> press the button to release the crate</p>
         </div>
       
-        <p><b>Joystick:</b> Press any button to release the crate</p>
-        <p><b>Mouse:</b> Click in the screen to release the crate</p>
-        <p><b>Start:</b> Press the VR button in the bottom right corner to enter in Virtual Reality mode and start.</p>
+        <p id="joy"><b>Joystick:</b> Press any button to release the crate</p>
+        <p id="mouse"><b>Mouse:</b> Click in the screen to release the crate</p>
+        <p id="start"><b>Start:</b> Press the VR button in the bottom right corner to enter in Virtual Reality mode and start.</p>
     </div>
 
     <a-scene id="scene" physics="friction: 0.8; restitution: 0.1">
@@ -277,10 +277,48 @@
             </a-entity>
         </a-entity>
         <script type="text/javascript">
+            function changeLanguage(lang) {
+                switch (lang) {
+                    case 'pt-BR':
+                        {
+                            TRANSLATION.translateDocument(TRANSLATION.PT_BR)
+                            break;
+                        }
+                    case 'en-US':
+                        {
+                            TRANSLATION.translateDocument(TRANSLATION.EN_US)
+                            break;
+                        }
+                }
+            }
             TRANSLATION.add(      
                 '#p1',
                 'Projectile Motion',
                 'Movimento de projéteis',
+            );
+
+            TRANSLATION.add(
+                '#inst',
+                'Instructions',
+                'Instuções',
+            );
+
+            TRANSLATION.add(
+                '#joy',
+                'Joystick: Press any button to release the crate',
+                'Joystick: Pressione qualquer botão para liberar a caixa.',
+            );
+
+            TRANSLATION.add(
+                '#mouse',
+                'Mouse: Click in the screen to release the crate',
+                'Mouse: Clique na tela para liberar a caixa.',
+            );
+
+            TRANSLATION.add(
+                '#start',
+                'Start: Press the VR button in the bottom right corner to enter in Virtual Reality mode and start.',
+                'Start: Pressione o botão VR no canto inferior direito para entrar no modo Realidade Virtual e iniciar.',
             );
         </script>
 
