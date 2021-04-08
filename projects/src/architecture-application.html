@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>House</title>
     <link rel="stylesheet" href="../../css/w3.css">
-    <script src="../js/translation.js"></script>
+    <script src="../../js/translation.js"></script>
     <style>
         html,
         body {
@@ -53,6 +53,21 @@
     <div id="stats"></div>
     <script type="module" src="architecture.js"></script>
     <script type="text/javascript">
+        function changeLanguage(lang) {
+            switch (lang) {
+                case 'pt-BR':
+                    {
+                        TRANSLATION.translateDocument(TRANSLATION.PT_BR)
+                        break;
+                    }
+                case 'en-US':
+                    {
+                        TRANSLATION.translateDocument(TRANSLATION.EN_US)
+                        break;
+                    }
+            }
+        }
+
         TRANSLATION.add(
             '#move',
             'Move: WASD',
@@ -90,8 +105,8 @@
         );
         TRANSLATION.add(
             '#inst',
-            '(Click to continue)',
-            '(Clique para continuar)'
+            'Instructions',
+            'Instruções'
         );
     </script>
 </body>
