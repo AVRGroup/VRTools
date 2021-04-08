@@ -71,9 +71,9 @@
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
 
-                <a id="fullscreen_link" href="./src/architecture-application.html" target="_" style="text-decoration: none;">
+                <a href="javascript: TRANSLATION.redirect('projects/src/architecture-application.html', '', true);">
                     <div class="more-modes w3-display-container"
-                        style="background: url('img/Architecture/blur.jpg') center;">
+                         style="background: url('img/Architecture/blur.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
                             <br />
@@ -86,7 +86,7 @@
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a href="./src/architecture-AR.html" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                        style="background: url('img/Architecture/blur-AR.jpg') center;">
+                         style="background: url('img/Architecture/blur-AR.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/ar-icon.png" alt="Augmented Reality" style="width: 64px;" />
                             <br />
@@ -99,7 +99,7 @@
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
                     <div id="warning-fiducial">
                         You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
-                            target="_blank">click here</a> to
+                                                                                           target="_blank">click here</a> to
                         download).
                     </div>
                 </p>
@@ -191,6 +191,12 @@
                 document.getElementById("scene").src = "./src/virtual-travel-application.html" + language;
                 document.getElementById("fullscreen_link").href = ("./src/architecture-application.html" + language);
             }
+        }
+
+        TRANSLATION.onTranslate = function () {
+            // document.querySelector('#scene').src = 'src/architecture-application.html?lang=' + TRANSLATION.currentLang;
+            document.querySelector('#scene').contentWindow.changeLanguage(TRANSLATION.currentLang);
+
         }
 
         TRANSLATION.onTranslate = function () {
