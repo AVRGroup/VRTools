@@ -45,6 +45,20 @@
             max-height: 22.5%;
         }
 
+        #info1 {
+            position: absolute;
+            margin-left: auto;
+            margin-right: auto;
+            left: 5%;
+            right: 5%;
+            bottom: 17.5%;
+            background-color: rgba(220, 220, 220, 0.7);
+            padding: 3px;
+            text-align: center;
+            border: rgb(120, 120, 120) solid 3px;
+            max-height: 22.5%;
+        }
+
         #vars {
             position: absolute;
             top: 25%;
@@ -83,8 +97,10 @@
         <li id="drop">Drop Box</li>
     </ul>
 
-    <div id="info">
+    <div id="info1">
         The displacement along x-axis and y-axis formulas are given below:
+    </div>
+    <div id="info">
         $$ \Delta x = v_xt.$$
         $$ \Delta y={v}_{0y}t-\frac{1}{2}{\mathrm{gt}}^{2}\\ .$$
     </div>
@@ -133,13 +149,9 @@
         );
 
         TRANSLATION.add(
-            '#info',
-            'The displacement along x-axis and y-axis formulas are given below:
-        $$ \Delta x = v_xt.$$
-        $$ \Delta y = { v }_{ 0y }t -\frac{ 1}{ 2}{ \mathrm{ gt }}^ { 2}\\ .$$',
-            'As fórmulas de deslocamento ao longo dos eixos x e y são fornecidas abaixo:
-        $$ \Delta x = v_xt.$$
-        $$ \Delta y = { v }_{ 0y }t -\frac{ 1}{ 2}{ \mathrm{ gt }}^ { 2}\\ .$$'
+            '#info1',
+            'The displacement along x-axis and y-axis formulas are given below:',
+            'As fórmulas de deslocamento ao longo dos eixos x e y são fornecidas abaixo:'
         );
 
     </script>
