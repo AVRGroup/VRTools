@@ -119,23 +119,23 @@ class Navbar extends HTMLElement {
                 <!-- Languages sub-section -->
                 <a href="javascript:void(0)" class="w3-border-top w3-bar-item "></a>
                 <a href="javascript:void(0)" class="nav-lang-option us-option selected"
-                    onclick="selectFlag('en-US'); TRANSLATION.changeSelectedLanguage('en-US');">
+                    onclick="changeSelectedLanguage('en-US');">
                     <img class="flag" src="${prevPath}img/flags/us-icon.png">
                 </a>
                 <a href="javascript:void(0)" class="nav-lang-option pt-option"
-                    onclick="selectFlag('pt-BR'); TRANSLATION.changeSelectedLanguage('pt-BR');">
+                    onclick="changeSelectedLanguage('pt-BR');">
                     <img class="flag" src="${prevPath}img/flags/br-icon.png">
                 </a>
             </div>
         </div>
 
         <div id="lang-options" class="w3-hide w3-hide-medium w3-hide-small w3-card">
-            <a href="javascript:void(0)" onclick="selectFlag('en-US'); TRANSLATION.changeSelectedLanguage('en-US');"
+            <a href="javascript:void(0)" onclick="changeSelectedLanguage('en-US');"
                 class="us-option selected">
                 <img class="flag" src="${prevPath}img/flags/us-icon.png"/>
                 English
             </a>
-            <a href="javascript:void(0)" onclick="selectFlag('pt-BR'); TRANSLATION.changeSelectedLanguage('pt-BR');"
+            <a href="javascript:void(0)" onclick="changeSelectedLanguage('pt-BR');"
                 class="pt-option">
                 <img class="flag" src="${prevPath}img/flags/br-icon.png"/>
                 Portuguese
@@ -160,29 +160,48 @@ function toggleNavFlag() {
     document.querySelector('#lang-options').classList.toggle('w3-show');
 }
 
-function selectFlag(lang) {
+function changeSelectedLanguage(lang) {
+    const flag = document.querySelector('#navFlag');
     const prevPath = window.location.origin === "https://avrgroup.github.io" ? '/vrtools/' : '/';
-    if (lang !== TRANSLATION.currentLang) {
-        if (lang === 'pt-BR') {
-            document.querySelector('#select-flag').src = `${prevPath}img/flags/br-icon.png`;
-        }
-        else {
-            document.querySelector('#select-flag').src = `${prevPath}img/flags/us-icon.png`;
-        }
+
+    const pt = document.querySelectorAll('.pt-option');
+    const us = document.querySelectorAll('.us-option');
+
+    if (lang === 'pt-BR') {
+        TRANSLATION.translateDocument(TRANSLATION.PT_BR)
+        document.querySelector('#select-flag').src = `${prevPath}img/flags/br-icon.png`;
+
+        pt.forEach(e => { e.classList.add('selected'); });
+        us.forEach(e => { e.classList.remove('selected'); });
     }
+    else if (lang === 'en-US') {
+        TRANSLATION.translateDocument(TRANSLATION.EN_US);
+        document.querySelector('#select-flag').src = `${prevPath}img/flags/us-icon.png`;
+
+        pt.forEach(e => { e.classList.remove('selected'); });
+        us.forEach(e => { e.classList.add('selected'); });
+    }
+
+    if (window.history.pushState) {
+        const newURL = window.location.origin + window.location.pathname + '?lang=' + TRANSLATION.currentLang + window.location.hash;
+        window.history.pushState({ path: newURL }, '', newURL)
+    }
+
+    flag.classList.remove('active');
+    document.querySelector('#lang-options').classList.remove('w3-show');
 }
+
 
 window.onload = function () {
     const url = new URLSearchParams(window.location.search);
     const lang = url.get('lang');
+    console.log('navbar')
 
     if (lang && lang === 'pt-BR') {
-        selectFlag('pt-BR');
-        TRANSLATION.changeSelectedLanguage('pt-BR')
-        TRANSLATION.translateDocument(TRANSLATION.PT_BR);
+        changeSelectedLanguage('pt-BR')
     }
     else {
-        selectFlag('en-US');
+        changeSelectedLanguage('en-US')
     }
 }
 

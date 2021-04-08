@@ -16,9 +16,9 @@ class Translation {
 
         this.onTranslate = null;
 
-        this.PT_BR = 0;
-        this.EN_US = 1;
-        this.currentLang = 'en-US';
+        this.PT_BR = 'pt-BR';
+        this.EN_US = 'en-US';
+        this.currentLang = this.EN_US;
     }
 
 
@@ -42,9 +42,11 @@ class Translation {
         let textArray;
         if (language === this.PT_BR) {
             textArray = this.ptBR;
+            this.currentLang = this.PT_BR
         }
         else if (language === this.EN_US) {
             textArray = this.enUS;
+            this.currentLang = this.EN_US
         }
         else {
             console.error('Invalid Language!')
@@ -63,36 +65,6 @@ class Translation {
                 }
             }
         }
-    }
-
-    changeSelectedLanguage(lang) {
-        const flag = document.querySelector('#navFlag');
-
-        if (lang !== this.currentLang) {
-            const pt = document.querySelectorAll('.pt-option');
-            const us = document.querySelectorAll('.us-option');
-
-            if (lang === 'pt-BR') {
-                TRANSLATION.translateDocument(TRANSLATION.PT_BR)
-            }
-            else if (lang === 'en-US') {
-                TRANSLATION.translateDocument(TRANSLATION.EN_US);
-            }
-
-            pt.forEach(e => { e.classList.toggle('selected'); });
-            us.forEach(e => { e.classList.toggle('selected'); });
-
-            this.currentLang = lang;
-
-            if (window.history.pushState) {
-                const newURL = window.location.origin + window.location.pathname + '?lang=' + this.currentLang + window.location.hash;
-                window.history.pushState({ path: newURL }, '', newURL)
-            }
-
-        }
-
-        flag.classList.remove('active');
-        document.querySelector('#lang-options').classList.remove('w3-show');
 
         if (this.onTranslate) {
             this.onTranslate();
@@ -113,3 +85,16 @@ class Translation {
 
 const TRANSLATION = new Translation();
 
+
+window.addEventListener('load', () => {
+    const url = new URLSearchParams(window.location.search);
+    const lang = url.get('lang');
+    console.log('translation')
+
+    if (lang && lang === 'pt-BR') {
+        TRANSLATION.translateDocument(TRANSLATION.PT_BR);
+    }
+    else {
+        TRANSLATION.translateDocument(TRANSLATION.EN_US);
+    }
+}, { once: true })
