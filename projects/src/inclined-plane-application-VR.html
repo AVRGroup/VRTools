@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -166,15 +166,52 @@
                 }
             },
             updateInfo: function () {
+                var language = location.search;
                 let string = ``;
-                string += `Status: ${this.world.gravity.y < 0 ? 'Running' : 'Paused'}\n`;
-                string += `Angle: ${Math.round(this.angle * 180 / Math.PI)} deg\n`;
-                string += `Friction coef: ${this.rampFriction * 250}\n`;
-                string += `Friction force: ${(this.rampFriction * this.cube.body.mass * this.gravity * -250 * Math.cos(this.angle)).toFixed(2)} N\n`;
-                string += `Weight: ${this.cube.body.mass * this.gravity * -1} N\n`;
-                string += `WeightX: ${(this.cube.body.mass * this.gravity * Math.sin(this.angle) * -1).toFixed(2)} N\n`;
-                string += `WeightY: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
-                string += `Normal: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
+                if (language.length != 0) {
+                    let aux = "?lang=";
+                    language = language.substring(aux.length, language.length);
+                    switch (language) {
+                        case "en-US":
+                            {
+                                
+                                string += `Status: ${this.world.gravity.y < 0 ? 'Running' : 'Paused'}\n`;
+                                string += `Angle: ${Math.round(this.angle * 180 / Math.PI)} deg\n`;
+                                string += `Friction coef: ${this.rampFriction * 250}\n`;
+                                string += `Friction force: ${(this.rampFriction * this.cube.body.mass * this.gravity * -250 * Math.cos(this.angle)).toFixed(2)} N\n`;
+                                string += `Weight: ${this.cube.body.mass * this.gravity * -1} N\n`;
+                                string += `WeightX: ${(this.cube.body.mass * this.gravity * Math.sin(this.angle) * -1).toFixed(2)} N\n`;
+                                string += `WeightY: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
+                                string += `Normal: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
+                                break;
+                            }
+                        case "pt-BR":
+                            {
+                                
+                                string += `Status: ${this.world.gravity.y < 0 ? 'Em Execução' : 'Pausado'}\n`;
+                                string += `Ângulo: ${Math.round(this.angle * 180 / Math.PI)} graus\n`;
+                                string += `Coeficiente de Atrito: ${this.rampFriction * 250}\n`;
+                                string += `Força de Atrito: ${(this.rampFriction * this.cube.body.mass * this.gravity * -250 * Math.cos(this.angle)).toFixed(2)} N\n`;
+                                string += `Peso: ${this.cube.body.mass * this.gravity * -1} N\n`;
+                                string += `PesoX: ${(this.cube.body.mass * this.gravity * Math.sin(this.angle) * -1).toFixed(2)} N\n`;
+                                string += `PesoY: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
+                                string += `Normal: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
+                                break;
+                            }
+                        
+                    }
+                }
+                else {
+                    
+                    string += `Status: ${this.world.gravity.y < 0 ? 'Running' : 'Paused'}\n`;
+                    string += `Angle: ${Math.round(this.angle * 180 / Math.PI)} deg\n`;
+                    string += `Friction coef: ${this.rampFriction * 250}\n`;
+                    string += `Friction force: ${(this.rampFriction * this.cube.body.mass * this.gravity * -250 * Math.cos(this.angle)).toFixed(2)} N\n`;
+                    string += `Weight: ${this.cube.body.mass * this.gravity * -1} N\n`;
+                    string += `WeightX: ${(this.cube.body.mass * this.gravity * Math.sin(this.angle) * -1).toFixed(2)} N\n`;
+                    string += `WeightY: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
+                    string += `Normal: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
+                }
 
                 this.vrInterface.showSideText(string);
             },
