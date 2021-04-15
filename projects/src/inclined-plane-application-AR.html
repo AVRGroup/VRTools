@@ -1,100 +1,103 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-    <head>
-        <title>Inclined Plane - AR</title>
-        <meta charset="UTF-8">
-        <!-- Tag that adapt the dimensions(width, height) of interface for mobile devices:
-            https://developer.mozilla.org/pt-BR/docs/Mozilla/Mobile/Viewport_meta_tag
-        -->
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<head>
+    <title>Inclined Plane - AR</title>
+    <meta charset="UTF-8">
+    <!-- Tag that adapt the dimensions(width, height) of interface for mobile devices:
+        https://developer.mozilla.org/pt-BR/docs/Mozilla/Mobile/Viewport_meta_tag
+    -->
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-        <style>
-            body {
-                margin: 0;
-                overflow: hidden;
-            }
-            table, th, td {
-                border: 2px solid white;
-                border-collapse: collapse;
-                padding: 2px;
-            }
-            table{
-                /**border-spacing: 5px;*/
-                width:100%;
-            }
-            #close {
-                float:right;
-                display:inline-block;
-                padding:2px 5px;
-                background:#ccc;
-            }
-    
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        table, th, td {
+            border: 2px solid white;
+            border-collapse: collapse;
+            padding: 2px;
+        }
+
+        table {
+            /**border-spacing: 5px;*/
+            width: 100%;
+        }
+
+        #close {
+            float: right;
+            display: inline-block;
+            padding: 2px 5px;
+            background: #ccc;
+        }
+
             #close:hover {
-                float:right;
-                display:inline-block;
-                padding:2px 5px;
-                background:#ccc;
-                color:#fff;
+                float: right;
+                display: inline-block;
+                padding: 2px 5px;
+                background: #ccc;
+                color: #fff;
             }
-            #close2 {
-                float:right;
-                display:inline-block;
-                padding:2px 5px;
-                background:#ccc;
-            }
-    
+
+        #close2 {
+            float: right;
+            display: inline-block;
+            padding: 2px 5px;
+            background: #ccc;
+        }
+
             #close2:hover {
-                float:right;
-                display:inline-block;
-                padding:2px 5px;
-                background:#ccc;
-                color:#fff;
+                float: right;
+                display: inline-block;
+                padding: 2px 5px;
+                background: #ccc;
+                color: #fff;
             }
-            
-            .square {
-                height: 15px;
-                width: 15px;
-                vertical-align: middle;
-                background-color: #FFF;
-                border: 1px solid #555;
-                margin-top: 5px;
-                margin-left: 5px;
-                margin-bottom: 5px;
-                margin-right: 5px;
-                text-align: center;
-            }
-        </style>
 
-        <!-- Libraries of configuration (Default) -->
-        <script type="text/javascript" charset="UTF-8" src="../libs/three/three.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="../libs/util/Stats.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="../libs/util/dat.gui.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="../libs/three/controls/OrbitControls.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="../libs/other/physijs/physi.js"></script>
+        .square {
+            height: 15px;
+            width: 15px;
+            vertical-align: middle;
+            background-color: #FFF;
+            border: 1px solid #555;
+            margin-top: 5px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+            margin-right: 5px;
+            text-align: center;
+        }
+    </style>
 
-        <script type="text/javascript" charset="UTF-8" src="../libs/three/geometries/ConvexGeometry.js"></script>    <!-- Biblioteca para trabalhar com Geometria convexa-->
-        <script type="text/javascript" charset="UTF-8" src="../libs/three/geometries/QuickHull.js"></script>
+    <!-- Libraries of configuration (Default) -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/three.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/util/Stats.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/util/dat.gui.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/controls/OrbitControls.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/other/physijs/physi.js"></script>
 
-        <script type="text/javascript" src="../libs/util/Stats.js"></script>
-        <link rel="stylesheet" href="../libs/util/dat.gui.css">
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/geometries/ConvexGeometry.js"></script>    <!-- Biblioteca para trabalhar com Geometria convexa-->
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/geometries/QuickHull.js"></script>
 
-        <!-- Library of Augmented Reality that uses Three.js -->
-        <script type="text/javascript" charset="UTF-8" src="../libs/MarkerTracking--LocationBasedAR/THREE/ar.js"></script>
-        <script>THREEx.ArToolkitContext.baseURL = "../"</script>  <!-- Define o local do contexto -->
-        
-        <!-- There are many useful functionss -->
-        <script type="text/javascript" charset="UTF-8" src="../libs/util/util.js"></script>
+    <script type="text/javascript" src="../libs/util/Stats.js"></script>
+    <link rel="stylesheet" href="../libs/util/dat.gui.css">
 
-        <!-- Math Equations -->
-        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js"></script>
+    <!-- Library of Augmented Reality that uses Three.js -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/MarkerTracking--LocationBasedAR/THREE/ar.js"></script>
+    <script>THREEx.ArToolkitContext.baseURL = "../"</script>  <!-- Define o local do contexto -->
+    <!-- There are many useful functionss -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/util/util.js"></script>
 
-        <!-- Library of example -->
-        <script type="text/javascript" charset="UTF-8" src="inclined-plane-AR.js"></script>
+    <!-- Math Equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js"></script>
 
-    </head>
+    <!-- Library of example -->
+    <script type="text/javascript" charset="UTF-8" src="inclined-plane-AR.js"></script>
+    <script src="../../js/translation.js"></script>
+</head>
     <body>
-        <div id="webgl-output" ></div>
+        <div id="webgl-output"></div>
         <div id="informations" style="position: absolute; width: 65%; height: 50%;
         display: none; z-index: 1000; ">
             <div id="content" style="color: #ffffff;
@@ -106,113 +109,202 @@
                         </th>
                     </tr>
                     <tr>
-                      <th colspan="1">Equations</th>
+                        <th colspan="1">Equations</th>
                     </tr>
                     <tr>
                         <td style="width:100%; text-align: justify">
-                            <b style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = \(m * \overrightarrow{G} \); 
+                            <b id="wf" style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = \(m * \overrightarrow{G} \);
                             \(\overrightarrow{W_x}\) = \(\overrightarrow{W} * sin(\theta) \);
                             \(\overrightarrow{W_y}\) = \(\overrightarrow{W} * cos(\theta) \);
-                            <b style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = \(\mu * \overrightarrow{N} \) ; 
+                            <b id="ff" style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = \(\mu * \overrightarrow{N} \) ;
                             <b style="color:yellow">Normal:</b> \(\overrightarrow{N}\) = \(\overrightarrow{W_y}\) ;
-                            <b style="color:yellow">Forces:</b>
-                            <div class = "square" style="background-color:rgb(255,0,0); 
+                            <b id="fi" style="color:yellow">Forces:</b>
+                            <div class="square" style="background-color:rgb(255,0,0);
                             border: 2px solid #000; display: inline-block;"></div>
-                            <p style="display: inline-block;"><b>Weight</b></p>
-                            <div class = "square" style="background-color:rgb(0,255,0);
+                            <p style="display: inline-block;"><b id="wf">Weight</b></p>
+                            <div class="square" style="background-color:rgb(0,255,0);
                             display: inline-block;"></div>
                             <p style="display: inline-block;"><b>Normal</b></p>
-                            <div class = "square" style="background-color:rgb(0,0,255); 
+                            <div class="square" style="background-color:rgb(0,0,255);
                             display: inline-block;"></div>
-                            <p style="display: inline-block;"><b>Friction</b></p>
+                            <p style="display: inline-block;"><b id="ff">Friction</b></p>
                         </td>
                     </tr>
                     <tr>
                         <th colspan="1">Data</th>
                     </tr>
                     <tr>
-                        <td rowspan= "3" style="text-align: justify"><b style="color:yellow">Angle:</b> \(\theta\) = <span id="thetaAngleDegree"></span>° 
+                        <td rowspan="3" style="text-align: justify">
+                            <b id="ang" style="color:yellow">Angle:</b> \(\theta\) = <span id="thetaAngleDegree"></span>°
                             = <span id="thetaAngleRadians"></span> rad;
                             \(\sin(\theta)\) = <span id="thetaAngleSin"></span>;
                             \(\cos(\theta)\) = <span id="thetaAngleCos"></span>;
                             \(\tan(\theta)\) = <span id="thetaAngleTan"></span>;
-                            <b style="color:yellow">Mass:</b> m = 1.0 Kg; 
-                            <b style="color:yellow">Gravity:</b> \(\overrightarrow{G}\) = <span id="gravityCoefficient"></span> m/\(s^2\);
-                            <b style="color:yellow">Friction Coefficient:</b> \(\mu\) = <span id="frictionCoefficient"></span>;
-                            <b style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = <span id="frictionForce"></span> N;
-                            <b style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = <span id="weightForce"></span> N;
+                            <b id="mass" style="color:yellow">Mass:</b> m = 1.0 Kg;
+                            <b id="grav" style="color:yellow">Gravity:</b> \(\overrightarrow{G}\) = <span id="gravityCoefficient"></span> m/\(s^2\);
+                            <b id="fc" style="color:yellow">Friction Coefficient:</b> \(\mu\) = <span id="frictionCoefficient"></span>;
+                            <b id="ff" style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = <span id="frictionForce"></span> N;
+                            <b id="wf" style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = <span id="weightForce"></span> N;
                             \(\overrightarrow{W_x}\) = <span id="weightXForce"></span> N;
                             \(\overrightarrow{W_y}\) = <span id="weightYForce"></span> N;
                             <b style="color:yellow">Normal:</b> \(\overrightarrow{N}\) = <span id="normalForce"></span> N
                         </td>
                     </tr>
                 </table>
-                
+
             </div>
         </div>
-    
+
         <div id="alertPanel" style="position: absolute; left: 10%; bottom: 10%; width: 80%; height: 15%;
         background-color: rgba(7, 7, 9, 0.8); display: flex; z-index: 1002; border: 2px solid #000 ">
             <span id='close'>X</span>
-            <div style = "margin-top: 20px">
-                <p id="alertPanelContent" style="font-size: 1.3em; text-align: center; color: #ffffff; 
+            <div style="margin-top: 20px">
+                <p id="alertPanelContent" style="font-size: 1.3em; text-align: center; color: #ffffff;
                 z-index: 1003; width: 95%; height: 90%;
                 word-wrap: break-word;">
-                    Press the "Start" button to run the model 
+                    Press the "Start" button to run the model
                 </p>
             </div>
         </div>
-    
-        <script type="text/javascript"> 
-            main();
-    
+
+        <script type="text/javascript">
+            var language = location.search;
+            if (language.length != 0) {
+                let aux = "?lang=";
+                language = language.substring(aux.length, language.length);
+                switch (language) {
+                    case "en-US":
+                        main('en-US');
+                        break;
+                    case "pt-BR":
+                        main('pt-BR');
+                        break;
+                }
+            }
+            else {
+                language = "en-US";
+                main('en-US');
+            }
+
             var informations = document.getElementById("informations");
-            var alertPanelContent =  document.getElementById("alertPanelContent");
-            var alertPanel =  document.getElementById("alertPanel");
-    
+            var alertPanelContent = document.getElementById("alertPanelContent");
+            var alertPanel = document.getElementById("alertPanel");
+
             onResizePanels();
-    
+
             function onResizePanels() {
                 informations.style.left = "5%";
                 informations.style.top = "5%";
-    
-                if(window.innerHeight < 500){           // Horizontal screen mobile
+
+                if (window.innerHeight < 500) {           // Horizontal screen mobile
                     informations.style.width = "90%";
                     informations.style.height = "90%";
                     alertPanelContent.style.fontSize = "6vh";
                     alertPanel.style.height = "15%";
                 }
-                else{
-                    if(window.innerWidth < 1000){
+                else {
+                    if (window.innerWidth < 1000) {
                         informations.style.width = "90%";
-                        if(window.innerWidth < 770){
+                        if (window.innerWidth < 770) {
                             alertPanelContent.style.fontSize = "1.3em";
-                            if(window.innerWidth < 500){
+                            if (window.innerWidth < 500) {
                                 informations.style.height = "90%";
                                 alertPanel.style.height = "15%";
                                 alertPanelContent.style.fontSize = "6vw";
                             }
-                            else{
+                            else {
                                 informations.style.height = "90%";
                                 alertPanelContent.style.fontSize = "4.5vw";
                             }
                         }
-                        else{
+                        else {
                             alertPanelContent.style.fontSize = "3.3vw";
                             informations.style.height = "90%";
                         }
                     }
-                    else{
+                    else {
                         informations.style.width = "65%";
                         informations.style.height = "50%";
                         alertPanelContent.style.fontSize = "40px";
                     }
                 }
             }
-    
-            window.addEventListener('resize', function(){
+
+            window.addEventListener('resize', function () {
                 onResizePanels();
-            });  
+            });
+        </script>
+        <script type="text/javascript">
+            function changeLanguage(lang) {
+                switch (lang) {
+                    case 'pt-BR':
+                        {
+                            TRANSLATION.translateDocument(TRANSLATION.PT_BR)
+                            break;
+                        }
+                    case 'en-US':
+                        {
+                            TRANSLATION.translateDocument(TRANSLATION.EN_US)
+                            break;
+                        }
+                }
+            }
+
+            TRANSLATION.add(
+                '#alertPanelContent',
+                'Press the "Start" button to run the model',
+                'Pressione o botão "Iniciar" para executar o modelo'
+            );
+
+            TRANSLATION.add(
+                '#info',
+                'Informations',
+                'Informações',
+            );
+
+            TRANSLATION.add(
+                '#eq',
+                'Equations',
+                'Equações'
+            );
+
+            TRANSLATION.add(
+                '#wf',
+                'Weight:',
+                'Peso:'
+            );
+
+            TRANSLATION.add(
+                '#ff',
+                'Friction:',
+                'Atrito:'
+            );
+
+            TRANSLATION.add(
+                '#fi',
+                'Forces:',
+                'Forças:'
+            );
+            TRANSLATION.add(
+                '#fc',
+                'Friction Coefficient:',
+                'Coeficiente de Atrito:'
+            );
+            TRANSLATION.add(
+                '#grav',
+                'Gravity:',
+                'Gravidade:'
+            );
+            TRANSLATION.add(
+                '#mass',
+                'Mass:',
+                'Massa:'
+            );
+            TRANSLATION.add(
+                '#ang',
+                'Angle:',
+                'Ângulo:'
+            );
         </script>
     </body>
 </html>

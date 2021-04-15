@@ -1,4 +1,4 @@
-function main() {
+function main(lang) {
     // Physijs configuration
     Physijs.scripts.worker = '../libs/other/physijs/physijs_worker.js';
     Physijs.scripts.ammo = 'ammo.js';
@@ -489,26 +489,57 @@ function main() {
     // Criando atributos do menu lateral
     var objectMenu = gui.addFolder("Menu");
     objectMenu.open();
-    objectMenu.add(controls, "frictionBox", 0, 1, 0.01).name("Friction").onChange(function(e){
-        controls.createRamp();           // Recria o objeto pois a fisica é mudada
-        controls.createBox();            
-        controls.updateDates();
-    });
-    objectMenu.add(controls, "angleRamp", 10, 50, 2).name("Angle (°)").onChange(function(e){
-        controls.createRamp();           // Recria o objeto pois a fisica é mudada
-        controls.createBox();           
-        controls.updateDates();
-    });
-    objectMenu.add(controls.panels, "informations").onChange(function(e){
-        if(controls.panels.informations){
-            controls.informations.style.display = "flex";
-            onResizePanels();                     // redraw the canvas forces
-        }
-        else{
-            controls.informations.style.display = "none";
-        }
-    }).name("Informations");
-    objectMenu.add(controls, "startSimulation").name("Start");
+    switch (lang) {
+        case "pt-BR":
+            {
+                objectMenu.add(controls, "frictionBox", 0, 1, 0.01).name("Atrito").onChange(function (e) {
+                    controls.createRamp();           // Recria o objeto pois a fisica é mudada
+                    controls.createBox();
+                    controls.updateDates();
+                });
+                objectMenu.add(controls, "angleRamp", 10, 50, 2).name("Ângulo (°)").onChange(function (e) {
+                    controls.createRamp();           // Recria o objeto pois a fisica é mudada
+                    controls.createBox();
+                    controls.updateDates();
+                });
+                objectMenu.add(controls.panels, "informations").onChange(function (e) {
+                    if (controls.panels.informations) {
+                        controls.informations.style.display = "flex";
+                        onResizePanels();                     // redraw the canvas forces
+                    }
+                    else {
+                        controls.informations.style.display = "none";
+                    }
+                }).name("Informações");
+                objectMenu.add(controls, "startSimulation").name("Iniciar");
+                break;
+            }
+        case "en-US":
+            {
+                objectMenu.add(controls, "frictionBox", 0, 1, 0.01).name("Friction").onChange(function (e) {
+                    controls.createRamp();           // Recria o objeto pois a fisica é mudada
+                    controls.createBox();
+                    controls.updateDates();
+                });
+                objectMenu.add(controls, "angleRamp", 10, 50, 2).name("Angle (°)").onChange(function (e) {
+                    controls.createRamp();           // Recria o objeto pois a fisica é mudada
+                    controls.createBox();
+                    controls.updateDates();
+                });
+                objectMenu.add(controls.panels, "informations").onChange(function (e) {
+                    if (controls.panels.informations) {
+                        controls.informations.style.display = "flex";
+                        onResizePanels();                     // redraw the canvas forces
+                    }
+                    else {
+                        controls.informations.style.display = "none";
+                    }
+                }).name("Informations");
+                objectMenu.add(controls, "startSimulation").name("Start");
+                break;
+            }
+    }
+   
 
     // Update GUI Elements
     function updateDisplay(gui) {

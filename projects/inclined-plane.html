@@ -90,7 +90,7 @@
         </div>
         <div class="w3-row-padding">
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/inclined-plane-application.html" target="_" style="text-decoration: none;">
+                <a href="javascript: TRANSLATION.redirect('projects/src/architecture-application.html', '', true);" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
                         style="background: url('img/Inclined-Plane/blur.png') center;">
                         <div class="w3-padding" style="width:100%">
@@ -206,6 +206,25 @@
     </footer>
 
     <script>
+        function changeLanguageApp() {
+            var language = location.search;
+            if (language.length != 0) {
+                document.getElementById("scene").src = "./src/inclined-plane-application.html" + language;
+                document.getElementById("fullscreen_link").href = ("./src/inclined-plane-application.html" + language);
+                document.getElementById("vr_link").href = ("./src/inclined-plane-application-VR.html" + language);
+                document.getElementById("ar_link").href = ("./src/inclined-plane-application-AR.html" + language);
+            }
+        }
+
+        changeLanguageApp();
+
+
+        TRANSLATION.onTranslate = function () {
+            // document.querySelector('#scene').src = 'src/architecture-application.html?lang=' + TRANSLATION.currentLang;
+            document.querySelector('#scene').contentWindow.changeLanguage(TRANSLATION.currentLang);
+
+        }
+
         TRANSLATION.add(
             '#title',
             'Inclined Plane',

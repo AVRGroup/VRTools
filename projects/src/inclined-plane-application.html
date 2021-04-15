@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 
@@ -15,11 +15,11 @@
 
     <script type="text/javascript" src="../libs/util/Stats.js"></script>
     <script type="text/javascript" src="../libs/util/dat.gui.js"></script>
-
+    <script src="../../js/translation.js"></script>
     <script type="text/javascript" src="../libs/util/util.js"></script>
     <script type="text/javascript" src="inclined-plane.js"></script>
 
-    <!-- Math Equations 
+    <!-- Math Equations
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
         <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js"></script>
     -->
@@ -36,44 +36,48 @@
             margin: 0;
             overflow: hidden;
         }
+
         table, th, td {
             border: 2px solid white;
             border-collapse: collapse;
             padding: 2px;
         }
-        table{
+
+        table {
             /**border-spacing: 5px;*/
-            width:100%;
+            width: 100%;
         }
+
         #close {
-            float:right;
-            display:inline-block;
-            padding:2px 5px;
-            background:#ccc;
+            float: right;
+            display: inline-block;
+            padding: 2px 5px;
+            background: #ccc;
         }
 
-        #close:hover {
-            float:right;
-            display:inline-block;
-            padding:2px 5px;
-            background:#ccc;
-            color:#fff;
-        }
+            #close:hover {
+                float: right;
+                display: inline-block;
+                padding: 2px 5px;
+                background: #ccc;
+                color: #fff;
+            }
+
         #close2 {
-            float:right;
-            display:inline-block;
-            padding:2px 5px;
-            background:#ccc;
+            float: right;
+            display: inline-block;
+            padding: 2px 5px;
+            background: #ccc;
         }
 
-        #close2:hover {
-            float:right;
-            display:inline-block;
-            padding:2px 5px;
-            background:#ccc;
-            color:#fff;
-        }
-        
+            #close2:hover {
+                float: right;
+                display: inline-block;
+                padding: 2px 5px;
+                background: #ccc;
+                color: #fff;
+            }
+
         .square {
             height: 15px;
             width: 15px;
@@ -95,46 +99,46 @@
             <div id="content" style="color: #ffffff;">
                 <table style="background-color: rgba(7, 7, 9, 0.9); border: 2px solid #000 ">
                 <tr>
-                    <th colspan="1" style="font-size: 1.3em; text-align: center;">
+                    <th id="info" colspan="1" style="font-size: 1.3em; text-align: center;">
                         Informations <span id='close2'>X</span>
                     </th>
                 </tr>
                 <tr>
-                  <th colspan="1">Equations</th>
+                  <th id="eq" colspan="1">Equations</th>
                 </tr>
                 <tr>
                     <td style="width:100%; text-align: justify">
-                        <b style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = \(m * \overrightarrow{G} \); 
+                        <b id="wf" style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = \(m * \overrightarrow{G} \); 
                         \(\overrightarrow{W_x}\) = \(\overrightarrow{W} * sin(\theta) \);
                         \(\overrightarrow{W_y}\) = \(\overrightarrow{W} * cos(\theta) \);
-                        <b style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = \(\mu * \overrightarrow{N} \) ; 
+                        <b id ="ff"style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = \(\mu * \overrightarrow{N} \) ; 
                         <b style="color:yellow">Normal:</b> \(\overrightarrow{N}\) = \(\overrightarrow{W_y}\) ;
-                        <b style="color:yellow">Forces:</b>
+                        <b id="fi" style="color:yellow">Forces:</b>
                         <div class = "square" style="background-color:rgb(255,0,0); 
                         border: 2px solid #000; display: inline-block;"></div>
-                        <p style="display: inline-block;"><b>Weight</b></p>
+                        <p style="display: inline-block;"><b id="wf">Weight</b></p>
                         <div class = "square" style="background-color:rgb(0,255,0);
                         display: inline-block;"></div>
                         <p style="display: inline-block;"><b>Normal</b></p>
                         <div class = "square" style="background-color:rgb(0,0,255); 
                         display: inline-block;"></div>
-                        <p style="display: inline-block;"><b>Friction</b></p>
+                        <p style="display: inline-block;"><b id="ff">Friction</b></p>
                     </td>
                 </tr>
                 <tr>
                     <th colspan="1">Data</th>
                 </tr>
                 <tr>
-                    <td rowspan= "3" style="text-align: justify"><b style="color:yellow">Angle:</b> \(\theta\) = <span id="thetaAngleDegree"></span>° 
+                    <td rowspan= "3" style="text-align: justify"><b id="ang" style="color:yellow">Angle:</b> \(\theta\) = <span id="thetaAngleDegree"></span>° 
                         = <span id="thetaAngleRadians"></span> rad;
                         \(\sin(\theta)\) = <span id="thetaAngleSin"></span>;
                         \(\cos(\theta)\) = <span id="thetaAngleCos"></span>;
                         \(\tan(\theta)\) = <span id="thetaAngleTan"></span>;
-                        <b style="color:yellow">Mass:</b> m = 1.0 Kg; 
-                        <b style="color:yellow">Gravity:</b> \(\overrightarrow{G}\) = <span id="gravityCoefficient"></span> m/\(s^2\);
-                        <b style="color:yellow">Friction Coefficient:</b> \(\mu\) = <span id="frictionCoefficient"></span>;
-                        <b style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = <span id="frictionForce"></span> N;
-                        <b style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = <span id="weightForce"></span> N;
+                        <b id="mass"style="color:yellow">Mass:</b> m = 1.0 Kg; 
+                        <b id="grav" style="color:yellow">Gravity:</b> \(\overrightarrow{G}\) = <span id="gravityCoefficient"></span> m/\(s^2\);
+                        <b id="fc" style="color:yellow">Friction Coefficient:</b> \(\mu\) = <span id="frictionCoefficient"></span>;
+                        <b id="ff" style="color:yellow">Friction:</b> \(\overrightarrow{Fr}\) = <span id="frictionForce"></span> N;
+                        <b id="wf" style="color:yellow">Weight:</b> \(\overrightarrow{W}\) = <span id="weightForce"></span> N;
                         \(\overrightarrow{W_x}\) = <span id="weightXForce"></span> N;
                         \(\overrightarrow{W_y}\) = <span id="weightYForce"></span> N;
                         <b style="color:yellow">Normal:</b> \(\overrightarrow{N}\) = <span id="normalForce"></span> N
@@ -158,7 +162,23 @@
     </div>
 
     <script type="text/javascript"> 
-        init();
+        var language = location.search;
+        if (language.length != 0) {
+            let aux = "?lang=";
+            language = language.substring(aux.length, language.length);
+            switch (language) {
+                case "en-US":
+                    init(language);
+                    break;
+                case "pt-BR":
+                    init(language);
+                    break;
+            }
+        }
+        else {
+            language = "en-US";
+            init(language);
+        }
 
         var informations = document.getElementById("informations");
         var alertPanelContent =  document.getElementById("alertPanelContent");
@@ -207,6 +227,78 @@
         window.addEventListener('resize', function(){
             onResizePanels();
         });  
+    </script>
+    <script type="text/javascript">
+        function changeLanguage(lang) {
+            switch (lang) {
+                case 'pt-BR':
+                    {
+                        TRANSLATION.translateDocument(TRANSLATION.PT_BR)
+                        break;
+                    }
+                case 'en-US':
+                    {
+                        TRANSLATION.translateDocument(TRANSLATION.EN_US)
+                        break;
+                    }
+            }
+        }
+
+        TRANSLATION.add(
+            '#alertPanelContent',
+            'Press the "Start" button to run the model',
+            'Pressione o botão "Iniciar" para executar o modelo'
+        );
+
+        TRANSLATION.add(
+            '#info',
+            'Informations',
+            'Informações',
+        );
+
+        TRANSLATION.add(
+            '#eq',
+            'Equations',
+            'Equações'
+        );
+
+        TRANSLATION.add(
+            '#wf',
+            'Weight:',
+            'Peso:'
+        );
+
+        TRANSLATION.add(
+            '#ff',
+            'Friction:',
+            'Atrito:'
+        );
+
+        TRANSLATION.add(
+            '#fi',
+            'Forces:',
+            'Forças:'
+        );
+        TRANSLATION.add(
+            '#fc',
+            'Friction Coefficient:',
+            'Coeficiente de Atrito:'
+        );
+        TRANSLATION.add(
+            '#grav',
+            'Gravity:',
+            'Gravidade:'
+        );
+        TRANSLATION.add(
+            '#mass',
+            'Mass:',
+            'Massa:'
+        );
+        TRANSLATION.add(
+            '#ang',
+            'Angle:',
+            'Ângulo:'
+        );
     </script>
 </body>
 </html>
