@@ -66,7 +66,10 @@
                 function translationApplication(){
                     var language = location.search;
                     if(language.length != 0){
-                        document.getElementById("scene").src = "./src/inclined-plane-application.html"  + location.search; 
+                        document.getElementById("scene").src = "./src/inclined-plane-application.html" + location.search; 
+                        document.getElementById("fullscreen_link").href = ("./src/inclined-plane-application.html" + language);
+                        document.getElementById("vr_link").href = ("./src/inclined-plane-application-VR.html" + language);
+                        document.getElementById("ar_link").href = ("./src/inclined-plane-application-AR.html" + language);
                     }
                 }
                 translationApplication();
