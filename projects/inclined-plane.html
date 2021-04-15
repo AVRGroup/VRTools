@@ -209,18 +209,6 @@
     </footer>
 
     <script>
-        function changeLanguageApp() {
-            var language = location.search;
-            if (language.length != 0) {
-                document.getElementById("scene").src = "./src/inclined-plane-application.html" + language;
-                document.getElementById("fullscreen_link").href = ("./src/inclined-plane-application.html" + language);
-                document.getElementById("vr_link").href = ("./src/inclined-plane-application-VR.html" + language);
-                document.getElementById("ar_link").href = ("./src/inclined-plane-application-AR.html" + language);
-            }
-        }
-
-        changeLanguageApp();
-
 
         TRANSLATION.onTranslate = function () {
             // document.querySelector('#scene').src = 'src/architecture-application.html?lang=' + TRANSLATION.currentLang;
