@@ -255,13 +255,13 @@ AFRAME.registerComponent('vr-interface', {
     else if (name === 'stopButton') {
       this.stopButton.onClick();
     }
-    else if (!this.isToChangeTheta && !this.isToChangeRho) {
-      for (let button of this.buttons) {
-        if (button.name === name && typeof button.onClick === 'function') {
-          button.onClick(evt.detail.intersection.object);
-        }
+    // else if (!this.isToChangeTheta && !this.isToChangeRho) {
+    for (let button of this.buttons) {
+      if (button.name === name && typeof button.onClick === 'function') {
+        button.onClick(evt.detail.intersection.object);
       }
     }
+    // }
   },
   addButton: function (name, img, callback) {
     const data = this.data;

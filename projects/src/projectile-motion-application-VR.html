@@ -17,7 +17,7 @@
             transform: translateY(-50%);
             margin: auto;
             padding-left: 5px;
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.75);
             font-size: 1.2em;
             color: #444;
             z-index: 1;
@@ -25,7 +25,8 @@
 
         @media only screen and (min-width: 768px) {
             #info {
-                text-align: center;
+                width: 45%;
+                text-align: left;
             }
         }
     </style>
@@ -34,12 +35,29 @@
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-button-controls.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-physics-system.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/other/howler.js"></script>
+    <script src="../libs/vr-interface.js"></script>
     <script src="../../js/translation.js"></script>
 
     <script>
         AFRAME.registerComponent('appcode', {
             init: function () {
                 const self = this;
+                const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
+                const messages = TRANSLATION.currentLang === TRANSLATION.EN_US ?
+                    ['The crate was released...', 'The crate hit the ground.', 'The crate hit the target!']
+                    :
+                    ['A caixa foi solta...', 'A caixa atingiu o solo.', 'A caixa atingiu o alvo!'];
+
+                vrInterface.hide();
+
+                vrInterface.addButton('myButton', '#dropTexture', () => {
+                    vrInterface.showMessage(messages[0])
+                    self.dropCrate();
+                });
+
+                // vrInterface.showSideText('You hit the target!')
+
+                vrInterface.isToChangeTheta = true;
 
                 this.isPaused = true;
 
@@ -47,6 +65,7 @@
                 this.crate = document.querySelector('#crate').object3D;
                 this.camera = document.querySelector('#camera').object3D;
 
+                this.isDropping = false;
                 this.velocity = 50;
                 this.vx = 0;
                 this.vz = 0;
@@ -90,6 +109,17 @@
                     // Howler.js seems to have the x-axis and z-axis inverted when compared to THREE.js
                     self.crateSound.pos(self.crate.position.z, self.crate.position.y, self.crate.position.x);
 
+                    if (self.isDropping) {
+                        if (Math.abs(self.crate.position.x) <= 10 || Math.abs(self.crate.position.z) <= 10) {
+                            vrInterface.showMessage(messages[2]);
+                        }
+                        else {
+                            vrInterface.showMessage(messages[1])
+                        }
+                    }
+
+                    this.isDropping = false;
+
                     if (!self.isPaused && self.soundLimiter < 3)
                         self.crateSound.play();
 
@@ -107,6 +137,8 @@
 
                     self.crate.el.body.mass = 5;
                     self.crate.el.body.velocity.set(self.pauseVelAux.x, self.pauseVelAux.y, self.pauseVelAux.z);
+
+                    vrInterface.show();
                 });
 
                 this.el.sceneEl.addEventListener('exit-vr', () => {
@@ -120,6 +152,8 @@
                     self.crate.el.body.mass = 0;
                     self.pauseVelAux = self.crate.el.body.velocity.clone();
                     self.crate.el.body.velocity.set(0, 0, 0);
+
+                    vrInterface.hide();
                 });
 
                 this.el.sceneEl.addEventListener('loaded', () => {
@@ -127,7 +161,10 @@
                 });
 
                 document.querySelector('[button-controls]').addEventListener('buttondown', () => { // Listen click, touch, and joystick button pressed events
-                    if (!this.isPaused) self.dropCrate();
+                    if (!this.isPaused) {
+                        self.dropCrate();
+                        vrInterface.showMessage(messages[0])
+                    }
                 });
             },
             tick: function () {
@@ -193,6 +230,7 @@
                 this.trajectory.geometry = new THREE.BufferGeometry().setFromPoints(this.path);
                 this.trajectory.geometry.needsupdate = true;
                 this.trajectory.visible = true;
+                this.isDropping = true;
             },
             ProjectileCurve: function () {
                 function ProjectileCurve(p0, velocity, verticalAngle, horizontalAngle, gravity, scale) {
@@ -235,13 +273,15 @@
 <body>
     <div id="info">
         <h2 id="inst">Instructions: </h2>
+        <p id="desc">Try to release the crate at the right time to hit the target!</p>
         <div class="w3">
-              <p id="p1"><b>Google Cardboard:</b> press the button to release the crate</p>
+            <p id="p1"><b>Google Cardboard:</b> press the button to release the crate</p>
         </div>
-      
+
         <p id="joy"><b>Joystick:</b> Press any button to release the crate</p>
         <p id="mouse"><b>Mouse:</b> Click in the screen to release the crate</p>
-        <p id="start"><b>Start:</b> Press the VR button in the bottom right corner to enter in Virtual Reality mode and start.</p>
+        <p id="start"><b>Start:</b> Press the VR button in the bottom right corner to enter in Virtual Reality mode and
+            start.</p>
     </div>
 
     <a-scene id="scene" physics="friction: 0.8; restitution: 0.1">
@@ -250,9 +290,9 @@
             <img id="skyBoxMap" src="assets/textures/cloud.jpg">
             <img id="grass" src="assets/textures/grass.png">
             <img id="crateTexture" src="assets/textures/crate.png">
+            <img id="targetTexture" src="assets/textures/target1.png">
+            <img id="dropTexture" src="assets/textures/dropButton.png">
         </a-assets>
-
-        <a-entity button-controls appcode></a-entity>
 
         <a-entity light=" type: ambient; color: #fff; intensity: 0.1">
         </a-entity>
@@ -263,6 +303,8 @@
         <a-plane id="ground" material="src: #grass; repeat: 140, 140" position="0 0 0" rotation="-90 0 0" width="1700"
             height="1700" static-body>
         </a-plane>
+
+        <a-circle id="target" src="#targetTexture" radius="10" position="0 0.05 0" rotation="-90 0 0"></a-circle>
 
         <a-box id="crate" src="#crateTexture" height="4" width="4" depth="4" position="0 2 0" visible="true"
             dynamic-body="linearDamping: 0; angularDamping: 0.01;">
@@ -276,6 +318,12 @@
             <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
             </a-entity>
         </a-entity>
+
+        <a-entity rotation="0 90 0"
+            vr-interface="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.1 1.5 2; theta: 0; rho: -20; movementBar: false; transparency: false; sideTextSize: 1 4"
+            button-controls appcode>
+        </a-entity>
+
         <script type="text/javascript">
             function changeLanguage(lang) {
                 switch (lang) {
@@ -291,34 +339,41 @@
                         }
                 }
             }
-            TRANSLATION.add(      
-                '#p1',
-                'Projectile Motion',
-                'Movimento de projéteis',
-            );
 
             TRANSLATION.add(
                 '#inst',
                 'Instructions',
-                'Instuções',
+                'Instruções',
+            );
+
+            TRANSLATION.add(
+                '#desc',
+                'Try to release the crate at the right time to hit the target!',
+                'Tente soltar a caixa no momento certo para acertar o alvo!',
+            );
+
+            TRANSLATION.add(
+                '#p1',
+                '<b>Google Cardboard:</b> press the button to release the crate',
+                '<b>Google Cardboard:</b> pressione o botão para soltar a caixa',
             );
 
             TRANSLATION.add(
                 '#joy',
-                'Joystick: Press any button to release the crate',
-                'Joystick: Pressione qualquer botão para liberar a caixa.',
+                '<b>Joystick:</b> Press any button to release the crate',
+                '<b>Joystick:</b> Pressione qualquer botão para liberar a caixa.',
             );
 
             TRANSLATION.add(
                 '#mouse',
-                'Mouse: Click in the screen to release the crate',
-                'Mouse: Clique na tela para liberar a caixa.',
+                '<b>Mouse:</b> Click in the screen to release the crate',
+                '<b>Mouse:</b> Clique na tela para liberar a caixa.',
             );
 
             TRANSLATION.add(
                 '#start',
-                'Start: Press the VR button in the bottom right corner to enter in Virtual Reality mode and start.',
-                'Start: Pressione o botão VR no canto inferior direito para entrar no modo Realidade Virtual e iniciar.',
+                '<b>Start:</b> Press the VR button in the bottom right corner to enter in Virtual Reality mode and start.',
+                '<b>Começar:</b> Pressione o botão VR no canto inferior direito para entrar no modo Realidade Virtual e iniciar.',
             );
         </script>
 
