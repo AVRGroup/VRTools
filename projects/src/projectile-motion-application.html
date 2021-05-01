@@ -67,11 +67,11 @@
             list-style-type: none;
         }
 
-            #vars li {
-                font-size: 1.2em;
-                background-color: rgba(220, 220, 220, 0.7);
-                padding: 3px;
-            }
+        #vars li {
+            font-size: 1.2em;
+            background-color: rgba(220, 220, 220, 0.7);
+            padding: 3px;
+        }
 
         #drop {
             margin-top: 3px;
@@ -116,18 +116,7 @@
     <script src="projectile-motion.js"></script>
     <script type="text/javascript">
         function changeLanguage(lang) {
-            switch (lang) {
-                case 'pt-BR':
-                    {
-                        TRANSLATION.translateDocument(TRANSLATION.PT_BR)
-                        break;
-                    }
-                case 'en-US':
-                    {
-                        TRANSLATION.translateDocument(TRANSLATION.EN_US)
-                        break;
-                    }
-            }
+            TRANSLATION.translateDocument(lang);
         }
 
         TRANSLATION.add(

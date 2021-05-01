@@ -199,39 +199,9 @@
     <script>
 
         let currentPage = location.href;
-
-        // // listen for changes
-        // setInterval(function () {
-        //     if (currentPage != location.href) {
-        //         // page has changed, set new page as 'current'
-        //         currentPage = location.href;
-
-        //         changeLanguageApp();
-        //         console.clear();
-        //     }
-        // }, 500);
-
-        // function changeLanguageApp() {
-        //     var language = location.search;
-        //     if (language.length != 0) {
-        //         document.getElementById("scene").src = "./src/projectile-motion-application.html" + language;
-        //         document.getElementById("fullscreen_link").href = ("./src/projectile-motion-application.html" + language);
-        //         document.getElementById("vr_link").href = ("./src/projectile-motion-application-VR.html" + language);
-        //         document.getElementById("ar_link").href = ("./src/projectile-motion-application-AR.html" + language);
-        //     }
-        //     else {
-        //         document.getElementById("scene").src = "./src/projectile-motion-application.html";
-        //         document.getElementById("fullscreen_link").href = ("./src/projectile-motion-application.html");
-        //         document.getElementById("vr_link").href = ("./src/projectile-motion-application-VR.html");
-        //         document.getElementById("ar_link").href = ("./src/projectile-motion-application-AR.html");
-        //     }
-        // }
-
-        // changeLanguageApp();
         // ã
 
         TRANSLATION.onTranslate = function () {
-            // document.querySelector('#scene').src = 'src/vascular-diseases-application.html?lang=' + TRANSLATION.currentLang;
             document.querySelector('#scene').contentWindow.changeLanguage(TRANSLATION.currentLang);
         }
 

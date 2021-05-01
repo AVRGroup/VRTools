@@ -1,4 +1,4 @@
-let rendererStats, renderer, scene, camera, light, controls, gui, clock;
+let rendererStats, renderer, scene, camera, light, controls, labels, gui, clock;
 
 let box, airplane, airplaneRange, trajectory, TrajectoryPath, lookDirection, x, y, t, time, totalTime;
 let xPos, xTotalDis, xDis, yTotalDis, yDis; //position and displacement
@@ -52,7 +52,6 @@ const ls = new LoadScreen(renderer, { type: 'stepped-circular', progressColor: '
     .start(ASSETS);
 
 function init() {
-
     initStats();
 
     scene = new Physijs.Scene();
@@ -68,611 +67,210 @@ function init() {
     light.position.set(0, 200, 200);
     scene.add(light);
 
-    var language = location.search;
-    if (language.length != 0) {
-        let aux = "?lang=";
-        language = language.substring(aux.length, language.length);
-        switch (language) {
-            case "en-US":
-                {
-                    controls = new function () {
-                        this.velocity_module = 30;
-                        this.velocity = 30;
-                        this.height = 100;
-                        this.switch_camera = false;
-                        this.show_info = true;
-                    };
+    labels = TRANSLATION.currentLang === TRANSLATION.EN_US ?
+        { velocity: 'velocity_module', height: 'height', camera: 'switch_camera', info: 'show_info' }
+        :
+        { velocity: 'velocidade_modulo', height: 'altura', camera: 'trocar_camera', info: 'mostrar_info' };
 
-                    gui = new dat.GUI();
-                    gui.add(controls, 'velocity_module', 20, 50).onChange(() => {
-                        if (controls.velocity < 0) {
-                            controls.velocity = controls.velocity_module * -1;
-                        }
-                        else {
-                            controls.velocity = controls.velocity_module
-                        }
-                    });
-                    gui.add(controls, 'height', 50, 100).onChange(() => {
-                        airplane.position.y = controls.height;
-                    });
-                    gui.add(controls, 'switch_camera').onChange(() => {
-                        if (!controls.switch_camera) {
-                            camera.position.set(0, 1.6, 80);
-                            camera.lookAt(new THREE.Vector3(0, 30, 0));
-                        }
-                        else {
-                            camera.position.copy(airplane.position);
-                            camera.lookAt(new THREE.Vector3(0, -1, 0))
-                        }
-                    });
-                    gui.add(controls, 'show_info').onChange(() => {
-                        document.getElementById('info').style.display = controls.show_info ? 'block' : 'none';
-                    });
+    controls = new function () {
+        this[labels.velocity] = 30;
+        this.velocity = 30;
+        this[labels.height] = 100;
+        this[labels.camera] = false;
+        this[labels.info] = true;
+    };
 
-                    let planeMaterial = new Physijs.createMaterial(
-                        ASSETS.materials.groundMaterial,
-                        0.8,
-                        0.1
-                    );
-
-                    let grass = ASSETS.textures.grass;
-                    grass.wrapS = THREE.RepeatWrapping;
-                    grass.wrapT = THREE.RepeatWrapping;
-                    grass.repeat.set(15, 15);
-
-                    const ground = new Physijs.PlaneMesh(new THREE.PlaneGeometry(800, 800), planeMaterial);
-                    ground.material.map = grass;
-                    ground.rotation.x = Math.PI * -0.5;
-                    scene.add(ground);
-
-                    let skyBox = ASSETS.objects.skyBox;
-                    scene.add(skyBox);
-
-                    lookDirection = new THREE.Vector3(0, -1, 0);
-                    airplaneRange = 175;
-                    airplane = ASSETS.objects.airplane;
-                    airplane.position.set(-150, controls.height, 0);
-                    airplane.rotation.y = Math.PI * 0.5;
-                    airplane.scale.set(0.15, 0.15, 0.15)
-                    scene.add(airplane);
-
-                    x = document.getElementById('x');
-                    y = document.getElementById('y');
-                    t = document.getElementById('t');
-
-                    let cubeMaterial = new Physijs.createMaterial(ASSETS.materials.cubeMaterial, 0.8, 0.1);
-                    box = new Physijs.BoxMesh(
-                        ASSETS.geometries.cubeGeometry,
-                        cubeMaterial
-                    );
-                    box.isReleased = false;
-                    box.material.map = ASSETS.textures.crate;
-                    box.position.set(0, 1.5, 85); // is not visible to the camera
-                    scene.add(box);
-
-                    box.addEventListener('collision', () => {
-                        if (!time) return;
-                        time = totalTime;
-                        xDis = xTotalDis;
-                        yDis = yTotalDis
-                        t.innerHTML = 'T: ' + time.toFixed(2) + 's';
-                        x.innerHTML = 'X: ' + xDis.toFixed(2) + 'm';
-                        y.innerHTML = 'Y: ' + yDis.toFixed(2) + 'm';
-                    }, false);
-
-                    TrajectoryPath = ProjectileCurve();
-
-                    let path = new TrajectoryPath(new THREE.Vector3(0, -1, 0), 0, 0, 0, 0);
-
-                    trajectory = new THREE.Line(
-                        new THREE.BufferGeometry().setFromPoints(path.getPoints(1)),
-                        ASSETS.materials.lineMaterial,
-                    );
-                    scene.add(trajectory);
-
-                    clock = new THREE.Clock();
-
-                    window.addEventListener('resize', onResize);
-                    document.getElementById('drop').addEventListener('click', onClick);
-
-                    ls.remove(() => {
-                        animate();
-                        simulate();
-                    });
-                    function drawTrajectory() {
-                        let path = new TrajectoryPath(
-                            airplane.position,
-                            controls.velocity,
-                            airplane.rotation.y * 2,
-                            0,
-                            9.8,
-                            10
-                        );
-                        path = path.getPoints(30)
-                        trajectory.geometry = new THREE.BufferGeometry().setFromPoints(path);
-                        trajectory.geometry.needsupdate = true;
-                    }
-                    function animate() {
-                        requestAnimationFrame(animate);
-
-                        airplane.position.x += controls.velocity * clock.getDelta();
-
-                        if (controls.switch_camera) {
-                            camera.position.copy(airplane.position);
-                            camera.lookAt(airplane.position.x, 0, 0);
-                        }
-
-                        if (airplane.position.x > airplaneRange) {
-                            airplane.rotation.y += - Math.PI;
-                            controls.velocity *= -1;
-                            airplane.position.x = airplaneRange;
-                        }
-                        else if (airplane.position.x < -airplaneRange) {
-                            airplane.rotation.y -= Math.PI;
-                            controls.velocity *= -1;
-                            airplane.position.x = -airplaneRange;
-                        }
-
-                        rendererStats.update();
-                        renderer.render(scene, camera);
-                    }
-                    function releaseBox() {
-                        box.position.copy(airplane.position);
-                        xPos = box.position.x;
-                        box.__dirtyPosition = true
-                        box.setAngularVelocity(new THREE.Vector3(0, 0, 0));
-                        box.setLinearVelocity(new THREE.Vector3(controls.velocity, 0, 0));
-                        box.isReleased = true;
-                        drawTrajectory();
-
-                        totalTime = quadraticTime(-4.9, 0, controls.height)
-                        let aux = totalTime
-                        time = 0;
-                        xTotalDis = controls.velocity * parseFloat(aux.toFixed(2));
-                        yTotalDis = -controls.height;
-                    }
-                    function onClick() {
-                        releaseBox();
-                    }
-                    function ProjectileCurve() {
-                        function ProjectileCurve(p0, velocity, verticalAngle, horizontalAngle, gravity, scale) {
-                            THREE.Curve.call(this);
-
-                            if (p0 === undefined || velocity === undefined || verticalAngle === undefined || horizontalAngle === undefined) {
-                                return null;
-                            }
-
-                            let vhorizontal = velocity * Math.cos(verticalAngle);
-
-                            this.p0 = p0;
-                            this.vy = velocity * Math.sin(verticalAngle);
-                            this.vx = velocity * Math.cos(horizontalAngle);
-                            this.vz = velocity * Math.sin(horizontalAngle);
-                            this.g = (gravity === undefined) ? -9.8 : gravity;
-                            this.scale = (scale === undefined) ? 1 : scale;
-
-                            if (this.g > 0) this.g *= -1;
-                        }
-                        ProjectileCurve.prototype = Object.create(THREE.Curve.prototype);
-                        ProjectileCurve.prototype.constructor = ProjectileCurve;
-
-                        ProjectileCurve.prototype.getPoint = function (t) {
-                            t *= this.scale;
-                            let x = this.p0.x + this.vx * t;
-                            let y = this.p0.y + ((this.vy * t) + (this.g * 0.5 * (t * t)));
-                            let z = this.p0.z - this.vz * t;
-                            return new THREE.Vector3(x, y, z);
-
-                        };
-
-                        return ProjectileCurve
-                    }
-
-                    break;
-                }
-            case "pt-BR":
-                {
-                    controls = new function () {
-                        this.velocidade_modulo = 30;
-                        this.velocidade = 30;
-                        this.altura = 100;
-                        this.trocar_camera = false;
-                        this.mostrar_info = true;
-                    };
-
-                    gui = new dat.GUI();
-                    gui.add(controls, 'velocidade_modulo', 20, 50).onChange(() => {
-                        if (controls.velocidade < 0) {
-                            controls.velocidade = controls.velocidade_modulo * -1;
-                        }
-                        else {
-                            controls.velocidade = controls.velocidade_modulo
-                        }
-                    });
-                    gui.add(controls, 'altura', 50, 100).onChange(() => {
-                        airplane.position.y = controls.altura;
-                    });
-                    gui.add(controls, 'trocar_camera').onChange(() => {
-                        if (!controls.trocar_camera) {
-                            camera.position.set(0, 1.6, 80);
-                            camera.lookAt(new THREE.Vector3(0, 30, 0));
-                        }
-                        else {
-                            camera.position.copy(airplane.position);
-                            camera.lookAt(new THREE.Vector3(0, -1, 0))
-                        }
-                    });
-                    gui.add(controls, 'mostrar_info').onChange(() => {
-                        document.getElementById('info').style.display = controls.mostrar_info ? 'block' : 'none';
-                    });
-
-                    let planeMaterial = new Physijs.createMaterial(
-                        ASSETS.materials.groundMaterial,
-                        0.8,
-                        0.1
-                    );
-
-                    let grass = ASSETS.textures.grass;
-                    grass.wrapS = THREE.RepeatWrapping;
-                    grass.wrapT = THREE.RepeatWrapping;
-                    grass.repeat.set(15, 15);
-
-                    const ground = new Physijs.PlaneMesh(new THREE.PlaneGeometry(800, 800), planeMaterial);
-                    ground.material.map = grass;
-                    ground.rotation.x = Math.PI * -0.5;
-                    scene.add(ground);
-
-                    let skyBox = ASSETS.objects.skyBox;
-                    scene.add(skyBox);
-
-                    lookDirection = new THREE.Vector3(0, -1, 0);
-                    airplaneRange = 175;
-                    airplane = ASSETS.objects.airplane;
-                    airplane.position.set(-150, controls.altura, 0);
-                    airplane.rotation.y = Math.PI * 0.5;
-                    airplane.scale.set(0.15, 0.15, 0.15)
-                    scene.add(airplane);
-
-                    x = document.getElementById('x');
-                    y = document.getElementById('y');
-                    t = document.getElementById('t');
-
-                    let cubeMaterial = new Physijs.createMaterial(ASSETS.materials.cubeMaterial, 0.8, 0.1);
-                    box = new Physijs.BoxMesh(
-                        ASSETS.geometries.cubeGeometry,
-                        cubeMaterial
-                    );
-                    box.isReleased = false;
-                    box.material.map = ASSETS.textures.crate;
-                    box.position.set(0, 1.5, 85); // is not visible to the camera
-                    scene.add(box);
-
-                    box.addEventListener('collision', () => {
-                        if (!time) return;
-                        time = totalTime;
-                        xDis = xTotalDis;
-                        yDis = yTotalDis
-                        t.innerHTML = 'T: ' + time.toFixed(2) + 's';
-                        x.innerHTML = 'X: ' + xDis.toFixed(2) + 'm';
-                        y.innerHTML = 'Y: ' + yDis.toFixed(2) + 'm';
-                    }, false);
-
-                    TrajectoryPath = ProjectileCurve();
-
-                    let path = new TrajectoryPath(new THREE.Vector3(0, -1, 0), 0, 0, 0, 0);
-
-                    trajectory = new THREE.Line(
-                        new THREE.BufferGeometry().setFromPoints(path.getPoints(1)),
-                        ASSETS.materials.lineMaterial,
-                    );
-                    scene.add(trajectory);
-
-                    clock = new THREE.Clock();
-
-                    window.addEventListener('resize', onResize);
-                    document.getElementById('drop').addEventListener('click', onClick);
-
-                    ls.remove(() => {
-                        animate();
-                        simulate();
-                    });
-                    function drawTrajectory() {
-                        let path = new TrajectoryPath(
-                            airplane.position,
-                            controls.velocidade,
-                            airplane.rotation.y * 2,
-                            0,
-                            9.8,
-                            10
-                        );
-                        path = path.getPoints(30)
-                        trajectory.geometry = new THREE.BufferGeometry().setFromPoints(path);
-                        trajectory.geometry.needsupdate = true;
-                    }
-                    function animate() {
-                        requestAnimationFrame(animate);
-
-                        airplane.position.x += controls.velocidade * clock.getDelta();
-
-                        if (controls.trocar_camera) {
-                            camera.position.copy(airplane.position);
-                            camera.lookAt(airplane.position.x, 0, 0);
-                        }
-
-                        if (airplane.position.x > airplaneRange) {
-                            airplane.rotation.y += - Math.PI;
-                            controls.velocidade *= -1;
-                            airplane.position.x = airplaneRange;
-                        }
-                        else if (airplane.position.x < -airplaneRange) {
-                            airplane.rotation.y -= Math.PI;
-                            controls.velocidade *= -1;
-                            airplane.position.x = -airplaneRange;
-                        }
-
-                        rendererStats.update();
-                        renderer.render(scene, camera);
-                    }
-                    function releaseBox() {
-                        box.position.copy(airplane.position);
-                        xPos = box.position.x;
-                        box.__dirtyPosition = true
-                        box.setAngularVelocity(new THREE.Vector3(0, 0, 0));
-                        box.setLinearVelocity(new THREE.Vector3(controls.velocidade, 0, 0));
-                        box.isReleased = true;
-                        drawTrajectory();
-
-                        totalTime = quadraticTime(-4.9, 0, controls.altura)
-                        let aux = totalTime
-                        time = 0;
-                        xTotalDis = controls.velocidade * parseFloat(aux.toFixed(2));
-                        yTotalDis = -controls.altura;
-                    }
-                    function onClick() {
-                        releaseBox();
-                    }
-                    function ProjectileCurve() {
-                        function ProjectileCurve(p0, velocidade, verticalAngle, horizontalAngle, gravity, scale) {
-                            THREE.Curve.call(this);
-
-                            if (p0 === undefined || velocidade === undefined || verticalAngle === undefined || horizontalAngle === undefined) {
-                                return null;
-                            }
-
-                            let vhorizontal = velocidade * Math.cos(verticalAngle);
-
-                            this.p0 = p0;
-                            this.vy = velocidade * Math.sin(verticalAngle);
-                            this.vx = velocidade * Math.cos(horizontalAngle);
-                            this.vz = velocidade * Math.sin(horizontalAngle);
-                            this.g = (gravity === undefined) ? -9.8 : gravity;
-                            this.scale = (scale === undefined) ? 1 : scale;
-
-                            if (this.g > 0) this.g *= -1;
-                        }
-                        ProjectileCurve.prototype = Object.create(THREE.Curve.prototype);
-                        ProjectileCurve.prototype.constructor = ProjectileCurve;
-
-                        ProjectileCurve.prototype.getPoint = function (t) {
-                            t *= this.scale;
-                            let x = this.p0.x + this.vx * t;
-                            let y = this.p0.y + ((this.vy * t) + (this.g * 0.5 * (t * t)));
-                            let z = this.p0.z - this.vz * t;
-                            return new THREE.Vector3(x, y, z);
-
-                        };
-
-                        return ProjectileCurve
-                    }
-
-                    break;
-                }
+    gui = new dat.GUI();
+    gui.add(controls, labels.velocity, 20, 50).onChange(() => {
+        if (controls.velocity < 0) {
+            controls.velocity = controls[labels.velocity] * -1;
         }
+        else {
+            controls.velocity = controls[labels.velocity]
+        }
+    });
+    gui.add(controls, labels.height, 50, 100).onChange(() => {
+        airplane.position.y = controls[labels.height]
+    });
+    gui.add(controls, labels.camera).onChange(() => {
+        if (!controls[labels.camera]) {
+            camera.position.set(0, 1.6, 80);
+            camera.lookAt(new THREE.Vector3(0, 30, 0));
+        }
+        else {
+            camera.position.copy(airplane.position);
+            camera.lookAt(new THREE.Vector3(0, -1, 0))
+        }
+    });
+    gui.add(controls, labels.info).onChange(() => {
+        document.getElementById('info').style.display = controls[labels.info] ? 'block' : 'none';
+    });
+
+    let planeMaterial = new Physijs.createMaterial(
+        ASSETS.materials.groundMaterial,
+        0.8,
+        0.1
+    );
+
+    let grass = ASSETS.textures.grass;
+    grass.wrapS = THREE.RepeatWrapping;
+    grass.wrapT = THREE.RepeatWrapping;
+    grass.repeat.set(9, 3);
+
+    const ground = new Physijs.PlaneMesh(new THREE.PlaneGeometry(650, 160), planeMaterial);
+    ground.material.map = grass;
+    ground.rotation.x = Math.PI * -0.5;
+    scene.add(ground);
+
+    let skyBox = ASSETS.objects.skyBox;
+    scene.add(skyBox);
+
+    lookDirection = new THREE.Vector3(0, -1, 0);
+    airplaneRange = 175;
+    airplane = ASSETS.objects.airplane;
+    airplane.position.set(-150, controls[labels.height], 0);
+    airplane.rotation.y = Math.PI * 0.5;
+    airplane.scale.set(0.15, 0.15, 0.15)
+    scene.add(airplane);
+
+    x = document.getElementById('x');
+    y = document.getElementById('y');
+    t = document.getElementById('t');
+
+    let cubeMaterial = new Physijs.createMaterial(ASSETS.materials.cubeMaterial, 0.8, 0.1);
+    box = new Physijs.BoxMesh(
+        ASSETS.geometries.cubeGeometry,
+        cubeMaterial
+    );
+    box.isReleased = false;
+    box.material.map = ASSETS.textures.crate;
+    box.position.set(0, 1.5, 85); // is not visible to the camera
+    scene.add(box);
+
+    box.addEventListener('collision', () => {
+        if (!time) return;
+        time = totalTime;
+        xDis = xTotalDis;
+        yDis = yTotalDis
+        t.innerHTML = 'T: ' + time.toFixed(2) + 's';
+        x.innerHTML = 'X: ' + xDis.toFixed(2) + 'm';
+        y.innerHTML = 'Y: ' + yDis.toFixed(2) + 'm';
+    }, false);
+
+    TrajectoryPath = ProjectileCurve();
+
+    let path = new TrajectoryPath(new THREE.Vector3(0, -1, 0), 0, 0, 0, 0);
+
+    trajectory = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(path.getPoints(1)),
+        ASSETS.materials.lineMaterial,
+    );
+    scene.add(trajectory);
+
+    clock = new THREE.Clock();
+
+    window.addEventListener('resize', onResize);
+    document.getElementById('drop').addEventListener('click', onClick);
+
+    ls.remove(() => {
+        animate();
+    });
+
+    function drawTrajectory() {
+        let path = new TrajectoryPath(
+            airplane.position,
+            controls.velocity,
+            airplane.rotation.y * 2,
+            0,
+            9.8,
+            10
+        );
+        path = path.getPoints(30)
+        trajectory.geometry = new THREE.BufferGeometry().setFromPoints(path);
+        trajectory.geometry.needsupdate = true;
     }
-    else {
-        controls = new function () {
-            this.velocity_module = 30;
-            this.velocity = 30;
-            this.height = 100;
-            this.switch_camera = false;
-            this.show_info = true;
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        airplane.position.x += controls.velocity * clock.getDelta();
+
+        if (controls[labels.camera]) {
+            camera.position.copy(airplane.position);
+            camera.lookAt(airplane.position.x, 0, 0);
+        }
+
+        if (airplane.position.x > airplaneRange) {
+            airplane.rotation.y += - Math.PI;
+            controls.velocity *= -1;
+            airplane.position.x = airplaneRange;
+        }
+        else if (airplane.position.x < -airplaneRange) {
+            airplane.rotation.y -= Math.PI;
+            controls.velocity *= -1;
+            airplane.position.x = -airplaneRange;
+        }
+
+        scene.simulate(undefined, 2);
+        rendererStats.update();
+        renderer.render(scene, camera);
+    }
+    function releaseBox() {
+        box.position.copy(airplane.position);
+        xPos = box.position.x;
+        box.__dirtyPosition = true
+        box.setAngularVelocity(new THREE.Vector3(0, 0, 0));
+        box.setLinearVelocity(new THREE.Vector3(controls.velocity, 0, 0));
+        box.isReleased = true;
+        drawTrajectory();
+
+        totalTime = quadraticTime(-4.9, 0, controls[labels.height])
+        let aux = totalTime
+        time = 0;
+        xTotalDis = controls.velocity * parseFloat(aux.toFixed(2));
+        yTotalDis = -controls[labels.height];
+    }
+    function onClick() {
+        releaseBox();
+    }
+    function ProjectileCurve() {
+        function ProjectileCurve(p0, velocity, verticalAngle, horizontalAngle, gravity, scale) {
+            THREE.Curve.call(this);
+
+            if (p0 === undefined || velocity === undefined || verticalAngle === undefined || horizontalAngle === undefined) {
+                return null;
+            }
+
+            let vhorizontal = velocity * Math.cos(verticalAngle);
+
+            this.p0 = p0;
+            this.vy = velocity * Math.sin(verticalAngle);
+            this.vx = velocity * Math.cos(horizontalAngle);
+            this.vz = velocity * Math.sin(horizontalAngle);
+            this.g = (gravity === undefined) ? -9.8 : gravity;
+            this.scale = (scale === undefined) ? 1 : scale;
+
+            if (this.g > 0) this.g *= -1;
+        }
+        ProjectileCurve.prototype = Object.create(THREE.Curve.prototype);
+        ProjectileCurve.prototype.constructor = ProjectileCurve;
+
+        ProjectileCurve.prototype.getPoint = function (t) {
+            t *= this.scale;
+            let x = this.p0.x + this.vx * t;
+            let y = this.p0.y + ((this.vy * t) + (this.g * 0.5 * (t * t)));
+            let z = this.p0.z - this.vz * t;
+            return new THREE.Vector3(x, y, z);
+
         };
 
-        gui = new dat.GUI();
-        gui.add(controls, 'velocity_module', 20, 50).onChange(() => {
-            if (controls.velocity < 0) {
-                controls.velocity = controls.velocity_module * -1;
-            }
-            else {
-                controls.velocity = controls.velocity_module
-            }
-        });
-        gui.add(controls, 'height', 50, 100).onChange(() => {
-            airplane.position.y = controls.height;
-        });
-        gui.add(controls, 'switch_camera').onChange(() => {
-            if (!controls.switch_camera) {
-                camera.position.set(0, 1.6, 80);
-                camera.lookAt(new THREE.Vector3(0, 30, 0));
-            }
-            else {
-                camera.position.copy(airplane.position);
-                camera.lookAt(new THREE.Vector3(0, -1, 0))
-            }
-        });
-        gui.add(controls, 'show_info').onChange(() => {
-            document.getElementById('info').style.display = controls.show_info ? 'block' : 'none';
-        });
-
-        let planeMaterial = new Physijs.createMaterial(
-            ASSETS.materials.groundMaterial,
-            0.8,
-            0.1
-        );
-
-        let grass = ASSETS.textures.grass;
-        grass.wrapS = THREE.RepeatWrapping;
-        grass.wrapT = THREE.RepeatWrapping;
-        grass.repeat.set(15, 15);
-
-        const ground = new Physijs.PlaneMesh(new THREE.PlaneGeometry(800, 800), planeMaterial);
-        ground.material.map = grass;
-        ground.rotation.x = Math.PI * -0.5;
-        scene.add(ground);
-
-        let skyBox = ASSETS.objects.skyBox;
-        scene.add(skyBox);
-
-        lookDirection = new THREE.Vector3(0, -1, 0);
-        airplaneRange = 175;
-        airplane = ASSETS.objects.airplane;
-        airplane.position.set(-150, controls.height, 0);
-        airplane.rotation.y = Math.PI * 0.5;
-        airplane.scale.set(0.15, 0.15, 0.15)
-        scene.add(airplane);
-
-        x = document.getElementById('x');
-        y = document.getElementById('y');
-        t = document.getElementById('t');
-
-        let cubeMaterial = new Physijs.createMaterial(ASSETS.materials.cubeMaterial, 0.8, 0.1);
-        box = new Physijs.BoxMesh(
-            ASSETS.geometries.cubeGeometry,
-            cubeMaterial
-        );
-        box.isReleased = false;
-        box.material.map = ASSETS.textures.crate;
-        box.position.set(0, 1.5, 85); // is not visible to the camera
-        scene.add(box);
-
-        box.addEventListener('collision', () => {
-            if (!time) return;
-            time = totalTime;
-            xDis = xTotalDis;
-            yDis = yTotalDis
-            t.innerHTML = 'T: ' + time.toFixed(2) + 's';
-            x.innerHTML = 'X: ' + xDis.toFixed(2) + 'm';
-            y.innerHTML = 'Y: ' + yDis.toFixed(2) + 'm';
-        }, false);
-
-        TrajectoryPath = ProjectileCurve();
-
-        let path = new TrajectoryPath(new THREE.Vector3(0, -1, 0), 0, 0, 0, 0);
-
-        trajectory = new THREE.Line(
-            new THREE.BufferGeometry().setFromPoints(path.getPoints(1)),
-            ASSETS.materials.lineMaterial,
-        );
-        scene.add(trajectory);
-
-        clock = new THREE.Clock();
-
-        window.addEventListener('resize', onResize);
-        document.getElementById('drop').addEventListener('click', onClick);
-
-        ls.remove(() => {
-            animate();
-            simulate();
-        });
-        function drawTrajectory() {
-            let path = new TrajectoryPath(
-                airplane.position,
-                controls.velocity,
-                airplane.rotation.y * 2,
-                0,
-                9.8,
-                10
-            );
-            path = path.getPoints(30)
-            trajectory.geometry = new THREE.BufferGeometry().setFromPoints(path);
-            trajectory.geometry.needsupdate = true;
-        }
-        function animate() {
-            requestAnimationFrame(animate);
-
-            airplane.position.x += controls.velocity * clock.getDelta();
-
-            if (controls.switch_camera) {
-                camera.position.copy(airplane.position);
-                camera.lookAt(airplane.position.x, 0, 0);
-            }
-
-            if (airplane.position.x > airplaneRange) {
-                airplane.rotation.y += - Math.PI;
-                controls.velocity *= -1;
-                airplane.position.x = airplaneRange;
-            }
-            else if (airplane.position.x < -airplaneRange) {
-                airplane.rotation.y -= Math.PI;
-                controls.velocity *= -1;
-                airplane.position.x = -airplaneRange;
-            }
-
-            rendererStats.update();
-            renderer.render(scene, camera);
-        }
-        function releaseBox() {
-            box.position.copy(airplane.position);
-            xPos = box.position.x;
-            box.__dirtyPosition = true
-            box.setAngularVelocity(new THREE.Vector3(0, 0, 0));
-            box.setLinearVelocity(new THREE.Vector3(controls.velocity, 0, 0));
-            box.isReleased = true;
-            drawTrajectory();
-
-            totalTime = quadraticTime(-4.9, 0, controls.height)
-            let aux = totalTime
-            time = 0;
-            xTotalDis = controls.velocity * parseFloat(aux.toFixed(2));
-            yTotalDis = -controls.height;
-        }
-        function onClick() {
-            releaseBox();
-        }
-        function ProjectileCurve() {
-            function ProjectileCurve(p0, velocity, verticalAngle, horizontalAngle, gravity, scale) {
-                THREE.Curve.call(this);
-
-                if (p0 === undefined || velocity === undefined || verticalAngle === undefined || horizontalAngle === undefined) {
-                    return null;
-                }
-
-                let vhorizontal = velocity * Math.cos(verticalAngle);
-
-                this.p0 = p0;
-                this.vy = velocity * Math.sin(verticalAngle);
-                this.vx = velocity * Math.cos(horizontalAngle);
-                this.vz = velocity * Math.sin(horizontalAngle);
-                this.g = (gravity === undefined) ? -9.8 : gravity;
-                this.scale = (scale === undefined) ? 1 : scale;
-
-                if (this.g > 0) this.g *= -1;
-            }
-            ProjectileCurve.prototype = Object.create(THREE.Curve.prototype);
-            ProjectileCurve.prototype.constructor = ProjectileCurve;
-
-            ProjectileCurve.prototype.getPoint = function (t) {
-                t *= this.scale;
-                let x = this.p0.x + this.vx * t;
-                let y = this.p0.y + ((this.vy * t) + (this.g * 0.5 * (t * t)));
-                let z = this.p0.z - this.vz * t;
-                return new THREE.Vector3(x, y, z);
-
-            };
-
-            return ProjectileCurve
-        }
-
+        return ProjectileCurve
     }
 
-    
 }
 
 let simuClock = new THREE.Clock();
-
-
 function simulate() {
-    scene.simulate();
     let delta = simuClock.getDelta()
     if (time !== totalTime) {
         xDis = box.position.x - xPos;
@@ -684,7 +282,7 @@ function simulate() {
         }
 
         yDis = box.position.y + yTotalDis - 1.5;
-        if (yDis < -controls.height + 0.5) yDis = -controls.height;
+        if (yDis < -controls[labels.height] + 0.5) yDis = -controls[labels.height];
 
         time += delta;
         if (time > totalTime) time = totalTime;
@@ -693,10 +291,6 @@ function simulate() {
         y.innerHTML = 'Y: ' + yDis.toFixed(2) + 'm';
     }
 }
-
-
-
-
 
 function quadraticTime(a, b, c) {
     // This uses the quadratic formula to solve for time in a linear motion with constant aceleration
