@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circuits VR</title>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- Library of Virtual Reality -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/vr-interface.js"></script>
+
+    <script>
+        AFRAME.registerComponent('panel', {
+            init: function () {
+                const self = this;
+                const vrInterface = this.el.components['vr-interface'];
+                this.models = this.el.querySelectorAll('.panelModel');
+                const clipboard = document.querySelector('#clipboard').object3D;
+
+                clipboard.data = { type: '', rotation: 0 };
+
+                vrInterface.addButton('wire', '#wire', () => {
+                    addToClipboard(0);
+                    vrInterface.showMessage('Wire block added to clipboard');
+                });
+                vrInterface.addButton('l-block', '#lwire', () => {
+                    addToClipboard('lblock');
+                    vrInterface.showMessage('Curved wire block added to clipboard');
+                });
+                vrInterface.addButton('t-block', '#twire', () => {
+                    addToClipboard('tblock');
+                    vrInterface.showMessage('T-shaped wire block added to clipboard');
+                });
+
+                vrInterface.addButton('rotate', '#rotateImage', () => rotate());
+
+                vrInterface.addButton('lamp', '#lamp', () => {
+                    addToClipboard('lamp');
+                    vrInterface.showMessage('Lamp block added to clipboard');
+                });
+                vrInterface.addButton('fan', '#fan', () => {
+                    addToClipboard('fan');
+                    vrInterface.showMessage('Fan block added to clipboard');
+                });
+
+                vrInterface.addButton('battery', '#battery', () => {
+                    addToClipboard('battery');
+                    vrInterface.showMessage('Battery block added to clipboard');
+                });
+
+                vrInterface.addButton('dispose', '#binImage', () => clearClipboard())
+
+                this.clipboardRotation = clipboard.rotation;
+                this.rotationDirection = 1;
+                function rotate(rotationDirection = 1) {
+                    self.rotationDirection = rotationDirection;
+
+                    clipboard.data.rotation -= Math.PI * 0.5 * self.rotationDirection;
+                    if (clipboard.data.rotation > 0) {
+                        clipboard.data.rotation -= Math.PI * 2;
+                    }
+                    else if (clipboard.data.rotation === (-2 * Math.PI)) {
+                        clipboard.data.rotation = 0;
+                    }
+
+                    self.rotate = true;
+                    self.deltaCont = 100;
+                    self.rotCont = 0;
+                }
+
+                function addToClipboard(type) {
+                    let index;
+                    switch (type) {
+                        case 'wire':
+                            index = 0;
+                            break;
+                        case 'lblock':
+                            index = 1;
+                            break;
+                        case 'tblock':
+                            index = 2;
+                            break;
+                        case 'battery':
+                            index = 3;
+                            break;
+                        case 'lamp':
+                            index = 4;
+                            break;
+                        case 'fan':
+                            index = 5;
+                            break;
+                        default:
+                            index = 0;
+                            break;
+                    }
+
+                    for (let i = 0; i < clipboard.children.length; i++) {
+                        clipboard.children[i].visible = false;
+                    }
+                    clipboard.children[index].visible = true;
+
+                    clipboard.data.type = type;
+                    clipboard.obj = clipboard.children[index];
+                }
+
+                function clearClipboard() {
+                    for (let i = 0; i < clipboard.children.length; i++) {
+                        clipboard.children[i].visible = false;
+                    }
+                    clipboard.obj = null;
+                }
+
+                window.addEventListener('keydown', (event) => {
+                    switch (event.key) {
+                        case "1":
+                            addToClipboard('wire')
+                            break;
+                        case "2":
+                            addToClipboard('lblock')
+                            break;
+                        case "3":
+                            addToClipboard('tblock')
+                            break;
+                        case "4":
+                            addToClipboard('lamp')
+                            break;
+                        case "5":
+                            addToClipboard('fan')
+                            break;
+                        case "6":
+                            addToClipboard('battery');
+                            break;
+                        case "0":
+                            clearClipboard();
+                        default:
+                            break;
+                    }
+                });
+
+                window.addEventListener('wheel', (event) => {
+                    if (!this.rotate) rotate(event.deltaY < 0 ? -1 : 1);
+                })
+            },
+            tick: function (time, delta) {
+                if (this.rotate) {
+                    if (this.deltaCont >= 15 && this.rotCont < 10) {
+                        for (let i = 0; i < this.models.length; i++) {
+                            this.models[i].object3D.rotation.x += Math.PI * 0.05 * this.rotationDirection;
+                        }
+                        this.clipboardRotation.x += Math.PI * 0.05 * this.rotationDirection;
+                        this.deltaCont = 0;
+                        this.rotCont++;
+                        if (this.rotCont >= 10) {
+                            this.rotate = false;
+                        }
+                    }
+                    else {
+                        this.deltaCont += delta;
+                    }
+                }
+            }
+        });
+
+        AFRAME.registerComponent('grid', {
+            init: function () {
+                const vrGrid = this.el.components['vr-interface'];
+                const clipboard = document.querySelector('#clipboard').object3D;
+                const container = document.querySelector('#container').object3D;
+                const batteries = [];
+                this.actionBlocks = [];
+                const matrix = new Array(45);
+                this.energy = 0;
+
+
+                for (let i = 0; i < 45; i++) {
+                    vrGrid.addButton(i, null, placeBlock);
+                }
+
+                function placeBlock(button) {
+                    let block = container.getObjectByName(button.name);
+                    if (block) {
+                        container.remove(block);
+                        matrix[block.pos] = null;
+
+                        if (block.type == 'battery') {
+                            batteries.splice(batteries.indexOf(block), 1)
+                        }
+                        if (!clipboard.obj) updateCircuit();
+                    }
+
+                    if (clipboard.obj) {
+                        block = clipboard.obj.clone();
+                        button.getWorldPosition(block.position);
+
+                        block.name = button.name;
+                        block.pos = button.name;
+                        block.type = clipboard.data.type;
+                        block.rotation.y = clipboard.data.rotation;
+                        block.visible = true;
+
+                        matrix[button.name] = block;
+
+                        if (clipboard.data.type === 'battery') {
+                            batteries.push(block);
+                        }
+                        else if (clipboard.data.type === 'lamp') {
+                            block.children[0].children[3].material = clipboard.obj.children[0].children[3].material.clone();
+                            block.action = lampAction;
+                        }
+                        else if (clipboard.data.type === 'fan') {
+                            block.action = fanAction;
+                        }
+
+                        container.add(block);
+                        updateCircuit();
+                    }
+                }
+
+                const self = this;
+                function updateCircuit() {
+                    for (let i = 0; i < self.actionBlocks.length; i++) {
+                        self.actionBlocks[i].action(false);
+                    }
+
+                    if (batteries.length > 0) {
+                        let pos;
+
+                        for (let i = 0; i < container.children.length; i++) {
+                            container.children[i].visited = false;
+                            container.children[i].isConnected = false;
+                        }
+
+                        for (let i = 0; i < batteries.length; i++) {
+                            if (batteries[i].visited) continue;
+
+                            pos = nextPosition(batteries[i]);
+
+                            self.actionBlocks = [];
+                            self.energy = 10;
+                            self.contTblocks = 0;
+                            self.queue = [];
+                            checkConnections(batteries[i].pos, pos);
+                        }
+                    }
+                }
+
+                function checkConnections(batteryPos, pos, prevPos, firstPos) {
+                    if (pos == batteryPos) return blocksConnect(matrix[pos], prevPos);
+                    if (!matrix[pos]) return false;
+                    if (matrix[pos].visited) {
+                        return blocksConnect(matrix[pos], prevPos) && (matrix[pos].isConnected || pos == firstPos);
+                    }
+
+                    if (!prevPos) prevPos = batteryPos;
+                    if (!firstPos) firstPos = pos;
+                    if (matrix[pos].type == 'battery') matrix[pos].visited = true;
+
+                    let isConnected = false;
+
+                    if (blocksConnect(matrix[pos], prevPos)) {
+
+                        let aux = prevPos;
+                        prevPos = pos;
+                        pos = nextPosition(matrix[pos], aux);
+
+                        if (pos.length) {
+                            matrix[prevPos].visited = true;
+                            isConnected = checkConnections(batteryPos, pos[0], prevPos, firstPos);
+                            matrix[prevPos].isConnected = isConnected;
+
+                            isConnected = checkConnections(batteryPos, pos[1], prevPos, firstPos) || isConnected;
+                            matrix[prevPos].isConnected = isConnected;
+                        }
+                        else {
+                            isConnected = checkConnections(batteryPos, pos, prevPos, firstPos);
+                            matrix[prevPos].isConnected = isConnected;
+                        }
+
+                        if (matrix[prevPos].action) {
+                            matrix[prevPos].action(isConnected);
+                            self.actionBlocks.push(matrix[prevPos]);
+                        }
+                    }
+
+                    return isConnected;
+                }
+
+                function blocksConnect(obj, prevPos) {
+                    if (obj.type == 'battery') {
+                        switch (obj.rotation.y) {
+                            case 0:
+                            case -Math.PI:
+                                return obj.pos + 1 === prevPos;
+                            default:
+                                return obj.pos - 9 === prevPos;
+                        }
+                    }
+                    else if (obj.type === 'lblock') {
+                        switch (obj.rotation.y) {
+                            case 0:
+                                return (obj.pos - 1) === prevPos || (obj.pos - 9) === prevPos;
+                            case -Math.PI:
+                                return (obj.pos + 1) === prevPos || (obj.pos + 9) === prevPos;
+                            case -Math.PI * 0.5:
+                                return (obj.pos - 9) === prevPos || (obj.pos + 1) === prevPos;
+                            default:
+                                return (obj.pos + 9) === prevPos || (obj.pos - 1) === prevPos;
+                        }
+                    }
+                    else if (obj.type === 'tblock') {
+                        switch (obj.rotation.y) {
+                            case 0:
+                                return (obj.pos + 9) === prevPos || (obj.pos + 1) === prevPos || (obj.pos - 1) === prevPos;
+                            case -Math.PI:
+                                return (obj.pos - 9) === prevPos || (obj.pos - 1) === prevPos || (obj.pos + 1) === prevPos;
+                            case -Math.PI * 0.5:
+                                return (obj.pos - 1) === prevPos || (obj.pos + 9) === prevPos || (obj.pos - 9) === prevPos;
+                            default:
+                                return (obj.pos + 1) === prevPos || (obj.pos - 9) === prevPos || (obj.pos + 9) === prevPos;
+                        }
+                    }
+                    else {
+                        switch (obj.rotation.y) {
+                            case 0:
+                            case -Math.PI:
+                                return (obj.pos - 1) === prevPos || (obj.pos + 1) === prevPos;
+                            default:
+                                return (obj.pos + 9) === prevPos || (obj.pos - 9) === prevPos;
+                        }
+                    }
+                }
+
+                function nextPosition(obj, prevPos) {
+                    if (obj.type === 'battery') {
+                        switch (obj.rotation.y) {
+                            case 0:
+                            case -Math.PI:
+                                return obj.pos - 1;
+                            default:
+                                return obj.pos + 9;
+                        }
+                    }
+                    else if (obj.type === 'lblock') {
+                        switch (obj.rotation.y) {
+                            case 0:
+                                if (obj.pos - 1 == prevPos) return obj.pos - 9;
+                                else return obj.pos - 1;
+                            case -Math.PI:
+                                if (obj.pos + 1 == prevPos) return obj.pos + 9;
+                                else return obj.pos + 1;
+                            case -Math.PI * 0.5:
+                                if (obj.pos - 9 == prevPos) return obj.pos + 1;
+                                else return obj.pos - 9;
+                            default:
+                                if (obj.pos + 9 == prevPos) return obj.pos - 1;
+                                else return obj.pos + 9;
+                        }
+                    }
+                    if (obj.type === 'divisor') {
+                        switch (obj.rotation.y) {
+                            case 0:
+                                if (obj.pos + 9 === prevPos) return [obj.pos - 1, obj.pos + 1];
+                                if (obj.pos + 1 === prevPos) return [obj.pos - 9, obj.pos - 1];
+                            case -Math.PI:
+                                return [obj.pos + 9, obj.pos - 1];
+                                break;
+                            case -Math.PI * 0.5:
+                                return [obj.pos + 1, obj.pos + 9];
+                            default:
+                                return [obj.pos - 1, obj.pos - 9];
+                        }
+                    }
+                    else if (obj.type === 'tblock') {
+                        switch (obj.rotation.y) {
+                            case 0:
+                                if (obj.pos + 1 === prevPos) return [obj.pos - 1, obj.pos + 9];
+                                if (obj.pos - 1 === prevPos) return [obj.pos + 1, obj.pos + 9];
+                                if (obj.pos + 9 === prevPos) return [obj.pos + 1, obj.pos - 1];
+                            case -Math.PI:
+                                if (obj.pos + 1 === prevPos) return [obj.pos - 1, obj.pos - 9];
+                                if (obj.pos - 1 === prevPos) return [obj.pos + 1, obj.pos - 9];
+                                if (obj.pos - 9 === prevPos) return [obj.pos + 1, obj.pos - 1];
+                            case -Math.PI * 0.5:
+                                if (obj.pos + 9 === prevPos) return [obj.pos - 9, obj.pos - 1];
+                                if (obj.pos - 9 === prevPos) return [obj.pos + 9, obj.pos - 1];
+                                if (obj.pos - 1 === prevPos) return [obj.pos + 9, obj.pos - 9];
+                            default:
+                                if (obj.pos + 9 === prevPos) return [obj.pos - 9, obj.pos + 1];
+                                if (obj.pos - 9 === prevPos) return [obj.pos + 9, obj.pos + 1];
+                                if (obj.pos + 1 === prevPos) return [obj.pos + 9, obj.pos - 9];
+                        }
+                    }
+                    else {
+                        switch (obj.rotation.y) {
+                            case 0:
+                            case -Math.PI:
+                                if (obj.pos - 1 == prevPos) return obj.pos + 1;
+                                else return obj.pos - 1;
+                            default:
+                                if (obj.pos - 9 == prevPos) return obj.pos + 9;
+                                else return obj.pos - 9;
+                        }
+                    }
+                }
+
+                function lampAction(isOn) {
+                    if (isOn) {
+                        this.children[0].children[3].material.emissive.set('#C44A47');
+                    }
+                    else {
+                        this.children[0].children[3].material.emissive.set('#000000');
+                    }
+                }
+
+                this.fans = [];
+                function fanAction(isOn) {
+                    if (isOn) {
+                        if (self.fans.indexOf(this) === -1)
+                            self.fans.push(this);
+                    }
+                    else {
+                        self.fans.splice(self.fans.indexOf(this), 1);
+                    }
+                }
+            },
+            tick: function (time, delta) {
+                if (this.fans.length > 0) {
+                    for (let i = 0; i < this.fans.length; i++)
+                        this.fans[i].children[0].children[3].rotation.y -= delta * 0.005;
+                }
+            },
+        });
+    </script>
+</head>
+
+<body>
+    <a-scene main_scene id="scene" renderer="colorManagement: true;" background="color: #343434">
+        <a-assets timeout="3000">
+            <a-asset-item id="tableModel" src="assets/models/circuits/table.glb"></a-asset-item>
+            <a-asset-item id="wireModel" src="assets/models/circuits/wire-block.glb"></a-asset-item>
+            <a-asset-item id="lblockModel" src="assets/models/circuits/l-block.glb"></a-asset-item>
+            <a-asset-item id="tblockModel" src="assets/models/circuits/t-block.glb"></a-asset-item>
+            <a-asset-item id="batteryModel" src="assets/models/circuits/battery-block.glb"></a-asset-item>
+            <a-asset-item id="lampModel" src="assets/models/circuits/lamp-block.glb"></a-asset-item>
+            <a-asset-item id="fanModel" src="assets/models/circuits/fan-block.glb"></a-asset-item>
+
+            <img id="rotateImage" src="assets/textures/circuits/rotate1.png">
+            <img id="binImage" src="assets/textures/circuits/bin.png">
+            <img id="wire" src="assets/textures/circuits/wire.png">
+            <img id="lwire" src="assets/textures/circuits/l-wire.png">
+            <img id="twire" src="assets/textures/circuits/t-wire.png">
+            <img id="lamp" src="assets/textures/circuits/lamp.png">
+            <img id="fan" src="assets/textures/circuits/fan.png">
+            <img id="battery" src="assets/textures/circuits/battery.png">
+        </a-assets>
+
+        <a-entity light="type: ambient; color: #fff; intensity: 0.3"></a-entity>
+        <a-entity light="color: #fff" position="-15 110 30"></a-entity>
+
+
+        <a-entity id="table" gltf-model="#tableModel" position="0 -0.04 -0.75" scale="1 1 1.05">
+        </a-entity>
+
+        <a-plane position="0 0 0" rotation="-90 0 0" width="10" height="10" color="#A1ACB3"></a-plane>
+
+        <a-plane position="0 1.45 -1.35" width="2.1" height="1" color="#4D3100"></a-plane>
+        <a-entity
+            vr-interface="dimension: 2 4; worldPosition:-0.045 1.45 -1.30; buttonSize: 0.4 0.4; gap: 0.03 0.03; border: 2 #362211; movementBar: false; transparency: true;"
+            panel>
+            <a-entity class="panelModel" gltf-model="#wireModel" position="-0.65 1.65 -1.30" rotation="90 90 90">
+            </a-entity>
+            <a-entity class="panelModel" gltf-model="#lblockModel" position="-0.18 1.65 -1.30" rotation="90 90 90">
+            </a-entity>
+            <a-entity class="panelModel" gltf-model="#tblockModel" position="0.22 1.68 -1.30" rotation="90 90 90">
+            </a-entity>
+            <a-entity class="panelModel" gltf-model="#lampModel" position="-0.65 1.25 -1.30" rotation="90 90 90">
+            </a-entity>
+            <a-entity class="panelModel" gltf-model="#fanModel" position="-0.22 1.25 -1.30" rotation="90 90 90">
+            </a-entity>
+            <a-entity class="panelModel" gltf-model="#batteryModel" position="0.21 1.25 -1.30" rotation="90 90 90">
+            </a-entity>
+        </a-entity>
+
+        <a-entity
+            vr-interface="dimension: 5 9; worldPosition: 0 0.975 -0.75; rotation: -90 0 0; transparency: true; buttonSize: 0.2 0.2; border: 5 #362211; cursorPosition: 0 0 -0.65"
+            grid>
+        </a-entity>
+
+        <a-entity id="container"></a-entity>
+
+        <a-entity id="rig" position="0 0.1 0">
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true"
+                wasd-controls="acceleration:150; fly: true; enabled: true">
+                <a-entity id="clipboard" position="0 0 -0.68" rotation="90 90 90" scale="0.3 0.3 0.3">
+                    <a-entity class="panelModel" gltf-model="#wireModel" visible="false">
+                    </a-entity>
+                    <a-entity class="panelModel" gltf-model="#lblockModel" visible="false">
+                    </a-entity>
+                    <a-entity class="panelModel" gltf-model="#tblockModel" visible="false">
+                    </a-entity>
+                    <a-entity class="panelModel" gltf-model="#batteryModel" visible="false">
+                    </a-entity>
+                    <a-entity class="panelModel" gltf-model="#lampModel" visible="false">
+                    </a-entity>
+                    <a-entity class="panelModel" gltf-model="#fanModel" visible="false">
+                    </a-entity>
+                </a-entity>
+            </a-entity>
+        </a-entity>
+    </a-scene>
+
+</body>
+
+</html>
