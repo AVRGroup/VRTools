@@ -110,7 +110,7 @@
                     self.crateSound.pos(self.crate.position.z, self.crate.position.y, self.crate.position.x);
 
                     if (self.isDropping) {
-                        if (Math.abs(self.crate.position.x) <= 10 || Math.abs(self.crate.position.z) <= 10) {
+                        if ((self.crate.position.x * self.crate.position.x) + (self.crate.position.z * self.crate.position.z) <= 100) {
                             vrInterface.showMessage(messages[2]);
                         }
                         else {
