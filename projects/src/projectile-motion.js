@@ -321,7 +321,7 @@ function setRenderer() {
     renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(0x7799FF);
     renderer.setPixelRatio(devicePixelRatio);
-    renderer.setSize(innerWidth, innerHeight);
+    renderer.setSize(innerWidth* 0.81, innerHeight);
     document.body.appendChild(renderer.domElement);
 }
 
