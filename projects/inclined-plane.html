@@ -63,16 +63,6 @@
                     }
                 }, 500);
 
-                function translationApplication(){
-                    var language = location.search;
-                    if(language.length != 0){
-                        document.getElementById("scene").src = "./src/inclined-plane-application.html" + location.search; 
-                        document.getElementById("fullscreen_link").href = ("./src/inclined-plane-application.html" + language);
-                        document.getElementById("vr_link").href = ("./src/inclined-plane-application-VR.html" + language);
-                        document.getElementById("ar_link").href = ("./src/inclined-plane-application-AR.html" + language);
-                    }
-                }
-                translationApplication();
 
                 // iOS iframe auto-resize workaround
 
@@ -93,7 +83,7 @@
         </div>
         <div class="w3-row-padding">
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="javascript: TRANSLATION.redirect('projects/src/architecture-application.html', '', true);" target="_" style="text-decoration: none;">
+                <a href="javascript: TRANSLTAION.redirect('projects/src/inclined-plane-application.html', '', true);" target="_" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
                         style="background: url('img/Inclined-Plane/blur.png') center;">
                         <div class="w3-padding" style="width:100%">
@@ -106,9 +96,9 @@
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/inclined-plane-application-AR.html" target="_" style="text-decoration: none;">
+                <a href="javascript: TRANSLATION.redirect('projects/src/inclined-plane-application-AR.html', '', true);">
                     <div class="more-modes w3-display-container"
-                        style="background: url('img/Inclined-Plane/blur-AR.png') center;">
+                         style="background: url('img/Inclined-Plane/blur-AR.png') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/ar-icon.png" alt="Augmented Reality" style="width: 64px;" />
                             <br />
@@ -121,14 +111,14 @@
                     <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
                     <div id="warning-fiducial">
                         You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
-                            target="_blank">click here</a> to
+                                                                                           target="_blank">click here</a> to
                         download).
                     </div>
                 </p>
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/inclined-plane-application-VR.html" target="_" style="text-decoration: none;">
+                <a href="javascript: TRANSLATION.redirect('projects/src/inclined-plane-application-VR.html', '', true);">
                     <div class="more-modes w3-display-container"
                          style="background: url('img/Inclined-Plane/blur.png') center;">
                         <div class="w3-padding" style="width:100%">
@@ -213,8 +203,8 @@
         TRANSLATION.onTranslate = function () {
             // document.querySelector('#scene').src = 'src/architecture-application.html?lang=' + TRANSLATION.currentLang;
             document.querySelector('#scene').contentWindow.changeLanguage(TRANSLATION.currentLang);
-
         }
+
 
         TRANSLATION.add(
             '#title',
