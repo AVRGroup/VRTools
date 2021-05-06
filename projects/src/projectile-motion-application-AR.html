@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+     <script src="../../js/translation.js"></script>
     <title>AR - Projectile Motion</title>
 
     <style>
@@ -144,8 +145,29 @@
                 this.limiter = 0;
 
                 this.randomizeValues();
-                this.heightLabel.innerHTML = "Height: " + height + ".0m"
-                this.velocityLabel.innerHTML = "Velocity: " + velocity + ".0m/s"
+                var language = location.search;
+                if (language.length != 0) {
+                    let aux = "?lang=";
+                    language = language.substring(aux.length, language.length);
+                    switch (language) {
+                        case "en-US":
+                            {
+                                this.heightLabel.innerHTML = "Height: " + height + ".0m"
+                                this.velocityLabel.innerHTML = "Velocity: " + velocity + ".0m/s"
+                            }
+
+                        case "pt-BR":
+                            {
+                                this.heightLabel.innerHTML = "Altura: " + height + ".0m"
+                                this.velocityLabel.innerHTML = "Velocidade: " + velocity + ".0m/s"
+                            }
+                    }
+                }
+                else {
+                    this.heightLabel.innerHTML = "Height: " + height + ".0m"
+                    this.velocityLabel.innerHTML = "Velocity: " + velocity + ".0m/s"
+                }
+                
 
                 setTimeout(() => {
                     document.getElementById("bar").style.display = "block";
@@ -181,16 +203,62 @@
 
                         if (this.crate.position.y <= 0) {
                             if (Math.abs(distance - correctDistance) <= 1.5) {
-                                this.reportLabel.innerHTML = `You hit the target! The correct distance was ${correctDistance.toFixed(1)}m. <br/> Click here to play again!`
-                                this.reportLabel.style.display = "block";
+
+                                var language = location.search;
+                                if (language.length != 0) {
+                                    let aux = "?lang=";
+                                    language = language.substring(aux.length, language.length);
+                                    switch (language) {
+                                        case "en-US":
+                                            {
+                                                this.reportLabel.innerHTML = `You hit the target! The correct distance was ${correctDistance.toFixed(1)}m. <br/> Click here to play again!`
+                                                this.reportLabel.style.display = "block";
+                                            }
+
+                                        case "pt-BR":
+                                            {
+                                                this.reportLabel.innerHTML = `Você acertou o alvo! A distância correta foi ${correctDistance.toFixed(1)}m. <br/> Clique aqui para jogar de novo!`
+                                                this.reportLabel.style.display = "block";
+                                            }
+                                    }
+                                }
+                                else {
+                                    this.reportLabel.innerHTML = `You hit the target! The correct distance was ${correctDistance.toFixed(1)}m. <br/> Click here to play again!`
+                                    this.reportLabel.style.display = "block";
+                                }
+
+                                
                                 chances = 3
                                 this.randomizeValues();
                                 newGame = true;
 
                             }
                             else if (chances === 0) {
-                                this.reportLabel.innerHTML = `Game over! The correct distance was ${correctDistance.toFixed(1)}m. <br/> Click here to play again!`
-                                this.reportLabel.style.display = "block";
+
+                                var language = location.search;
+                                if (language.length != 0) {
+                                    let aux = "?lang=";
+                                    language = language.substring(aux.length, language.length);
+                                    switch (language) {
+                                        case "en-US":
+                                            {
+                                                this.reportLabel.innerHTML = `Game over! The correct distance was ${correctDistance.toFixed(1)}m. <br/> Click here to play again!`
+                                                this.reportLabel.style.display = "block";
+                                            }
+
+                                        case "pt-BR":
+                                            {
+                                                this.reportLabel.innerHTML = `Fim de jogo! A distância correta era ${correctDistance.toFixed(1)}m. <br/> Clique aqui para jogar de novo!`
+                                                this.reportLabel.style.display = "block";
+                                            }
+                                    }
+                                }
+                                else {
+                                    this.reportLabel.innerHTML = `Game over! The correct distance was ${correctDistance.toFixed(1)}m. <br/> Click here to play again!`
+                                    this.reportLabel.style.display = "block";
+                                }
+
+                                
                                 chances = 3
                                 this.randomizeValues();
                                 newGame = true;
@@ -276,7 +344,46 @@
         <a-entity id="camera" camera></a-entity>
         <a-entity simulator></a-entity>
     </a-scene>
+    <script type="text/javascript">
+        function changeLanguage(lang) {
+            switch (lang) {
+                case 'pt-BR':
+                    {
+                        TRANSLATION.translateDocument(TRANSLATION.PT_BR)
+                        break;
+                    }
+                case 'en-US':
+                    {
+                        TRANSLATION.translateDocument(TRANSLATION.EN_US)
+                        break;
+                    }
+            }
+        }
+        changeLanguage(TRANSLATION.lang);
+        TRANSLATION.add(
+            '#start',
+            'Start Simulation',
+            'Iniciar Simulação'
+        );
 
+        TRANSLATION.add(
+            '#distance',
+            'Distance: __._m:',
+            'Distância: __._m',
+        );
+
+        TRANSLATION.add(
+            '#drop',
+            'Drop Box',
+            'Soltar Caixa'
+        );
+
+        TRANSLATION.add(
+            '#info1',
+            'The displacement along x-axis and y-axis formulas are given below:',
+            'As fórmulas de deslocamento ao longo dos eixos x e y são fornecidas abaixo:'
+        );
+    </script>
 
 </body>
 
