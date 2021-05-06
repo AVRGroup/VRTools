@@ -23,18 +23,11 @@
         if(language.length != 0){
             let aux = "?lang=";
             language = language.substring(aux.length, language.length);
-            switch(language){
-                case "en-US":            
-                    main_en_US(language);
-                    break;
-                case "pt-BR":            
-                    main_pt_BR(language);
-                    break;
-            }
+            main(language);
         }
         else{                            
             language = "en-US";
-            main_en_US(language);
+            main(language);
         }
     </script>
 </body>
