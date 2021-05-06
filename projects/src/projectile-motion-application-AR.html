@@ -145,30 +145,10 @@
                 this.limiter = 0;
 
                 this.randomizeValues();
-                var language = location.search;
-                if (language.length != 0) {
-                    let aux = "?lang=";
-                    language = language.substring(aux.length, language.length);
-                    switch (language) {
-                        case "en-US":
-                            {
-                                this.heightLabel.innerHTML = "Height: " + height + ".0m"
-                                this.velocityLabel.innerHTML = "Velocity: " + velocity + ".0m/s"
-                            }
-
-                        case "pt-BR":
-                            {
-                                this.heightLabel.innerHTML = "Altura: " + height + ".0m"
-                                this.velocityLabel.innerHTML = "Velocidade: " + velocity + ".0m/s"
-                            }
-                    }
-                }
-                else {
-                    this.heightLabel.innerHTML = "Height: " + height + ".0m"
-                    this.velocityLabel.innerHTML = "Velocity: " + velocity + ".0m/s"
-                }
                 
-
+                
+                this.heightLabel.innerHTML = "Height: " + height + ".0m"
+                this.velocityLabel.innerHTML = "Velocity: " + velocity + ".0m/s"
                 setTimeout(() => {
                     document.getElementById("bar").style.display = "block";
                     document.getElementById("chances").style.display = "block";
@@ -236,6 +216,7 @@
                             else if (chances === 0) {
 
                                 var language = location.search;
+                                console.log(language)
                                 if (language.length != 0) {
                                     let aux = "?lang=";
                                     language = language.substring(aux.length, language.length);
@@ -345,21 +326,31 @@
         <a-entity simulator></a-entity>
     </a-scene>
     <script type="text/javascript">
-        function changeLanguage(lang) {
-            switch (lang) {
-                case 'pt-BR':
-                    {
-                        TRANSLATION.translateDocument(TRANSLATION.PT_BR)
-                        break;
-                    }
-                case 'en-US':
-                    {
-                        TRANSLATION.translateDocument(TRANSLATION.EN_US)
-                        break;
-                    }
+        function changeLanguage() {
+            var language = location.search;
+            if (language.length != 0) {
+                let aux = "?lang=";
+                language = language.substring(aux.length, language.length);
+                switch (language) {
+                    case "en-US":
+                        {
+                            TRANSLATION.translateDocument(TRANSLATION.EN_US)
+                            break;
+                        }
+
+                    case "pt-BR":
+                        {
+                            TRANSLATION.translateDocument(TRANSLATION.PT_BR)
+                            break;
+                        }
+                }
             }
+            else {
+                TRANSLATION.translateDocument(TRANSLATION.EN_US)
+            }
+           
         }
-        changeLanguage(TRANSLATION.lang);
+        changeLanguage();
         TRANSLATION.add(
             '#start',
             'Start Simulation',
@@ -373,15 +364,15 @@
         );
 
         TRANSLATION.add(
-            '#drop',
-            'Drop Box',
-            'Soltar Caixa'
+            '#height',
+            'Height: __._m',
+            'Altura: __._m'
         );
 
         TRANSLATION.add(
-            '#info1',
-            'The displacement along x-axis and y-axis formulas are given below:',
-            'As fórmulas de deslocamento ao longo dos eixos x e y são fornecidas abaixo:'
+            '#velocity',
+            'Velocity: __._m/s',
+            'Velocidade: __._m/s'
         );
     </script>
 
