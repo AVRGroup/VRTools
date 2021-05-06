@@ -24,21 +24,10 @@ function main(language) {
 	// FIX: TRANSPARENCY Problem
 	//  https://stackoverflow.com/questions/15994944/transparent-objects-in-threejs
 	// Em seguida, os objetos serão renderizados na ordem em que são adicionados à cena 
-	// renderer.sortObjects = false; 
-
-	let rotationCamera = new THREE.PerspectiveCamera(
-		50,
-		window.innerWidth / window.innerHeight,
-		0.1,
-		1000
-	); 
-	rotationCamera.up.set(0, 1, 0);
-	rotationCamera.position.set(0, 12, 7);
-	rotationCamera.position.set(0, 11, 8);
-	let defaultCamera = rotationCamera;
+	renderer.sortObjects = false; 
 
 	// VR camera variables
-	let cameraVR, user, geometryMarker, materialMarker, circleMarker;
+	let cameraVR, user, marker;
 	let groupCenter;
 
 	// Time controller
@@ -58,6 +47,7 @@ function main(language) {
 	let objectLooked = null, objectImagePlane = null, selectedImage = null;
 	let pointCollisionRayCaster;
 
+	// Translation attributes
 	let texts, nameFiles;
 	switch(language){
 		case "en-US":            
@@ -66,7 +56,8 @@ function main(language) {
 			};
 			nameFiles = {
 				retry: "retry.png", messageVictory: "messageVictory.png",
-				messageLoose: "messageLoose.png"
+				previous: "previous-2.png", messageLoose: "messageLoose.png",
+				next: "next-2.png", changeCameraTitle: "changeCameraTitle.png"
 			};
 			break;
 		case "pt-BR":            
@@ -74,7 +65,9 @@ function main(language) {
 				menu: ["MENU PRINCIPAL", "FALHAS: ", "ACERTOS: ", "TEMPO: "],
 			};
 			nameFiles = {
-				retry: `retry-(${language}).png`, messageVictory: `messageVictory-(${language}).png`, messageLoose: `messageLoose-(${language}).png`
+				retry: `retry-(${language}).png`, messageVictory: `messageVictory-(${language}).png`, messageLoose: `messageLoose-(${language}).png`,
+				previous: `previous-(${language}).png`, next: `next-(${language}).png`,
+				changeCameraTitle: `changeCameraTitle-(${language}).png`
 			};
 			break;
 	}
@@ -114,7 +107,7 @@ function main(language) {
 				this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
 				this.ctx.font = "Bold 38px Arial";
 				this.ctx.fillStyle = "rgb(255, 255, 0)";
-				this.ctx.fillText(texts.menu[0], 280, 45);
+				this.ctx.fillText(texts.menu[0], 340, 45);
 				this.ctx.fillText(texts.menu[1] + controls.fails, 20, 100);
 				this.ctx.fillText(texts.menu[2] + controls.hits, 240, 100);
 				this.ctx.fillText(
@@ -148,8 +141,14 @@ function main(language) {
 		amountSheets: 0,
 		currentSheet: 0,
 		amountPages: 0,
-		buttons: [], // Retry
-		sizeButton: 1.75,
+		buttons: [], // Retry, previous, next
+		sizeButton: 5,	//1,75
+
+		// Camera
+		cameraOption: 1,
+		cameraQuantity: 3,
+		defaultCamera: null,
+		cameraPositionPanel: new THREE.Group(),
 
 		// Functions
 		animationBook: function () {
@@ -186,19 +185,47 @@ function main(language) {
 			scene.add(this.book);
 		},
 		createButtons: function () {
-            let buttonRetryGeometry = new THREE.PlaneGeometry(3.5, 1.75, 0.1, 0.1);
+            let buttonRetryGeometry = new THREE.PlaneGeometry(4, 2, 0.1, 0.1);
             let buttonRetryMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load(`./assets/icons/${nameFiles.retry}`), side: THREE.DoubleSide});
             let buttonRetry = new THREE.Mesh(buttonRetryGeometry, buttonRetryMaterial);
             this.buttons.push(buttonRetry);
-            this.buttons[0].position.set(12.6, 20.25, -11.9);
-            this.buttons[0].objectType = 8;
+            this.buttons[0].position.set(11.6, 20.25, -11.9);
+            this.buttons[0].objectType = 3;
             scene.add(this.buttons[0]); 
+			let buttonCameraGeometry = new THREE.PlaneGeometry(this.sizeButton, this.sizeButton, 0.1, 0.1);
+            let buttonCameraMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load(`./assets/icons/${nameFiles.previous}`), side: THREE.DoubleSide});
+            let buttonCamera = new THREE.Mesh(buttonCameraGeometry, buttonCameraMaterial);
+			buttonCamera.position.set(0, 2, 0.1);
+            this.buttons.push(buttonCamera);
+			this.cameraPositionPanel.add(buttonCamera);
+            this.buttons[1].objectType = 4;
+			buttonCameraGeometry = new THREE.PlaneGeometry(this.sizeButton, this.sizeButton, 0.1, 0.1);
+            buttonCameraMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load(`./assets/icons/${nameFiles.next}`), side: THREE.DoubleSide});
+            buttonCamera = new THREE.Mesh(buttonCameraGeometry, buttonCameraMaterial);
+			buttonCamera.position.set(0, -5, 0.1);
+            this.buttons.push(buttonCamera);
+			this.cameraPositionPanel.add(buttonCamera);
+            this.buttons[2].objectType = 5;
+		},
+		createCameraPositionPanel: function(){
+			let panelGeometry = new THREE.PlaneGeometry(10, 21, 0.1, 0.1);
+            let panelMaterial = new THREE.MeshBasicMaterial({
+				color: 0x00000, side: THREE.DoubleSide
+			});
+            let panelMesh = new THREE.Mesh(panelGeometry, panelMaterial);
+			this.cameraPositionPanel.add(panelMesh);
+			this.cameraPositionPanel.position.set(18.0, 11.2, -7.95);
+			scene.add(this.cameraPositionPanel);
+			let titleGeometry = new THREE.PlaneGeometry(10, 5, 0.1, 0.1);
+            let titleMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load(`./assets/textures/historical-figures/${nameFiles.changeCameraTitle}`), side: THREE.DoubleSide});
+            let title = new THREE.Mesh(titleGeometry, titleMaterial);
+			this.cameraPositionPanel.add(title);
+			title.position.set(0, 8, 0.1);
 		},
 		createImageClone: function () {
 			let panelGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
 			let panelMaterial = new THREE.MeshStandardMaterial({
-				color: "rgb(255,255,255)",
-				side: THREE.DoubleSide,
+				color: "rgb(255,255,255)", side: THREE.DoubleSide,
 			});
 			this.imageClone = new THREE.Mesh(panelGeometry, panelMaterial);
 			this.imageClone.position.set(-100, -100, -100);
@@ -209,16 +236,13 @@ function main(language) {
 			let canvas1 = document.createElement("canvas");
 			let context1 = canvas1.getContext("2d");
 			canvas1.width = 1024;
-			canvas1.height = 128; //Set dimensions of the canvas texture to adjust aspect ratio
+			canvas1.height = 128; // Set dimensions of the canvas texture to adjust aspect ratio
 
 			// canvas contents will be used for a texture
 			let texture1 = new THREE.Texture(canvas1);
 			texture1.needsUpdate = true;
 
-			let material1 = new THREE.MeshBasicMaterial({
-				map: texture1,
-				side: THREE.DoubleSide,
-			});
+			let material1 = new THREE.MeshBasicMaterial({ map: texture1, side: THREE.DoubleSide});
 			material1.transparent = true;
 			let mesh1 = new THREE.Mesh(new THREE.PlaneGeometry(29.5, 3), material1);
 			mesh1.position.set(0, 20.4, -12.1);
@@ -551,6 +575,16 @@ function main(language) {
             scene.add(nameBox);
 		},
 		createScenary: function () {
+			this.createCameraPositionPanel();
+
+			let camera = new THREE.PerspectiveCamera(
+				50, window.innerWidth / window.innerHeight,
+				0.1, 1000
+			); 
+			camera.up.set(0, 1, 0);
+			camera.position.set(-5 + this.cameraOption * 5, 10, 6);
+			this.defaultCamera = camera;
+
 			// VR cameras attributes
 			groupCenter = new THREE.Group();
 			cameraVR = new THREE.PerspectiveCamera(
@@ -562,17 +596,17 @@ function main(language) {
 			cameraVR.position.set(0, 1.6, 0);
 			user = new THREE.Group(); // This helps move the camera
 			user.position.set(
-				defaultCamera.position.x,
-				defaultCamera.position.y,
-				defaultCamera.position.z
+				this.defaultCamera.position.x,
+				this.defaultCamera.position.y,
+				this.defaultCamera.position.z
 			);
 			scene.add(user);
 			user.add(cameraVR);
-			geometryMarker = new THREE.RingGeometry(14 * 0.0025, 14 * 0.005, 64); 
-			materialMarker = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-			circleMarker = new THREE.Mesh(geometryMarker, materialMarker);
-			cameraVR.add(circleMarker);
-			circleMarker.position.set(0, 0, -5); 
+			let geometryMarker = new THREE.RingGeometry(14 * 0.0025, 14 * 0.005, 64); 
+			let materialMarker = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+			marker = new THREE.Mesh(geometryMarker, materialMarker);
+			cameraVR.add(marker);
+			marker.position.set(0, 0, -5); 
 			geometryMarker = new THREE.RingGeometry(15 * 0.0025, 15 * 0.003, 64);
 			materialMarker = new THREE.MeshBasicMaterial({ color: 0x00000 });
 			let circleBGMarker = new THREE.Mesh(geometryMarker, materialMarker);
@@ -582,8 +616,8 @@ function main(language) {
 			materialMarker = new THREE.MeshBasicMaterial({ color: 0x00000 });
 			circleBGMarker.add(new THREE.Mesh(geometryMarker, materialMarker));
 			groupCenter.position.set(0, 0, -5); 
-			circleMarker.add(groupCenter);
-			var spotLight = new THREE.SpotLight(0xffffff);
+			marker.add(groupCenter);
+			let spotLight = new THREE.SpotLight(0xffffff);
 			spotLight.position.copy(new THREE.Vector3(0, 15, 15));
 			spotLight.shadow.mapSize.width = 2048;
 			spotLight.shadow.mapSize.height = 2048;
@@ -593,17 +627,17 @@ function main(language) {
 			spotLight.penumbra = 0.05;
 			spotLight.name = "spotLight";
 			scene.add(spotLight);
-			var ambientLight = new THREE.AmbientLight(0x343434);
+			let ambientLight = new THREE.AmbientLight(0x343434);
 			ambientLight.name = "ambientLight";
 			scene.add(ambientLight);
 
 			// Show axes (parameter is size of each axis)
-			// var axes = new THREE.AxesHelper(24);
+			// let axes = new THREE.AxesHelper(24);
 			// axes.name = "AXES";
 			// axes.visible = true;
 			// scene.add(axes);
 
-			var groundPlane = createGroundPlane(30, 30); // width and height
+			let groundPlane = createGroundPlane(30, 30); // width and height
 			groundPlane.rotateX(THREE.Math.degToRad(-90));
 			scene.add(groundPlane);
 
@@ -618,6 +652,10 @@ function main(language) {
 			animationList = [];
 			objectRaycaster = [];
 			objectRaycasterClonePictures = [];
+
+			this.book.rotateX(THREE.Math.degToRad(10));
+			this.book.position.set(0, this.book.position.y + 1, 0);
+			this.cameraPositionPanel.rotateY(THREE.Math.degToRad(-45));
 
 			// Pages of book
 			for (let i = 0; i < this.book.children.length; i++) {
@@ -664,6 +702,8 @@ function main(language) {
 			objectRaycaster = [];
 			objectRaycasterClonePictures = [];
 			this.imageClone = null;
+			this.cameraOption = 1;
+			this.cameraPanel = new THREE.Group();
 			this.book = new THREE.Group();
 		},
 		removeEntity: function (object) {
@@ -688,7 +728,7 @@ function main(language) {
 				}
 			}
 			for (let j = 0; j < objectRaycaster.length; j++) {
-				if (objectRaycaster[j] == imagePlane) {
+				if (objectRaycaster[j] === imagePlane) {
 					// Remove imageBlock of the page
 					objectRaycaster.splice(j, 1);
 					break;
@@ -731,15 +771,20 @@ function main(language) {
 				i--; // FIX remove when works with ".length"
 			}
 			return auxOrderList;
-		}
+		},
+		updateCameraPosition: function(){
+			this.defaultCamera.position.set(-5 + this.cameraOption * 5, 10, 6 + 0);
+			// this.defaultCamera.position.set(-5 + this.cameraOption * 5, 11, 4.5);
+			user.position.set(this.defaultCamera.position.x, this.defaultCamera.position.y, this.defaultCamera.position.z);
+		},
 	};
 	controls.createScenary();
 
 	// Reajuste da renderização com base na mudança da janela
 	function onResize() {
 		// Atualiza o aspect da camera com relação as novas dimensões
-		rotationCamera.aspect = window.innerWidth / window.innerHeight; 
-		rotationCamera.updateProjectionMatrix(); // Atualiza a matriz de projeção
+		controls.defaultCamera.aspect = window.innerWidth / window.innerHeight;
+		controls.defaultCamera.updateProjectionMatrix();
 		cameraVR.aspect = window.innerWidth / window.innerHeight;
 		cameraVR.updateProjectionMatrix();
 		renderer.setSize(window.innerWidth, window.innerHeight); //Define os novos valores para o renderizador
@@ -851,7 +896,7 @@ function main(language) {
 			case 1: // Collide with image
 				selectedImage = objectLooked;
 				selectedImage.visible = false;
-				controls.imageClone.position.x = circleMarker.position.x;
+				controls.imageClone.position.x = marker.position.x;
 				controls.imageClone.position.y = 0.1;
 				controls.imageClone.position.z = -6.35;
 				controls.imageClone.rotateX(THREE.Math.degToRad(-90));
@@ -868,17 +913,25 @@ function main(language) {
 				//
 				//
 				break;
-			case 8: // Retry Button
+			case 3: // Retry Button
 				console.clear();
 				controls.emptyScene();
 				controls.createScenary();
+				break;
+			case 4: // Previous button
+				controls.cameraOption = controls.cameraOption > 0 ? controls.cameraOption - 1 : controls.cameraQuantity - 1;
+				controls.updateCameraPosition();
+				break;
+			case 5: // Next button
+				controls.cameraOption = controls.cameraOption < 2 ? controls.cameraOption + 1 : 0;
+				controls.updateCameraPosition();
 				break;
 		}
 	}
 
 	function getIntersections(elements) {
 		raycaster.setFromCamera(
-			{x: circleMarker.position.x, y: circleMarker.position.y},
+			{x: marker.position.x, y: marker.position.y},
 			cameraVR
 		);
 		return raycaster.intersectObjects(elements);
@@ -904,7 +957,7 @@ function main(language) {
 		if (selectedImage == null) {
 			// FIX the bug of change the picture when moving above another picture
 			raycasterPictures.setFromCamera(
-				{ x: circleMarker.position.x, y: circleMarker.position.y },
+				{ x: marker.position.x, y: marker.position.y },
 				cameraVR
 			);
 			let intersects = raycasterPictures.intersectObjects(
@@ -950,7 +1003,7 @@ function main(language) {
 				if (controls.cameraOption == 0) {
 					checkRaycasterOnImageAtPages();
 					checkRaycasterClonePictures();
-					movePictureFromPanel();
+					// movePictureFromPanel();
 				}
 				break;
 			case 1: // Victory
