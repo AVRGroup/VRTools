@@ -195,7 +195,6 @@ function changeSelectedLanguage(lang) {
 window.onload = function () {
     const url = new URLSearchParams(window.location.search);
     const lang = url.get('lang');
-    console.log('navbar')
 
     if (lang && lang === 'pt-BR') {
         changeSelectedLanguage('pt-BR')

@@ -89,7 +89,6 @@ const TRANSLATION = new Translation();
 window.addEventListener('load', () => {
     const url = new URLSearchParams(window.location.search);
     const lang = url.get('lang');
-    console.log('translation')
 
     if (lang && lang === 'pt-BR') {
         TRANSLATION.translateDocument(TRANSLATION.PT_BR);
