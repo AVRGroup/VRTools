@@ -606,8 +606,13 @@ AFRAME.registerComponent('vr-interface', {
     for (let k = 0; k < this.buttons.length; k++) {
       this.positionate(this.buttons[k], k);
       if (this.data.centralize) this.centralize(this.buttons[k]);
-      this.positionateBorder(this.buttons[k]);
     }
+
+    if (this.borderMaterial) {
+      for (let k = 0; k < this.buttons.length; k++) {
+        this.positionateBorder(this.buttons[k])
+      }
+    };
 
     if (this.message.object3D.visible) {
       this.positionateMessage(this.pos);
