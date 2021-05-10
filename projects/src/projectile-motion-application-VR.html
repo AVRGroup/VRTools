@@ -47,16 +47,20 @@
                     ['The crate was released...', 'The crate hit the ground.', 'The crate hit the target!']
                     :
                     ['A caixa foi solta...', 'A caixa atingiu o solo.', 'A caixa atingiu o alvo!'];
+                const isHandsfree = new URLSearchParams(window.location.search).get('handsfree') === 'true';
 
-                vrInterface.hide();
+                if (isHandsfree) {
+                    vrInterface.addButton('myButton', '#dropTexture', () => {
+                        vrInterface.showMessage(messages[0])
+                        self.dropCrate();
+                    });
+                }
+                else {
+                    vrInterface.addButton('placeHolder');
+                    vrInterface.cursor.object3D.visible = false
+                }
 
-                vrInterface.addButton('myButton', '#dropTexture', () => {
-                    vrInterface.showMessage(messages[0])
-                    self.dropCrate();
-                });
-
-                // vrInterface.showSideText('You hit the target!')
-
+                vrInterface.hide()
                 vrInterface.isToChangeTheta = true;
 
                 this.isPaused = true;
@@ -320,7 +324,7 @@
         </a-entity>
 
         <a-entity rotation="0 90 0"
-            vr-interface="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.1 1.5 2; theta: 0; rho: -20; movementBar: false; transparency: false; sideTextSize: 1 4"
+            vr-interface="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.25; theta: 0; rho: -15; movementBar: false; transparency: false; sideTextSize: 1 4"
             button-controls appcode>
         </a-entity>
 
