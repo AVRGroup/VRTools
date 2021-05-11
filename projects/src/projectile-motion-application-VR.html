@@ -77,8 +77,6 @@
                 this.distanceSquared;
                 this.pauseVelAux = { x: 0, y: 0, z: 0 };
 
-                this.randomizeAirplanePosition();
-
                 // ----- Loading sound ----- //
 
                 this.airplaneSound = new Howl({
@@ -97,6 +95,8 @@
 
                 // ----- Setting trajectory object ----- //
 
+                this.aimHelper = document.querySelector("#aimHelper");
+                this.aimHelper.object3D.position.copy(this.airplane.position);
                 this.Curve = this.ProjectileCurve(); // Personalized curve class
                 this.path = new this.Curve(new THREE.Vector3(0, -1, 0), 0, 0, 0, 0); // instantiate Curve in an object that can be used to create a geomety
                 this.material = new THREE.LineBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.5 });
@@ -105,7 +105,12 @@
                     new THREE.BufferGeometry().setFromPoints(this.path.getPoints(1)),
                     this.material
                 );
-                this.el.sceneEl.setObject3D('trajectory', this.trajectory);
+                this.aimHelper.setObject3D('trajectory', this.trajectory);
+                // this.aimRange = Math.sqrt(2 * this.aimHelper.object3D.position.y / 9.8) * this.vx;
+
+                // ----- Positionating airplane ----- //
+
+                this.randomizeAirplanePosition();
 
                 // ----- Event listeners ----- //
 
@@ -114,7 +119,8 @@
                     self.crateSound.pos(self.crate.position.z, self.crate.position.y, self.crate.position.x);
 
                     if (self.isDropping) {
-                        if ((self.crate.position.x * self.crate.position.x) + (self.crate.position.z * self.crate.position.z) <= 100) {
+                        // r^2 = 11.5^2 = 132.25
+                        if ((self.crate.position.x * self.crate.position.x) + (self.crate.position.z * self.crate.position.z) <= 132.25) {
                             vrInterface.showMessage(messages[2]);
                         }
                         else {
@@ -127,8 +133,8 @@
                     if (!self.isPaused && self.soundLimiter < 3)
                         self.crateSound.play();
 
-                    if (this.trajectory.visible)
-                        this.trajectory.visible = false;
+                    // if (this.trajectory.visible)
+                    //     this.trajectory.visible = false;
                 });
 
                 this.el.sceneEl.addEventListener('enter-vr', () => {
@@ -138,6 +144,7 @@
 
                     self.airplaneSound.play();
                     self.airplane.el.setAttribute('velocity', { x: this.vx, y: 0, z: this.vz });
+                    // self.aimHelper.setAttribute('velocity', { x: this.vx, y: 0, z: this.vz });
 
                     self.crate.el.body.mass = 5;
                     self.crate.el.body.velocity.set(self.pauseVelAux.x, self.pauseVelAux.y, self.pauseVelAux.z);
@@ -176,6 +183,10 @@
 
                 this.distanceSquared = (this.airplane.position.x * this.airplane.position.x) + (this.airplane.position.z * this.airplane.position.z);
 
+                if (this.distanceSquared - this.aimRangeSquared <= this.stopDistance) {
+                    this.trajectory.visible = false;
+                }
+
                 // Howler.js seems to have the x-axis and z-axis inverted when compared to THREE.js
                 this.airplaneSound.pos(
                     this.airplane.position.z,
@@ -183,6 +194,9 @@
                     this.airplane.position.x,
 
                 );
+
+                this.aimHelper.object3D.position.x = this.airplane.position.x;
+                this.aimHelper.object3D.position.z = this.airplane.position.z;
 
                 Howler.orientation( // rotates the sound listener
                     Math.cos(this.camera.rotation.y), 0, Math.sin(this.camera.rotation.y),
@@ -197,6 +211,7 @@
 
                     this.airplane.visible = true;
                     this.airplane.el.setAttribute('velocity', { x: this.vx, y: 0, z: this.vz });
+                    this.aimHelper.setAttribute('velocity', { x: this.vx, y: 0, z: this.vz });
                 }
             },
             randomizeAirplanePosition: function () {
@@ -215,15 +230,11 @@
                 this.airplane.rotation.y = (Math.PI / 2) - theta; // Math.PI / 2 refers to airplane object inital rotation
                 this.vx = this.velocity * Math.cos(theta);
                 this.vz = this.velocity * Math.sin(theta);
-            },
-            dropCrate: function () {
-                this.crate.visible = true;
-                this.crate.el.body.position.set(this.airplane.position.x, this.airplane.position.y, this.airplane.position.z)
-                this.crate.el.body.angularVelocity.set(0, 0, 0);
-                this.crate.el.body.velocity.set(this.vx, 0, this.vz);
+
+                this.aimHelper.object3D.position.copy(this.airplane.position);
 
                 this.path = new this.Curve(
-                    this.airplane.position,
+                    new THREE.Vector3(0, 0, 0),
                     this.velocity,
                     0,
                     this.airplane.rotation.y - (Math.PI / 2),
@@ -234,6 +245,30 @@
                 this.trajectory.geometry = new THREE.BufferGeometry().setFromPoints(this.path);
                 this.trajectory.geometry.needsupdate = true;
                 this.trajectory.visible = true;
+
+                /*
+                    The trajectory line dissapears at certain point, the code below determines at which point it happens.
+                    The stop distance is the distance from where the line touchs the ground to the center (0,0,0).
+                    The distance from the bottom of the line to the center is the distance of the airplane minus the range of the trajectory.
+                    Let x be the distance of the airplane, y be the range, and stopD the distance we want.
+                    Whe should hide the trajectory when:
+                        x - y = stopD
+                    However, to avoid calling sqrt every call of tick function, we use x^2. So we also got to use y^2 in our equation to find the distance.
+                        x^2 - y^2 = stopDistance
+                    How whe dont know the value of x, but we define the value of y, we can use the following equation, which was obtained from the two above:
+                        (stopD - y)^2 - y^2 = stopDistance
+                */
+                const stopD = 70;
+                this.aimRange = Math.sqrt(2 * this.aimHelper.object3D.position.y / 9.8) * this.velocity;
+                this.aimRangeSquared = this.aimRange * this.aimRange;
+                this.stopDistance = (stopD + this.aimRange) * (stopD + this.aimRange) - this.aimRangeSquared;
+            },
+            dropCrate: function () {
+                this.crate.visible = true;
+                this.crate.el.body.position.set(this.airplane.position.x, this.airplane.position.y, this.airplane.position.z)
+                this.crate.el.body.angularVelocity.set(0, 0, 0);
+                this.crate.el.body.velocity.set(this.vx, 0, this.vz);
+
                 this.isDropping = true;
             },
             ProjectileCurve: function () {
@@ -318,8 +353,11 @@
             body="type: dynamic; mass: 0; shape: none;">
         </a-entity>
 
+        <a-entity id="aimHelper"></a-entity>
+
         <a-entity id="rig" position="0 0 0">
-            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true"
+                wasd-controls="acceleration:900; fly: false; enabled: true">
             </a-entity>
         </a-entity>
 
