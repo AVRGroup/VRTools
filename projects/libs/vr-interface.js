@@ -195,7 +195,7 @@ AFRAME.registerComponent('vr-interface', {
     this.message = document.createElement('a-entity');
     this.message.setAttribute('text', { align: 'center', width: data.messageSize, height: data.messageSize, color: new THREE.Color(data.messageColor) });
     this.message.setAttribute('geometry', { primitive: 'plane', height: data.messageSize * 0.1, width: data.messageSize });
-    this.message.setAttribute('material', { color: new THREE.Color(data.messageBG), transparent: data.transparency, opacity: data.transparency ? 0.75 : 1 });
+    this.message.setAttribute('material', { color: new THREE.Color(data.messageBG), transparent: data.bgTransparency, opacity: data.bgTransparency ? 0.75 : 1 });
     this.message.object3D.visible = false;
     this.buttonGroup.appendChild(this.message);
 

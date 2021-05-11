@@ -7,7 +7,7 @@
     <title>Projectile Motion VR</title>
 
     <style>
-        #info {
+        .panel {
             display: none;
             position: absolute;
             top: 50%;
@@ -17,14 +17,24 @@
             transform: translateY(-50%);
             margin: auto;
             padding-left: 5px;
-            background-color: rgba(255, 255, 255, 0.75);
             font-size: 1.2em;
-            color: #444;
             z-index: 1;
         }
 
+        #info {
+            background-color: rgba(255, 255, 255, 0.75);
+            color: #444;
+            border: #444 1px solid;
+        }
+
+        #again {
+            background-color: rgba(205, 255, 205, 0.75);
+            color: #272;
+            border: #272 1px solid;
+        }
+
         @media only screen and (min-width: 768px) {
-            #info {
+            .panel {
                 width: 45%;
                 text-align: left;
             }
@@ -64,6 +74,7 @@
                 vrInterface.isToChangeTheta = true;
 
                 this.isPaused = true;
+                this.released = false;
 
                 this.airplane = document.querySelector('#airplane').object3D;
                 this.crate = document.querySelector('#crate').object3D;
@@ -91,6 +102,10 @@
                     onplay: () => { self.soundLimiter++ },
                     onend: () => { self.soundLimiter-- },
                 });
+                this.winSound = new Howl({
+                    src: ['assets/sounds/win.wav'], // Mativve https://freesound.org/people/Mativve/sounds/391539/
+                    volume: 2,
+                });
                 Howler.pos(0, 1.6, 0); // Sound listener position
 
                 // ----- Setting trajectory object ----- //
@@ -106,7 +121,6 @@
                     this.material
                 );
                 this.aimHelper.setObject3D('trajectory', this.trajectory);
-                // this.aimRange = Math.sqrt(2 * this.aimHelper.object3D.position.y / 9.8) * this.vx;
 
                 // ----- Positionating airplane ----- //
 
@@ -122,6 +136,9 @@
                         // r^2 = 11.5^2 = 132.25
                         if ((self.crate.position.x * self.crate.position.x) + (self.crate.position.z * self.crate.position.z) <= 132.25) {
                             vrInterface.showMessage(messages[2]);
+                            self.winSound.play();
+                            self.win = true;
+                            self.el.sceneEl.exitVR();
                         }
                         else {
                             vrInterface.showMessage(messages[1])
@@ -132,28 +149,36 @@
 
                     if (!self.isPaused && self.soundLimiter < 3)
                         self.crateSound.play();
-
-                    // if (this.trajectory.visible)
-                    //     this.trajectory.visible = false;
                 });
 
                 this.el.sceneEl.addEventListener('enter-vr', () => {
-                    document.querySelector('#info').style.display = 'none';
+                    if (self.win) {
+                        self.win = false;
+                        document.querySelector('#again').style.display = 'none';
+                        self.randomizeAirplanePosition();
+                    }
+                    else {
+                        document.querySelector('#info').style.display = 'none';
+                        self.crate.el.body.velocity.set(self.pauseVelAux.x, self.pauseVelAux.y, self.pauseVelAux.z);
+                    }
 
                     self.isPaused = false;
 
                     self.airplaneSound.play();
                     self.airplane.el.setAttribute('velocity', { x: this.vx, y: 0, z: this.vz });
-                    // self.aimHelper.setAttribute('velocity', { x: this.vx, y: 0, z: this.vz });
 
                     self.crate.el.body.mass = 5;
-                    self.crate.el.body.velocity.set(self.pauseVelAux.x, self.pauseVelAux.y, self.pauseVelAux.z);
 
                     vrInterface.show();
                 });
 
                 this.el.sceneEl.addEventListener('exit-vr', () => {
-                    document.querySelector('#info').style.display = 'block';
+                    if (self.win) {
+                        document.querySelector('#again').style.display = 'block';
+                    }
+                    else {
+                        document.querySelector('#info').style.display = 'block';
+                    }
 
                     self.isPaused = true;
 
@@ -172,8 +197,9 @@
                 });
 
                 document.querySelector('[button-controls]').addEventListener('buttondown', () => { // Listen click, touch, and joystick button pressed events
-                    if (!this.isPaused) {
+                    if (!self.isPaused && !self.released) {
                         self.dropCrate();
+                        self.released = true;
                         vrInterface.showMessage(messages[0])
                     }
                 });
@@ -262,6 +288,8 @@
                 this.aimRange = Math.sqrt(2 * this.aimHelper.object3D.position.y / 9.8) * this.velocity;
                 this.aimRangeSquared = this.aimRange * this.aimRange;
                 this.stopDistance = (stopD + this.aimRange) * (stopD + this.aimRange) - this.aimRangeSquared;
+
+                this.released = false;
             },
             dropCrate: function () {
                 this.crate.visible = true;
@@ -310,7 +338,7 @@
 </head>
 
 <body>
-    <div id="info">
+    <div id="info" class="panel">
         <h2 id="inst">Instructions: </h2>
         <p id="desc">Try to release the crate at the right time to hit the target!</p>
         <div class="w3">
@@ -321,6 +349,11 @@
         <p id="mouse"><b>Mouse:</b> Click in the screen to release the crate</p>
         <p id="start"><b>Start:</b> Press the VR button in the bottom right corner to enter in Virtual Reality mode and
             start.</p>
+    </div>
+
+    <div id="again" class="panel">
+        <h2>Congratulations, you Won!</h2>
+        <p>Press the VR button in the bottom right corner to play again.</p>
     </div>
 
     <a-scene id="scene" physics="friction: 0.8; restitution: 0.1">
@@ -339,8 +372,8 @@
 
         <a-sky id="skyBox" material="src: #skyBoxMap" radius="850"></a-sky>
 
-        <a-plane id="ground" material="src: #grass; repeat: 140, 140" position="0 0 0" rotation="-90 0 0" width="1700"
-            height="1700" static-body>
+        <a-plane id="ground" material="src: #grass; repeat: 140, 140, transparent: false, alphaTest: 0.5"
+            position="0 0 0" rotation="-90 0 0" width="1700" height="1700" static-body>
         </a-plane>
 
         <a-circle id="target" src="#targetTexture" radius="10" position="0 0.05 0" rotation="-90 0 0"></a-circle>
@@ -362,7 +395,7 @@
         </a-entity>
 
         <a-entity rotation="0 90 0"
-            vr-interface="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.25; theta: 0; rho: -15; movementBar: false; transparency: false; sideTextSize: 1 4"
+            vr-interface="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.25; theta: 0; rho: -15; movementBar: false; transparency: true; bgTransparency: false; sideTextSize: 1 4"
             button-controls appcode>
         </a-entity>
 
