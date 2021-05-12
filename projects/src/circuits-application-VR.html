@@ -24,6 +24,77 @@
     <script type="text/javascript" charset="UTF-8" src="../libs/vr-interface.js"></script>
 
     <script>
+        let currentLang = 'en-US';
+        const messages = [];
+        messages["en-US"] = [
+            'Wire block added to clipboard',
+            'Curved wire block added to clipboard',
+            'T-shaped wire block added to clipboard',
+            'Lamp block added to clipboard',
+            'Fan block added to clipboard',
+            'Battery block added to clipboard',
+        ];
+        messages["pt-BR"] = [
+            'Fio adcionado na area de transferencia',
+            'Fio em formato de L adcionado na area de transferencia',
+            'Fio em formato de T adcionado na area de transferencia',
+            'Lampada adcionada na area de transferencia',
+            'Ventoinha adcionada na area de transferencia',
+            'Bateria adcionada na area de transferencia',
+        ];
+
+        function changeLanguage(lang) {
+            if (lang != currentLang) {
+                const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
+                if (vrInterface) {
+                    const loader = new THREE.TextureLoader();
+
+                    if (lang === 'pt-BR') {
+                        currentLang = 'pt-BR';
+
+                        vrInterface.buttons[0].material.map = loader.load('assets/textures/circuits/wire-br.png');
+                        vrInterface.buttons[1].material.map = loader.load('assets/textures/circuits/l-wire-br.png');
+                        vrInterface.buttons[2].material.map = loader.load('assets/textures/circuits/t-wire-br.png');
+                        vrInterface.buttons[3].material.map = loader.load('assets/textures/circuits/rotate-br.png');
+                        vrInterface.buttons[4].material.map = loader.load('assets/textures/circuits/lamp-br.png');
+                        vrInterface.buttons[5].material.map = loader.load('assets/textures/circuits/fan-br.png');
+                        vrInterface.buttons[6].material.map = loader.load('assets/textures/circuits/battery-br.png');
+                        vrInterface.buttons[7].material.map = loader.load('assets/textures/circuits/bin-br.png');
+                    }
+                    else {
+                        currentLang = 'en-US';
+
+                        vrInterface.buttons[0].material.map = loader.load('assets/textures/circuits/wire.png');
+                        vrInterface.buttons[1].material.map = loader.load('assets/textures/circuits/l-wire.png');
+                        vrInterface.buttons[2].material.map = loader.load('assets/textures/circuits/t-wire.png');
+                        vrInterface.buttons[3].material.map = loader.load('assets/textures/circuits/rotate.png');
+                        vrInterface.buttons[4].material.map = loader.load('assets/textures/circuits/lamp.png');
+                        vrInterface.buttons[5].material.map = loader.load('assets/textures/circuits/fan.png');
+                        vrInterface.buttons[6].material.map = loader.load('assets/textures/circuits/battery.png');
+                        vrInterface.buttons[7].material.map = loader.load('assets/textures/circuits/bin.png');
+                    }
+
+                    for (let button of vrInterface.buttons) {
+                        button.material.needsUpdate = true;
+                    }
+                }
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const lang = new URLSearchParams(window.location.search).get('lang');
+            if (lang === 'pt-BR') {
+                document.querySelector('#wire').src = 'assets/textures/circuits/wire-br.png';
+                document.querySelector('#lwire').src = 'assets/textures/circuits/l-wire-br.png';
+                document.querySelector('#twire').src = 'assets/textures/circuits/t-wire-br.png';
+                document.querySelector('#lamp').src = 'assets/textures/circuits/lamp-br.png';
+                document.querySelector('#fan').src = 'assets/textures/circuits/fan-br.png';
+                document.querySelector('#battery').src = 'assets/textures/circuits/battery-br.png';
+                document.querySelector('#rotateImage').src = 'assets/textures/circuits/rotate-br.png';
+                document.querySelector('#binImage').src = 'assets/textures/circuits/bin-br.png';
+            }
+        }, { once: true });
+
         AFRAME.registerComponent('panel', {
             init: function () {
                 const self = this;
@@ -35,31 +106,31 @@
 
                 vrInterface.addButton('wire', '#wire', () => {
                     addToClipboard(0);
-                    vrInterface.showMessage('Wire block added to clipboard');
+                    vrInterface.showMessage(messages[currentLang][0]);
                 });
                 vrInterface.addButton('l-block', '#lwire', () => {
                     addToClipboard('lblock');
-                    vrInterface.showMessage('Curved wire block added to clipboard');
+                    vrInterface.showMessage(messages[currentLang][1]);
                 });
                 vrInterface.addButton('t-block', '#twire', () => {
                     addToClipboard('tblock');
-                    vrInterface.showMessage('T-shaped wire block added to clipboard');
+                    vrInterface.showMessage(messages[currentLang][2]);
                 });
 
                 vrInterface.addButton('rotate', '#rotateImage', () => rotate());
 
                 vrInterface.addButton('lamp', '#lamp', () => {
                     addToClipboard('lamp');
-                    vrInterface.showMessage('Lamp block added to clipboard');
+                    vrInterface.showMessage(messages[currentLang][3]);
                 });
                 vrInterface.addButton('fan', '#fan', () => {
                     addToClipboard('fan');
-                    vrInterface.showMessage('Fan block added to clipboard');
+                    vrInterface.showMessage(messages[currentLang][4]);
                 });
 
                 vrInterface.addButton('battery', '#battery', () => {
                     addToClipboard('battery');
-                    vrInterface.showMessage('Battery block added to clipboard');
+                    vrInterface.showMessage(messages[currentLang][5]);
                 });
 
                 vrInterface.addButton('dispose', '#binImage', () => clearClipboard())
@@ -458,7 +529,7 @@
             <a-asset-item id="lampModel" src="assets/models/circuits/lamp-block.glb"></a-asset-item>
             <a-asset-item id="fanModel" src="assets/models/circuits/fan-block.glb"></a-asset-item>
 
-            <img id="rotateImage" src="assets/textures/circuits/rotate1.png">
+            <img id="rotateImage" src="assets/textures/circuits/rotate.png">
             <img id="binImage" src="assets/textures/circuits/bin.png">
             <img id="wire" src="assets/textures/circuits/wire.png">
             <img id="lwire" src="assets/textures/circuits/l-wire.png">
