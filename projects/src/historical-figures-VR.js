@@ -72,6 +72,13 @@ function main(language) {
 			break;
 	}
 
+	let errorMaterial = new THREE.MeshBasicMaterial({
+		side: THREE.DoubleSide,
+		map: textureLoader.load(
+			`./assets/textures/Erro.png`
+		),
+	});
+
 	// Controls of sidebar
 	const controls = {
 		book: new THREE.Group(),
@@ -120,7 +127,7 @@ function main(language) {
 			clearMenu: function () {
 				this.ctx.fillStyle = "rgba(10, 10, 10)";
 				this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-				this.object.material.map.needsUpdate = true; //Update the canvas texture
+				this.object.material.map.needsUpdate = true; // Update the canvas texture
 			},
 		},
 		
@@ -130,10 +137,12 @@ function main(language) {
 		orderPicturesBook: [],
 		messageVictory: null,
 		messageLoose: null,
+
 		// bookAttributes
 		angleBeginPage: 0,
 		angleFinishPage: 180,
 		angleRatePage: 1.8, 
+
 		// page and sheet attributes
 		widthPage: 12,
 		lengthPage: 14,
@@ -141,14 +150,11 @@ function main(language) {
 		amountSheets: 0,
 		currentSheet: 0,
 		amountPages: 0,
-		buttons: [], // Retry, previous, next
-		sizeButton: 5,	//1,75
+		buttons: [], // Retry
+		sizeButton: 5,	
 
 		// Camera
-		cameraOption: 1,
-		cameraQuantity: 3,
 		defaultCamera: null,
-		cameraPositionPanel: new THREE.Group(),
 
 		// Functions
 		animationBook: function () {
@@ -192,35 +198,6 @@ function main(language) {
             this.buttons[0].position.set(11.6, 20.25, -11.9);
             this.buttons[0].objectType = 3;
             scene.add(this.buttons[0]); 
-			let buttonCameraGeometry = new THREE.PlaneGeometry(this.sizeButton, this.sizeButton, 0.1, 0.1);
-            let buttonCameraMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load(`./assets/icons/${nameFiles.previous}`), side: THREE.DoubleSide});
-            let buttonCamera = new THREE.Mesh(buttonCameraGeometry, buttonCameraMaterial);
-			buttonCamera.position.set(0, 2, 0.1);
-            this.buttons.push(buttonCamera);
-			this.cameraPositionPanel.add(buttonCamera);
-            this.buttons[1].objectType = 4;
-			buttonCameraGeometry = new THREE.PlaneGeometry(this.sizeButton, this.sizeButton, 0.1, 0.1);
-            buttonCameraMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load(`./assets/icons/${nameFiles.next}`), side: THREE.DoubleSide});
-            buttonCamera = new THREE.Mesh(buttonCameraGeometry, buttonCameraMaterial);
-			buttonCamera.position.set(0, -5, 0.1);
-            this.buttons.push(buttonCamera);
-			this.cameraPositionPanel.add(buttonCamera);
-            this.buttons[2].objectType = 5;
-		},
-		createCameraPositionPanel: function(){
-			let panelGeometry = new THREE.PlaneGeometry(10, 21, 0.1, 0.1);
-            let panelMaterial = new THREE.MeshBasicMaterial({
-				color: 0x00000, side: THREE.DoubleSide
-			});
-            let panelMesh = new THREE.Mesh(panelGeometry, panelMaterial);
-			this.cameraPositionPanel.add(panelMesh);
-			this.cameraPositionPanel.position.set(18.0, 11.2, -7.95);
-			scene.add(this.cameraPositionPanel);
-			let titleGeometry = new THREE.PlaneGeometry(10, 5, 0.1, 0.1);
-            let titleMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load(`./assets/textures/historical-figures/${nameFiles.changeCameraTitle}`), side: THREE.DoubleSide});
-            let title = new THREE.Mesh(titleGeometry, titleMaterial);
-			this.cameraPositionPanel.add(title);
-			title.position.set(0, 8, 0.1);
 		},
 		createImageClone: function () {
 			let panelGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
@@ -237,11 +214,9 @@ function main(language) {
 			let context1 = canvas1.getContext("2d");
 			canvas1.width = 1024;
 			canvas1.height = 128; // Set dimensions of the canvas texture to adjust aspect ratio
-
 			// canvas contents will be used for a texture
 			let texture1 = new THREE.Texture(canvas1);
 			texture1.needsUpdate = true;
-
 			let material1 = new THREE.MeshBasicMaterial({ map: texture1, side: THREE.DoubleSide});
 			material1.transparent = true;
 			let mesh1 = new THREE.Mesh(new THREE.PlaneGeometry(29.5, 3), material1);
@@ -291,8 +266,6 @@ function main(language) {
 					map: textureLoader.load("./assets/textures/page.png"),
 					side: THREE.DoubleSide,
 				});
-				//pageMaterial.depthWrite = false; 
-
 				let page = new THREE.Mesh(pageGeometry, pageMaterial);
 				page.name = "page_" + this.amountPages;
 				page.position.set(this.widthPage / 2, 0, 0);
@@ -311,7 +284,7 @@ function main(language) {
 					side: THREE.DoubleSide,
 				});
 				let imagePlane = new THREE.Mesh(imageGeometry, imageMaterial);
-				imagePlane.position.set(0, this.lengthPage / 4.5, 0.01);
+				imagePlane.position.set(0, this.lengthPage / 4.5, 0.04);
 				imagePlane.objectType = 2;
 				imagePlane.name = "imageBlock-Page_" + this.amountPages;
 				page.add(imagePlane);
@@ -320,8 +293,7 @@ function main(language) {
 				// Informations block
 				let informationGeometry = new THREE.PlaneGeometry( 9.6, 6.08, 0.1, 0.1 );
 				let informationMaterial = new THREE.MeshBasicMaterial({
-					transparent: true,
-					side: THREE.DoubleSide,
+					transparent: true, side: THREE.DoubleSide,
 					map: textureLoader.load(
 						`./assets/textures/historical-figures/pictures/information/${language}/${indexPicture}.png`
 					),
@@ -329,7 +301,7 @@ function main(language) {
 				//informationMaterial.depthTest = false; 
 				let informationPlane = new THREE.Mesh(informationGeometry, informationMaterial);
 				informationPlane.name = "informationBlock-Page_" + this.amountPages;
-				informationPlane.position.set(0, -this.lengthPage / 5, 0.025); //0.01
+				informationPlane.position.set(0, -this.lengthPage / 5, 0.03); //0.01
 				page.add(informationPlane);
 				this.amountSheets++;
 				this.book.add(sheet); // Added sheet with page on the book
@@ -341,7 +313,7 @@ function main(language) {
 				for (let i = 0; i < this.book.children.length; i++) {
 					let sheetAux = this.book.children[i];
 					sheetAux.angleFinish =
-						180 - i * this.angleRatePage - sheetAux.angleBegin; //this.angleBeginPage;
+						180 - i * this.angleRatePage - sheetAux.angleBegin; 
 				}
 			} else {
 				let sheet = this.book.children[this.book.children.length - 1]; // Take a sheet to insert a page on the book
@@ -356,9 +328,8 @@ function main(language) {
 				let pageMaterial = new THREE.MeshBasicMaterial({
 					transparent: true, //opacity: 0.5,
 					map: textureLoader.load("./assets/textures/page.png"),
-					side: THREE.DoubleSide, //side:THREE.DoubleSide,
+					side: THREE.DoubleSide, 
 				});
-				//pageMaterial.depthWrite = false; 
 				let page = new THREE.Mesh(pageGeometry, pageMaterial);
 				page.name = "page_" + this.amountPages;
 				page.position.set(this.widthPage / 2, -0.005, 0);
@@ -371,18 +342,13 @@ function main(language) {
 				page.indexPicture = indexPicture;
 
 				// Image plane
-				let imageGeometry = new THREE.PlaneGeometry(
-					this.widthPage / 1.5,
-					this.lengthPage / 3,
-					0.1,
-					0.1
-				);
+				let imageGeometry = new THREE.PlaneGeometry(9, 4.5, 0.1, 0.1);
 				let imageMaterial = new THREE.MeshBasicMaterial({
 					color: "rgb(255, 255, 255)",
 					side: THREE.DoubleSide,
 				});
 				let imagePlane = new THREE.Mesh(imageGeometry, imageMaterial);
-				imagePlane.position.set(0, this.lengthPage / 4.5, -0.01);
+				imagePlane.position.set(0, this.lengthPage / 4.5, -0.04);
 				imagePlane.rotateY(THREE.Math.degToRad(180));
 				imagePlane.objectType = 2;
 				imagePlane.indexPicture = indexPicture;
@@ -390,12 +356,7 @@ function main(language) {
 				page.add(imagePlane);
 
 				// Informations block
-				let informationGeometry = new THREE.PlaneGeometry(
-					9.6,
-					6.08,
-					0.1,
-					0.1
-				);
+				let informationGeometry = new THREE.PlaneGeometry(9.6, 6.08, 0.1, 0.1);
 				let informationMaterial = new THREE.MeshBasicMaterial({
 					transparent: true /*opacity: 0.9,*/,
 					side: THREE.DoubleSide,
@@ -408,10 +369,9 @@ function main(language) {
 					informationMaterial
 				);
 				informationPlane.name = "informationBlock-Page_" + this.amountPages;
-				informationPlane.position.set(0, -this.lengthPage / 5, -0.025); // -0.01
+				informationPlane.position.set(0, -this.lengthPage / 5, -0.03); // -0.01
 				informationPlane.rotateY(THREE.Math.degToRad(180));
 				page.add(informationPlane);
-				//this.book.add(sheet);       // Added sheet with page on the book
 			}
 			this.amountPages++;
 		},
@@ -575,14 +535,12 @@ function main(language) {
             scene.add(nameBox);
 		},
 		createScenary: function () {
-			this.createCameraPositionPanel();
-
 			let camera = new THREE.PerspectiveCamera(
 				50, window.innerWidth / window.innerHeight,
 				0.1, 1000
 			); 
 			camera.up.set(0, 1, 0);
-			camera.position.set(-5 + this.cameraOption * 5, 10, 6);
+			camera.position.set(0, 10, 6);
 			this.defaultCamera = camera;
 
 			// VR cameras attributes
@@ -594,7 +552,7 @@ function main(language) {
 				1000
 			);
 			cameraVR.position.set(0, 1.6, 0);
-			user = new THREE.Group(); // This helps move the camera
+			user = new THREE.Group(); // This object helps move the camera
 			user.position.set(
 				this.defaultCamera.position.x,
 				this.defaultCamera.position.y,
@@ -655,7 +613,6 @@ function main(language) {
 
 			this.book.rotateX(THREE.Math.degToRad(10));
 			this.book.position.set(0, this.book.position.y + 1, 0);
-			this.cameraPositionPanel.rotateY(THREE.Math.degToRad(-45));
 
 			// Pages of book
 			for (let i = 0; i < this.book.children.length; i++) {
@@ -702,8 +659,6 @@ function main(language) {
 			objectRaycaster = [];
 			objectRaycasterClonePictures = [];
 			this.imageClone = null;
-			this.cameraOption = 1;
-			this.cameraPanel = new THREE.Group();
 			this.book = new THREE.Group();
 		},
 		removeEntity: function (object) {
@@ -772,11 +727,6 @@ function main(language) {
 			}
 			return auxOrderList;
 		},
-		updateCameraPosition: function(){
-			this.defaultCamera.position.set(-5 + this.cameraOption * 5, 10, 6 + 0);
-			// this.defaultCamera.position.set(-5 + this.cameraOption * 5, 11, 4.5);
-			user.position.set(this.defaultCamera.position.x, this.defaultCamera.position.y, this.defaultCamera.position.z);
-		},
 	};
 	controls.createScenary();
 
@@ -843,13 +793,13 @@ function main(language) {
 	}
 
 	function onSelectEnd(event) {
-		if (objectLooked != null && objectLooked.objectType == 2) {
-			if (selectedImage != null) {
-				if (objectLooked.indexPicture == selectedImage.indexPicture) {
+		if (objectLooked !== null && objectLooked.objectType === 2) {
+			if (selectedImage !== null) {
+				if (objectLooked.indexPicture === selectedImage.indexPicture) {
 					objectLooked.material = selectedImage.material.clone(); // Generate a clone of material and replace on image plane
 					controls.hits++;
 					controls.removePictureFromWall(selectedImage, objectLooked); // Remove imagePlane and picture of panel
-					if (controls.pictures.length == 0) {
+					if (controls.pictures.length === 0) {
 						controls.state = 1;
 						controls.messageVictory.visible = true;
 					}
@@ -857,32 +807,32 @@ function main(language) {
 					controls.fails++;
 					if (controls.fails > 2) {
 						controls.state = 2;
+						objectLooked.material = errorMaterial;
+						objectLooked.material.map.needsUpdate = true;
 						controls.removeAllPictures();
 						controls.messageLoose.visible = true;
 					}
 				}
-				objectImagePlane.material.color = new THREE.Color("rgb(255,255,255)");
-				objectImagePlane = null;
-				controls.imageClone.position.set(-100, -100, -100);
-				controls.imageClone.rotation.set(0, 0, 0);
-				groupCenter.children = [];
 			}
 		}
-		if (selectedImage != null) {
+		if (selectedImage !== null && controls.state !== 2) {
 			// Drop the picture
+			objectImagePlane.material.color = new THREE.Color("rgb(255,255,255)");
+			objectImagePlane = null;
 			selectedImage.visible = true;
 			controls.imageClone.position.set(-100, -100, -100);
-			controls.imageClone.rotation.set(0,0,0);
+			controls.imageClone.rotation.set(0, 0, 0);
 			groupCenter.children = [];
 		}
 		selectedImage = null;
+		controls.imageClone.scale.set(1, 1, 1);
 	}
 
 	function raycasterController(controller) {
 		switch (objectLooked.objectType) {
 			case 0:
 				if (objectLooked.sheet.animationAngle == 0) {
-					//Don't rotate if the page is moving
+					// Don't rotate if the page is moving
 					if (objectLooked.sheet.sideOption == 0) {
 						objectLooked.sheet.sideOption = 1;
 						controls.currentSheet++;
@@ -896,9 +846,10 @@ function main(language) {
 			case 1: // Collide with image
 				selectedImage = objectLooked;
 				selectedImage.visible = false;
+				controls.imageClone.scale.set(0.75, 0.75, 0.75);
 				controls.imageClone.position.x = marker.position.x;
 				controls.imageClone.position.y = 0.1;
-				controls.imageClone.position.z = -6.35;
+				controls.imageClone.position.z = -1.35;
 				controls.imageClone.rotateX(THREE.Math.degToRad(-90));
 				groupCenter.add(controls.imageClone);
 				controls.imageClone.rotateX(THREE.Math.degToRad(35));
@@ -917,14 +868,6 @@ function main(language) {
 				console.clear();
 				controls.emptyScene();
 				controls.createScenary();
-				break;
-			case 4: // Previous button
-				controls.cameraOption = controls.cameraOption > 0 ? controls.cameraOption - 1 : controls.cameraQuantity - 1;
-				controls.updateCameraPosition();
-				break;
-			case 5: // Next button
-				controls.cameraOption = controls.cameraOption < 2 ? controls.cameraOption + 1 : 0;
-				controls.updateCameraPosition();
 				break;
 		}
 	}
@@ -954,7 +897,7 @@ function main(language) {
 
 	// Only verify if has a collision with the pictures
 	function checkRaycasterClonePictures() {
-		if (selectedImage == null) {
+		if (selectedImage === null) {
 			// FIX the bug of change the picture when moving above another picture
 			raycasterPictures.setFromCamera(
 				{ x: marker.position.x, y: marker.position.y },
@@ -969,7 +912,7 @@ function main(language) {
 					// picture is not visible, only the clone it is
 					controls.imageClone.position.x = pictureLooked.position.x;
 					controls.imageClone.position.y = pictureLooked.position.y;
-					controls.imageClone.position.z = pictureLooked.position.z  + 0.2;
+					controls.imageClone.position.z = pictureLooked.position.z + 0.2;
 					controls.imageClone.material = pictureLooked.material.clone();
 				}
 			}
@@ -977,7 +920,6 @@ function main(language) {
 	}
 
 	// A cor do espaço de imagem na pagina muda pra verde
-
 	function checkRaycasterOnImageAtPages() {
 		if (objectLooked != null && selectedImage != null && objectLooked.objectType == 2
 		) {
@@ -1000,11 +942,8 @@ function main(language) {
 		switch (controls.state) {
 			case 0: // Game Running
 				controls.timer.updateTime(dt);
-				if (controls.cameraOption == 0) {
-					checkRaycasterOnImageAtPages();
-					checkRaycasterClonePictures();
-					// movePictureFromPanel();
-				}
+				checkRaycasterOnImageAtPages();
+				checkRaycasterClonePictures();
 				break;
 			case 1: // Victory
 				break;
