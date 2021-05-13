@@ -817,6 +817,7 @@ function main(language) {
 		}
 		if (selectedImage !== null && controls.state !== 2) {
 			// Drop the picture
+			objectImagePlane.material.color = new THREE.Color("rgb(255,255,255)");
 			objectImagePlane = null;
 			selectedImage.visible = true;
 			controls.imageClone.position.set(-100, -100, -100);
@@ -845,16 +846,11 @@ function main(language) {
 			case 1: // Collide with image
 				selectedImage = objectLooked;
 				selectedImage.visible = false;
-				// controls.imageClone.position.x = marker.position.x;
-				// controls.imageClone.position.y = 0.1;
-				// controls.imageClone.position.z = -6.35;
-				// console.log(controls.imageClone);
 				controls.imageClone.scale.set(0.75, 0.75, 0.75);
 				controls.imageClone.position.x = marker.position.x;
 				controls.imageClone.position.y = 0.1;
 				controls.imageClone.position.z = -1.35;
 				controls.imageClone.rotateX(THREE.Math.degToRad(-90));
-
 				groupCenter.add(controls.imageClone);
 				controls.imageClone.rotateX(THREE.Math.degToRad(35));
 				let materialAux = controls.imageClone.material.clone();
