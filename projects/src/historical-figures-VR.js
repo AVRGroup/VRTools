@@ -145,10 +145,7 @@ function main(language) {
 		sizeButton: 5,	//1,75
 
 		// Camera
-		cameraOption: 1,
-		cameraQuantity: 3,
 		defaultCamera: null,
-		cameraPositionPanel: new THREE.Group(),
 
 		// Functions
 		animationBook: function () {
@@ -192,35 +189,6 @@ function main(language) {
             this.buttons[0].position.set(11.6, 20.25, -11.9);
             this.buttons[0].objectType = 3;
             scene.add(this.buttons[0]); 
-			let buttonCameraGeometry = new THREE.PlaneGeometry(this.sizeButton, this.sizeButton, 0.1, 0.1);
-            let buttonCameraMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load(`./assets/icons/${nameFiles.previous}`), side: THREE.DoubleSide});
-            let buttonCamera = new THREE.Mesh(buttonCameraGeometry, buttonCameraMaterial);
-			buttonCamera.position.set(0, 2, 0.1);
-            this.buttons.push(buttonCamera);
-			this.cameraPositionPanel.add(buttonCamera);
-            this.buttons[1].objectType = 4;
-			buttonCameraGeometry = new THREE.PlaneGeometry(this.sizeButton, this.sizeButton, 0.1, 0.1);
-            buttonCameraMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load(`./assets/icons/${nameFiles.next}`), side: THREE.DoubleSide});
-            buttonCamera = new THREE.Mesh(buttonCameraGeometry, buttonCameraMaterial);
-			buttonCamera.position.set(0, -5, 0.1);
-            this.buttons.push(buttonCamera);
-			this.cameraPositionPanel.add(buttonCamera);
-            this.buttons[2].objectType = 5;
-		},
-		createCameraPositionPanel: function(){
-			let panelGeometry = new THREE.PlaneGeometry(10, 21, 0.1, 0.1);
-            let panelMaterial = new THREE.MeshBasicMaterial({
-				color: 0x00000, side: THREE.DoubleSide
-			});
-            let panelMesh = new THREE.Mesh(panelGeometry, panelMaterial);
-			this.cameraPositionPanel.add(panelMesh);
-			this.cameraPositionPanel.position.set(18.0, 11.2, -7.95);
-			scene.add(this.cameraPositionPanel);
-			let titleGeometry = new THREE.PlaneGeometry(10, 5, 0.1, 0.1);
-            let titleMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load(`./assets/textures/historical-figures/${nameFiles.changeCameraTitle}`), side: THREE.DoubleSide});
-            let title = new THREE.Mesh(titleGeometry, titleMaterial);
-			this.cameraPositionPanel.add(title);
-			title.position.set(0, 8, 0.1);
 		},
 		createImageClone: function () {
 			let panelGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
@@ -575,14 +543,12 @@ function main(language) {
             scene.add(nameBox);
 		},
 		createScenary: function () {
-			this.createCameraPositionPanel();
-
 			let camera = new THREE.PerspectiveCamera(
 				50, window.innerWidth / window.innerHeight,
 				0.1, 1000
 			); 
 			camera.up.set(0, 1, 0);
-			camera.position.set(-5 + this.cameraOption * 5, 10, 6);
+			camera.position.set(0, 10, 6);
 			this.defaultCamera = camera;
 
 			// VR cameras attributes
@@ -655,7 +621,6 @@ function main(language) {
 
 			this.book.rotateX(THREE.Math.degToRad(10));
 			this.book.position.set(0, this.book.position.y + 1, 0);
-			this.cameraPositionPanel.rotateY(THREE.Math.degToRad(-45));
 
 			// Pages of book
 			for (let i = 0; i < this.book.children.length; i++) {
@@ -702,8 +667,6 @@ function main(language) {
 			objectRaycaster = [];
 			objectRaycasterClonePictures = [];
 			this.imageClone = null;
-			this.cameraOption = 1;
-			this.cameraPanel = new THREE.Group();
 			this.book = new THREE.Group();
 		},
 		removeEntity: function (object) {
@@ -774,7 +737,6 @@ function main(language) {
 		},
 		updateCameraPosition: function(){
 			this.defaultCamera.position.set(-5 + this.cameraOption * 5, 10, 6 + 0);
-			// this.defaultCamera.position.set(-5 + this.cameraOption * 5, 11, 4.5);
 			user.position.set(this.defaultCamera.position.x, this.defaultCamera.position.y, this.defaultCamera.position.z);
 		},
 	};
@@ -843,7 +805,7 @@ function main(language) {
 	}
 
 	function onSelectEnd(event) {
-		if (objectLooked != null && objectLooked.objectType == 2) {
+		if (objectLooked != null && objectLooked.objectType === 2) {
 			if (selectedImage != null) {
 				if (objectLooked.indexPicture == selectedImage.indexPicture) {
 					objectLooked.material = selectedImage.material.clone(); // Generate a clone of material and replace on image plane
@@ -872,7 +834,7 @@ function main(language) {
 			// Drop the picture
 			selectedImage.visible = true;
 			controls.imageClone.position.set(-100, -100, -100);
-			controls.imageClone.rotation.set(0,0,0);
+			controls.imageClone.rotation.set(0, 0, 0);
 			groupCenter.children = [];
 		}
 		selectedImage = null;
@@ -882,7 +844,7 @@ function main(language) {
 		switch (objectLooked.objectType) {
 			case 0:
 				if (objectLooked.sheet.animationAngle == 0) {
-					//Don't rotate if the page is moving
+					// Don't rotate if the page is moving
 					if (objectLooked.sheet.sideOption == 0) {
 						objectLooked.sheet.sideOption = 1;
 						controls.currentSheet++;
@@ -918,14 +880,6 @@ function main(language) {
 				controls.emptyScene();
 				controls.createScenary();
 				break;
-			case 4: // Previous button
-				controls.cameraOption = controls.cameraOption > 0 ? controls.cameraOption - 1 : controls.cameraQuantity - 1;
-				controls.updateCameraPosition();
-				break;
-			case 5: // Next button
-				controls.cameraOption = controls.cameraOption < 2 ? controls.cameraOption + 1 : 0;
-				controls.updateCameraPosition();
-				break;
 		}
 	}
 
@@ -955,6 +909,8 @@ function main(language) {
 	// Only verify if has a collision with the pictures
 	function checkRaycasterClonePictures() {
 		if (selectedImage == null) {
+			console.log("Aqui");
+
 			// FIX the bug of change the picture when moving above another picture
 			raycasterPictures.setFromCamera(
 				{ x: marker.position.x, y: marker.position.y },
@@ -969,7 +925,7 @@ function main(language) {
 					// picture is not visible, only the clone it is
 					controls.imageClone.position.x = pictureLooked.position.x;
 					controls.imageClone.position.y = pictureLooked.position.y;
-					controls.imageClone.position.z = pictureLooked.position.z  + 0.2;
+					controls.imageClone.position.z = pictureLooked.position.z + 0.2;
 					controls.imageClone.material = pictureLooked.material.clone();
 				}
 			}
@@ -977,7 +933,6 @@ function main(language) {
 	}
 
 	// A cor do espaço de imagem na pagina muda pra verde
-
 	function checkRaycasterOnImageAtPages() {
 		if (objectLooked != null && selectedImage != null && objectLooked.objectType == 2
 		) {
@@ -1000,11 +955,8 @@ function main(language) {
 		switch (controls.state) {
 			case 0: // Game Running
 				controls.timer.updateTime(dt);
-				if (controls.cameraOption == 0) {
-					checkRaycasterOnImageAtPages();
-					checkRaycasterClonePictures();
-					// movePictureFromPanel();
-				}
+				checkRaycasterOnImageAtPages();
+				checkRaycasterClonePictures();
 				break;
 			case 1: // Victory
 				break;
