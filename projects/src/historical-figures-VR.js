@@ -667,7 +667,7 @@ function main(language) {
 		},
 		removePictureFromWall: function (image, imagePlane) {
 			for (let i = 0; i < this.pictures.length; i++) {
-				if (this.pictures[i].indexPicture == image.indexPicture) {
+				if (this.pictures[i].indexPicture === image.indexPicture) {
 					this.pictures.splice(i, 1);
 					break;
 				}
@@ -691,21 +691,19 @@ function main(language) {
 			}
 
 			for (let j = 0; j < objectRaycasterClonePictures.length; j++) {
-				if ( objectRaycasterClonePictures[j].indexPicture == image.indexPicture) {
+				if (objectRaycasterClonePictures[j].indexPicture === image.indexPicture) {
 					objectRaycasterClonePictures.splice(j, 1);
 					break;
 				}
 			}
 			this.removeEntity(image);
 			objectLooked = null;
-			selectedImage = null;
 			controls.imageClone.position.set(-100, -100, -100);
 			controls.imageClone.rotateX(THREE.Math.degToRad(90));
 		},
 		removeAllPictures: function () {
 			for (let i = 0; i < this.pictures.length; i++) {
-				let aux = this.pictures[i];
-				this.removeEntity(aux);
+				this.removeEntity(this.pictures[i]);
 			}
 			objectRaycasterClonePictures = [];
 			objectLooked = null;
@@ -812,12 +810,12 @@ function main(language) {
 						controls.removeAllPictures();
 						controls.messageLoose.visible = true;
 					}
+					objectImagePlane.material.color = new THREE.Color("rgb(255,255,255)");
 				}
 			}
 		}
 		if (selectedImage !== null && controls.state !== 2) {
 			// Drop the picture
-			objectImagePlane.material.color = new THREE.Color("rgb(255,255,255)");
 			objectImagePlane = null;
 			selectedImage.visible = true;
 			controls.imageClone.position.set(-100, -100, -100);
@@ -884,14 +882,11 @@ function main(language) {
 		let intersects = getIntersections(objectRaycaster);
 		if (intersects.length > 0) {
 			objectLooked = intersects[0].object;
-			pointCollisionRayCaster = intersects[0].point;
 			if (!objectLooked.visible) {
 				objectLooked = null;
-				pointCollisionRayCaster = null;
 			}
 		} else {
 			objectLooked = null;
-			pointCollisionRayCaster = null;
 		}
 	}
 
@@ -921,7 +916,7 @@ function main(language) {
 
 	// A cor do espaço de imagem na pagina muda pra verde
 	function checkRaycasterOnImageAtPages() {
-		if (objectLooked != null && selectedImage != null && objectLooked.objectType == 2
+		if (objectLooked != null && selectedImage != null && objectLooked.objectType === 2
 		) {
 			objectImagePlane = objectLooked;
 			objectImagePlane.material.color = new THREE.Color("rgb(0,180,0)");
