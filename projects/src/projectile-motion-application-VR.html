@@ -27,12 +27,6 @@
             border: #444 1px solid;
         }
 
-        #again {
-            background-color: rgba(205, 255, 205, 0.75);
-            color: #272;
-            border: #272 1px solid;
-        }
-
         @media only screen and (min-width: 768px) {
             .panel {
                 width: 45%;
@@ -54,15 +48,23 @@
                 const self = this;
                 const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
                 const messages = TRANSLATION.currentLang === TRANSLATION.EN_US ?
-                    ['The crate was released...', 'The crate hit the ground.', 'The crate hit the target!']
+                    ['The crate was released...', 'The crate hit the ground.', 'You win!\nPress your action button to start again!']
                     :
-                    ['A caixa foi solta...', 'A caixa atingiu o solo.', 'A caixa atingiu o alvo!'];
+                    ['A caixa foi solta...', 'A caixa atingiu o solo.', 'Você ganhou!\nAperte seu botao de açao para começar de novo!'];
                 const isHandsfree = new URLSearchParams(window.location.search).get('handsfree') === 'true';
 
                 if (isHandsfree) {
                     vrInterface.addButton('myButton', '#dropTexture', () => {
-                        vrInterface.showMessage(messages[0])
-                        self.dropCrate();
+                        if (!self.isPaused && !self.released) {
+                            vrInterface.showMessage(messages[0])
+                            self.dropCrate();
+                            self.released = true;
+                            vrInterface.showMessage(messages[0])
+                        }
+
+                        if (self.win) {
+                            self.el.sceneEl.exitVR();
+                        }
                     });
                 }
                 else {
@@ -71,6 +73,7 @@
                 }
 
                 vrInterface.hide()
+                vrInterface.showSideText(''); // there's some bug in showSideText requiring to call it here
                 vrInterface.isToChangeTheta = true;
 
                 this.isPaused = true;
@@ -120,11 +123,24 @@
 
                     if (self.isDropping) {
                         // r^2 = 11.5^2 = 132.25
-                        if ((self.crate.position.x * self.crate.position.x) + (self.crate.position.z * self.crate.position.z) <= 132.25) {
-                            vrInterface.showMessage(messages[2]);
-                            self.winSound.play();
+                        if ((self.crate.position.x * self.crate.position.x) + (self.crate.position.z * self.crate.position.z) >= 132.25) {
                             self.win = true;
-                            self.el.sceneEl.exitVR();
+                            self.winSound.play();
+                            pause();
+
+                            vrInterface.isToChangeTheta = false;
+                            self.el.setAttribute('vr-interface', {
+                                theta: (self.camera.rotation.y * 180 / Math.PI) + 30,
+                                rho: 0,
+                                sideTextRotation: -30,
+                                messageBG: '#509000',
+                            });
+                            vrInterface.showSideText(messages[2]);
+
+                            if (isHandsfree) {
+                                vrInterface.buttons[0].material.map = new THREE.TextureLoader().load('assets/textures/projectile-motion/play-again.png');
+                                vrInterface.buttons[0].material.needsUpdate = true;
+                            }
                         }
                         else {
                             vrInterface.showMessage(messages[1])
@@ -140,7 +156,20 @@
                 this.el.sceneEl.addEventListener('enter-vr', () => {
                     if (self.win) {
                         self.win = false;
-                        document.querySelector('#again').style.display = 'none';
+                        document.querySelector('#info').style.display = 'none';
+
+                        vrInterface.isToChangeTheta = true;
+                        vrInterface.hideSideText();
+                        self.el.setAttribute('vr-interface', {
+                            rho: -15,
+                            messageBG: '#000000',
+                        });
+
+                        if (isHandsfree) {
+                            vrInterface.buttons[0].material.map = new THREE.TextureLoader().load('assets/textures/projectile-motion/dropButton.png');
+                            vrInterface.buttons[0].material.needsUpdate = true;
+                        }
+
                         self.randomizeAirplanePosition();
                     }
                     else {
@@ -159,13 +188,12 @@
                 });
 
                 this.el.sceneEl.addEventListener('exit-vr', () => {
-                    if (self.win) {
-                        document.querySelector('#again').style.display = 'block';
-                    }
-                    else {
-                        document.querySelector('#info').style.display = 'block';
-                    }
+                    document.querySelector('#info').style.display = 'block';
+                    vrInterface.hide();
+                    pause();
+                });
 
+                function pause() {
                     self.isPaused = true;
 
                     self.airplaneSound.pause();
@@ -174,9 +202,7 @@
                     self.crate.el.body.mass = 0;
                     self.pauseVelAux = self.crate.el.body.velocity.clone();
                     self.crate.el.body.velocity.set(0, 0, 0);
-
-                    vrInterface.hide();
-                });
+                }
 
                 this.el.sceneEl.addEventListener('loaded', () => {
                     document.querySelector('#info').style.display = 'block';
@@ -187,6 +213,10 @@
                         self.dropCrate();
                         self.released = true;
                         vrInterface.showMessage(messages[0])
+                    }
+
+                    if (self.win) {
+                        self.el.sceneEl.exitVR();
                     }
                 });
             },
@@ -264,11 +294,6 @@
             start.</p>
     </div>
 
-    <div id="again" class="panel">
-        <h2>Congratulations, you Won!</h2>
-        <p>Press the VR button in the bottom right corner to play again.</p>
-    </div>
-
     <a-scene id="scene" physics="friction: 0.8; restitution: 0.1">
         <a-assets timeout="3000">
             <a-asset-item id="airplaneModel" src="assets/models/airplane.glb"></a-asset-item>
@@ -276,7 +301,7 @@
             <img id="grass" src="assets/textures/grass.png">
             <img id="crateTexture" src="assets/textures/crate.png">
             <img id="targetTexture" src="assets/textures/target1.png">
-            <img id="dropTexture" src="assets/textures/dropButton.png">
+            <img id="dropTexture" src="assets/textures/projectile-motion/dropButton.png">
         </a-assets>
 
         <a-entity light=" type: ambient; color: #fff; intensity: 0.1">
@@ -308,7 +333,7 @@
         </a-entity>
 
         <a-entity rotation="0 90 0"
-            vr-interface="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.25; theta: 0; rho: -15; movementBar: false; transparency: true; bgTransparency: false; sideTextSize: 1 4"
+            vr-interface="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.25; theta: 0; rho: -15; movementBar: false; transparency: true; bgTransparency: false; sideTextSize: 0.75 1.5"
             button-controls appcode>
         </a-entity>
 
