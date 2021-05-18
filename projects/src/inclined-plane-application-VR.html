@@ -174,7 +174,7 @@
                     switch (language) {
                         case "en-US":
                             {
-                                
+
                                 string += `Status: ${this.world.gravity.y < 0 ? 'Running' : 'Paused'}\n`;
                                 string += `Angle: ${Math.round(this.angle * 180 / Math.PI)} deg\n`;
                                 string += `Friction coef: ${this.rampFriction * 250}\n`;
@@ -187,7 +187,7 @@
                             }
                         case "pt-BR":
                             {
-                                
+
                                 string += `Status: ${this.world.gravity.y < 0 ? 'Em Execução' : 'Pausado'}\n`;
                                 string += `Ângulo: ${Math.round(this.angle * 180 / Math.PI)} graus\n`;
                                 string += `Coeficiente de Atrito: ${this.rampFriction * 250}\n`;
@@ -198,11 +198,11 @@
                                 string += `Normal: ${(this.cube.body.mass * this.gravity * Math.cos(this.angle) * -1).toFixed(2)} N\n`;
                                 break;
                             }
-                        
+
                     }
                 }
                 else {
-                    
+
                     string += `Status: ${this.world.gravity.y < 0 ? 'Running' : 'Paused'}\n`;
                     string += `Angle: ${Math.round(this.angle * 180 / Math.PI)} deg\n`;
                     string += `Friction coef: ${this.rampFriction * 250}\n`;
@@ -399,7 +399,8 @@
         </a-entity>
 
         <a-entity
-            vr-interface="dimension: 3 2; theta: 135; transparency: true; gap: 0.01 0.01; border: 1 #6d7584; messageSize: 1.3; sideTextSize: 0.75 0.6; sideTextRotation: -30; bgTransparency: false;"
+            vr-interface="dimension: 3 2; theta: 135; transparency: true; gap: 0.01 0.01; border: 1 #6d7584; 
+            font:assets/fonts/roboto-msdf.json; negate: false; messageSize: 1.3; sideTextSize: 0.75 0.6; sideTextRotation: -30; bgTransparency: false;"
             app>
         </a-entity>
 

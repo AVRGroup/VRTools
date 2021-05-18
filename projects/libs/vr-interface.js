@@ -112,6 +112,8 @@ AFRAME.registerComponent('vr-interface', {
     transparency: { type: 'bool', default: false },
     visible: { type: 'bool', default: true },
     gap: { type: 'vec2', default: { x: 0.00, y: 0.00 } },
+    font: { type: 'string' },
+    negate: { type: 'bool', default: true },
     messagePos: {
       default: 'top',
       oneof: ['top', 'bottom', 'left', 'right'],
@@ -226,11 +228,11 @@ AFRAME.registerComponent('vr-interface', {
       this.cursor.setAttribute('material', { color: data.cursorColor, shader: 'flat' });
     }
 
-    this.message.setAttribute('text', { align: 'center', width: data.messageSize, height: data.messageSize, color: new THREE.Color(data.messageColor) });
+    this.message.setAttribute('text', { align: 'center', font: data.font, negate: data.negate, width: data.messageSize, height: data.messageSize, color: new THREE.Color(data.messageColor) });
     this.message.setAttribute('geometry', { primitive: 'plane', height: data.messageSize * 0.1, width: data.messageSize });
     this.message.setAttribute('material', { color: new THREE.Color(data.messageBG), shader: 'flat', transparent: data.bgTransparency, opacity: data.bgTransparency ? 0.75 : 1 });
 
-    this.sideText.setAttribute('text', { align: 'center', width: data.messageSize, height: data.messageSize, transparent: true, color: new THREE.Color(data.messageColor) });
+    this.sideText.setAttribute('text', { align: 'center', font: data.font, negate: data.negate, width: data.messageSize, height: data.messageSize, transparent: true, color: new THREE.Color(data.messageColor) });
     this.sideText.setAttribute('geometry', { primitive: 'plane', height: data.sideTextSize.y, width: data.sideTextSize.x });
     this.sideText.setAttribute('material', { color: new THREE.Color(data.messageBG), shader: 'flat', transparent: data.bgTransparency, opacity: data.bgTransparency ? 0.75 : 1 });
 

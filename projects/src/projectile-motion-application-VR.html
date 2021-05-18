@@ -50,7 +50,7 @@
                 const messages = TRANSLATION.currentLang === TRANSLATION.EN_US ?
                     ['The crate was released...', 'The crate hit the ground.', 'You win!\nPress your action button to start again!']
                     :
-                    ['A caixa foi solta...', 'A caixa atingiu o solo.', 'Você ganhou!\nAperte seu botao de açao para começar de novo!'];
+                    ['A caixa foi solta...', 'A caixa atingiu o solo.', 'Você ganhou!\nAperte seu botão de ação para começar de novo!'];
                 const isHandsfree = new URLSearchParams(window.location.search).get('handsfree') === 'true';
 
                 if (isHandsfree) {
@@ -123,7 +123,7 @@
 
                     if (self.isDropping) {
                         // r^2 = 11.5^2 = 132.25
-                        if ((self.crate.position.x * self.crate.position.x) + (self.crate.position.z * self.crate.position.z) >= 132.25) {
+                        if ((self.crate.position.x * self.crate.position.x) + (self.crate.position.z * self.crate.position.z) <= 132.25) {
                             self.win = true;
                             self.winSound.play();
                             pause();
@@ -333,7 +333,8 @@
         </a-entity>
 
         <a-entity rotation="0 90 0"
-            vr-interface="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.25; theta: 0; rho: -15; movementBar: false; transparency: true; bgTransparency: false; sideTextSize: 0.75 1.5"
+            vr-interface="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.25; theta: 0; rho: -15; movementBar: false; 
+            font:assets/fonts/roboto-msdf.json; negate: false; transparency: true; bgTransparency: false; sideTextSize: 0.75 1.5"
             button-controls appcode>
         </a-entity>
 
