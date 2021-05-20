@@ -116,43 +116,135 @@
                 this.vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
                 const rig = document.querySelector('#rig');
                 const camera = document.querySelector('#camera').object3D;
+                
+                var language = location.search;
+                let string = ``;
+                if (language.length != 0) {
+                    let aux = "?lang=";
+                    language = language.substring(aux.length, language.length);
+                    switch (language) {
+                        case "en-US":
+                            {
+                                this.vrInterface.addButton('start', '#start', () => {
+                                     self.startSimulation();
+                                });
 
-                this.vrInterface.addButton('start', '#start', () => {
-                    self.startSimulation();
-                });
+                                this.posIdx = 0;
+                                this.positions = [
+                                    { cameraPos: '5 3.4 5', interfacePos: '-0.7 0 0.7', infoPos: '3.75 5 5.2', rotation: 135 },
+                                    { cameraPos: '5 0 3', interfacePos: '0 0 1', infoPos: '4.3 1.6 4', rotation: 180 },
+                                    { cameraPos: '0 0 7', interfacePos: '-1 0 0', infoPos: '-1 1.6 6.3', rotation: 90 },
+                                ]
+                                this.vrInterface.addButton('changeCamera', '#changeCamera', () => {
+                                    this.posIdx = this.posIdx == 2 ? 0 : this.posIdx + 1;
 
-                this.posIdx = 0;
-                this.positions = [
-                    { cameraPos: '5 3.4 5', interfacePos: '-0.7 0 0.7', infoPos: '3.75 5 5.2', rotation: 135 },
-                    { cameraPos: '5 0 3', interfacePos: '0 0 1', infoPos: '4.3 1.6 4', rotation: 180 },
-                    { cameraPos: '0 0 7', interfacePos: '-1 0 0', infoPos: '-1 1.6 6.3', rotation: 90 },
-                ]
-                this.vrInterface.addButton('changeCamera', '#changeCamera', () => {
-                    this.posIdx = this.posIdx == 2 ? 0 : this.posIdx + 1;
+                                    let { cameraPos, interfacePos, infoPos, rotation } = this.positions[this.posIdx];
 
-                    let { cameraPos, interfacePos, infoPos, rotation } = this.positions[this.posIdx];
+                                    rig.setAttribute('position', cameraPos);
+                                    rig.setAttribute('rotation', { x: 0, y: rotation - (camera.rotation.y * 180 / Math.PI), z: 0 });
+                                    this.vrInterface.updatePosition({ theta: rotation });
+                                });
 
-                    rig.setAttribute('position', cameraPos);
-                    rig.setAttribute('rotation', { x: 0, y: rotation - (camera.rotation.y * 180 / Math.PI), z: 0 });
-                    this.vrInterface.updatePosition({ theta: rotation });
-                });
+                                this.vrInterface.addButton('increaseFriction', '#increaseFriction', () => {
+                                    self.changeFriction();
+                                });
 
-                this.vrInterface.addButton('increaseFriction', '#increaseFriction', () => {
-                    self.changeFriction();
-                });
+                                this.vrInterface.addButton('decreaseFriction', '#decreaseFriction', () => {
+                                    self.changeFriction(-1);
+                                });
 
-                this.vrInterface.addButton('decreaseFriction', '#decreaseFriction', () => {
-                    self.changeFriction(-1);
-                });
+                                this.vrInterface.addButton('increaseAngle', '#increaseAngle', () => {
+                                    self.changeAngle();
+                                });
 
-                this.vrInterface.addButton('increaseAngle', '#increaseAngle', () => {
-                    self.changeAngle();
-                });
+                                this.vrInterface.addButton('decreaseAngle', '#decreaseAngle', () => {
+                                    self.changeAngle(-1);
+                                });
 
-                this.vrInterface.addButton('decreaseAngle', '#decreaseAngle', () => {
-                    self.changeAngle(-1);
-                });
+                                break;
+                            }
+                        case "pt-BR":
+                            {
+                                this.vrInterface.addButton('start-pt', '#start-pt', () => {
+                                    self.startSimulation();
+                                });
 
+                                this.posIdx = 0;
+                                this.positions = [
+                                    { cameraPos: '5 3.4 5', interfacePos: '-0.7 0 0.7', infoPos: '3.75 5 5.2', rotation: 135 },
+                                    { cameraPos: '5 0 3', interfacePos: '0 0 1', infoPos: '4.3 1.6 4', rotation: 180 },
+                                    { cameraPos: '0 0 7', interfacePos: '-1 0 0', infoPos: '-1 1.6 6.3', rotation: 90 },
+                                ]
+                                this.vrInterface.addButton('changeCamera-pt', '#changeCamera-pt', () => {
+                                    this.posIdx = this.posIdx == 2 ? 0 : this.posIdx + 1;
+
+                                    let { cameraPos, interfacePos, infoPos, rotation } = this.positions[this.posIdx];
+
+                                    rig.setAttribute('position', cameraPos);
+                                    rig.setAttribute('rotation', { x: 0, y: rotation - (camera.rotation.y * 180 / Math.PI), z: 0 });
+                                    this.vrInterface.updatePosition({ theta: rotation });
+                                });
+
+                                this.vrInterface.addButton('increaseFriction-pt', '#increaseFriction-pt', () => {
+                                    self.changeFriction();
+                                });
+
+                                this.vrInterface.addButton('decreaseFriction-pt', '#decreaseFriction-pt', () => {
+                                    self.changeFriction(-1);
+                                });
+
+                                this.vrInterface.addButton('increaseAngle-pt', '#increaseAngle-pt', () => {
+                                    self.changeAngle();
+                                });
+
+                                this.vrInterface.addButton('decreaseAngle-pt', '#decreaseAngle-pt', () => {
+                                    self.changeAngle(-1);
+                                });
+
+                                    break;
+                            }
+
+                    }
+                }
+                else {
+                    this.vrInterface.addButton('start', '#start', () => {
+                        self.startSimulation();
+                    });
+
+                    this.posIdx = 0;
+                    this.positions = [
+                        { cameraPos: '5 3.4 5', interfacePos: '-0.7 0 0.7', infoPos: '3.75 5 5.2', rotation: 135 },
+                        { cameraPos: '5 0 3', interfacePos: '0 0 1', infoPos: '4.3 1.6 4', rotation: 180 },
+                        { cameraPos: '0 0 7', interfacePos: '-1 0 0', infoPos: '-1 1.6 6.3', rotation: 90 },
+                    ]
+                    this.vrInterface.addButton('changeCamera', '#changeCamera', () => {
+                        this.posIdx = this.posIdx == 2 ? 0 : this.posIdx + 1;
+
+                        let { cameraPos, interfacePos, infoPos, rotation } = this.positions[this.posIdx];
+
+                        rig.setAttribute('position', cameraPos);
+                        rig.setAttribute('rotation', { x: 0, y: rotation - (camera.rotation.y * 180 / Math.PI), z: 0 });
+                        this.vrInterface.updatePosition({ theta: rotation });
+                    });
+
+                    this.vrInterface.addButton('increaseFriction', '#increaseFriction', () => {
+                        self.changeFriction();
+                    });
+
+                    this.vrInterface.addButton('decreaseFriction', '#decreaseFriction', () => {
+                        self.changeFriction(-1);
+                    });
+
+                    this.vrInterface.addButton('increaseAngle', '#increaseAngle', () => {
+                        self.changeAngle();
+                    });
+
+                    this.vrInterface.addButton('decreaseAngle', '#decreaseAngle', () => {
+                        self.changeAngle(-1);
+                    });
+
+                }
+                
                 // window.addEventListener('keydown', (e) => {
                 //     // console.log(e.keyCode);
                 //     e.keyCode === 32 && this.changeAngle();
@@ -345,6 +437,13 @@
             <img id="decreaseFriction" src="assets/icons/decrease-friction.png">
             <img id="increaseAngle" src="assets/icons/increase-angle.png">
             <img id="decreaseAngle" src="assets/icons/decrease-angle.png">
+            
+            <img id="start-pt" src="assets/icons/start(pt-BR).png">
+            <img id="changeCamera-pt" src="assets/icons/change-camera(pt-BR).png">
+            <img id="increaseFriction-pt" src="assets/icons/increase-friction(pt-BR).png">
+            <img id="decreaseFriction-pt" src="assets/icons/decrease-friction(pt-BR).png">
+            <img id="increaseAngle-pt" src="assets/icons/increase-angle(pt-BR).png">
+            <img id="decreaseAngle-pt" src="assets/icons/decrease-angle(pt-BR).png">
         </a-assets>
 
         <a-box id="box" material="src: #stone" position="0 2.74 -1.46" rotation="30 0 90"

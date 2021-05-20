@@ -50,96 +50,294 @@
 
                 this.hide = false;
 
-                vrInterface.addButton('previous', '#previous', () => {
-                    let model = self.models[self.modelIndex];
+                var language = location.search;
 
-                    model.object3D.remove(self.highlight);
-                    model.object3D.visible = false;
+                if (language.length != 0) {
+                    let aux = "?lang=";
+                    language = language.substring(aux.length, language.length);
+                    switch (language) {
+                        case 'en-US': {
+                            vrInterface.addButton('previous', '#previous', () => {
+                                let model = self.models[self.modelIndex];
 
-                    if (self.modelIndex == 0) {
-                        self.modelIndex = self.models.length - 1;
-                    }
-                    else {
-                        self.modelIndex--;
-                    }
+                                model.object3D.remove(self.highlight);
+                                model.object3D.visible = false;
 
-                    model = self.models[self.modelIndex];
-                    model.object3D.add(self.highlight);
+                                if (self.modelIndex == 0) {
+                                    self.modelIndex = self.models.length - 1;
+                                }
+                                else {
+                                    self.modelIndex--;
+                                }
 
-                    self.highlight.position.copy(self.highlightSettings[self.modelIndex].pos);
-                    self.highlight.scale.copy(self.highlightSettings[self.modelIndex].scale);
+                                model = self.models[self.modelIndex];
+                                model.object3D.add(self.highlight);
 
-                    model.object3D.visible = true;
+                                self.highlight.position.copy(self.highlightSettings[self.modelIndex].pos);
+                                self.highlight.scale.copy(self.highlightSettings[self.modelIndex].scale);
 
-                    vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
-                });
+                                model.object3D.visible = true;
 
-                vrInterface.addButton('next', '#next', () => {
-                    let model = self.models[self.modelIndex];
+                                vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
+                            });
 
-                    model.object3D.remove(self.highlight);
-                    model.object3D.visible = false;
+                            vrInterface.addButton('next', '#next', () => {
+                                let model = self.models[self.modelIndex];
 
-                    if (self.modelIndex == self.models.length - 1) {
-                        self.modelIndex = 0;
-                    }
-                    else {
-                        self.modelIndex++;
-                    }
+                                model.object3D.remove(self.highlight);
+                                model.object3D.visible = false;
 
-                    model = self.models[self.modelIndex];
-                    model.object3D.add(self.highlight);
+                                if (self.modelIndex == self.models.length - 1) {
+                                    self.modelIndex = 0;
+                                }
+                                else {
+                                    self.modelIndex++;
+                                }
 
-                    self.highlight.position.copy(self.highlightSettings[self.modelIndex].pos);
-                    self.highlight.scale.copy(self.highlightSettings[self.modelIndex].scale);
+                                model = self.models[self.modelIndex];
+                                model.object3D.add(self.highlight);
 
-                    model.object3D.visible = true;
+                                self.highlight.position.copy(self.highlightSettings[self.modelIndex].pos);
+                                self.highlight.scale.copy(self.highlightSettings[self.modelIndex].scale);
 
-                    vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
-                });
+                                model.object3D.visible = true;
 
-                vrInterface.addButton('zoomIn', '#zoomIn', () => {
-                    if (self.zoomLevel < 1) {
-                        for (let i = 0; i < self.models.length; i++) {
-                            self.models[i].object3D.position.z += 0.5;
+                                vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
+                            });
 
+                            vrInterface.addButton('zoomIn', '#zoomIn', () => {
+                                if (self.zoomLevel < 1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z += 0.5;
+
+                                    }
+                                    self.zoomLevel++;
+                                    vrInterface.showMessage('Zoomed in');
+                                }
+                                else {
+                                    vrInterface.showMessage('Max zoom reached already');
+                                }
+                            });
+
+                            vrInterface.addButton('zoomOut', '#zoomOut', () => {
+                                if (self.zoomLevel > -1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z -= 0.5;
+
+                                    }
+                                    vrInterface.showMessage('Zoomed off');
+                                    self.zoomLevel--;
+                                }
+                                else {
+                                    vrInterface.showMessage('Min zoom reached already');
+                                }
+                            });
+
+                            vrInterface.addButton('rotation', '#rotation', () => {
+                                self.rotate = !self.rotate;
+                                vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
+                            });
+
+                            vrInterface.addButton('toggleHighlight', '#toggleHighlight', () => {
+                                self.highlight.visible = !self.highlight.visible;
+                                vrInterface.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
+                            });
+
+                            document.addEventListener('pointerlockchange', (event) => {
+                                vrInterface.show();
+                                self.hide = false;
+                            });
+                            break;
                         }
-                        self.zoomLevel++;
-                        vrInterface.showMessage('Zoomed in');
-                    }
-                    else {
-                        vrInterface.showMessage('Max zoom reached already');
-                    }
-                });
+                        case 'pt-BR': {
+                            vrInterface.addButton('previous-pt', '#previous-pt', () => {
+                                let model = self.models[self.modelIndex];
 
-                vrInterface.addButton('zoomOut', '#zoomOut', () => {
-                    if (self.zoomLevel > -1) {
-                        for (let i = 0; i < self.models.length; i++) {
-                            self.models[i].object3D.position.z -= 0.5;
+                                model.object3D.remove(self.highlight);
+                                model.object3D.visible = false;
 
+                                if (self.modelIndex == 0) {
+                                    self.modelIndex = self.models.length - 1;
+                                }
+                                else {
+                                    self.modelIndex--;
+                                }
+
+                                model = self.models[self.modelIndex];
+                                model.object3D.add(self.highlight);
+
+                                self.highlight.position.copy(self.highlightSettings[self.modelIndex].pos);
+                                self.highlight.scale.copy(self.highlightSettings[self.modelIndex].scale);
+
+                                model.object3D.visible = true;
+
+                                vrInterface.showMessage(`Modelo de ${model.getAttribute('name')} carregado`);
+                            });
+
+                            vrInterface.addButton('next-pt', '#next-pt', () => {
+                                let model = self.models[self.modelIndex];
+
+                                model.object3D.remove(self.highlight);
+                                model.object3D.visible = false;
+
+                                if (self.modelIndex == self.models.length - 1) {
+                                    self.modelIndex = 0;
+                                }
+                                else {
+                                    self.modelIndex++;
+                                }
+
+                                model = self.models[self.modelIndex];
+                                model.object3D.add(self.highlight);
+
+                                self.highlight.position.copy(self.highlightSettings[self.modelIndex].pos);
+                                self.highlight.scale.copy(self.highlightSettings[self.modelIndex].scale);
+
+                                model.object3D.visible = true;
+
+                                vrInterface.showMessage(`Modelo de ${model.getAttribute('name')} carregado`);
+                            });
+
+                            vrInterface.addButton('zoomIn-pt', '#zoomIn-pt', () => {
+                                if (self.zoomLevel < 1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z += 0.5;
+
+                                    }
+                                    self.zoomLevel++;
+                                    vrInterface.showMessage('Imagem Ampiada');
+                                }
+                                else {
+                                    vrInterface.showMessage('Ampliação máximo atingida');
+                                }
+                            });
+
+                            vrInterface.addButton('zoomOut-pt', '#zoomOut-pt', () => {
+                                if (self.zoomLevel > -1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z -= 0.5;
+
+                                    }
+                                    vrInterface.showMessage('Imagem Reduzida');
+                                    self.zoomLevel--;
+                                }
+                                else {
+                                    vrInterface.showMessage('Redução máxima atingida');
+                                }
+                            });
+
+                            vrInterface.addButton('rotation-pt', '#rotation-pt', () => {
+                                self.rotate = !self.rotate;
+                                vrInterface.showMessage(`Rotação está ${self.rotate ? 'ligada' : 'desligada'}`);
+                            });
+
+                            vrInterface.addButton('toggleHighlight-pt', '#toggleHighlight-pt', () => {
+                                self.highlight.visible = !self.highlight.visible;
+                                vrInterface.showMessage(`Destaque está ${self.highlight.visible ? 'ativado' : 'desativado'}`);
+                            });
+
+                            document.addEventListener('pointerlockchange', (event) => {
+                                vrInterface.show();
+                                self.hide = false;
+                            });
+                            break;
                         }
-                        vrInterface.showMessage('Zoomed off');
-                        self.zoomLevel--;
                     }
-                    else {
-                        vrInterface.showMessage('Min zoom reached already');
-                    }
-                });
+                } else {
+                    vrInterface.addButton('previous', '#previous', () => {
+                                let model = self.models[self.modelIndex];
 
-                vrInterface.addButton('rotation', '#rotation', () => {
-                    self.rotate = !self.rotate;
-                    vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
-                });
+                                model.object3D.remove(self.highlight);
+                                model.object3D.visible = false;
 
-                vrInterface.addButton('toggleHighlight', '#toggleHighlight', () => {
-                    self.highlight.visible = !self.highlight.visible;
-                    vrInterface.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
-                });
+                                if (self.modelIndex == 0) {
+                                    self.modelIndex = self.models.length - 1;
+                                }
+                                else {
+                                    self.modelIndex--;
+                                }
 
-                document.addEventListener('pointerlockchange', (event) => {
-                    vrInterface.show();
-                    self.hide = false;
-                });
+                                model = self.models[self.modelIndex];
+                                model.object3D.add(self.highlight);
+
+                                self.highlight.position.copy(self.highlightSettings[self.modelIndex].pos);
+                                self.highlight.scale.copy(self.highlightSettings[self.modelIndex].scale);
+
+                                model.object3D.visible = true;
+
+                                vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
+                            });
+
+                            vrInterface.addButton('next', '#next', () => {
+                                let model = self.models[self.modelIndex];
+
+                                model.object3D.remove(self.highlight);
+                                model.object3D.visible = false;
+
+                                if (self.modelIndex == self.models.length - 1) {
+                                    self.modelIndex = 0;
+                                }
+                                else {
+                                    self.modelIndex++;
+                                }
+
+                                model = self.models[self.modelIndex];
+                                model.object3D.add(self.highlight);
+
+                                self.highlight.position.copy(self.highlightSettings[self.modelIndex].pos);
+                                self.highlight.scale.copy(self.highlightSettings[self.modelIndex].scale);
+
+                                model.object3D.visible = true;
+
+                                vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
+                            });
+
+                            vrInterface.addButton('zoomIn', '#zoomIn', () => {
+                                if (self.zoomLevel < 1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z += 0.5;
+
+                                    }
+                                    self.zoomLevel++;
+                                    vrInterface.showMessage('Zoomed in');
+                                }
+                                else {
+                                    vrInterface.showMessage('Max zoom reached already');
+                                }
+                            });
+
+                            vrInterface.addButton('zoomOut', '#zoomOut', () => {
+                                if (self.zoomLevel > -1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z -= 0.5;
+
+                                    }
+                                    vrInterface.showMessage('Zoomed off');
+                                    self.zoomLevel--;
+                                }
+                                else {
+                                    vrInterface.showMessage('Min zoom reached already');
+                                }
+                            });
+
+                            vrInterface.addButton('rotation', '#rotation', () => {
+                                self.rotate = !self.rotate;
+                                vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
+                            });
+
+                            vrInterface.addButton('toggleHighlight', '#toggleHighlight', () => {
+                                self.highlight.visible = !self.highlight.visible;
+                                vrInterface.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
+                            });
+
+                            document.addEventListener('pointerlockchange', (event) => {
+                                vrInterface.show();
+                                self.hide = false;
+                            });
+                }
+
+
+               
 
                 this.el.addEventListener('buttondown', () => {
                     self.hide = !self.hide;
@@ -177,6 +375,13 @@
             <img id="zoomIn" src="assets/icons/zoomin.png">
             <img id="zoomOut" src="assets/icons/zoomout.png">
             <img id="toggleHighlight" src="assets/icons/highlight.png">
+
+            <img id="next-pt" src="assets/icons/next-(pt-BR).png">
+            <img id="previous-pt" src="assets/icons/previous-(pt-BR).png">
+            <img id="rotation-pt" src="assets/icons/rotation(pt-BR).png">
+            <img id="zoomIn-pt" src="assets/icons/zoomin-(pt-BR).png">
+            <img id="zoomOut-pt" src="assets/icons/zoomout-(pt-BR).png">
+            <img id="toggleHighlight-pt" src="assets/icons/highlight(pt-BR).png">
         </a-assets>
 
         <a-entity light="type: ambient; color: #fff; intensity: 0.3"></a-entity>
