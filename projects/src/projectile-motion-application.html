@@ -9,25 +9,28 @@
     <style>
         html,
         body {
-            background-color: #87CEEB;
+            background-color: #82b1a8;
             margin: 0;
             height: 100%;
             overflow: hidden;
         }
 
         #top {
-            border-top: rgb(120, 120, 120) solid 3px;
-            border-left: rgb(120, 120, 120) solid 3px;
-            border-right: rgb(120, 120, 120) solid 3px;
-
+            border-top: rgb(70, 70, 70) solid 3px;
+            border-left: rgb(70, 70, 70) solid 3px;
+            border-right: rgb(70, 70, 70) solid 3px;
+            border-bottom: rgb(70, 70, 70) solid 3px;
         }
 
         .middle {
-            border-left: rgb(120, 120, 120) solid 3px;
-            border-right: rgb(120, 120, 120) solid 3px;
+            border-left: rgb(70, 70, 70) solid 3px;
+            border-right: rgb(70, 70, 70) solid 3px;
         }
 
         .bottom {
+            border-left: rgb(70, 70, 70) solid 3px;
+            border-right: rgb(70, 70, 70) solid 3px;
+            border-bottom: rgb(70, 70, 70) solid 3px;
             margin-left: auto;
             margin-right: auto;
             width: 100;
@@ -35,18 +38,17 @@
         }
 
         #info {
-            font-size: 0.8em;
+            top: 8px;
+            font-size: 1em;
             position: absolute;
             margin-left: auto;
             margin-right: auto;
             left: 81%;
             right: auto;
             bottom: 5px;
-            background-color: rgba(220, 220, 220, 0.7);
             padding: 3px;
             text-align: center;
-            border: rgb(120, 120, 120) solid 3px;
-            max-height: 50%;
+            max-height: 40%;
             width: 100;
             display: block;
         }
@@ -65,82 +67,129 @@
             max-height: 22.5%;
         } */
 
-        #vars {
-            font-size: 1.2em;
-            position: absolute;
-            top: 25%;
-            left: 83.5%;
-            list-style-type: none;
-            width: 100;
-            display: block;
-        }
-
-            #vars li {
-                font-size: 0.8em;
-                top: 25%;
-                bottom: 25%;
-                background-color: rgba(220, 220, 220, 0.7);
-                padding: 3px;
-                width: 100;
-                display: block;
-            }
-
         #drop {
             width: 100;
             display: block;
-            font-size: 0.8em;
+            font-size: 1.2em;
             margin-top: 3px;
             text-align: center;
-            border: rgb(120, 120, 120) solid 2px;
+            border: rgb(70, 70, 70) solid 2px;
             border-radius: 8%;
             cursor: pointer;
         }
-        #show {
+
+        #switch {
             width: 100;
             display: block;
-            font-size: 0.8em;
+            font-size: 1.2em;
             margin-top: 3px;
             text-align: center;
-            border: rgb(120, 120, 120) solid 2px;
+            border: rgb(70, 70, 70) solid 2px;
             border-radius: 8%;
             cursor: pointer;
         }
+
+        .slidecontainer {
+            width: 100%; /* Width of the outside container */
+        }
+
+        /* The slider itself */
+        .slider {
+            -webkit-appearance: none;  /* Override default CSS styles */
+            appearance: none;
+            width: 100%; /* Full-width */
+            height: 25px; /* Specified height */
+            background: #d3d3d3; /* Grey background */
+            outline: none; /* Remove outline */
+            opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+            -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+            transition: opacity .2s;
+        }
+
+        /* Mouse-over effects */
+        .slider:hover {
+            opacity: 1; /* Fully shown on mouse-over */
+        }
+
+        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Override default look */
+            appearance: none;
+            width: 25px; /* Set a specific slider handle width */
+            height: 25px; /* Slider handle height */
+            background: #04AA6D; /* Green background */
+            cursor: pointer; /* Cursor on hover */
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px; /* Set a specific slider handle width */
+            height: 25px; /* Slider handle height */
+            background: #04AA6D; /* Green background */
+            cursor: pointer; /* Cursor on hover */
+        }
+        
     </style>
 </head>
 
 <body>
     <div id="three-stats"></div>
     <div id="physijs-stats"></div>
-    <div id="gui"></div>
+    <div id="panel">
+        <ul id="info">
+            <li id="top">Displacement:</li>
+            <li id="x" class="middle">x: -</li>
+            <li id="y" class="middle">y: -</li>
+            <li id="time" class="middle">Time:</li>
+            <li id="t" class="bottom">T: -</li>
+            <li id="drop">Drop Box</li>
+            <li id="switch">Switch Camera</li>
+            <div class="slidecontainer">
+                <li id="velo" > Velocity</li>
+                <span id="demo"></span>
+                <input type="range" min="20" max="50" value="30" class="slider" id="myRangeVelocity">
+                <li id="heig" >
+                
+                    Height</li><span id="demo1"></span>
+                <input type="range" min="50" max="100" value="100" class="slider" id="myRangeHeight">
+               
+            </div>
 
-    <ul id="vars">
-        <li id="top">Displacement:</li>
-        <li id="x" class="middle">x: -</li>
-        <li id="y" class="middle">y: -</li>
-        <li id="time" class="middle">Time:</li>
-        <li id="t" class="bottom">t: -</li>
-        <li id="drop">Drop Box</li>
-        <li id="show">Show Info</li>
-    </ul>
 
-    <div id="info">
-        <div id="info1">
-            The displacement along x-axis and y-axis formulas are given below:
-        </div>
+            <div id="info1">
+                The displacement along x-axis and y-axis formulas are given below:
+            </div>
 
-        $$ \Delta x = v_xt.$$
-        $$ \Delta y={v}_{0y}t-\frac{1}{2}{\mathrm{gt}}^{2}\\ .$$
+            $$ \Delta x = v_xt.$$
+            $$ \Delta y={v}_{0y}t-\frac{1}{2}{\mathrm{gt}}^{2}\\ .$$
+        </ul>
     </div>
-
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../libs/three/three.js"></script>
-    <script src="../libs/util/dat.gui.js"></script>
     <script src="../libs/util/Stats.js"></script>
     <script src="../libs/util/loadScreen/LoadScreen.js"></script>
     <script src="../libs/loaders/GLTFLoader.js"></script>
     <script src="../libs/other/physijs/physi.js"></script>
     <script src="projectile-motion.js"></script>
+    <script>
+
+        var slider = document.getElementById("myRangeVelocity");
+        var output = document.getElementById("demo");
+        output.innerHTML = slider.value;
+
+        slider.oninput = function() {
+            output.innerHTML = this.value;
+        }	
+
+
+        var sliderHei = document.getElementById("myRangeHeight");
+        var outputHei = document.getElementById("demo1")
+        outputHei.innerHTML = sliderHei.value;
+        sliderHei.oninput = function() {
+            outputHei.innerHTML = this.value;
+        }
+
+    </script>
     <script type="text/javascript">
         function changeLanguage(lang) {
             TRANSLATION.translateDocument(lang);
@@ -162,6 +211,24 @@
             '#drop',
             'Drop Box',
             'Soltar Caixa'
+        );
+        
+        TRANSLATION.add(
+            '#switch',
+            'Switch Camera',
+            'Trocar Câmera'
+        );
+
+        TRANSLATION.add(
+            '#velo',
+            'Velocity',
+            'Velocidade'
+        );
+
+        TRANSLATION.add(
+            '#heig',
+            'Height',
+            'Altura'
         );
 
         TRANSLATION.add(

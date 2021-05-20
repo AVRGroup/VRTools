@@ -6,6 +6,7 @@ let xPos, xTotalDis, xDis, yTotalDis, yDis; //position and displacement
 Physijs.scripts.worker = '../libs/other/physijs/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
 
+
 const ASSETS = {
     textures: {
         crate: {
@@ -73,38 +74,10 @@ function init() {
         { velocity: 'velocidade_modulo', height: 'altura', camera: 'trocar_camera', info: 'mostrar_info' };
 
     controls = new function () {
-        this[labels.velocity] = 30;
+        this.camera = 1.6;
         this.velocity = 30;
-        this[labels.height] = 100;
-        this[labels.camera] = false;
-        this[labels.info] = true;
     };
 
-    gui = new dat.GUI();
-    gui.add(controls, labels.velocity, 20, 50).onChange(() => {
-        if (controls.velocity < 0) {
-            controls.velocity = controls[labels.velocity] * -1;
-        }
-        else {
-            controls.velocity = controls[labels.velocity]
-        }
-    });
-    gui.add(controls, labels.height, 50, 100).onChange(() => {
-        airplane.position.y = controls[labels.height]
-    });
-    gui.add(controls, labels.camera).onChange(() => {
-        if (!controls[labels.camera]) {
-            camera.position.set(0, 1.6, 80);
-            camera.lookAt(new THREE.Vector3(0, 30, 0));
-        }
-        else {
-            camera.position.copy(airplane.position);
-            camera.lookAt(new THREE.Vector3(0, -1, 0))
-        }
-    });
-    gui.add(controls, labels.info).onChange(() => {
-        document.getElementById('info').style.display = controls[labels.info] ? 'block' : 'none';
-    });
 
     let planeMaterial = new Physijs.createMaterial(
         ASSETS.materials.groundMaterial,
@@ -128,7 +101,7 @@ function init() {
     lookDirection = new THREE.Vector3(0, -1, 0);
     airplaneRange = 175;
     airplane = ASSETS.objects.airplane;
-    airplane.position.set(-150, controls[labels.height], 0);
+    airplane.position.set(-150, document.getElementById('myRangeHeight').value, 0);
     airplane.rotation.y = Math.PI * 0.5;
     airplane.scale.set(0.15, 0.15, 0.15)
     scene.add(airplane);
@@ -156,7 +129,7 @@ function init() {
         x.innerHTML = 'X: ' + xDis.toFixed(2) + 'm';
         y.innerHTML = 'Y: ' + yDis.toFixed(2) + 'm';
     }, false);
-
+    
     TrajectoryPath = ProjectileCurve();
 
     let path = new TrajectoryPath(new THREE.Vector3(0, -1, 0), 0, 0, 0, 0);
@@ -171,8 +144,14 @@ function init() {
 
     window.addEventListener('resize', onResize);
     document.getElementById('drop').addEventListener('click', onClick);
-
+    document.getElementById('switch').addEventListener('click', switchCamera);
+    controls.camera = false;
+    document.getElementById('myRangeHeight').addEventListener('click', heightAirplane);
+    airplane.position.y = document.getElementById('myRangeHeight').value
+    document.getElementById('myRangeVelocity').addEventListener('click', velocityAirplane);
+    controls.velocity = document.getElementById('myRangeVelocity').value
     ls.remove(() => {
+        controls.velocity = document.getElementById('myRangeVelocity').value;
         animate();
     });
 
@@ -194,8 +173,8 @@ function init() {
         requestAnimationFrame(animate);
 
         airplane.position.x += controls.velocity * clock.getDelta();
-
-        if (controls[labels.camera]) {
+        console.log(controls.camera)
+        if (controls.camera == true) {
             camera.position.copy(airplane.position);
             camera.lookAt(airplane.position.x, 0, 0);
         }
@@ -206,7 +185,7 @@ function init() {
             airplane.position.x = airplaneRange;
         }
         else if (airplane.position.x < -airplaneRange) {
-            airplane.rotation.y -= Math.PI;
+            airplane.rotation.y += Math.PI;
             controls.velocity *= -1;
             airplane.position.x = -airplaneRange;
         }
@@ -218,22 +197,51 @@ function init() {
     function releaseBox() {
         box.position.copy(airplane.position);
         xPos = box.position.x;
+        let aux1 = 0;
+        while(aux1 != airplane.position.y)
+        {
+            aux1++;
+        }
+        airplane.position.y = aux1;
         box.__dirtyPosition = true
         box.setAngularVelocity(new THREE.Vector3(0, 0, 0));
         box.setLinearVelocity(new THREE.Vector3(controls.velocity, 0, 0));
         box.isReleased = true;
         drawTrajectory();
 
-        totalTime = quadraticTime(-4.9, 0, controls[labels.height])
+        totalTime = quadraticTime(-4.9, 0, document.getElementById('myRangeHeight').value)
         let aux = totalTime
         time = 0;
-        xTotalDis = controls.velocity * parseFloat(aux.toFixed(2));
-        yTotalDis = -controls[labels.height];
+        xTotalDis = document.getElementById('myRangeVelocity').value  * parseFloat(aux.toFixed(2));
+        yTotalDis = -document.getElementById('myRangeHeight').value;
     }
     function onClick() {
         releaseBox();
     }
+    function heightAirplane() {
+        airplane.position.y = document.getElementById('myRangeHeight').value;
+    }
+    function velocityAirplane() {
+        if(controls.velocity < 0)
+            controls.velocity = document.getElementById('myRangeVelocity').value *(-1);
+        else
+            controls.velocity =  document.getElementById('myRangeVelocity').value;
+        
+    }
+    function switchCamera() {
+        if (controls.camera == true) {
+            controls.camera = false;
+            camera.position.set(0, 1.6, 80);
+            camera.lookAt(new THREE.Vector3(0, 30, 0));
+        }
+        else {
+            controls.camera = true;
+            camera.position.copy(airplane.position);
+            camera.lookAt(new THREE.Vector3(0, -1, 0))
+        }
+    }
     function ProjectileCurve() {
+
         function ProjectileCurve(p0, velocity, verticalAngle, horizontalAngle, gravity, scale) {
             THREE.Curve.call(this);
 
@@ -282,7 +290,7 @@ function simulate() {
         }
 
         yDis = box.position.y + yTotalDis - 1.5;
-        if (yDis < -controls[labels.height] + 0.5) yDis = -controls[labels.height];
+        if (yDis < -document.getElementById('myRangeHeight').value + 0.5) yDis = -document.getElementById('myRangeHeight').value;
 
         time += delta;
         if (time > totalTime) time = totalTime;
