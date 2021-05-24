@@ -1,32 +1,24 @@
 <!DOCTYPE html>
 <html>
-<title>VR Tools - Sites in VR</title>
+<title id="title">VR Tools - Sites in VR</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../css/w3.css">
 <link rel="stylesheet" href="../css/style.css">
+<script src="../components/navbar.js"></script>
+<script src="../js/translation.js"></script>
+
 
 <body>
 
     <!-- Navbar (sit on top) -->
-    <div class="w3-top ">
-        <div class="w3-bar w3-white w3-wide w3-padding w3-card ">
-            <a href="../index.html#home " class="w3-bar-item w3-button "><b>VR</b> Tools</a>
-            <!-- Float links to the right. Hide them on small screens -->
-            <div class="w3-right w3-hide-small ">
-                <a href="../index.html#vr-apps" class="w3-bar-item w3-button">VR Apps</a>
-                <a href="../index.html#projects" class="w3-bar-item w3-button">Projects</a>
-                <a href="../index.html#about " class="w3-bar-item w3-button ">About</a>
-                <a href="../index.html#contact " class="w3-bar-item w3-button ">Contact</a>
-            </div>
-        </div>
-    </div>
+    <navbar-component></navbar-component>
 
     <!-- Page content -->
     <div class="w3-content w3-padding " style="max-width:1564px ">
 
         <div class="w3-container w3-padding-32 " id="projects ">
-            <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Sites in VR</h1>
+            <h1 id ="title1"class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Sites in VR</h1>
         </div>
 
         <!-- images/slideshow -->
@@ -56,11 +48,11 @@
         </div>
 
         <div class="w3-container w3-padding-48 " id="about ">
-            <p>
+            <p id="p1">
                 Sites in VR gives you the opportunity to travel virtually and see world famous landmarks in several countries, such as Turkey, Egypt, Saudi Arabia, Belgium, France and many more. You may also explore the wonders of the Islamic architecture. What about
                 visiting mosques, palaces, museums, castles, religious sites or ancient cities?
             </p>
-            <p>
+            <p id="p2">
                 The app has more than a 1000 panoramic high qualities images and it can take you to places like the Egypt pyramids or even to the moon. Do not waste your time, check it right now!
             </p>
         </div>
@@ -79,6 +71,30 @@
     </footer>
 
     <script type="text/javascript" src="../js/script.js "></script>
+
+    <script>
+          TRANSLATION.add(
+            '#title',
+            'VR Tools - Sites in VR',
+            'VR Tools - Sites em RV'
+        );
+        TRANSLATION.add(
+            '#title1',
+            'Sites in VR',
+            'Sites em RV'
+        );
+        TRANSLATION.add(
+            '#p1',
+            ' Sites in VR gives you the opportunity to travel virtually and see world famous landmarks in several countries, such as Turkey, Egypt, Saudi Arabia, Belgium, France and many more. You may also explore the wonders of the Islamic architecture. What about visiting mosques, palaces, museums, castles, religious sites or ancient cities?',
+            'Sites em RV lhe dão a oportunidade de viajar virtualmente e ver marcos mundialmente famosos em vários países, como Turquia, Egito, Arábia Saudita, Bélgica, França e muito mais. Você também pode explorar as maravilhas da arquitetura islâmica. Que tal visitar mesquitas, palácios, museus, castelos, locais religiosos ou cidades antigas?'
+        );
+        TRANSLATION.add(
+            '#p2',
+            'The app has more than a 1000 panoramic high qualities images and it can take you to places like the Egypt pyramids or even to the moon. Do not waste your time, check it right now!',
+            'O aplicativo tem mais de 1000 imagens panorâmicas de alta qualidade e pode levá-lo a lugares como as pirâmides do Egito ou até mesmo para a lua. Não perca seu tempo, verifique agora mesmo!'
+        );
+
+    </script>
 </body>
 
 </html>

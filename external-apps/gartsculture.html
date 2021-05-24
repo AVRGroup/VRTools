@@ -5,22 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../css/w3.css">
 <link rel="stylesheet" href="../css/style.css">
+<script src="../components/navbar.js"></script>
+<script src="../js/translation.js"></script>
 
 <body>
 
     <!-- Navbar (sit on top) -->
-    <div class="w3-top ">
-        <div class="w3-bar w3-white w3-wide w3-padding w3-card ">
-            <a href="../index.html#home " class="w3-bar-item w3-button "><b>VR</b> Tools</a>
-            <!-- Float links to the right. Hide them on small screens -->
-            <div class="w3-right w3-hide-small ">
-                <a href="../index.html#vr-apps" class="w3-bar-item w3-button">VR Apps</a>
-                <a href="../index.html#projects" class="w3-bar-item w3-button">Projects</a>
-                <a href="../index.html#about " class="w3-bar-item w3-button ">About</a>
-                <a href="../index.html#contact " class="w3-bar-item w3-button ">Contact</a>
-            </div>
-        </div>
-    </div>
+    <navbar-component></navbar-component>
 
     <!-- Page content -->
     <div class="w3-content w3-padding " style="max-width:1564px ">
@@ -56,10 +47,10 @@
         </div>
 
         <div class="w3-container w3-padding-48 " id="about ">
-            <p>
+            <p id="p1">
                 Google Arts & Culture allow users to access content of over 2000 museums around the world. Among all the archives, collections and other offered features, there is also more than 300 virtual reality guided tours waiting for you to be taken.
             </p>
-            <p>
+            <p id="p2">
                 What about visiting <a href="https://artsandculture.google.com/partner/parco-archeologico-e-paesaggistico-valle-dei-templi?hl=en ">ancient Greek temples</a>? Or exploring the masterpieces in <a href="https://artsandculture.google.com/partner/dulwich-picture-gallery?hl=en ">England’s first purpose-built public art gallery</a>?
                 You can even get to know one of the New Seven Wonders of the World, <a href="https://artsandculture.google.com/partner/congrega%C3%A7%C3%A3o-do-sant%C3%ADssimo-redentor?hl=en ">Christ the Redeemer</a> in Brazil.
             </p>
@@ -79,6 +70,23 @@
     </footer>
 
     <script type="text/javascript" src="../js/script.js "></script>
+
+    <script>
+        TRANSLATION.add(
+            '#p1',
+            'Google Arts & Culture allow users to access content of over 2000 museums around the world. Among all the archives, collections and other offered features, there is also more than 300 virtual reality guided tours waiting for you to be taken.',
+            'O Google Arts & Culture permite que os usuários acessem conteúdo de mais de 2000 museus em todo o mundo. Entre todos os arquivos, coleções e outros recursos oferecidos, há também mais de 300 visitas guiadas em realidade virtual esperando que você seja levado.'
+        );
+        TRANSLATION.add(
+            '#p2',
+            ` What about visiting <a href="https://artsandculture.google.com/partner/parco-archeologico-e-paesaggistico-valle-dei-templi?hl=en ">ancient Greek temples</a>? Or exploring the masterpieces in <a href="https://artsandculture.google.com/partner/dulwich-picture-gallery?hl=en ">England’s first purpose-built public art gallery</a>?
+                You can even get to know one of the New Seven Wonders of the World, <a href="https://artsandculture.google.com/partner/congrega%C3%A7%C3%A3o-do-sant%C3%ADssimo-redentor?hl=en ">Christ the Redeemer</a> in Brazil. `,
+            ` Que tal visitar <a href="https://artsandculture.google.com/partner/parco-archeologico-e-paesaggistico-valle-dei-templi?hl=en ">templos Gregos antigos</a>? Ou explorar as obras primas na <a href="https://artsandculture.google.com/partner/dulwich-picture-gallery?hl=en ">primeira galeria de arte pública construída na Inglaterra</a>?
+                Você pode até conhecer uma das Nova Sete Maravilhas do Mundo, <a href="https://artsandculture.google.com/partner/congrega%C3%A7%C3%A3o-do-sant%C3%ADssimo-redentor?hl=en ">o Cristo Redentor</a> no Brasil. `
+        );
+    </script>
+
+
 </body>
 
 </html>

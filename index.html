@@ -122,7 +122,7 @@
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom">
-                <a href="javascript: TRANSLATION.redirect('projects/circuits.html')">
+                <a href="  ('projects/circuits.html')">
                     <div class="w3-display-container" style="border:2px solid black">
                         <div id="circuits" class="project-title w3-display-topleft w3-padding">Eletric
                             Circuits</div>
@@ -140,7 +140,7 @@
 
         <div class="w3-row-padding">
             <div class="w3-col l3 m6 w3-margin-bottom">
-                <a href="external-apps/gartsculture.html" target="_">
+                <a href="javascript: TRANSLATION.redirect('external-apps/gartsculture.html')">
                     <div class="w3-display-container">
                         <div class="project-title w3-display-topleft w3-padding">Google Arts & Culture</div>
                         <img src="img/gartsculture/gartculture.jpg" alt="Google Arts and Culture logo"
@@ -149,7 +149,7 @@
                 </a>
             </div>
             <div class="w3-col l3 m6 w3-margin-bottom">
-                <a href="external-apps/gexpeditions.html" target="_">
+                <a href="javascript: TRANSLATION.redirect('external-apps/gexpeditions.html')">
                     <div class="w3-display-container">
                         <div class="project-title w3-display-topleft w3-padding">Google Expeditions</div>
                         <img src="img/gexpeditions/gexpeditions.png" alt="Google Expeditions logo" style="width:100%">
@@ -157,15 +157,15 @@
                 </a>
             </div>
             <div class="w3-col l3 m6 w3-margin-bottom">
-                <a href="external-apps/sitesinvr.html" target="_">
+                <a href="javascript: TRANSLATION.redirect('external-apps/sitesinvr.html')">
                     <div class="w3-display-container">
-                        <div class="project-title w3-display-topleft w3-padding">Sites in VR</div>
+                        <div id="sites" class="project-title w3-display-topleft w3-padding">Sites in VR</div>
                         <img src="img/sitesinvr/sitesvr.jpg" alt="Sites in VR logo" style="width:100%">
                     </div>
                 </a>
             </div>
             <div class="w3-col l3 m6 w3-margin-bottom">
-                <a href="external-apps/matterportvr.html" target="_">
+                <a href="javascript: TRANSLATION.redirect('external-apps/matterportvr.html')">
                     <div class="w3-display-container">
                         <div class="project-title w3-display-topleft w3-padding">Matterport VR</div>
                         <img src="img/matterportvr/matterport.jpg" alt="Matterport VR logo" style="width:100%">
@@ -249,7 +249,7 @@
             <form name="gform" id="gform"
                 action="https://docs.google.com/forms/d/e/1FAIpQLScT0oKS0BJ2vBWH5zVIlBgfFiZG9bgcDiuPka5jAZVDkFW8hw/formResponse?"
                 target="hidden_iframe" onsubmit="showModal()">
-                <input class="w3-input w3-border" type="text" placeholder="Name" required name="entry.107470474"
+                <input  class="w3-input w3-border" type="text" placeholder="Name" required name="entry.107470474"
                     id="entry.107470474">
                 <input class="w3-input w3-section w3-border" type="email" placeholder="Email" required
                     name="entry.1094368542" id="entry.1094368542">
@@ -382,6 +382,12 @@
         );
 
         TRANSLATION.add(
+            '#sites',
+            'Sites in VR',
+            'Sites em RV'
+        );
+
+        TRANSLATION.add(
             '#about-text',
             'Welcome! On this site we will provide links to popular Virtual Reality and Augmented Reality systems and projects developed by' +
             ' students from the UFJF computer science course. Feel free to contact us to suggest improvements and enjoy the content!',
@@ -467,6 +473,12 @@
             '#message-button',
             'Send message',
             'Enviar mensagem'
+        );
+
+        TRANSLATION.add(
+            '#comment',
+            'Name',
+            'Nome'
         );
 
     </script>

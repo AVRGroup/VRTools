@@ -1,32 +1,23 @@
 <!DOCTYPE html>
 <html>
-<title>VR Tools - Matterport VR</title>
+<title id="title">VR Tools - Matterport VR</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../css/w3.css">
 <link rel="stylesheet" href="../css/style.css">
+<script src="../components/navbar.js"></script>
+<script src="../js/translation.js"></script>
 
 <body>
 
     <!-- Navbar (sit on top) -->
-    <div class="w3-top ">
-        <div class="w3-bar w3-white w3-wide w3-padding w3-card ">
-            <a href="../index.html#home " class="w3-bar-item w3-button "><b>VR</b> Tools</a>
-            <!-- Float links to the right. Hide them on small screens -->
-            <div class="w3-right w3-hide-small ">
-                <a href="../index.html#vr-apps" class="w3-bar-item w3-button">VR Apps</a>
-                <a href="../index.html#projects" class="w3-bar-item w3-button">Projects</a>
-                <a href="../index.html#about " class="w3-bar-item w3-button ">About</a>
-                <a href="../index.html#contact " class="w3-bar-item w3-button ">Contact</a>
-            </div>
-        </div>
-    </div>
+    <navbar-component></navbar-component>
 
     <!-- Page content -->
     <div class="w3-content w3-padding " style="max-width:1564px ">
 
         <div class="w3-container w3-padding-32 " id="projects ">
-            <h1 class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Matterport VR</h1>
+            <h1 id="title1" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Matterport VR</h1>
         </div>
 
         <!-- images/slideshow -->
@@ -56,10 +47,10 @@
         </div>
 
         <div class="w3-container w3-padding-48 " id="about ">
-            <p>
+            <p id="p1">
                 Matterport VR claims to have the largest collection of real-world VR content, offering an immersive experience in every virtual space, no matter if the place you are virtually visiting is a travel destination, a celebrity home or a historic place.
             </p>
-            <p>
+            <p id="p2">
                 The app comes with over 150 VR experiences, but you are able to download more in their <a href="https://matterport.com/industries/gallery" target="_blank">website</a>.
             </p>
         </div>
@@ -78,6 +69,28 @@
     </footer>
 
     <script type="text/javascript" src="../js/script.js "></script>
+    <script>
+        TRANSLATION.add(
+            '#title',
+            'VR Tools - Matterport VR',
+            'VR Tools - Matterport RV'
+        );
+          TRANSLATION.add(
+            '#title1',
+            'Matterport VR',
+            'Matterport RV'
+        );
+        TRANSLATION.add(
+            '#p1',
+            'Matterport VR claims to have the largest collection of real-world VR content, offering an immersive experience in every virtual space, no matter if the place you are virtually visiting is a travel destination, a celebrity home or a historic place.',
+            'A Matterport RV afirma ter a maior coleção de conteúdo RV do mundo real, oferecendo uma experiência imersiva em todos os espaços virtuais, não importa se o lugar que você está virtualmente visitando é um destino de viagem, uma casa de celebridade ou um lugar histórico.'
+        );
+        TRANSLATION.add(
+            '#p2',
+            'The app comes with over 150 VR experiences, but you are able to download more in their <a href="https://matterport.com/industries/gallery" target="_blank">website</a>.',
+            'O aplicativo vem com mais de 150 experiências em RV, mas você pode baixar mais no <a href="https://matterport.com/industries/gallery" target="_blank">site</a> deles.'
+        );
+    </script>
 </body>
 
 </html>

@@ -5,22 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../css/w3.css">
 <link rel="stylesheet" href="../css/style.css">
+<script src="../components/navbar.js"></script>
+<script src="../js/translation.js"></script>
+
 
 <body>
 
     <!-- Navbar (sit on top) -->
-    <div class="w3-top ">
-        <div class="w3-bar w3-white w3-wide w3-padding w3-card ">
-            <a href="../index.html#home " class="w3-bar-item w3-button "><b>VR</b> Tools</a>
-            <!-- Float links to the right. Hide them on small screens -->
-            <div class="w3-right w3-hide-small ">
-                <a href="../index.html#vr-apps" class="w3-bar-item w3-button">VR Apps</a>
-                <a href="../index.html#projects" class="w3-bar-item w3-button">Projects</a>
-                <a href="../index.html#about " class="w3-bar-item w3-button ">About</a>
-                <a href="../index.html#contact " class="w3-bar-item w3-button ">Contact</a>
-            </div>
-        </div>
-    </div>
+    <navbar-component></navbar-component>
 
     <!-- Page content -->
     <div class="w3-content w3-padding " style="max-width:1564px ">
@@ -56,11 +48,11 @@
         </div>
 
         <div class="w3-container w3-padding-48 " id="about ">
-            <p>
+            <p id="p1">
                 Google Expeditions is an educational app which allows teachers and students explore together the worlds of virtual-reality and augmented-reality. It has over 1000 virtual-reality tours and 100 augmented-reality tours, besides you being able to
                 <a href="https://poly.google.com/tourcreator">create your own tour</a>. The app supports the creation of classes, in which a teacher can act like a guide and lead the students locally connected from their smartphones or tablets.
             </p>
-            <p>
+            <p id="p2">
                 So, are you ready to swim with sharks, visit the outer space, explore the ancient Rome or playing with Dinosaurs?
             </p>
         </div>
@@ -79,6 +71,20 @@
     </footer>
 
     <script type="text/javascript" src="../js/script.js "></script>
+    <script>
+        TRANSLATION.add(
+            '#p1',
+            `  Google Expeditions is an educational app which allows teachers and students explore together the worlds of virtual-reality and augmented-reality. It has over 1000 virtual-reality tours and 100 augmented-reality tours, besides you being able to
+                <a href="https://poly.google.com/tourcreator">create your own tour</a>. The app supports the creation of classes, in which a teacher can act like a guide and lead the students locally connected from their smartphones or tablets. `,
+            `  O Google Expeditions é um aplicativo educacional que permite que professores e alunos explorem juntos os mundos da realidade virtual e da realidade aumentada. Possui mais de 1000 passeios em realidade virtual e 100 passeios em realidade aumentada, além de você ser capaz de
+                <a href="https://poly.google.com/tourcreator">criar sua própria turnê</a>. O aplicativo apoia a criação de aulas, nas quais um professor pode agir como um guia e levar os alunos localmente conectados a partir de seus smartphones ou tablets. `
+        );
+        TRANSLATION.add(
+            '#p2',
+            ` So, are you ready to swim with sharks, visit the outer space, explore the ancient Rome or playing with Dinosaurs? `,
+            `Então, você está pronto para nadar com tubarões, visitar o espaço sideral, explorar a Roma antiga ou brincar com dinossauros? `
+        );
+    </script>
 </body>
 
 </html>
