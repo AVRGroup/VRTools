@@ -1,12 +1,13 @@
 ﻿<!DOCTYPE html>
 <html>
     <head>
-        <title>Platonic Solids - AR</title>
+        <title id="title1">Platonic Solids - AR</title>
         <meta charset="UTF-8">
         <!-- Tag that adapt the dimensions(width, height) of interface for mobile devices:
             https://developer.mozilla.org/pt-BR/docs/Mozilla/Mobile/Viewport_meta_tag
         -->
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <script src="../../js/translation.js"></script>
 
         <style>
             body {
@@ -67,6 +68,13 @@
                 language = "en-US";
                 main(language);
             }
+        </script>
+        <script>
+            TRANSLATION.add(
+                '#title1',
+                'Platonic Solids - AR',
+                'Sólidos Platônicos - RA'
+        );
         </script>
     </body>
 </html>
