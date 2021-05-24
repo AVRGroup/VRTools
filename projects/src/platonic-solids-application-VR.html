@@ -211,6 +211,12 @@
                             break;
                         }
                         case 'pt-BR': {
+                            self.models[0].setAttribute('name','Tetraedro');
+                            self.models[1].setAttribute('name','Cubo');
+                            self.models[2].setAttribute('name','Octaedro');
+                            self.models[3].setAttribute('name','Dodecaedro');
+                            self.models[4].setAttribute('name','Icosaedro');
+
                             vrInterface.addButton('previous-pt', '#previous-pt', () => {
                                 self.models[self.modelIndex].object3D.visible = false;
                                 if (self.modelIndex == 0) {
