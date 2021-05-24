@@ -2,9 +2,10 @@
 <html>
 
 <head>
-    <title>Solar System - VR</title>
+    <title id="title1">Solar System - VR</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../../js/translation.js"></script>
     <style>
         body {
             margin: 0;
@@ -289,6 +290,13 @@
             }
         </script>
     </a-scene>
+    <script>
+         TRANSLATION.add(
+            '#title1',
+            'Solar System - VR',
+            'Sistema Solar - RV'
+        );
+    </script>
 </body>
 
 </html>

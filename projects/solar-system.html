@@ -121,7 +121,7 @@
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a href="./src/solar-system-application-VR.html" target="_blank" style="text-decoration: none;">
+                <a id="vr_link" href="./src/solar-system-application-VR.html" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
                          style="background: url('img/Solar-System/blur-VR.jpg') center;">
                         <div class="w3-padding" style="width:100%">
@@ -345,12 +345,14 @@
                 document.getElementById("fullscreenMediumQuality_link").href = ("./src/solar-system-application.html" + language + "&quality=0"); 
                 document.getElementById("fullscreenHighQuality_link").href = ("./src/solar-system-application.html" + language + "&quality=1"); 
                 document.getElementById("ar_link").href = ("./src/solar-system-application-AR.html" + language); 
+                document.getElementById("vr_link").href = ("./src/solar-system-application-VR.html" + language); 
             }
             else{
                 document.getElementById("scene").src = ("./src/solar-system-application.html?lang=en-US&quality=0");
                 document.getElementById("fullscreenMediumQuality_link").href = ("./src/solar-system-application.html?lang=en-US&quality=0"); 
                 document.getElementById("fullscreenHighQuality_link").href = ("./src/solar-system-application.html?lang=en-US&quality=1"); 
                 document.getElementById("ar_link").href = ("./src/solar-system-application-AR.html?lang=pt-BR"); 
+                document.getElementById("vr_link").href = ("./src/solar-system-application-VR.html?lang=pt-BR"); 
             }
         }
 
