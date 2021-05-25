@@ -47,7 +47,7 @@
             init: function () {
                 const self = this;
                 const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
-                const messages = TRANSLATION.currentLang === TRANSLATION.EN_US ?
+                var messages = TRANSLATION.currentLang === TRANSLATION.EN_US ?
                     ['The crate was released...', 'The crate hit the ground.', 'You win!\nPress your action button to start again!']
                     :
                     ['A caixa foi solta...', 'A caixa atingiu o solo.', 'Você ganhou!\nAperte seu botão de ação para começar de novo!'];
