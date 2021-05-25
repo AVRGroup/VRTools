@@ -54,7 +54,8 @@
                 const isHandsfree = new URLSearchParams(window.location.search).get('handsfree') === 'true';
 
                 if (isHandsfree) {
-                    vrInterface.addButton('myButton', '#dropTexture', () => {
+                    if(TRANSLATION.currentLang == TRANSLATION.EN_US) {
+                        vrInterface.addButton('myButton', '#dropTexture', () => {
                         if (!self.isPaused && !self.released) {
                             vrInterface.showMessage(messages[0])
                             self.dropCrate();
@@ -65,7 +66,23 @@
                         if (self.win) {
                             self.el.sceneEl.exitVR();
                         }
-                    });
+                    }); 
+                    }
+                    
+                    if(TRANSLATION.currentLang == TRANSLATION.PT_BR) {
+                        vrInterface.addButton('myButton', '#dropTexture-pt-BR', () => {
+                        if (!self.isPaused && !self.released) {
+                            vrInterface.showMessage(messages[0])
+                            self.dropCrate();
+                            self.released = true;
+                            vrInterface.showMessage(messages[0])
+                        }
+
+                        if (self.win) {
+                            self.el.sceneEl.exitVR();
+                        }
+                    }); 
+                    }
                 }
                 else {
                     vrInterface.addButton('placeHolder');
@@ -302,6 +319,7 @@
             <img id="crateTexture" src="assets/textures/crate.png">
             <img id="targetTexture" src="assets/textures/target1.png">
             <img id="dropTexture" src="assets/textures/projectile-motion/dropButton.png">
+            <img id="dropTexture-pt-BR" src="assets/textures/projectile-motion/dropButton-pt-BR.png">
         </a-assets>
 
         <a-entity light=" type: ambient; color: #fff; intensity: 0.1">
