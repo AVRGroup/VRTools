@@ -150,6 +150,13 @@
                             break;
                         }
                         case 'pt-BR': {
+
+                            self.models[0].setAttribute('name','Derrame');
+                            self.models[1].setAttribute('name','Aneurisma');
+                            self.models[2].setAttribute('name','Estenose');
+                            self.models[3].setAttribute('name','Trombose');
+
+
                             vrInterface.addButton('previous-pt', '#previous-pt', () => {
                                 let model = self.models[self.modelIndex];
 
