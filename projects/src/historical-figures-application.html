@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../libs/util/Stats.js"></script>
     <script type="text/javascript" src="../libs/util/loadScreen/LoadScreen.js"></script>
     <script type="text/javascript" src="historical-figures.js"></script>
+    <script src="../../js/translation.js"></script>
     <style>
         body {
             margin: 0;
@@ -20,7 +21,7 @@
             height: 100%;
         }
     </style>
-    <title>Historical Figures</title>
+    <title id="title">Historical Figures</title>
 </head>
 <body>
     <div id="webgl-output"></div>
@@ -35,6 +36,13 @@
             language = "en-US";
             main(language);
         }
+    </script>
+    <script>
+         TRANSLATION.add(
+            '#title',
+            'Historical Figures',
+            'Figuras Históricas'
+        );
     </script>
 </body>
 </html>
