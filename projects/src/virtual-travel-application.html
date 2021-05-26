@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Virtual Travel</title>
+    <title id="title">Virtual Travel</title>
     <meta name="description" content="360&deg; Image - A-Frame">
     <script src="../libs/aframe-master.js"></script>
     <script src="../libs/vr-interface.js"></script>
@@ -345,6 +345,13 @@
 
 
     </a-scene>
+    <script>
+         TRANSLATION.add(
+            '#title',
+            'Virtual Travel',
+            'Viagem Virtual'
+        );
+    </script>
 </body>
 
 </html>
