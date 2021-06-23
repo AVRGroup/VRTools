@@ -23,7 +23,7 @@
 
     <!-- Library of Virtual Reality -->
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
-    <script type="text/javascript" charset="UTF-8" src="../libs/vr-interface.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/orbi.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-button-controls.js"></script>
 
 
@@ -33,7 +33,7 @@
         AFRAME.registerComponent('config', {
             init: function () {
                 const self = this;
-                const vrInterface = this.el.components['vr-interface'];
+                const vrInterface = this.el.components['orbi'];
                 this.models = document.querySelectorAll('.menu-model');
                 this.modelIndex = 0;
                 this.rotate = true;
@@ -212,11 +212,11 @@
                             break;
                         }
                         case 'pt-BR': {
-                            self.models[0].setAttribute('name','Tetraedro');
-                            self.models[1].setAttribute('name','Cubo');
-                            self.models[2].setAttribute('name','Octaedro');
-                            self.models[3].setAttribute('name','Dodecaedro');
-                            self.models[4].setAttribute('name','Icosaedro');
+                            self.models[0].setAttribute('name', 'Tetraedro');
+                            self.models[1].setAttribute('name', 'Cubo');
+                            self.models[2].setAttribute('name', 'Octaedro');
+                            self.models[3].setAttribute('name', 'Dodecaedro');
+                            self.models[4].setAttribute('name', 'Icosaedro');
 
                             vrInterface.addButton('previous-pt', '#previous-pt', () => {
                                 self.models[self.modelIndex].object3D.visible = false;
@@ -498,16 +498,16 @@
             </a-entity>
         </a-entity>
 
-        <a-entity vr-interface="dimension: 3 2; transparency: true; gap: 0.01 0.01; border: 1 #6d7584; messageBG: #121212;
+        <a-entity orbi="dimension: 3 2; transparency: true; gap: 0.01 0.01; border: 1 #6d7584; messageBG: #121212;
             font:assets/fonts/roboto-msdf.json; negate: false" config button-controls>
         </a-entity>
 
     </a-scene>
     <script>
-         TRANSLATION.add(
-                '#title1',
-                'Platonic Solids - VR',
-                'Sólidos Platônicos - RV'
+        TRANSLATION.add(
+            '#title1',
+            'Platonic Solids - VR',
+            'Sólidos Platônicos - RV'
         );
     </script>
 </body>

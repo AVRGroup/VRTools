@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="title">Projectile Motion VR</title>
-    <script src="../../js/translation.js"></script>
 
     <style>
         .panel {
@@ -36,18 +35,18 @@
         }
     </style>
 
+    <script src="../../js/translation.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-button-controls.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/aframe-physics-system.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/other/howler.js"></script>
-    <script src="../libs/vr-interface.js"></script>
-    <script src="../../js/translation.js"></script>
+    <script src="../libs/orbi.js"></script>
 
     <script>
         AFRAME.registerComponent('appcode', {
             init: function () {
                 const self = this;
-                const vrInterface = document.querySelector('[vr-interface]').components['vr-interface'];
+                const orbi = document.querySelector('[orbi]').components['orbi'];
                 var messages = TRANSLATION.currentLang === TRANSLATION.EN_US ?
                     ['The crate was released...', 'The crate hit the ground.', 'You win!\nPress your action button to start again!']
                     :
@@ -55,44 +54,45 @@
                 const isHandsfree = new URLSearchParams(window.location.search).get('handsfree') === 'true';
 
                 if (isHandsfree) {
-                    if(TRANSLATION.currentLang == TRANSLATION.EN_US) {
-                        vrInterface.addButton('myButton', '#dropTexture', () => {
-                        if (!self.isPaused && !self.released) {
-                            vrInterface.showMessage(messages[0])
-                            self.dropCrate();
-                            self.released = true;
-                            vrInterface.showMessage(messages[0])
-                        }
+                    if (TRANSLATION.currentLang == TRANSLATION.EN_US) {
+                        orbi.addButton('myButton', '#dropTexture', () => {
+                            if (!self.isPaused && !self.released) {
+                                orbi.showMessage(messages[0])
+                                self.dropCrate();
+                                self.released = true;
+                                orbi.showMessage(messages[0])
+                            }
 
-                        if (self.win) {
-                            self.el.sceneEl.exitVR();
-                        }
-                    }); 
+                            if (self.win) {
+                                self.el.sceneEl.exitVR();
+                            }
+                        });
                     }
-                    
-                    if(TRANSLATION.currentLang == TRANSLATION.PT_BR) {
-                        vrInterface.addButton('myButton', '#dropTexture-pt-BR', () => {
-                        if (!self.isPaused && !self.released) {
-                            vrInterface.showMessage(messages[0])
-                            self.dropCrate();
-                            self.released = true;
-                            vrInterface.showMessage(messages[0])
-                        }
 
-                        if (self.win) {
-                            self.el.sceneEl.exitVR();
-                        }
-                    }); 
+                    if (TRANSLATION.currentLang == TRANSLATION.PT_BR) {
+                        orbi.addButton('myButton', '#dropTexture-pt-BR', () => {
+                            if (!self.isPaused && !self.released) {
+                                orbi.showMessage(messages[0])
+                                self.dropCrate();
+                                self.released = true;
+                                orbi.showMessage(messages[0])
+                            }
+
+                            if (self.win) {
+                                self.el.sceneEl.exitVR();
+                            }
+                        });
                     }
                 }
                 else {
-                    vrInterface.addButton('placeHolder');
-                    vrInterface.cursor.object3D.visible = false
+                    orbi.addButton('placeHolder');
+                    orbi.cursor.object3D.visible = false
                 }
 
-                vrInterface.hide()
-                vrInterface.showSideText(''); // there's some bug in showSideText requiring to call it here
-                vrInterface.isToChangeTheta = true;
+                orbi.hide()
+                orbi.showSideText('oi'); // there's some bug in showSideText requiring to call it here
+                orbi.hideSideText();
+                orbi.isToChangeTheta = true;
 
                 this.isPaused = true;
                 this.released = false;
@@ -146,22 +146,22 @@
                             self.winSound.play();
                             pause();
 
-                            vrInterface.isToChangeTheta = false;
-                            self.el.setAttribute('vr-interface', {
+                            orbi.isToChangeTheta = false;
+                            self.el.setAttribute('orbi', {
                                 theta: (self.camera.rotation.y * 180 / Math.PI) + 30,
-                                rho: 0,
+                                phi: 0,
                                 sideTextRotation: -30,
                                 messageBG: '#509000',
                             });
-                            vrInterface.showSideText(messages[2]);
+                            orbi.showSideText(messages[2]);
 
                             if (isHandsfree) {
-                                vrInterface.buttons[0].material.map = new THREE.TextureLoader().load('assets/textures/projectile-motion/play-again.png');
-                                vrInterface.buttons[0].material.needsUpdate = true;
+                                orbi.buttons[0].material.map = new THREE.TextureLoader().load('assets/textures/projectile-motion/play-again.png');
+                                orbi.buttons[0].material.needsUpdate = true;
                             }
                         }
                         else {
-                            vrInterface.showMessage(messages[1])
+                            orbi.showMessage(messages[1])
                         }
                     }
 
@@ -176,16 +176,16 @@
                         self.win = false;
                         document.querySelector('#info').style.display = 'none';
 
-                        vrInterface.isToChangeTheta = true;
-                        vrInterface.hideSideText();
-                        self.el.setAttribute('vr-interface', {
-                            rho: -15,
+                        orbi.isToChangeTheta = true;
+                        orbi.hideSideText();
+                        self.el.setAttribute('orbi', {
+                            phi: -15,
                             messageBG: '#000000',
                         });
 
                         if (isHandsfree) {
-                            vrInterface.buttons[0].material.map = new THREE.TextureLoader().load('assets/textures/projectile-motion/dropButton.png');
-                            vrInterface.buttons[0].material.needsUpdate = true;
+                            orbi.buttons[0].material.map = new THREE.TextureLoader().load('assets/textures/projectile-motion/dropButton.png');
+                            orbi.buttons[0].material.needsUpdate = true;
                         }
 
                         self.randomizeAirplanePosition();
@@ -202,12 +202,12 @@
 
                     self.crate.el.body.mass = 5;
 
-                    vrInterface.show();
+                    orbi.show();
                 });
 
                 this.el.sceneEl.addEventListener('exit-vr', () => {
                     document.querySelector('#info').style.display = 'block';
-                    vrInterface.hide();
+                    orbi.hide();
                     pause();
                 });
 
@@ -230,7 +230,7 @@
                     if (!self.isPaused && !self.released) {
                         self.dropCrate();
                         self.released = true;
-                        vrInterface.showMessage(messages[0])
+                        orbi.showMessage(messages[0])
                     }
 
                     if (self.win) {
@@ -352,7 +352,7 @@
         </a-entity>
 
         <a-entity rotation="0 90 0"
-            vr-interface="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.25; theta: 0; rho: -15; movementBar: false; 
+            orbi="dimension: 1 1; buttonSize: 0.2 0.2; orbits:1.25; theta: 0; phi: -15; movementBar: false; 
             font:assets/fonts/roboto-msdf.json; negate: false; transparency: true; bgTransparency: false; sideTextSize: 0.75 1.5"
             button-controls appcode>
         </a-entity>
@@ -409,10 +409,10 @@
                 '<b>Começar:</b> Pressione o botão VR no canto inferior direito para entrar no modo Realidade Virtual e iniciar.',
             );
             TRANSLATION.add(
-            '#title',
-            'Projectile Motion - VR',
-            'Movimento de Projéteis - RV'
-        );
+                '#title',
+                'Projectile Motion - VR',
+                'Movimento de Projéteis - RV'
+            );
         </script>
 
 
