@@ -30,7 +30,7 @@
         AFRAME.registerComponent('config', {
             init: function () {
                 const self = this;
-                const vrInterface = this.el.components['orbi'];
+                const orbi = this.el.components['orbi'];
 
                 this.models = document.querySelectorAll('.menu-model');
                 this.modelIndex = 0;
@@ -58,7 +58,7 @@
                     language = language.substring(aux.length, language.length);
                     switch (language) {
                         case 'en-US': {
-                            vrInterface.addButton('previous', '#previous', () => {
+                            orbi.addButton('previous', '#previous', () => {
                                 let model = self.models[self.modelIndex];
 
                                 model.object3D.remove(self.highlight);
@@ -79,10 +79,10 @@
 
                                 model.object3D.visible = true;
 
-                                vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
+                                orbi.showMessage(`${model.getAttribute('name')} model loaded`);
                             });
 
-                            vrInterface.addButton('next', '#next', () => {
+                            orbi.addButton('next', '#next', () => {
                                 let model = self.models[self.modelIndex];
 
                                 model.object3D.remove(self.highlight);
@@ -103,49 +103,49 @@
 
                                 model.object3D.visible = true;
 
-                                vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
+                                orbi.showMessage(`${model.getAttribute('name')} model loaded`);
                             });
 
-                            vrInterface.addButton('zoomIn', '#zoomIn', () => {
+                            orbi.addButton('zoomIn', '#zoomIn', () => {
                                 if (self.zoomLevel < 1) {
                                     for (let i = 0; i < self.models.length; i++) {
                                         self.models[i].object3D.position.z += 0.5;
 
                                     }
                                     self.zoomLevel++;
-                                    vrInterface.showMessage('Zoomed in');
+                                    orbi.showMessage('Zoomed in');
                                 }
                                 else {
-                                    vrInterface.showMessage('Max zoom reached already');
+                                    orbi.showMessage('Max zoom reached already');
                                 }
                             });
 
-                            vrInterface.addButton('zoomOut', '#zoomOut', () => {
+                            orbi.addButton('zoomOut', '#zoomOut', () => {
                                 if (self.zoomLevel > -1) {
                                     for (let i = 0; i < self.models.length; i++) {
                                         self.models[i].object3D.position.z -= 0.5;
 
                                     }
-                                    vrInterface.showMessage('Zoomed off');
+                                    orbi.showMessage('Zoomed off');
                                     self.zoomLevel--;
                                 }
                                 else {
-                                    vrInterface.showMessage('Min zoom reached already');
+                                    orbi.showMessage('Min zoom reached already');
                                 }
                             });
 
-                            vrInterface.addButton('rotation', '#rotation', () => {
+                            orbi.addButton('rotation', '#rotation', () => {
                                 self.rotate = !self.rotate;
-                                vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
+                                orbi.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
                             });
 
-                            vrInterface.addButton('toggleHighlight', '#toggleHighlight', () => {
+                            orbi.addButton('toggleHighlight', '#toggleHighlight', () => {
                                 self.highlight.visible = !self.highlight.visible;
-                                vrInterface.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
+                                orbi.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
                             });
 
                             document.addEventListener('pointerlockchange', (event) => {
-                                vrInterface.show();
+                                orbi.show();
                                 self.hide = false;
                             });
                             break;
@@ -158,7 +158,7 @@
                             self.models[3].setAttribute('name','Trombose');
 
 
-                            vrInterface.addButton('previous-pt', '#previous-pt', () => {
+                            orbi.addButton('previous-pt', '#previous-pt', () => {
                                 let model = self.models[self.modelIndex];
 
                                 model.object3D.remove(self.highlight);
@@ -179,10 +179,10 @@
 
                                 model.object3D.visible = true;
 
-                                vrInterface.showMessage(`Modelo de ${model.getAttribute('name')} carregado`);
+                                orbi.showMessage(`Modelo de ${model.getAttribute('name')} carregado`);
                             });
 
-                            vrInterface.addButton('next-pt', '#next-pt', () => {
+                            orbi.addButton('next-pt', '#next-pt', () => {
                                 let model = self.models[self.modelIndex];
 
                                 model.object3D.remove(self.highlight);
@@ -203,56 +203,56 @@
 
                                 model.object3D.visible = true;
 
-                                vrInterface.showMessage(`Modelo de ${model.getAttribute('name')} carregado`);
+                                orbi.showMessage(`Modelo de ${model.getAttribute('name')} carregado`);
                             });
 
-                            vrInterface.addButton('zoomIn-pt', '#zoomIn-pt', () => {
+                            orbi.addButton('zoomIn-pt', '#zoomIn-pt', () => {
                                 if (self.zoomLevel < 1) {
                                     for (let i = 0; i < self.models.length; i++) {
                                         self.models[i].object3D.position.z += 0.5;
 
                                     }
                                     self.zoomLevel++;
-                                    vrInterface.showMessage('Imagem Ampiada');
+                                    orbi.showMessage('Imagem Ampiada');
                                 }
                                 else {
-                                    vrInterface.showMessage('Ampliação máximo atingida');
+                                    orbi.showMessage('Ampliação máximo atingida');
                                 }
                             });
 
-                            vrInterface.addButton('zoomOut-pt', '#zoomOut-pt', () => {
+                            orbi.addButton('zoomOut-pt', '#zoomOut-pt', () => {
                                 if (self.zoomLevel > -1) {
                                     for (let i = 0; i < self.models.length; i++) {
                                         self.models[i].object3D.position.z -= 0.5;
 
                                     }
-                                    vrInterface.showMessage('Imagem Reduzida');
+                                    orbi.showMessage('Imagem Reduzida');
                                     self.zoomLevel--;
                                 }
                                 else {
-                                    vrInterface.showMessage('Redução máxima atingida');
+                                    orbi.showMessage('Redução máxima atingida');
                                 }
                             });
 
-                            vrInterface.addButton('rotation-pt', '#rotation-pt', () => {
+                            orbi.addButton('rotation-pt', '#rotation-pt', () => {
                                 self.rotate = !self.rotate;
-                                vrInterface.showMessage(`Rotação está ${self.rotate ? 'ligada' : 'desligada'}`);
+                                orbi.showMessage(`Rotação está ${self.rotate ? 'ligada' : 'desligada'}`);
                             });
 
-                            vrInterface.addButton('toggleHighlight-pt', '#toggleHighlight-pt', () => {
+                            orbi.addButton('toggleHighlight-pt', '#toggleHighlight-pt', () => {
                                 self.highlight.visible = !self.highlight.visible;
-                                vrInterface.showMessage(`Destaque está ${self.highlight.visible ? 'ativado' : 'desativado'}`);
+                                orbi.showMessage(`Destaque está ${self.highlight.visible ? 'ativado' : 'desativado'}`);
                             });
 
                             document.addEventListener('pointerlockchange', (event) => {
-                                vrInterface.show();
+                                orbi.show();
                                 self.hide = false;
                             });
                             break;
                         }
                     }
                 } else {
-                    vrInterface.addButton('previous', '#previous', () => {
+                    orbi.addButton('previous', '#previous', () => {
                                 let model = self.models[self.modelIndex];
 
                                 model.object3D.remove(self.highlight);
@@ -273,10 +273,10 @@
 
                                 model.object3D.visible = true;
 
-                                vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
+                                orbi.showMessage(`${model.getAttribute('name')} model loaded`);
                             });
 
-                            vrInterface.addButton('next', '#next', () => {
+                            orbi.addButton('next', '#next', () => {
                                 let model = self.models[self.modelIndex];
 
                                 model.object3D.remove(self.highlight);
@@ -297,49 +297,49 @@
 
                                 model.object3D.visible = true;
 
-                                vrInterface.showMessage(`${model.getAttribute('name')} model loaded`);
+                                orbi.showMessage(`${model.getAttribute('name')} model loaded`);
                             });
 
-                            vrInterface.addButton('zoomIn', '#zoomIn', () => {
+                            orbi.addButton('zoomIn', '#zoomIn', () => {
                                 if (self.zoomLevel < 1) {
                                     for (let i = 0; i < self.models.length; i++) {
                                         self.models[i].object3D.position.z += 0.5;
 
                                     }
                                     self.zoomLevel++;
-                                    vrInterface.showMessage('Zoomed in');
+                                    orbi.showMessage('Zoomed in');
                                 }
                                 else {
-                                    vrInterface.showMessage('Max zoom reached already');
+                                    orbi.showMessage('Max zoom reached already');
                                 }
                             });
 
-                            vrInterface.addButton('zoomOut', '#zoomOut', () => {
+                            orbi.addButton('zoomOut', '#zoomOut', () => {
                                 if (self.zoomLevel > -1) {
                                     for (let i = 0; i < self.models.length; i++) {
                                         self.models[i].object3D.position.z -= 0.5;
 
                                     }
-                                    vrInterface.showMessage('Zoomed off');
+                                    orbi.showMessage('Zoomed off');
                                     self.zoomLevel--;
                                 }
                                 else {
-                                    vrInterface.showMessage('Min zoom reached already');
+                                    orbi.showMessage('Min zoom reached already');
                                 }
                             });
 
-                            vrInterface.addButton('rotation', '#rotation', () => {
+                            orbi.addButton('rotation', '#rotation', () => {
                                 self.rotate = !self.rotate;
-                                vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
+                                orbi.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
                             });
 
-                            vrInterface.addButton('toggleHighlight', '#toggleHighlight', () => {
+                            orbi.addButton('toggleHighlight', '#toggleHighlight', () => {
                                 self.highlight.visible = !self.highlight.visible;
-                                vrInterface.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
+                                orbi.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
                             });
 
                             document.addEventListener('pointerlockchange', (event) => {
-                                vrInterface.show();
+                                orbi.show();
                                 self.hide = false;
                             });
                 }
@@ -350,10 +350,10 @@
                 this.el.addEventListener('buttondown', () => {
                     self.hide = !self.hide;
                     if (self.hide) {
-                        vrInterface.hide();
+                        orbi.hide();
                     }
                     else {
-                        vrInterface.show();
+                        orbi.show();
                     }
                 });
             },
