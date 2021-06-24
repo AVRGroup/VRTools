@@ -55,7 +55,7 @@
   - show() - make interface visible
   
   Observations:
-  - Setting the dimension property correctly is important for displaying the vr interface elements correctly;
+  - Setting the dimension property correctly is important for displaying the orbi elements correctly;
 */
 
 AFRAME.registerComponent('orbi', {
@@ -305,7 +305,7 @@ AFRAME.registerComponent('orbi', {
     const data = this.data;
 
     if (data.dimension.x * data.dimension.y <= this.buttons.length) {
-      console.warn('VRInterface: Number of buttons doesn\'t match dimensions limits.')
+      console.warn('OrBI: Number of buttons doesn\'t match dimensions limits.')
     }
 
     let image;

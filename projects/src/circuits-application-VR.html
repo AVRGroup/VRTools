@@ -47,36 +47,36 @@
 
         function changeLanguage(lang) {
             if (lang != currentLang) {
-                const vrInterface = document.querySelector('[orbi]').components['orbi'];
-                if (vrInterface) {
+                const orbi = document.querySelector('[orbi]').components['orbi'];
+                if (orbi) {
                     const loader = new THREE.TextureLoader();
 
                     if (lang === 'pt-BR') {
                         currentLang = 'pt-BR';
 
-                        vrInterface.buttons[0].material.map = loader.load('assets/textures/circuits/wire-br.png');
-                        vrInterface.buttons[1].material.map = loader.load('assets/textures/circuits/l-wire-br.png');
-                        vrInterface.buttons[2].material.map = loader.load('assets/textures/circuits/t-wire-br.png');
-                        vrInterface.buttons[3].material.map = loader.load('assets/textures/circuits/rotate-br.png');
-                        vrInterface.buttons[4].material.map = loader.load('assets/textures/circuits/lamp-br.png');
-                        vrInterface.buttons[5].material.map = loader.load('assets/textures/circuits/fan-br.png');
-                        vrInterface.buttons[6].material.map = loader.load('assets/textures/circuits/battery-br.png');
-                        vrInterface.buttons[7].material.map = loader.load('assets/textures/circuits/bin-br.png');
+                        orbi.buttons[0].material.map = loader.load('assets/textures/circuits/wire-br.png');
+                        orbi.buttons[1].material.map = loader.load('assets/textures/circuits/l-wire-br.png');
+                        orbi.buttons[2].material.map = loader.load('assets/textures/circuits/t-wire-br.png');
+                        orbi.buttons[3].material.map = loader.load('assets/textures/circuits/rotate-br.png');
+                        orbi.buttons[4].material.map = loader.load('assets/textures/circuits/lamp-br.png');
+                        orbi.buttons[5].material.map = loader.load('assets/textures/circuits/fan-br.png');
+                        orbi.buttons[6].material.map = loader.load('assets/textures/circuits/battery-br.png');
+                        orbi.buttons[7].material.map = loader.load('assets/textures/circuits/bin-br.png');
                     }
                     else {
                         currentLang = 'en-US';
 
-                        vrInterface.buttons[0].material.map = loader.load('assets/textures/circuits/wire.png');
-                        vrInterface.buttons[1].material.map = loader.load('assets/textures/circuits/l-wire.png');
-                        vrInterface.buttons[2].material.map = loader.load('assets/textures/circuits/t-wire.png');
-                        vrInterface.buttons[3].material.map = loader.load('assets/textures/circuits/rotate.png');
-                        vrInterface.buttons[4].material.map = loader.load('assets/textures/circuits/lamp.png');
-                        vrInterface.buttons[5].material.map = loader.load('assets/textures/circuits/fan.png');
-                        vrInterface.buttons[6].material.map = loader.load('assets/textures/circuits/battery.png');
-                        vrInterface.buttons[7].material.map = loader.load('assets/textures/circuits/bin.png');
+                        orbi.buttons[0].material.map = loader.load('assets/textures/circuits/wire.png');
+                        orbi.buttons[1].material.map = loader.load('assets/textures/circuits/l-wire.png');
+                        orbi.buttons[2].material.map = loader.load('assets/textures/circuits/t-wire.png');
+                        orbi.buttons[3].material.map = loader.load('assets/textures/circuits/rotate.png');
+                        orbi.buttons[4].material.map = loader.load('assets/textures/circuits/lamp.png');
+                        orbi.buttons[5].material.map = loader.load('assets/textures/circuits/fan.png');
+                        orbi.buttons[6].material.map = loader.load('assets/textures/circuits/battery.png');
+                        orbi.buttons[7].material.map = loader.load('assets/textures/circuits/bin.png');
                     }
 
-                    for (let button of vrInterface.buttons) {
+                    for (let button of orbi.buttons) {
                         button.material.needsUpdate = true;
                     }
                 }
@@ -100,42 +100,42 @@
         AFRAME.registerComponent('panel', {
             init: function () {
                 const self = this;
-                const vrInterface = this.el.components['orbi'];
+                const orbi = this.el.components['orbi'];
                 this.models = this.el.querySelectorAll('.panelModel');
                 const clipboard = document.querySelector('#clipboard').object3D;
 
                 clipboard.data = { type: '', rotation: 0 };
 
-                vrInterface.addButton('wire', '#wire', () => {
+                orbi.addButton('wire', '#wire', () => {
                     addToClipboard(0);
-                    vrInterface.showMessage(messages[TRANSLATION.currentLang][0]);
+                    orbi.showMessage(messages[TRANSLATION.currentLang][0]);
                 });
-                vrInterface.addButton('l-block', '#lwire', () => {
+                orbi.addButton('l-block', '#lwire', () => {
                     addToClipboard('lblock');
-                    vrInterface.showMessage(messages[TRANSLATION.currentLang][1]);
+                    orbi.showMessage(messages[TRANSLATION.currentLang][1]);
                 });
-                vrInterface.addButton('t-block', '#twire', () => {
+                orbi.addButton('t-block', '#twire', () => {
                     addToClipboard('tblock');
-                    vrInterface.showMessage(messages[TRANSLATION.currentLang][2]);
+                    orbi.showMessage(messages[TRANSLATION.currentLang][2]);
                 });
 
-                vrInterface.addButton('rotate', '#rotateImage', () => rotate());
+                orbi.addButton('rotate', '#rotateImage', () => rotate());
 
-                vrInterface.addButton('lamp', '#lamp', () => {
+                orbi.addButton('lamp', '#lamp', () => {
                     addToClipboard('lamp');
-                    vrInterface.showMessage(messages[TRANSLATION.currentLang][3]);
+                    orbi.showMessage(messages[TRANSLATION.currentLang][3]);
                 });
-                vrInterface.addButton('fan', '#fan', () => {
+                orbi.addButton('fan', '#fan', () => {
                     addToClipboard('fan');
-                    vrInterface.showMessage(messages[TRANSLATION.currentLang][4]);
+                    orbi.showMessage(messages[TRANSLATION.currentLang][4]);
                 });
 
-                vrInterface.addButton('battery', '#battery', () => {
+                orbi.addButton('battery', '#battery', () => {
                     addToClipboard('battery');
-                    vrInterface.showMessage(messages[TRANSLATION.currentLang][5]);
+                    orbi.showMessage(messages[TRANSLATION.currentLang][5]);
                 });
 
-                vrInterface.addButton('dispose', '#binImage', () => clearClipboard())
+                orbi.addButton('dispose', '#binImage', () => clearClipboard())
 
                 this.clipboardRotation = clipboard.rotation;
                 this.rotationDirection = 1;
