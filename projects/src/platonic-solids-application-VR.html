@@ -33,7 +33,7 @@
         AFRAME.registerComponent('config', {
             init: function () {
                 const self = this;
-                const vrInterface = this.el.components['orbi'];
+                const orbi = this.el.components['orbi'];
                 this.models = document.querySelectorAll('.menu-model');
                 this.modelIndex = 0;
                 this.rotate = true;
@@ -103,7 +103,7 @@
                     language = language.substring(aux.length, language.length);
                     switch (language) {
                         case 'en-US': {
-                            vrInterface.addButton('previous', '#previous', () => {
+                            orbi.addButton('previous', '#previous', () => {
                                 self.models[self.modelIndex].object3D.visible = false;
                                 if (self.modelIndex == 0) {
                                     self.modelIndex = self.models.length - 1;
@@ -121,9 +121,9 @@
                                     self.models[self.modelIndex].object3D.children[0].visible = true;
                                     self.models[self.modelIndex].object3D.children[1].visible = false;
                                 }
-                                vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
+                                orbi.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
                             });
-                            vrInterface.addButton('next', '#next', () => {
+                            orbi.addButton('next', '#next', () => {
                                 self.models[self.modelIndex].object3D.visible = false;
                                 if (self.modelIndex == self.models.length - 1) {
                                     self.modelIndex = 0;
@@ -141,47 +141,47 @@
                                     self.models[self.modelIndex].object3D.children[0].visible = true;
                                     self.models[self.modelIndex].object3D.children[1].visible = false;
                                 }
-                                vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
+                                orbi.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
                             });
-                            vrInterface.addButton('decrease', '#decrease', () => {
+                            orbi.addButton('decrease', '#decrease', () => {
                                 if (this.info == 0.5) {
-                                    vrInterface.showMessage('Min size reached already')
+                                    orbi.showMessage('Min size reached already')
                                 }
                                 if (self.models[self.modelIndex].object3D.position.y == 1) {
                                     self.models[self.modelIndex].object3D.scale.set(0.5, 0.5, 0.5);
                                     self.models[self.modelIndex].object3D.position.y = 0.5;
                                     this.info = 0.5;
-                                    vrInterface.showMessage('Size decreased')
+                                    orbi.showMessage('Size decreased')
                                 }
                                 if (self.models[self.modelIndex].object3D.position.y == 2) {
                                     self.models[self.modelIndex].object3D.scale.set(1, 1, 1);
                                     self.models[self.modelIndex].object3D.position.y = 1;
                                     this.info = 1;
-                                    vrInterface.showMessage('Size decreased')
+                                    orbi.showMessage('Size decreased')
                                 }
                             });
-                            vrInterface.addButton('increase', '#increase', () => {
+                            orbi.addButton('increase', '#increase', () => {
                                 if (this.info == 2) {
-                                    vrInterface.showMessage('Max size reached already')
+                                    orbi.showMessage('Max size reached already')
                                 }
                                 if (self.models[self.modelIndex].object3D.position.y == 1) {
                                     self.models[self.modelIndex].object3D.scale.set(2, 2, 2);
                                     self.models[self.modelIndex].object3D.position.y = 2;
                                     this.info = 2;
-                                    vrInterface.showMessage('Size increased');
+                                    orbi.showMessage('Size increased');
                                 }
                                 if (self.models[self.modelIndex].object3D.position.y == 0.5) {
                                     self.models[self.modelIndex].object3D.scale.set(1, 1, 1);
                                     self.models[self.modelIndex].object3D.position.y = 1;
                                     this.info = 1;
-                                    vrInterface.showMessage('Size increased');
+                                    orbi.showMessage('Size increased');
                                 }
                             });
-                            vrInterface.addButton('rotation', '#rotation', () => {
+                            orbi.addButton('rotation', '#rotation', () => {
                                 self.rotate = !self.rotate;
-                                vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
+                                orbi.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
                             });
-                            vrInterface.addButton('wireframe', '#wireframe', () => {
+                            orbi.addButton('wireframe', '#wireframe', () => {
                                 if (this.wireframe) {
                                     self.models[self.modelIndex].object3D.children[0].visible = true;
                                     self.models[self.modelIndex].object3D.children[1].visible = false;
@@ -192,21 +192,21 @@
                                     this.wireframe = true;
 
                                 }
-                                vrInterface.showMessage(`Wireframe is ${self.models[self.modelIndex].object3D.children[0].material.wireframe ? 'on' : 'off'}`);
-                                vrInterface.showMessage(`Wireframe is ${this.wireframe ? 'on' : 'off'}`);
+                                orbi.showMessage(`Wireframe is ${self.models[self.modelIndex].object3D.children[0].material.wireframe ? 'on' : 'off'}`);
+                                orbi.showMessage(`Wireframe is ${this.wireframe ? 'on' : 'off'}`);
                             });
 
                             document.addEventListener('pointerlockchange', (event) => {
-                                vrInterface.show();
+                                orbi.show();
                                 self.hide = false;
                             });
                             this.el.addEventListener('buttondown', () => {
                                 self.hide = !self.hide;
                                 if (self.hide) {
-                                    vrInterface.hide();
+                                    orbi.hide();
                                 }
                                 else {
-                                    vrInterface.show();
+                                    orbi.show();
                                 }
                             });
                             break;
@@ -218,7 +218,7 @@
                             self.models[3].setAttribute('name', 'Dodecaedro');
                             self.models[4].setAttribute('name', 'Icosaedro');
 
-                            vrInterface.addButton('previous-pt', '#previous-pt', () => {
+                            orbi.addButton('previous-pt', '#previous-pt', () => {
                                 self.models[self.modelIndex].object3D.visible = false;
                                 if (self.modelIndex == 0) {
                                     self.modelIndex = self.models.length - 1;
@@ -236,9 +236,9 @@
                                     self.models[self.modelIndex].object3D.children[0].visible = true;
                                     self.models[self.modelIndex].object3D.children[1].visible = false;
                                 }
-                                vrInterface.showMessage(`Modelo de ${self.models[self.modelIndex].getAttribute('name')} carregado`);
+                                orbi.showMessage(`Modelo de ${self.models[self.modelIndex].getAttribute('name')} carregado`);
                             });
-                            vrInterface.addButton('next-pt', '#next-pt', () => {
+                            orbi.addButton('next-pt', '#next-pt', () => {
                                 self.models[self.modelIndex].object3D.visible = false;
                                 if (self.modelIndex == self.models.length - 1) {
                                     self.modelIndex = 0;
@@ -256,47 +256,47 @@
                                     self.models[self.modelIndex].object3D.children[0].visible = true;
                                     self.models[self.modelIndex].object3D.children[1].visible = false;
                                 }
-                                vrInterface.showMessage(`Modelo de ${self.models[self.modelIndex].getAttribute('name')} carregado`);
+                                orbi.showMessage(`Modelo de ${self.models[self.modelIndex].getAttribute('name')} carregado`);
                             });
-                            vrInterface.addButton('decrease-pt', '#decrease-pt', () => {
+                            orbi.addButton('decrease-pt', '#decrease-pt', () => {
                                 if (this.info == 0.5) {
-                                    vrInterface.showMessage('Tamanho mínimo atingido')
+                                    orbi.showMessage('Tamanho mínimo atingido')
                                 }
                                 if (self.models[self.modelIndex].object3D.position.y == 1) {
                                     self.models[self.modelIndex].object3D.scale.set(0.5, 0.5, 0.5);
                                     self.models[self.modelIndex].object3D.position.y = 0.5;
                                     this.info = 0.5;
-                                    vrInterface.showMessage('Tamanho reduzido')
+                                    orbi.showMessage('Tamanho reduzido')
                                 }
                                 if (self.models[self.modelIndex].object3D.position.y == 2) {
                                     self.models[self.modelIndex].object3D.scale.set(1, 1, 1);
                                     self.models[self.modelIndex].object3D.position.y = 1;
                                     this.info = 1;
-                                    vrInterface.showMessage('Tamanho reduzido')
+                                    orbi.showMessage('Tamanho reduzido')
                                 }
                             });
-                            vrInterface.addButton('increase-pt', '#increase-pt', () => {
+                            orbi.addButton('increase-pt', '#increase-pt', () => {
                                 if (this.info == 2) {
-                                    vrInterface.showMessage('Tamanho máximo atingido')
+                                    orbi.showMessage('Tamanho máximo atingido')
                                 }
                                 if (self.models[self.modelIndex].object3D.position.y == 1) {
                                     self.models[self.modelIndex].object3D.scale.set(2, 2, 2);
                                     self.models[self.modelIndex].object3D.position.y = 2;
                                     this.info = 2;
-                                    vrInterface.showMessage('Tamanho aumentado');
+                                    orbi.showMessage('Tamanho aumentado');
                                 }
                                 if (self.models[self.modelIndex].object3D.position.y == 0.5) {
                                     self.models[self.modelIndex].object3D.scale.set(1, 1, 1);
                                     self.models[self.modelIndex].object3D.position.y = 1;
                                     this.info = 1;
-                                    vrInterface.showMessage('Tamanho aumentado');
+                                    orbi.showMessage('Tamanho aumentado');
                                 }
                             });
-                            vrInterface.addButton('rotation-pt', '#rotation-pt', () => {
+                            orbi.addButton('rotation-pt', '#rotation-pt', () => {
                                 self.rotate = !self.rotate;
-                                vrInterface.showMessage(`Rotação ${self.rotate ? 'Ligada' : 'Desligada'}`);
+                                orbi.showMessage(`Rotação ${self.rotate ? 'Ligada' : 'Desligada'}`);
                             });
-                            vrInterface.addButton('wireframe', '#wireframe', () => {
+                            orbi.addButton('wireframe', '#wireframe', () => {
                                 if (this.wireframe) {
                                     self.models[self.modelIndex].object3D.children[0].visible = true;
                                     self.models[self.modelIndex].object3D.children[1].visible = false;
@@ -307,28 +307,28 @@
                                     this.wireframe = true;
 
                                 }
-                                vrInterface.showMessage(`Wireframe ${self.models[self.modelIndex].object3D.children[0].material.wireframe ? 'Ligado' : 'Desligado'}`);
-                                vrInterface.showMessage(`Wireframe ${this.wireframe ? 'Ligado' : 'Desligado'}`);
+                                orbi.showMessage(`Wireframe ${self.models[self.modelIndex].object3D.children[0].material.wireframe ? 'Ligado' : 'Desligado'}`);
+                                orbi.showMessage(`Wireframe ${this.wireframe ? 'Ligado' : 'Desligado'}`);
                             });
 
                             document.addEventListener('pointerlockchange', (event) => {
-                                vrInterface.show();
+                                orbi.show();
                                 self.hide = false;
                             });
                             this.el.addEventListener('buttondown', () => {
                                 self.hide = !self.hide;
                                 if (self.hide) {
-                                    vrInterface.hide();
+                                    orbi.hide();
                                 }
                                 else {
-                                    vrInterface.show();
+                                    orbi.show();
                                 }
                             });
                             break;
                         }
                     }
                 } else {
-                    vrInterface.addButton('previous', '#previous', () => {
+                    orbi.addButton('previous', '#previous', () => {
                         self.models[self.modelIndex].object3D.visible = false;
                         if (self.modelIndex == 0) {
                             self.modelIndex = self.models.length - 1;
@@ -346,9 +346,9 @@
                             self.models[self.modelIndex].object3D.children[0].visible = true;
                             self.models[self.modelIndex].object3D.children[1].visible = false;
                         }
-                        vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
+                        orbi.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
                     });
-                    vrInterface.addButton('next', '#next', () => {
+                    orbi.addButton('next', '#next', () => {
                         self.models[self.modelIndex].object3D.visible = false;
                         if (self.modelIndex == self.models.length - 1) {
                             self.modelIndex = 0;
@@ -366,47 +366,47 @@
                             self.models[self.modelIndex].object3D.children[0].visible = true;
                             self.models[self.modelIndex].object3D.children[1].visible = false;
                         }
-                        vrInterface.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
+                        orbi.showMessage(`${self.models[self.modelIndex].getAttribute('name')} model loaded`);
                     });
-                    vrInterface.addButton('decrease', '#decrease', () => {
+                    orbi.addButton('decrease', '#decrease', () => {
                         if (this.info == 0.5) {
-                            vrInterface.showMessage('Min size reached already')
+                            orbi.showMessage('Min size reached already')
                         }
                         if (self.models[self.modelIndex].object3D.position.y == 1) {
                             self.models[self.modelIndex].object3D.scale.set(0.5, 0.5, 0.5);
                             self.models[self.modelIndex].object3D.position.y = 0.5;
                             this.info = 0.5;
-                            vrInterface.showMessage('Size decreased')
+                            orbi.showMessage('Size decreased')
                         }
                         if (self.models[self.modelIndex].object3D.position.y == 2) {
                             self.models[self.modelIndex].object3D.scale.set(1, 1, 1);
                             self.models[self.modelIndex].object3D.position.y = 1;
                             this.info = 1;
-                            vrInterface.showMessage('Size decreased')
+                            orbi.showMessage('Size decreased')
                         }
                     });
-                    vrInterface.addButton('increase', '#increase', () => {
+                    orbi.addButton('increase', '#increase', () => {
                         if (this.info == 2) {
-                            vrInterface.showMessage('Max size reached already')
+                            orbi.showMessage('Max size reached already')
                         }
                         if (self.models[self.modelIndex].object3D.position.y == 1) {
                             self.models[self.modelIndex].object3D.scale.set(2, 2, 2);
                             self.models[self.modelIndex].object3D.position.y = 2;
                             this.info = 2;
-                            vrInterface.showMessage('Size increased');
+                            orbi.showMessage('Size increased');
                         }
                         if (self.models[self.modelIndex].object3D.position.y == 0.5) {
                             self.models[self.modelIndex].object3D.scale.set(1, 1, 1);
                             self.models[self.modelIndex].object3D.position.y = 1;
                             this.info = 1;
-                            vrInterface.showMessage('Size increased');
+                            orbi.showMessage('Size increased');
                         }
                     });
-                    vrInterface.addButton('rotation', '#rotation', () => {
+                    orbi.addButton('rotation', '#rotation', () => {
                         self.rotate = !self.rotate;
-                        vrInterface.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
+                        orbi.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
                     });
-                    vrInterface.addButton('wireframe', '#wireframe', () => {
+                    orbi.addButton('wireframe', '#wireframe', () => {
                         if (this.wireframe) {
                             self.models[self.modelIndex].object3D.children[0].visible = true;
                             self.models[self.modelIndex].object3D.children[1].visible = false;
@@ -417,21 +417,21 @@
                             this.wireframe = true;
 
                         }
-                        vrInterface.showMessage(`Wireframe is ${self.models[self.modelIndex].object3D.children[0].material.wireframe ? 'on' : 'off'}`);
-                        vrInterface.showMessage(`Wireframe is ${this.wireframe ? 'on' : 'off'}`);
+                        orbi.showMessage(`Wireframe is ${self.models[self.modelIndex].object3D.children[0].material.wireframe ? 'on' : 'off'}`);
+                        orbi.showMessage(`Wireframe is ${this.wireframe ? 'on' : 'off'}`);
                     });
 
                     document.addEventListener('pointerlockchange', (event) => {
-                        vrInterface.show();
+                        orbi.show();
                         self.hide = false;
                     });
                     this.el.addEventListener('buttondown', () => {
                         self.hide = !self.hide;
                         if (self.hide) {
-                            vrInterface.hide();
+                            orbi.hide();
                         }
                         else {
-                            vrInterface.show();
+                            orbi.show();
                         }
                     });
                 }
