@@ -69,16 +69,42 @@ let passedTime = 0; // sum of deltas to get total time passed
 let loadingBar, outline; // they store loading bar mesh and outline mesh (initialized in create scene) 
 let detectingTime = 0, isDetecting = false; // helpers to detecing animation
 
+const vecOrigin2d = new THREE.Vector2(0, 0); // origin for raycaster
+const quaternion = new THREE.Quaternion(); // aux quaternion to movement
+
 let raycaster, intersection, groundIntersection, lastRock = null;
 
 const rocks = []; // receives rock meshes in createScene()
 const ground = []; // receives ground meshes in createScene()
 
-let counterText, counterTextGeo, font, count = 0;
-let winText;
+let counterText, counterTextGeo, count = 0;
 
-const vecOrigin2d = new THREE.Vector2(0, 0); // origin for raycaster
-const quaternion = new THREE.Quaternion(); // aux quaternion to movement
+var winText, font; // using var allocating variables in global scope for using in change language function
+
+//-- Language variables ---------------------------------------------------------------------------
+var appCurrentLang = new URLSearchParams(window.location.search).get('lang') || 'en-US';
+console.log(appCurrentLang);
+
+var winMessage = {
+    'en-US': 'Task Completed',
+    'pt-BR': 'Missão cumprida'
+}
+var instructionsMesasge = {
+    'en-US': `
+    <h2>Instructions:</h2>
+    <p>You are piloting a fictional drone in Mars and searching for special rocks that might store register of
+        ancient life.
+    </p>
+    <p>Follow the path and find 3 reddish rocks.</p>
+    `,
+    'pt-BR': `
+    <h2>Instruções:</h2>
+    <p>Você é o piloto de um dronce fictício em Marte e está a procura de rochas especias que podem guardar registros de vida antiga.
+    </p>
+    <p>Siga o caminho e encontre 3 pedras avermelhadas!</p>
+    `
+}
+
 
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 createScene();
@@ -193,6 +219,30 @@ function onSelectEnd() {
     moveCamera = false;
 }
 
+function changeLanguage(lang) {
+    if (appCurrentLang != lang) {
+
+        document.querySelector('#instructions').innerHTML = instructionsMesasge[lang];
+
+        if (font) {
+            console.log('hey font')
+            const winTextGeo = new THREE.TextBufferGeometry(winMessage[lang], {
+                font: font,
+                size: 0.05,
+                height: 0,
+            });
+            const greenMat = new THREE.MeshBasicMaterial({ color: 0x00ff00, depthWrite: false, depthTest: false });
+
+
+            winText.geometry = winTextGeo;
+            winText.geometry.needsUpdate = true;
+        }
+
+        appCurrentLang = lang;
+    }
+}
+window.changeLanguage = changeLanguage; // adding function to global scope
+
 //------------------------------------------------------------------------------------------------
 //-- Scene and auxiliary functions ---------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
@@ -277,6 +327,9 @@ async function createScene() {
             console.log('An error happened', error);
         }
     );
+
+    //-- Changin instruciions language ---------------------------------------------------------------
+    document.querySelector('#instructions').innerHTML = instructionsMesasge[appCurrentLang];
 
     //-- Create VR button and settings ---------------------------------------------------------------
     loadingText.style.display = 'none';
@@ -392,7 +445,7 @@ function createCameraElements() {
         counterText.position.set(0.3, 0.35, -1);
         camera.add(counterText);
 
-        const winTextGeo = new THREE.TextBufferGeometry('Task Completed', {
+        const winTextGeo = new THREE.TextBufferGeometry(winMessage[appCurrentLang], {
             font: font,
             size: 0.05,
             height: 0,
