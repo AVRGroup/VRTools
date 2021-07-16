@@ -320,11 +320,36 @@ async function createScene() {
             window.setTimeout(createCameraElements, 500)
         },
         (xhr) => { // on progress fuction
-            console.log('Terrain: ' + (xhr.loaded / xhr.total * 100) + '% loaded');
-            loadingText.innerHTML = (xhr.loaded / xhr.total * 100).toFixed(0) + '% loaded';
+            if (!isNaN(xhr.loaded) && !isNaN(xhr.total) && xhr.total > 0) {
+                console.log('Terrain: ' + (xhr.loaded / xhr.total * 100) + '% loaded');
+                loadingText.innerHTML = (xhr.loaded / xhr.total * 100).toFixed(0) + '% loaded';
+            }
         },
         (error) => { // on error function
             console.log('An error happened', error);
+        }
+    );
+
+    //-------- loading rover --------
+    await asyncLoader(
+        'assets/models/mars/perseverance.glb',
+        function (gltf) {
+            const rover = gltf.scene;
+
+            rover.rotation.y = Math.PI;
+            rover.position.z = -5;
+            rover.castShadow = true;
+            rover.matrixAutoUpdate = false
+            rover.updateMatrix();
+
+            scene.add(rover);
+
+        },
+        function (xhr) {
+            console.log('Rover: ' + (xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        function (error) {
+            console.log('An error happened', error)
         }
     );
 
@@ -336,32 +361,6 @@ async function createScene() {
     document.querySelector('.container').style.display = 'none';
     document.querySelector('#instructions').style.display = 'block';
     document.body.appendChild(VRButton.createButton(renderer));
-
-    //-------- loading rover --------
-    // loader.load(
-    // 	'../../assets/models/perseverance.glb',
-    // 	function (gltf) {
-    // 		const rover = gltf.scene;
-
-    // 		rover.rotation.y = Math.PI;
-    // 		rover.position.z = -5;
-    // 		rover.castShadow = true;
-    // 		rover.matrixAutoUpdate = false
-    // 		rover.updateMatrix();
-
-    // 		scene.add(rover);
-    // 		hasRoverLoaded = true;
-
-    // 		if (hasTerrainLoaded) createCameraInterface(); // camera interface has to be created after other objects in scene
-
-    // 	},
-    // 	function (xhr) {
-    // 		console.log('Rover: ' + (xhr.loaded / xhr.total * 100) + '% loaded');
-    // 	},
-    // 	function (error) {
-    // 		console.log('An error happened', error)
-    // 	}
-    // );
 }
 
 
