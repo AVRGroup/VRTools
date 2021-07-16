@@ -203,7 +203,7 @@ function loadingAnimation(passedTime) {
             counterText.geometry = counterTextGeo;
             counterText.geometry.needsUpdate = true;
 
-            if (count === 1) {
+            if (count === 3) {
                 winText.visible = true;
                 winSoud.play();
             }
