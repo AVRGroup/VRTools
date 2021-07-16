@@ -126,7 +126,17 @@
                     <div class="w3-display-container" style="border:2px solid black">
                         <div id="circuits" class="project-title w3-display-topleft w3-padding">Eletric
                             Circuits</div>
-                        <img src="img/projects-main-images/circuits.png" alt="example of important historical figures"
+                        <img src="img/projects-main-images/circuits.png" alt="initial view of the application"
+                            style="width:100%;">
+                    </div>
+                </a>
+            </div>
+
+            <div class="w3-col l3 m6 w3-margin-bottom">
+                <a href="javascript: TRANSLATION.redirect('projects/mars.html')">
+                    <div class="w3-display-container" style="border:2px solid black">
+                        <div id="mars" class="project-title w3-display-topleft w3-padding">Mars</div>
+                        <img src="img/projects-main-images/mars.jpg" alt="initial view of the application"
                             style="width:100%;">
                     </div>
                 </a>
@@ -249,7 +259,7 @@
             <form name="gform" id="gform"
                 action="https://docs.google.com/forms/d/e/1FAIpQLScT0oKS0BJ2vBWH5zVIlBgfFiZG9bgcDiuPka5jAZVDkFW8hw/formResponse?"
                 target="hidden_iframe" onsubmit="showModal()">
-                <input  class="w3-input w3-border" type="text" placeholder="Name" required name="entry.107470474"
+                <input class="w3-input w3-border" type="text" placeholder="Name" required name="entry.107470474"
                     id="entry.107470474">
                 <input class="w3-input w3-section w3-border" type="email" placeholder="Email" required
                     name="entry.1094368542" id="entry.1094368542">
@@ -373,6 +383,12 @@
             '#circuits',
             'Eletic Circuits',
             'Circuitos Elétricos'
+        );
+
+        TRANSLATION.add(
+            '#mars',
+            'Mars',
+            'Marte'
         )
 
         TRANSLATION.add(

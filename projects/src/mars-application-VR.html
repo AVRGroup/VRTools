@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mars VR</title>
+    <link rel="shortcut icon" href="../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            overflow: hidden;
+            height: 100vh;
+            background-image: url('../img/Mars/back2.jpg');
+            background-position: top center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 1;
+            margin: -76px 0 0 -76px;
+            width: 150px;
+            height: auto;
+        }
+
+        #loader {
+            width: 120px;
+            height: 120px;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        .text {
+            color: white;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        #instructions {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            width: 80%;
+            max-width: 720px;
+            transform: translateY(-50%);
+            margin: auto;
+            padding-left: 5px;
+            font-size: 1.2em;
+            z-index: 1;
+            border: 1px solid white;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body style="background-color:black;">
+    <div id="stats"></div>
+    <div class="container">
+        <div id="loader"></div>
+        <p id="loader-text" class="text">Downloading...</p>
+    </div>
+
+    <div id="instructions" class="text" style="display: none;">
+        <h2>Instructions:</h2>
+        <p>You are piloting a fictional drone in Mars and searching for special rocks that might store register of
+            ancient life.</p>
+        <p>Follow the path and find 3 reddish rocks.</p>
+    </div>
+
+    <div id="webgl-output">
+        <script type="module" src="mars-application-VR.js"></script>
+    </div>
+</body>
+
+</html>
