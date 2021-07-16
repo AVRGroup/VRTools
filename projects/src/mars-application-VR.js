@@ -81,6 +81,12 @@ let counterText, counterTextGeo, count = 0;
 
 var winText, font; // using var allocating variables in global scope for using in change language function
 
+const winSoud = new Howl({
+    src: ['assets/sounds/win.wav'], // Mativve https://freesound.org/people/Mativve/sounds/391539/
+    volume: 1,
+});
+Howler.pos(0, 1.6, 0); // Sound listener position
+
 //-- Language variables ---------------------------------------------------------------------------
 var appCurrentLang = new URLSearchParams(window.location.search).get('lang') || 'en-US';
 console.log(appCurrentLang);
@@ -197,8 +203,9 @@ function loadingAnimation(passedTime) {
             counterText.geometry = counterTextGeo;
             counterText.geometry.needsUpdate = true;
 
-            if (count === 3) {
+            if (count === 1) {
                 winText.visible = true;
+                winSoud.play();
             }
         }
 
