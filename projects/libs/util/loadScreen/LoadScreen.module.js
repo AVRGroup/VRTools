@@ -5,8 +5,8 @@
  */
 // (modified to be a module)
 
-import * as THREE from '../../three/three.module.js';
-import { GLTFLoader } from '../../three/jsm/jsm/loaders/GLTFLoader.js';
+import * as THREE from '../../three/build/three.module.js';
+import { GLTFLoader } from '../../three/build/jsm/loaders/GLTFLoader.js';
 
 const LoadScreen = function (renderer, style) {
 

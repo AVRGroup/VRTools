@@ -1,7 +1,7 @@
 //-- Imports -------------------------------------------------------------------------------------
-import * as THREE from "../libs/three-127/build/three.module.js";
-import { VRButton } from "../libs/three-127/build/jsm/webxr/VRButton.js";
-import { GLTFLoader } from '../libs/three-127/build/jsm/loaders/GLTFLoader.js';
+import * as THREE from "../libs/three/build/three.module.js";
+import { VRButton } from "../libs/three/build/jsm/webxr/VRButton.js";
+import { GLTFLoader } from '../libs/three/build/jsm/loaders/GLTFLoader.js';
 import Stats from '../libs/util/stats.module.js';
 
 //-----------------------------------------------------------------------------------------------

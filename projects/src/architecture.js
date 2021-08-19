@@ -1,7 +1,7 @@
 /* eslint-disable indent */
-import * as THREE from '../libs/three/three.module.js';
-import Stats from '../libs/util/stats.module.js';
-import { PointerLockControls } from '../libs/util/PointerLockControls.js';
+import * as THREE from '../libs/three/build/three.module.js';
+import Stats from '../libs/three/build/jsm/libs/stats.module.js';
+import { PointerLockControls } from '../libs/three/build/jsm/controls/PointerLockControls.js';
 import { LoadScreen } from '../libs/util/loadScreen/LoadScreen.module.js';
 
 let stats, renderer, scene, camera, light, ambientLight, clock;

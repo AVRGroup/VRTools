@@ -44,15 +44,15 @@ function main(language) {
     // Load all elements before the execution 
     const ASSETS = {
         geometries: {
-            backButtonGeometry: new THREE.PlaneGeometry(sizeButton, sizeButton, 0.1, 0.1),
-			messageLooseGeometry: new THREE.PlaneGeometry(26, 8, 0.1, 0.1),
-			messageVictoryGeometry: new THREE.PlaneGeometry(26, 8, 0.1, 0.1),
+            backButtonGeometry: new THREE.PlaneGeometry(sizeButton, sizeButton, 1, 1),
+			messageLooseGeometry: new THREE.PlaneGeometry(26, 8, 1, 1),
+			messageVictoryGeometry: new THREE.PlaneGeometry(26, 8, 1, 1),
 			panelGeometry: new THREE.BoxGeometry(30, 19.5, 5),
-            readButtonGeometry: new THREE.PlaneGeometry(sizeButton, sizeButton, 0.1, 0.1),
-            retryButtonGeometry: new THREE.PlaneGeometry(3.5, 1.75, 0.1, 0.1),
+            readButtonGeometry: new THREE.PlaneGeometry(sizeButton, sizeButton, 1, 1),
+            retryButtonGeometry: new THREE.PlaneGeometry(3.5, 1.75, 1, 1),
             skyboxGeometry: new THREE.SphereGeometry(200, 128, 128),
-            zoomInButtonGeometry: new THREE.PlaneGeometry(sizeButton + 0.65, sizeButton + 0.65, 0.1, 0.1),
-            zoomOutButtonGeometry: new THREE.PlaneGeometry(sizeButton + 0.65, sizeButton + 0.65, 0.1, 0.1),
+            zoomInButtonGeometry: new THREE.PlaneGeometry(sizeButton + 0.65, sizeButton + 0.65, 1, 1),
+            zoomOutButtonGeometry: new THREE.PlaneGeometry(sizeButton + 0.65, sizeButton + 0.65, 1, 1),
         },
         textures: {
             backButtonMap: { 
@@ -387,7 +387,7 @@ function main(language) {
                 scene.add(this.buttons[5]); 
             },
             createImageClone: function(){
-                let panelGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
+                let panelGeometry = new THREE.PlaneGeometry(8, 4, 1, 1);
                 let panelMaterial = new THREE.MeshStandardMaterial({
                     color: "rgb(255,255,255)", side: THREE.DoubleSide
                 });
@@ -439,7 +439,7 @@ function main(language) {
                     let sheet = new THREE.Group();          // Support the elements -- Center of rotation page
 
                     // Page Background
-                    let pageGeometry = new THREE.PlaneGeometry(this.widthPage, this.lengthPage, 0.1, 0.1);
+                    let pageGeometry = new THREE.PlaneGeometry(this.widthPage, this.lengthPage, 1, 1);
                     let pageMaterial = new THREE.MeshBasicMaterial({
                         transparent: true, //opacity: 0.5,
                         map: textureLoader.load("./assets/textures/page.png"), side:THREE.DoubleSide
@@ -456,7 +456,7 @@ function main(language) {
                     page.indexPicture = indexPicture;
 
                     // Image plane
-                    let imageGeometry = new THREE.PlaneGeometry(9, 4.5, 0.1, 0.1);
+                    let imageGeometry = new THREE.PlaneGeometry(9, 4.5, 1, 1);
                     let imageMaterial = new THREE.MeshBasicMaterial({color:"rgb(255, 255, 255)", side: THREE.DoubleSide});
                     let imagePlane = new THREE.Mesh(imageGeometry, imageMaterial);
                     imagePlane.position.set(0, this.lengthPage/4.5, 0.01);
@@ -466,7 +466,7 @@ function main(language) {
                     imagePlane.indexPicture = indexPicture;
 
                     // Informations block
-                    let informationGeometry = new THREE.PlaneGeometry(9.6, 6.08, 0.1, 0.1);
+                    let informationGeometry = new THREE.PlaneGeometry(9.6, 6.08, 1, 1);
                     let informationMaterial = new THREE.MeshBasicMaterial({
                         transparent: true,
                         side: THREE.DoubleSide,
@@ -492,7 +492,7 @@ function main(language) {
                     let sheet = this.book.children[this.book.children.length - 1]; // Take a sheet to insert a page on the book
                     
                     // Page Background
-                    let pageGeometry = new THREE.PlaneGeometry(this.widthPage, this.lengthPage, 0.1, 0.1);
+                    let pageGeometry = new THREE.PlaneGeometry(this.widthPage, this.lengthPage, 1, 1);
                     let pageMaterial = new THREE.MeshBasicMaterial({
                         transparent: true,
                         map: textureLoader.load("./assets/textures/page.png"), side:THREE.DoubleSide
@@ -509,7 +509,7 @@ function main(language) {
                     page.indexPicture = indexPicture;
 
                     // Image plane
-                    let imageGeometry = new THREE.PlaneGeometry(this.widthPage/1.5, this.lengthPage/3, 0.1, 0.1);
+                    let imageGeometry = new THREE.PlaneGeometry(this.widthPage/1.5, this.lengthPage/3, 1, 1);
                     let imageMaterial = new THREE.MeshBasicMaterial({color:"rgb(255, 255, 255)", side:THREE.DoubleSide});
                     let imagePlane = new THREE.Mesh(imageGeometry, imageMaterial);
                     imagePlane.position.set(0, this.lengthPage/4.5, -0.01);
@@ -520,7 +520,7 @@ function main(language) {
                     page.add(imagePlane);
 
                     // Informations block
-                    let informationGeometry = new THREE.PlaneGeometry(9.6, 6.08, 0.1, 0.1);
+                    let informationGeometry = new THREE.PlaneGeometry(9.6, 6.08, 1, 1);
                     let informationMaterial = new THREE.MeshBasicMaterial({
                         transparent: true,
                         side: THREE.DoubleSide,
@@ -546,7 +546,7 @@ function main(language) {
         
                 /** Pictures */
         
-                let pictureGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
+                let pictureGeometry = new THREE.PlaneGeometry(8, 4, 1, 1);
                 let pictureMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/1.jpg"), side: THREE.DoubleSide});
                 let picture = new THREE.Mesh(pictureGeometry, pictureMaterial);
                 picture.position.set(-10, 4.5, -12);
@@ -556,12 +556,12 @@ function main(language) {
                 scene.add(picture);
                 this.pictures.push(picture);
                 this.orderPicturesBook.push(picture.indexPicture);
-                let nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 0.1, 0.1);
+                let nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 1, 1);
                 let nameBoxMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/name/1.png"), side: THREE.DoubleSide});
                 let nameBox = new THREE.Mesh(nameBoxGeometry, nameBoxMaterial);
                 nameBox.position.set(-10, 1.5, -12);
                 scene.add(nameBox);
-                pictureGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
+                pictureGeometry = new THREE.PlaneGeometry(8, 4, 1, 1);
                 pictureMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/2.jpg"), side: THREE.DoubleSide});
                 picture = new THREE.Mesh(pictureGeometry, pictureMaterial);
                 picture.name = "picture_02";
@@ -571,12 +571,12 @@ function main(language) {
                 scene.add(picture);
                 this.pictures.push(picture);
                 this.orderPicturesBook.push(picture.indexPicture);
-                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 0.1, 0.1);
+                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 1, 1);
                 nameBoxMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/name/2.png"), side: THREE.DoubleSide});
                 nameBox = new THREE.Mesh(nameBoxGeometry, nameBoxMaterial);
                 nameBox.position.set(0, 1.5, -12);
                 scene.add(nameBox);
-                pictureGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
+                pictureGeometry = new THREE.PlaneGeometry(8, 4, 1, 1);
                 pictureMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/3.jpg"), side: THREE.DoubleSide});
                 picture = new THREE.Mesh(pictureGeometry, pictureMaterial);
                 picture.position.set(10, 4.5, -12);
@@ -586,12 +586,12 @@ function main(language) {
                 scene.add(picture);
                 this.pictures.push(picture);
                 this.orderPicturesBook.push(picture.indexPicture);
-                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 0.1, 0.1);
+                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 1, 1);
                 nameBoxMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/name/3.png"), side: THREE.DoubleSide});
                 nameBox = new THREE.Mesh(nameBoxGeometry, nameBoxMaterial);
                 nameBox.position.set(10, 1.5, -12);
                 scene.add(nameBox);
-                pictureGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
+                pictureGeometry = new THREE.PlaneGeometry(8, 4, 1, 1);
                 pictureMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/4.jpg"), side: THREE.DoubleSide});
                 picture = new THREE.Mesh(pictureGeometry, pictureMaterial);
                 picture.position.set(-10, 10.5, -12);
@@ -601,12 +601,12 @@ function main(language) {
                 scene.add(picture);
                 this.pictures.push(picture);
                 this.orderPicturesBook.push(picture.indexPicture);
-                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 0.1, 0.1);
+                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 1, 1);
                 nameBoxMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/name/4.png"), side: THREE.DoubleSide});
                 nameBox = new THREE.Mesh(nameBoxGeometry, nameBoxMaterial);
                 nameBox.position.set(-10, 7.5, -12);
                 scene.add(nameBox);
-                pictureGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
+                pictureGeometry = new THREE.PlaneGeometry(8, 4, 1, 1);
                 pictureMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/5.jpg"), side: THREE.DoubleSide});
                 picture = new THREE.Mesh(pictureGeometry, pictureMaterial);
                 picture.name = "picture_05";
@@ -616,12 +616,12 @@ function main(language) {
                 scene.add(picture);
                 this.pictures.push(picture);
                 this.orderPicturesBook.push(picture.indexPicture);
-                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 0.1, 0.1);
+                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 1, 1);
                 nameBoxMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/name/5.png"), side: THREE.DoubleSide});
                 nameBox = new THREE.Mesh(nameBoxGeometry, nameBoxMaterial);
                 nameBox.position.set(0, 7.5, -12);
                 scene.add(nameBox);
-                pictureGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
+                pictureGeometry = new THREE.PlaneGeometry(8, 4, 1, 1);
                 pictureMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/6.jpg"), side: THREE.DoubleSide});
                 picture = new THREE.Mesh(pictureGeometry, pictureMaterial);
                 picture.position.set(10, 10.5, -12);
@@ -631,12 +631,12 @@ function main(language) {
                 scene.add(picture);
                 this.pictures.push(picture);
                 this.orderPicturesBook.push(picture.indexPicture);
-                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 0.1, 0.1);
+                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 1, 1);
                 nameBoxMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/name/6.png"), side: THREE.DoubleSide});
                 nameBox = new THREE.Mesh(nameBoxGeometry, nameBoxMaterial);
                 nameBox.position.set(10, 7.5, -12);
                 scene.add(nameBox);
-                pictureGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
+                pictureGeometry = new THREE.PlaneGeometry(8, 4, 1, 1);
                 pictureMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/7.jpg"), side: THREE.DoubleSide});
                 picture = new THREE.Mesh(pictureGeometry, pictureMaterial);
                 picture.position.set(-10, 16.5, -12);
@@ -646,12 +646,12 @@ function main(language) {
                 scene.add(picture);
                 this.pictures.push(picture);
                 this.orderPicturesBook.push(picture.indexPicture);
-                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 0.1, 0.1);
+                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 1, 1);
                 nameBoxMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/name/7.png"), side: THREE.DoubleSide});
                 nameBox = new THREE.Mesh(nameBoxGeometry, nameBoxMaterial);
                 nameBox.position.set(-10, 13.5, -12);
                 scene.add(nameBox);
-                pictureGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
+                pictureGeometry = new THREE.PlaneGeometry(8, 4, 1, 1);
                 pictureMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/8.jpg"), side: THREE.DoubleSide});
                 picture = new THREE.Mesh(pictureGeometry, pictureMaterial);
                 picture.name = "picture_08";
@@ -661,12 +661,12 @@ function main(language) {
                 scene.add(picture);
                 this.pictures.push(picture);
                 this.orderPicturesBook.push(picture.indexPicture);
-                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 0.1, 0.1);
+                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 1, 1);
                 nameBoxMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/name/8.png"), side: THREE.DoubleSide});
                 nameBox = new THREE.Mesh(nameBoxGeometry, nameBoxMaterial);
                 nameBox.position.set(0, 13.5, -12);
                 scene.add(nameBox);
-                pictureGeometry = new THREE.PlaneGeometry(8, 4, 0.1, 0.1);
+                pictureGeometry = new THREE.PlaneGeometry(8, 4, 1, 1);
                 pictureMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/9.jpg"), side: THREE.DoubleSide});
                 picture = new THREE.Mesh(pictureGeometry, pictureMaterial);
                 picture.position.set(10, 16.5, -12);
@@ -676,7 +676,7 @@ function main(language) {
                 scene.add(picture);
                 this.pictures.push(picture);
                 this.orderPicturesBook.push(picture.indexPicture);
-                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 0.1, 0.1);
+                nameBoxGeometry = new THREE.PlaneGeometry(8, 1, 1, 1);
                 nameBoxMaterial = new THREE.MeshBasicMaterial({map: textureLoader.load("./assets/textures/historical-figures/pictures/name/9.png"), side: THREE.DoubleSide});
                 nameBox = new THREE.Mesh(nameBoxGeometry, nameBoxMaterial);
                 nameBox.position.set(10, 13.5, -12);
@@ -1031,6 +1031,7 @@ function main(language) {
         function checkRaycaster(){
             // update the picking ray with the camera and mouse position
             raycaster.setFromCamera(mouse, defaultCamera);
+            console.log(objectRaycaster);
             let intersects = raycaster.intersectObjects(objectRaycaster);
             if(intersects.length > 0){
                 objectLooked = intersects[0].object;

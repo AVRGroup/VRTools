@@ -11,19 +11,19 @@
             margin: 0;
             overflow: hidden;
         }
-        
+
         canvas {
             display: block;
             width: 100%;
             height: 100%;
         }
-        
+
         a {
             color: var(--color-blue);
             cursor: pointer;
             text-decoration: none;
         }
-        
+
         #newWindow {
             display: block;
             position: absolute;
@@ -35,14 +35,14 @@
     </style>
 
     <!-- Libraries of configuration -->
-    <script type="text/javascript" charset="UTF-8" src="../libs/three/three.js"></script>
-    <script type="text/javascript" charset="UTF-8" src="../libs/three/controls/OrbitControls.js"></script>
-    <script type="text/javascript" src="../libs/util/Stats.js"></script>
-    <script type="text/javascript" src="../libs/util/dat.gui.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/build/three.min.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/build/js/controls/OrbitControls.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/build/js/libs/stats.min.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/three/build/js/libs/dat.gui.min.js"></script>
 
     <!-- Library of Augmented Reality that uses Three.js -->
-    <script type="text/javascript" charset="UTF-8" src="../libs/MarkerTracking--LocationBasedAR/THREE/ar.js"></script>
-    <script>THREEx.ArToolkitContext.baseURL = "../"</script>  <!-- Define o local do contexto -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/MarkerTracking--LocationBasedAR/THREE/ar-modified.js"></script>
+    <script>THREEx.ArToolkitContext.baseURL = "../"</script> <!-- Define o local do contexto -->
 
     <!-- Loading screen -->
     <script type="text/javascript" charset="UTF-8" src="../libs/util/loadScreen/LoadScreen.js"></script>
@@ -76,7 +76,7 @@
         }
     </script>
     <script>
-         TRANSLATION.add(
+        TRANSLATION.add(
             '#title1',
             'Solar System - AR',
             'Sistema Solar - RA'

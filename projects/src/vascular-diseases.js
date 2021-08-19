@@ -2,7 +2,8 @@ let rendererStats, renderer, scene, camera, trackballControls, light, ambientLig
 let stroke, aneurysm, stenosis, thrombus, highlight, viewpoint, isMouseOut;
 let language = 'en-US';
 
-const decoder = new THREE.DRACOLoader().setDecoderPath('../libs/draco/gltf/');
+const decoder = new THREE.DRACOLoader()
+decoder.setDecoderPath('../libs/three/build/js/libs/draco/');
 
 const ASSETS = {
     textures: {
@@ -31,6 +32,7 @@ const ASSETS = {
         stenosis: {
             path: 'assets/models/vascular-diseases/stenosis.glb',
             fileSize: 143,
+            // draco: decoder
         },
         thrombus: {
             path: 'assets/models/vascular-diseases/thrombus.glb',

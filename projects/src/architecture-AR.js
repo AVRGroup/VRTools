@@ -31,6 +31,8 @@ function init() {
 
     scene = new THREE.Scene();
 
+    let test = new THREE.EventDispatcher();
+
     camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 1, 500);
     scene.add(camera);
 
