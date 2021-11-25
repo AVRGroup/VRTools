@@ -77,7 +77,7 @@ if(quality == 1)
     
         objects: {
             calcario: {
-                path: 'assets/models/geography/calcita_low.glb',
+                path: 'assets/models/geography/calcario_low.glb',
                 fileSize: 2936,
                 draco: decoder // the first model needs to set the draco decoder
             },
