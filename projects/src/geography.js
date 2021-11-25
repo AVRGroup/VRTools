@@ -122,11 +122,11 @@ function init() {
     onResize();
 
     ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-    scene.add(ambientLight);
+    //scene.add(ambientLight);
     console.log('aaaa')
     light = new THREE.DirectionalLight(0xffffff, 2);
     light.position.set(0, 0, 100);
-    scene.add(light);
+    scene.add(light);  
 
     trackballControls = new THREE.TrackballControls(camera, renderer.domElement);
     trackballControls.minDistance = 10;
@@ -137,14 +137,14 @@ function init() {
     calcario.scale.set(2, 2, 2);
     calcario.position.set(0, -20, 0);
     calcario.rotation.set(0, -Math.PI / 12, 0);
-    calcario.visible = true;
+    calcario.visible = false;
     content.calcario.model = calcario;
     scene.add(calcario);
 
     basalto = ASSETS.objects.basalto;
     basalto.scale.set(2, 2, 2);
     basalto.position.set(0, -20, 0);
-    basalto.visible = false;
+    basalto.visible = true;
     content.basalto.model = basalto;
     scene.add(basalto)
 
@@ -314,17 +314,18 @@ function changeContent() {
     granito.visible = false;
     ardosia.visible = false;
     marmore.visible = false;
-//    scene.remove(light);
-//    scene.remove(ambientLight)
+    scene.remove(light);
+    scene.remove(ambientLight)
 
     console.log(value)
 
-    if(value == 'granito') {
+    if(content[value] == 'granito') {
         light = new THREE.DirectionalLight(0xffffff, 2);
         light.position.set(0, 0, 100);
         scene.add(light);    
     }
-    if(value == 'calcario') {
+    if(content[value] === calcario) {
+        console.log('entrou')
         ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
         scene.add(ambientLight);
     }
