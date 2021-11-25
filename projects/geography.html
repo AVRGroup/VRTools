@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title id="title">Rock Types</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/w3.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/translation.js"></script>
+    <script src="../components/navbar.js"></script>
+</head>
+
+<body>
+
+    <!-- Navbar (sit on top) -->
+    <navbar-component></navbar-component>
+
+    <!-- Page content -->
+    <div class="w3-content w3-padding " style="max-width:1564px ">
+
+        <div class="w3-container w3-padding-32 " id="projects">
+            <h1 id="header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">Rock Types</h1>
+        </div>
+
+        <div class="w3-container" id="about" style="text-align:justify;">
+            <p id="p1">
+                As rochas fazem parte da litosfera, camada que compõe a superfície sólida da Terra. 
+                Elas são constituídas pela união de diferentes minerais, e são os diversos processos 
+                naturais do planeta os responsáveis pela formação dos mais variados tipos de rochas que são divididos em 3 grandes tipos:
+            </p>
+
+            <p id="p2">
+                Magmáticas: formadas pela solidificação do magma e se dividem em 2 grupos de acordo com o local de sua solidificação. As intrusivas são as que se solidificaram dentro da crosta terrestre e as extrusivas são as que se solidificam fora da crosta. A principal diferença entre elas é que nas intrusivas os minerais se agrupam e formam cristais visíveis a olho nu, como na maioria dos granitos, enquanto nas extrusivas não é possível observar essa separação a olho nu, um exemplo é o basalto.
+                Metamórficas: também são formadas na crosta terrestre.  A pressão e a temperatura muito elevadas, os fortes atritos, ou a combinação química de dois ou mais minerais transformam a estrutura das rochas já formadas, como o mármore, a ardósia, o quartzo e o gnaisse.
+                Sedimentares: formadas fora da crosta terrestre pelo intemperismo sofrido pelas demais rochas. São exemplos o arenito e o calcário.
+
+            </p>
+
+        </div>
+
+        <div class="w3-container w3-row w3-mobile" style="text-align:center;">
+            <!-- workaround to center iframe -->
+            <div class="w3-col m2 l2 w3-hide-small">
+                <p></p>
+            </div>
+
+            <iframe id="scene" class="w3-col l8" src="./src/geography-application.html" height="400"
+                    style="border:2px solid black;"></iframe>
+
+            <script>
+
+                // iOS iframe auto-resize workaround
+
+                if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
+
+                    var scene = document.getElementById('scene');
+
+                    scene.style.width = getComputedStyle(scene).width;
+                    scene.style.height = getComputedStyle(scene).height;
+                    scene.setAttribute('scrolling', 'no');
+
+                }
+            </script>
+        </div>
+
+        <!-- More modes -->
+        <div class="w3-container w3-padding-32 ">
+            <h3 id="more-modes-header" class="w3-padding-16 w3-border-bottom w3-border-light-grey ">More modes</h3>
+        </div>
+
+        <div class="w3-row-padding">
+            <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
+                <a id="fullscreenMediumQuality_link" href="./src/geography-application.html?quality=0" target="_blank" style="text-decoration: none;">
+                    <div class="more-modes w3-display-container"
+                         style="background: url('img/Geography/marmoreNovo3.png') center;">
+                        <div class="w3-padding" style="width:100%">
+                            <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
+                            <br /><div id="fullscreen">Fullscreen - Standart Quality</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
+                <a id="fullscreenHighQuality_link" href="./src/geography-application.html?quality=1" target="_blank" style="text-decoration: none;">
+                    <div class="more-modes w3-display-container"
+                         style="background: url('img/Geography/marmoreNovo3.png') center;">
+                        <div class="w3-padding" style="width:100%">
+                            <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
+                            <br /><div id="fullscreen2">Fullscreen - High Quality</div>
+                        </div>
+                    </div>
+                </a>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-quality">In high quality, the download time can be considerably longer.</div>
+                </p>
+            </div>
+
+            <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
+                <a id="vr_link" href="./src/geography-application-VR-2.html" target="_blank" style="text-decoration: none;">
+                    <div class="more-modes w3-display-container"
+                         style="background: url('img/Geography/calcario.png') center;">
+                        <div class="w3-padding" style="width:100%">
+                            <img src="img/icons/vr-icon.png" alt="Augmented Reality" style="width: 64px;" />
+                            <br /><div id="vr">Virtual Reality - Standart Quality</div>
+                        </div>
+                    </div>
+                </a>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-hmd-1">
+                        In order to fully experiece the VR mode, it is required one HMD (head-mounted display).
+                    </div>
+                </p>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-vr">
+                        It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                             target="_blank">Google Virtual Reality services</a>
+                        on the first access.
+                    </div>
+                </p>
+            </div>
+
+            <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
+                <a id="vr_link" href="./src/geography-application-VR.html" target="_blank" style="text-decoration: none;">
+                    <div class="more-modes w3-display-container"
+                         style="background: url('img/Geography/calcario.png') center;">
+                        <div class="w3-padding" style="width:100%">
+                            <img src="img/icons/vr-icon.png" alt="Augmented Reality" style="width: 64px;" />
+                            <br /><div id="vr">Virtual Reality - Standart Quality</div>
+                        </div>
+                    </div>
+                </a>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-hmd-1">
+                        In order to fully experiece the VR mode, it is required one HMD (head-mounted display).
+                    </div>
+                </p>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-vr">
+                        It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                             target="_blank">Google Virtual Reality services</a>
+                        on the first access.
+                    </div>
+                </p>
+            </div>
+
+        </div>
+        <!-- End of more modes-->
+
+
+        <div class="w3-panel w3-leftbar w3-serif">
+            <h5 id="refer"><b>Reference:</b></h5>
+            <p>
+                <i>
+                    Alpha-Element, "Saturn-Ring texture", Web resource:
+                    https://www.deviantart.com/alpha-element/art/Stock-Image-Saturn-Rings-393767006
+                </i>
+            </p>
+            <p>
+                <i>
+                    Solar System Scope, "Solar System textures", Web resource:
+                    https://www.solarsystemscope.com/textures/
+                </i>
+            </p>
+            <p>
+                <i>
+                    Owen, T.C. "Solar System." From Encyclopædia Britannica, inc. Web resource
+                    https://www.britannica.com/science/solar-system
+                </i>
+            </p>
+        </div>
+
+        <!-- End page content -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-center w3-black w3-padding-16 ">        
+            <h5 id="bottom"><b>Powered by:</b></h5>
+            <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank "
+                class="w3-hover-text-green ">w3.css</a>
+    </footer>
+
+    <script>
+
+        // Check page is changed and reload the application with another language
+        // store url on load
+        let currentPage = location.href;
+
+        // listen for changes
+        setInterval(function()
+        {
+            if (currentPage != location.href)
+            {
+                // page has changed, set new page as 'current'
+                currentPage = location.href;
+                
+                changeLanguageApp();
+                
+            }
+        }, 500);
+
+        function changeLanguageApp(){
+            var language = location.search;
+            if(language.length != 0){
+                document.getElementById("scene").src = ("./src/geography-application.html" + language + "&quality=0");
+                document.getElementById("fullscreenMediumQuality_link").href = ("./src/geography-application.html" + language + "&quality=0"); 
+                document.getElementById("fullscreenHighQuality_link").href = ("./src/geography-application.html" + language + "&quality=1"); 
+            //    document.getElementById("ar_link").href = ("./src/solar-system-application-AR.html" + language); 
+                document.getElementById("vr_link").href = ("./src/geography-application-VR.html" + language); 
+            }
+            else{
+                document.getElementById("scene").src = ("./src/geography-application.html?lang=en-US&quality=0");
+                document.getElementById("fullscreenMediumQuality_link").href = ("./src/geography-application.html?lang=en-US&quality=0"); 
+                document.getElementById("fullscreenHighQuality_link").href = ("./src/geography-application.html?lang=en-US&quality=1"); 
+            //    document.getElementById("ar_link").href = ("./src/solar-system-application-AR.html?lang=pt-BR"); 
+                document.getElementById("vr_link").href = ("./src/geography-application-VR.html?lang=pt-BR"); 
+            }
+        }
+
+        changeLanguageApp();
+
+        // Translation controller
+
+        TRANSLATION.add(
+            '#header',
+            'Rock Types',
+            'Tipos de Rocha'
+        );
+
+        TRANSLATION.add(
+            '#p1',
+            `Rocks are part of the lithosphere, the layer that makes up the Earth's solid surface.
+                They are constituted by the union of different minerals, and are the different processes
+                those responsible for the formation of the most varied types of rocks that are divided into 3 major types:`,
+
+            `As rochas fazem parte da litosfera, camada que compõe a superfície sólida da Terra. 
+                Elas são constituídas pela união de diferentes minerais, e são os diversos processos 
+                naturais do planeta os responsáveis pela formação dos mais variados tipos de rochas que são divididos em 3 grandes tipos:`
+        );
+
+        TRANSLATION.add(
+            '#p2',
+            ` Magmatic: formed by the solidification of magma and divided into 2 groups according to the location of its solidification. Intrusives are those that solidify inside the earth's crust and extrusives are those that solidify outside the crust. The main difference between them is that in intrusive minerals group together and form crystals visible to the naked eye, as in most granites, while in extrusive ones it is not possible to observe this separation with the naked eye, an example is basalt.
+              Metamorphic: they are also formed in the earth's crust. Very high pressure and temperature, strong friction, or the chemical combination of two or more minerals transform the structure of rocks already formed, such as marble, slate, quartz and gneiss.
+              Sedimentary: formed outside the earth's crust by the weathering suffered by other rocks. Examples are sandstone and limestone.`,
+
+            `Magmáticas: formadas pela solidificação do magma e se dividem em 2 grupos de acordo com o local de sua solidificação. As intrusivas são as que se solidificaram dentro da crosta terrestre e as extrusivas são as que se solidificam fora da crosta. A principal diferença entre elas é que nas intrusivas os minerais se agrupam e formam cristais visíveis a olho nu, como na maioria dos granitos, enquanto nas extrusivas não é possível observar essa separação a olho nu, um exemplo é o basalto.
+             Metamórficas: também são formadas na crosta terrestre.  A pressão e a temperatura muito elevadas, os fortes atritos, ou a combinação química de dois ou mais minerais transformam a estrutura das rochas já formadas, como o mármore, a ardósia, o quartzo e o gnaisse.
+             Sedimentares: formadas fora da crosta terrestre pelo intemperismo sofrido pelas demais rochas. São exemplos o arenito e o calcário.`
+        );
+
+        TRANSLATION.add(
+            '#fullscreen',
+            'Fullscreen - Standart Quality',
+            'Tela cheia - Qualidade Padrão'
+        );
+
+        TRANSLATION.add(
+            '#fullscreen2',
+            'Fullscreen - High Quality',
+            'Tela cheia - Qualidade Alta'
+        );
+
+        TRANSLATION.add(
+            '#ar',
+            'Augmented Reality',
+            'Realidade Aumentada',
+        );
+
+        TRANSLATION.add(
+            '#vr',
+            'Virtual Reality - Standart Quality',
+            'Realidade Virtual - Qualidade Padrão',
+        );
+
+        TRANSLATION.add(
+            '#vr2',
+            'Virtual Reality - High Quality',
+            'Realidade Virtual - Qualidade Alta'
+        );
+
+        TRANSLATION.add(
+            '#warning-quality',
+            `In high quality, the download time can be considerably longer. `,
+            `Em alta qualidade, o tempo de download pode ser consideravelmente mais longo.`
+        );
+
+        TRANSLATION.add(
+            '#warning-hmd-1',
+            `In order to fully experiece the VR mode, it is required one HMD (head-mounted display).`,
+            `Para uma experiência completa no modo RV, é necessário usar um HMD (head-mounted display).`
+        );
+
+        TRANSLATION.add(
+            '#warning-vr',
+            ` It may be necessary to accept the installation of <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                        target="_blank">Google Virtual Reality services</a>
+                        on the first access. `,
+            `  Pode ser necessário aceitar a instalação dos <a href="https://play.google.com/store/apps/details?id=com.google.vr.vrcore&hl=en_US&gl=US"
+                                                                        target="_blank">serviços de Realidade Virtual da Google</a>
+                        no primeiro acesso. `
+        );
+
+
+
+
+        TRANSLATION.add(
+            '#more-modes-header',
+            'More modes',
+            'Mais modos'
+        );
+
+        TRANSLATION.add(
+            '#refer',
+            'Reference',
+            'Referências'
+        );
+
+        TRANSLATION.add(
+            '#title',
+            'Rock Types',
+            'Tipos de Rocha'
+        );
+
+        TRANSLATION.add(
+            '#bottom',
+            'Powered by ',
+            'Distribuído por '
+        );
+
+    </script>
+</body>
+
+</html>

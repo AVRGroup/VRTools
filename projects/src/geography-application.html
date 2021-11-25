@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Vascular Diseases</title>
+    <script src="../../js/translation.js"></script>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+
+        #panel {
+            position: absolute;
+            bottom: 0;
+            width: 100vw;
+            background-color: #E2E5E7;
+        }
+
+        #panel-title {
+            margin-top: 0;
+            margin-bottom: 0;
+            background-color: #B3A1A1;
+            padding: 7px;
+            font-family: sans-serif;
+            text-align: center;
+            color: #efefef;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #panel-title:after {
+            position: absolute;
+            content: "";
+            top: 0.5em;
+            right: 0.8em;
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-color: transparent transparent #fff transparent;
+        }
+
+        #panel-title.active:after {
+            border-color: #fff transparent transparent transparent;
+            top: 0.8em;
+        }
+
+        #panel-content {
+            display: none;
+            max-height: 60vh;
+            padding: 5px;
+            color: #736767;
+            overflow-y: scroll;
+        }
+
+        #panel select {
+            width: 100%;
+            padding: 0.3em;
+        }
+
+        #panel a {
+            color: #736767;
+        }
+
+        .btn {
+            padding-top: 0.2em;
+            padding-bottom: 0.2em;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #E2E5E7;
+            background-color: #CCBEB8;
+            border: none;
+            border-radius: 0.25em;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #D9CAC3;
+        }
+
+
+        .content-title {
+            margin-top: 1em;
+            margin-bottom: 0;
+            display: block;
+        }
+
+        .content {
+            margin-top: 0;
+        }
+
+        @media only screen and (min-width: 768px) {
+            #panel {
+                position: absolute;
+                right: 0;
+                width: 25vw;
+                height: 100vh;
+            }
+
+            #panel-title {
+                margin-top: 0;
+                margin-bottom: 0;
+                padding: 7px;
+                font-family: sans-serif;
+                text-align: center;
+                color: #efefef;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            #panel-title:after {
+                border: none;
+            }
+
+            #panel-title.active:after {
+                border: none;
+            }
+
+            #panel-content {
+                display: block;
+                /*Mais que 90vh corta o final do conteudo por algum motivo */
+                max-height: 90vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="three-stats"></div>
+    <div id="panel">
+        <h3 id="panel-title" onclick="toggleContent()">Tipos de Rocha</h3>
+
+        <div id="panel-content">
+            <select id="selector" onchange="changeContent()">
+                <!-- <option value="cardio" selected>Cardiovascular disease</option> -->
+                <option id="opt-calcario" value="calcario" selected>Limestone</option>
+                <option id="opt-basalto" value="basalto">Basalt</option>
+                <option id="opt-granito" value="granito">Granite</option>
+                <option id="opt-ardosia" value="ardosia">Slate</option>
+                <option id="opt-marmore" value="marmore">Marble</option>
+            </select>
+
+
+
+            <b id="whatis-title" class="content-title">About</b>
+            <p id="whatis" class="content">
+                Limestone is a sedimentary rock that contains minerals with amounts above 30% of calcium carbonate (aragonite or calcite). 
+                Limestones are most often formed by the accumulation of lower organisms (eg, cyanobacteria) or calcium carbonate precipitation in the form of bicarbonate, 
+                mainly in the marine environment. They can also be found in rivers, lakes and underground (caves).
+            </p>
+
+            <b id="risk-title" class="content-title">Applications</b>
+            <p id="risk" class="content">
+                Limestone is the main product used to correct soil acidity. 
+                Generally speaking, it acts by reducing the amount of harmful elements, increasing the level of Calcium and Magnesium, thus making the soil more aerated, 
+                allowing greater water circulation and better root development and, as a result, increasing the activity of microorganisms causing that the fertilization 
+                yields more.The benefits generated by the application in crops and pastures start with greater productivity, synonymous with better yields for landowners, 
+                regardless of the areas extension.
+            </p>
+
+
+
+            <b id="source-title" class="content-title">Source</b>
+            <p id="source" class="content">
+                <a href="https://www.nhlbi.nih.gov/health-topics/stroke" target="_blank"
+                    rel="noopener external">NHLBI</a><br />
+                <a href="https://www.stroke.org/en/about-stroke/stroke-risk-factors/stroke-risk-factors-you-can-control-treat-and-improve"
+                    target="_blank" rel="noopener external">Stroke.org</a><br />
+                <a href="https://www.mayoclinic.org/diseases-conditions/stroke/symptoms-causes/syc-20350113"
+                    target="_blank" rel="noopener external">Mayo Clinic</a>
+
+            </p>
+
+            <b id="credits-title" class="content-title">3D Model Credits</b>
+            <p id="credits" class="content">
+                <a href="https://3dprint.nih.gov/discover/3DPX-001564" target="_blank" rel="noopener external">
+                    3D Print
+                    for Health
+                </a>
+            </p> 
+        </div>
+    </div>
+
+    <div id="output"></div>
+
+    <script>
+        function toggleContent() {
+            if (window.innerWidth >= 768) return;
+            let title = document.querySelector('#panel-title');
+            let content = document.querySelector('#panel-content');
+
+            title.classList.toggle('active');
+
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            }
+            else content.style.display = 'block';
+        }
+    </script>
+
+    <script src="../libs/three/three.js"></script>
+    <!-- <script src="../libs/three/controls/OrbitControls.js"></script> -->
+    <script src="../libs/three/controls/TrackballControls.js"></script>
+    <script src="../libs/util/Stats.js"></script>
+    <script src="../libs/util/loadScreen/LoadScreenDraco.js"></script>
+    <script src="../libs/loaders/GLTFLoader.js"></script>
+    <script src="../libs/loaders/DRACOLoader.js"></script>
+    <script src="geography.js"></script>
+    <script>
+        TRANSLATION.add(
+            '#page-title',
+            'Rock Types',
+            'Tipos de rocha'
+        );
+        TRANSLATION.add(
+            '#panel-title',
+            'Rock Types',
+            'Tipos de Rocha'
+        );
+    </script>
+</body>
+
+</html>

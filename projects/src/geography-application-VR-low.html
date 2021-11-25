@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Rock Types VR</title>
+    <link rel="stylesheet" href="../../css/w3.css">
+    <script src="../../js/translation.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- Library of Virtual Reality -->
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-master.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/orbi.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/aframe-button-controls.js"></script>
+
+    <script>
+        AFRAME.registerComponent('config', {
+            init: function () {
+                const self = this;
+                const orbi = this.el.components['orbi'];
+
+                this.models = document.querySelectorAll('.menu-model');
+                this.modelIndex = 0;
+                this.rotate = false;
+                this.zoomLevel = 0;
+
+                this.hide = false;
+
+                var language = location.search;
+
+                if (language.length != 0) {
+                    let aux = "?lang=";
+                    language = language.substring(aux.length, language.length);
+                    switch (language) {
+                        case 'en-US': {
+                            orbi.addButton('previous', '#previous', () => {
+                                let model = self.models[self.modelIndex];
+
+                                model.object3D.visible = false;
+
+                                if (self.modelIndex == 0) {
+                                    self.modelIndex = self.models.length - 1;
+                                }
+                                else {
+                                    self.modelIndex--;
+                                }
+
+                                model = self.models[self.modelIndex];
+
+                                model.object3D.visible = true;
+
+                                orbi.showMessage(`${model.getAttribute('name')} model loaded`);
+                            });
+
+                            orbi.addButton('next', '#next', () => {
+                                let model = self.models[self.modelIndex];
+
+                                model.object3D.visible = false;
+
+                                if (self.modelIndex == self.models.length - 1) {
+                                    self.modelIndex = 0;
+                                }
+                                else {
+                                    self.modelIndex++;
+                                }
+
+                                model = self.models[self.modelIndex];
+
+                                model.object3D.visible = true;
+
+                                orbi.showMessage(`${model.getAttribute('name')} model loaded`);
+                            });
+
+                            orbi.addButton('zoomIn', '#zoomIn', () => {
+                                if (self.zoomLevel < 1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z += 0.5;
+
+                                    }
+                                    self.zoomLevel++;
+                                    orbi.showMessage('Zoomed in');
+                                }
+                                else {
+                                    orbi.showMessage('Max zoom reached already');
+                                }
+                            });
+
+                            orbi.addButton('zoomOut', '#zoomOut', () => {
+                                if (self.zoomLevel > -1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z -= 0.5;
+
+                                    }
+                                    orbi.showMessage('Zoomed off');
+                                    self.zoomLevel--;
+                                }
+                                else {
+                                    orbi.showMessage('Min zoom reached already');
+                                }
+                            });
+
+                            orbi.addButton('rotation', '#rotation', () => {
+                                self.rotate = !self.rotate;
+                                orbi.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
+                            });
+/*
+                            orbi.addButton('toggleHighlight', '#toggleHighlight', () => {
+                                self.highlight.visible = !self.highlight.visible;
+                                orbi.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
+                            });
+*/
+                            document.addEventListener('pointerlockchange', (event) => {
+                                orbi.show();
+                                self.hide = false;
+                            });
+                            break;
+                        }
+                        case 'pt-BR': {
+
+                            self.models[0].setAttribute('name','Calcário');
+                            self.models[1].setAttribute('name','Basalto');
+                            self.models[2].setAttribute('name','Granito');
+                            self.models[3].setAttribute('name','Ardósia');
+                            self.models[4].setAttribute('name','Mármore')
+
+
+                            orbi.addButton('previous-pt', '#previous-pt', () => {
+                                let model = self.models[self.modelIndex];
+
+                                model.object3D.visible = false;
+
+                                if (self.modelIndex == 0) {
+                                    self.modelIndex = self.models.length - 1;
+                                }
+                                else {
+                                    self.modelIndex--;
+                                }
+
+                                model = self.models[self.modelIndex];
+
+                                model.object3D.visible = true;
+
+                                orbi.showMessage(`Modelo de ${model.getAttribute('name')} carregado`);
+                            });
+
+                            orbi.addButton('next-pt', '#next-pt', () => {
+                                let model = self.models[self.modelIndex];
+
+                                model.object3D.visible = false;
+
+                                if (self.modelIndex == self.models.length - 1) {
+                                    self.modelIndex = 0;
+                                }
+                                else {
+                                    self.modelIndex++;
+                                }
+
+                                model = self.models[self.modelIndex];
+
+                                model.object3D.visible = true;
+
+                                orbi.showMessage(`Modelo de ${model.getAttribute('name')} carregado`);
+                            });
+
+                            orbi.addButton('zoomIn-pt', '#zoomIn-pt', () => {
+                                if (self.zoomLevel < 1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z += 0.5;
+
+                                    }
+                                    self.zoomLevel++;
+                                    orbi.showMessage('Imagem Ampiada');
+                                }
+                                else {
+                                    orbi.showMessage('Ampliação máximo atingida');
+                                }
+                            });
+
+                            orbi.addButton('zoomOut-pt', '#zoomOut-pt', () => {
+                                if (self.zoomLevel > -1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z -= 0.5;
+
+                                    }
+                                    orbi.showMessage('Imagem Reduzida');
+                                    self.zoomLevel--;
+                                }
+                                else {
+                                    orbi.showMessage('Redução máxima atingida');
+                                }
+                            });
+
+                            orbi.addButton('rotation-pt', '#rotation-pt', () => {
+                                self.rotate = !self.rotate;
+                                orbi.showMessage(`Rotação está ${self.rotate ? 'ligada' : 'desligada'}`);
+                            });
+
+                            orbi.addButton('toggleHighlight-pt', '#toggleHighlight-pt', () => {
+                                //self.highlight.visible = !self.highlight.visible;
+                                //orbi.showMessage(`Destaque está  ? 'ativado' : 'desativado'}`);
+                                let string = '\nPLACE: San Francisco, California United States of America.\n';
+                                string += '\nFort Point is a masonry seacoast fortification \nlocated on the southern side of the Golden Gate at\n the entrance to San Francisco Bay.';
+                                string += '\nIt is also the geographic name of the promontory \nupon which the fort and the southern approach of\n the Golden Gate Bridge were constructed.\n\n';
+                                orbi.showSideText(string);
+                                orbi.showSideText('aaaaaaaaaaa');
+                                console.log(string)
+                            });
+
+                            document.addEventListener('pointerlockchange', (event) => {
+                                orbi.show();
+                                self.hide = false;
+                            });
+                            break;
+                        }
+                    }
+                } else {
+                    orbi.addButton('previous', '#previous', () => {
+                                let model = self.models[self.modelIndex];
+
+                                model.object3D.visible = false;
+
+                                if (self.modelIndex == 0) {
+                                    self.modelIndex = self.models.length - 1;
+                                }
+                                else {
+                                    self.modelIndex--;
+                                }
+
+                                model = self.models[self.modelIndex];
+
+                                model.object3D.visible = true;
+
+                                orbi.showMessage(`${model.getAttribute('name')} model loaded`);
+                            });
+
+                            orbi.addButton('next', '#next', () => {
+                                let model = self.models[self.modelIndex];
+
+                                model.object3D.visible = false;
+
+                                if (self.modelIndex == self.models.length - 1) {
+                                    self.modelIndex = 0;
+                                }
+                                else {
+                                    self.modelIndex++;
+                                }
+
+                                model = self.models[self.modelIndex];
+
+                                model.object3D.visible = true;
+
+                                orbi.showMessage(`${model.getAttribute('name')} model loaded`);
+                            });
+
+                            orbi.addButton('zoomIn', '#zoomIn', () => {
+                                if (self.zoomLevel < 1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z += 0.5;
+
+                                    }
+                                    self.zoomLevel++;
+                                    orbi.showMessage('Zoomed in');
+                                }
+                                else {
+                                    orbi.showMessage('Max zoom reached already');
+                                }
+                            });
+
+                            orbi.addButton('zoomOut', '#zoomOut', () => {
+                                if (self.zoomLevel > -1) {
+                                    for (let i = 0; i < self.models.length; i++) {
+                                        self.models[i].object3D.position.z -= 0.5;
+
+                                    }
+                                    orbi.showMessage('Zoomed off');
+                                    self.zoomLevel--;
+                                }
+                                else {
+                                    orbi.showMessage('Min zoom reached already');
+                                }
+                            });
+
+                            orbi.addButton('rotation', '#rotation', () => {
+                                self.rotate = !self.rotate;
+                                orbi.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
+                            });
+/*
+                            orbi.addButton('toggleHighlight', '#toggleHighlight', () => {
+                                self.highlight.visible = !self.highlight.visible;
+                                orbi.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
+                            });
+*/
+                            document.addEventListener('pointerlockchange', (event) => {
+                                orbi.show();
+                                self.hide = false;
+                            });
+                }
+
+
+               
+
+                this.el.addEventListener('buttondown', () => {
+                    self.hide = !self.hide;
+                    if (self.hide) {
+                        orbi.hide();
+                    }
+                    else {
+                        orbi.show();
+                    }
+                });
+            },
+            tick: function (time, delta) {
+                if (this.rotate) {
+                    let rot;
+                    this.models[this.modelIndex].object3D.rotation.y += 0.0008 * delta;
+                    rot = this.models[this.modelIndex].object3D.rotation.y
+                }
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <a-scene main_scene id="scene" renderer="colorManagement: true;" background="color: #202020"
+        gltf-model="dracoDecoderPath: ../libs/draco/gltf/;">
+        <a-assets timeout="3000">
+            <a-asset-item id="calcarioModel" src="assets/models/geography/calcario_low.glb"></a-asset-item>
+            <a-asset-item id="basaltoModel" src="assets/models/geography/basalto_low.glb"></a-asset-item>
+            <a-asset-item id="granitoModel" src="assets/models/geography/granito_low.glb"></a-asset-item>
+            <a-asset-item id="ardosiaModel" src="assets/models/geography/ardosia_low.glb"></a-asset-item>
+            <a-asset-item id="marmoreModel" src="assets/models/geography/marmore1.glb"></a-asset-item>
+
+            <img id="next" src="assets/icons/next.png">
+            <img id="previous" src="assets/icons/previous.png">
+            <img id="rotation" src="assets/icons/rotation.png">
+            <img id="zoomIn" src="assets/icons/zoomin.png">
+            <img id="zoomOut" src="assets/icons/zoomout.png">
+            <img id="toggleHighlight" src="assets/icons/highlight.png">
+
+            <img id="next-pt" src="assets/icons/next-(pt-BR).png">
+            <img id="previous-pt" src="assets/icons/previous-(pt-BR).png">
+            <img id="rotation-pt" src="assets/icons/rotation(pt-BR).png">
+            <img id="zoomIn-pt" src="assets/icons/zoomin-(pt-BR).png">
+            <img id="zoomOut-pt" src="assets/icons/zoomout-(pt-BR).png">
+            <img id="toggleHighlight-pt" src="assets/icons/highlight(pt-BR).png">
+        </a-assets>
+
+        <a-entity light="type: ambient; color: #fff; intensity: 0.3"></a-entity>
+        <a-entity light="type: directional; color: #fff; intensity: 0.7" position="7 3.6 10"></a-entity>
+        <a-entity light="color: #fff" position="-5 110 0"></a-entity>
+
+        <a-entity id="calcario" name="Limestone" class="menu-model" position="0 1 -2" scale="0.05 0.05 0.05"
+            gltf-model="#calcarioModel" visible="true">
+        </a-entity>
+        <a-entity id="basalto" name="Basalt" class="menu-model" position="0 1 -2" scale="0.05 0.05 0.05"
+            gltf-model="#basaltoModel" visible="false">
+        </a-entity>
+        <a-entity id="granito" name="Granite" class="menu-model" position="0 1.5 -2" scale="0.25 0.25 0.25"
+            gltf-model="#granitoModel" visible="false">
+        </a-entity>
+        <a-entity id="ardosia" name="Salte" class="menu-model" position="0 1.5 -2" scale="0.8 0.8 0.8"
+            rotation="0 -10 0" gltf-model="#ardosiaModel" visible="false">
+        </a-entity>
+        <a-entity id="marmore" name="Marble" class="menu-model" position="0 1.5 -2" scale="0.4 0.4 0.4"
+            rotation="0 -10 0" gltf-model="#marmoreModel" visible="false">
+        </a-entity>
+
+        <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" color="#666666"></a-plane>
+
+        <a-entity orbi="dimension: 4 2; orbits: 1 1.5 2; theta: 90; phi: 0 ; transparency: true; gap: 0.01 0.01; border: 1.2 #6d7584; 
+        font:assets/fonts/roboto-msdf.json; negate: false; messageColor: yellow; messageSize: 1.2; sideTextSize: 0.88 1.3; sideTextRotation: -40; 
+        bgTransparency: false;" config button-controls>
+    </a-entity>
+
+        <a-entity id="rig" position="0 0 0" rotation="0 0 0">
+            <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true"
+                wasd-controls="acceleration:150; fly: true; enabled: false">
+            </a-entity>
+        </a-entity>
+    </a-scene>
+    <script>
+         TRANSLATION.add(
+            '#title',
+            'Rock Types VR',
+            'Tipos de Rocha RV'
+        );
+    </script>
+</body>
+
+</html>
