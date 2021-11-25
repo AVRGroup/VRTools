@@ -77,7 +77,7 @@ if(quality == 1)
     
         objects: {
             calcario: {
-                path: 'assets/models/geography/calcario_low.glb',
+                path: 'assets/models/geography/calcita_low.glb',
                 fileSize: 2936,
                 draco: decoder // the first model needs to set the draco decoder
             },
@@ -151,6 +151,7 @@ function init() {
     granito = ASSETS.objects.granito;
     granito.scale.set(10, 10, 10);
     granito.position.set(0, 0, 0);
+    granito.rotation.set(0, -Math.PI / 12, 0);
     granito.visible = false;
     content.granito.model = granito;
     scene.add(granito)
