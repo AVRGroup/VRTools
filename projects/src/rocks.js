@@ -38,24 +38,24 @@ if(quality == 1)
     
         objects: {
             calcario: {
-                path: 'assets/models/geography/limestone.glb',
+                path: 'assets/models/rocks/limestone.glb',
                 fileSize: 23521,
                 draco: decoder // the first model needs to set the draco decoder
             },
             basalto: {
-                path: 'assets/models/geography/basalt.glb',
+                path: 'assets/models/rocks/basalt.glb',
                 fileSize: 24647,
             },
             granito: {
-                path: 'assets/models/geography/granite.glb',
+                path: 'assets/models/rocks/granite.glb',
                 fileSize: 32702,
             },
             ardosia: {
-                path: 'assets/models/geography/slate.glb',
+                path: 'assets/models/rocks/slate.glb',
                 fileSize: 13302,
             },
             marmore: {
-                path: 'assets/models/geography/marble.glb',
+                path: 'assets/models/rocks/marble.glb',
                 fileSize: 26344,
             }
         }
@@ -77,24 +77,24 @@ if(quality == 1)
     
         objects: {
             calcario: {
-                path: 'assets/models/geography/limestone_low.glb',
+                path: 'assets/models/rocks/limestone_low.glb',
                 fileSize: 1627,
                 draco: decoder // the first model needs to set the draco decoder
             },
             basalto: {
-                path: 'assets/models/geography/basalt_low.glb',
+                path: 'assets/models/rocks/basalt_low.glb',
                 fileSize: 2095,
             },
             granito: {
-                path: 'assets/models/geography/granite_low.glb',
+                path: 'assets/models/rocks/granite_low.glb',
                 fileSize: 2350,
             },
             ardosia: {
-                path: 'assets/models/geography/slate_low.glb',
+                path: 'assets/models/rocks/slate_low.glb',
                 fileSize: 1799,
             },
             marmore: {
-                path: 'assets/models/geography/marble_low.glb',
+                path: 'assets/models/rocks/marble_low.glb',
                 fileSize: 2310,
             }
         }

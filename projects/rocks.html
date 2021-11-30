@@ -45,7 +45,7 @@
                 <p></p>
             </div>
 
-            <iframe id="scene" class="w3-col l8" src="./src/geography-application.html" height="400"
+            <iframe id="scene" class="w3-col l8" src="./src/rocks-application.html" height="400"
                     style="border:2px solid black;"></iframe>
 
             <script>
@@ -71,9 +71,9 @@
 
         <div class="w3-row-padding">
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a id="fullscreenMediumQuality_link" href="./src/geography-application.html?quality=0" target="_blank" style="text-decoration: none;">
+                <a id="fullscreenMediumQuality_link" href="./src/rocks-application.html?quality=0" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Geography/marmoreNovo3.png') center;">
+                         style="background: url('img/Rocks/marmore.png') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
                             <br /><div id="fullscreen">Fullscreen - Standart Quality</div>
@@ -83,9 +83,9 @@
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a id="fullscreenHighQuality_link" href="./src/geography-application.html?quality=1" target="_blank" style="text-decoration: none;">
+                <a id="fullscreenHighQuality_link" href="./src/rocks-application.html?quality=1" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Geography/marmoreNovo3.png') center;">
+                         style="background: url('img/Rocks/marmore.png') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
                             <br /><div id="fullscreen2">Fullscreen - High Quality</div>
@@ -100,9 +100,9 @@
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a id="vr" href="./src/geography-application-VR-low.html" target="_blank" style="text-decoration: none;">
+                <a id="vr" href="./src/rocks-application-VR-low.html" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Geography/calcario.png') center;">
+                         style="background: url('img/Rocks/calcario.png') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="Augmented Reality" style="width: 64px;" />
                             <br /><div id="vr">Virtual Reality - Standart Quality</div>
@@ -128,9 +128,9 @@
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a id="vr2" href="./src/geography-application-VR.html" target="_blank" style="text-decoration: none;">
+                <a id="vr2" href="./src/rocks-application-VR.html" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Geography/calcario.png') center;">
+                         style="background: url('img/Rocks/calcario.png') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/vr-icon.png" alt="Augmented Reality" style="width: 64px;" />
                             <br /><div id="vr">Virtual Reality - High Quality</div>
@@ -213,18 +213,18 @@
         function changeLanguageApp(){
             var language = location.search;
             if(language.length != 0){
-                document.getElementById("scene").src = ("./src/geography-application.html" + language + "&quality=0");
-                document.getElementById("fullscreenMediumQuality_link").href = ("./src/geography-application.html" + language + "&quality=0"); 
-                document.getElementById("fullscreenHighQuality_link").href = ("./src/geography-application.html" + language + "&quality=1"); 
+                document.getElementById("scene").src = ("./src/rocks-application.html" + language + "&quality=0");
+                document.getElementById("fullscreenMediumQuality_link").href = ("./src/rocks-application.html" + language + "&quality=0"); 
+                document.getElementById("fullscreenHighQuality_link").href = ("./src/rocks-application.html" + language + "&quality=1"); 
             //    document.getElementById("ar_link").href = ("./src/solar-system-application-AR.html" + language); 
-                document.getElementById("vr_link").href = ("./src/geography-application-VR.html" + language); 
+                document.getElementById("vr_link").href = ("./src/rocks-application-VR.html" + language); 
             }
             else{
-                document.getElementById("scene").src = ("./src/geography-application.html?lang=en-US&quality=0");
-                document.getElementById("fullscreenMediumQuality_link").href = ("./src/geography-application.html?lang=en-US&quality=0"); 
-                document.getElementById("fullscreenHighQuality_link").href = ("./src/geography-application.html?lang=en-US&quality=1"); 
+                document.getElementById("scene").src = ("./src/rocks-application.html?lang=en-US&quality=0");
+                document.getElementById("fullscreenMediumQuality_link").href = ("./src/rocks-application.html?lang=en-US&quality=0"); 
+                document.getElementById("fullscreenHighQuality_link").href = ("./src/rocks-application.html?lang=en-US&quality=1"); 
             //    document.getElementById("ar_link").href = ("./src/solar-system-application-AR.html?lang=pt-BR"); 
-                document.getElementById("vr_link").href = ("./src/geography-application-VR.html?lang=pt-BR"); 
+                document.getElementById("vr_link").href = ("./src/rocks-application-VR.html?lang=pt-BR"); 
             }
         }
 
