@@ -26,7 +26,7 @@ if(quality == 1)
         textures: {
             helper: {
                 path: 'assets/textures/loader-helper.jpg',
-                fileSize: 12259 + 25574 + 4428 + 15957 + 3521, 
+                fileSize: 23521 + 24647 + 32702 + 13302 + 26344, 
             }
         },
         geometries: {
@@ -38,25 +38,25 @@ if(quality == 1)
     
         objects: {
             calcario: {
-                path: 'assets/models/geography/calcita.glb',
-                fileSize: 12259,
+                path: 'assets/models/geography/limestone.glb',
+                fileSize: 23521,
                 draco: decoder // the first model needs to set the draco decoder
             },
             basalto: {
-                path: 'assets/models/geography/basalto2.glb',
-                fileSize: 25574,
+                path: 'assets/models/geography/basalt.glb',
+                fileSize: 24647,
             },
             granito: {
-                path: 'assets/models/geography/granito.glb',
-                fileSize: 4428,
+                path: 'assets/models/geography/granite.glb',
+                fileSize: 32702,
             },
             ardosia: {
-                path: 'assets/models/geography/ardosia.glb',
-                fileSize: 15957,
+                path: 'assets/models/geography/slate.glb',
+                fileSize: 13302,
             },
             marmore: {
-                path: 'assets/models/geography/marmore1.glb',
-                fileSize: 3.521,
+                path: 'assets/models/geography/marble.glb',
+                fileSize: 26344,
             }
         }
     };
@@ -65,7 +65,7 @@ if(quality == 1)
         textures: {
             helper: {
                 path: 'assets/textures/loader-helper.jpg',
-                fileSize: 2936 + 3892 + 1626 + 1702 + 2072, 
+                fileSize: 1627 + 2095 + 2350 + 1799 + 2310, 
             }
         },
         geometries: {
@@ -77,25 +77,25 @@ if(quality == 1)
     
         objects: {
             calcario: {
-                path: 'assets/models/geography/calcario_low.glb',
-                fileSize: 2936,
+                path: 'assets/models/geography/limestone_low.glb',
+                fileSize: 1627,
                 draco: decoder // the first model needs to set the draco decoder
             },
             basalto: {
-                path: 'assets/models/geography/basalto_low.glb',
-                fileSize: 3892,
+                path: 'assets/models/geography/basalt_low.glb',
+                fileSize: 2095,
             },
             granito: {
-                path: 'assets/models/geography/granito_low.glb',
-                fileSize: 1626,
+                path: 'assets/models/geography/granite_low.glb',
+                fileSize: 2350,
             },
             ardosia: {
-                path: 'assets/models/geography/ardosia_low.glb',
-                fileSize: 1702,
+                path: 'assets/models/geography/slate_low.glb',
+                fileSize: 1799,
             },
             marmore: {
-                path: 'assets/models/geography/marmore1.glb',
-                fileSize: 2072,
+                path: 'assets/models/geography/marble_low.glb',
+                fileSize: 2310,
             }
         }
     };
@@ -149,7 +149,7 @@ function init() {
     scene.add(basalto)
 
     granito = ASSETS.objects.granito;
-    granito.scale.set(10, 10, 10);
+    granito.scale.set(30, 30, 30);
     granito.position.set(0, 0, 0);
     granito.rotation.set(0, -Math.PI / 12, 0);
     granito.visible = false;
@@ -165,8 +165,8 @@ function init() {
     scene.add(ardosia)
 
     marmore = ASSETS.objects.marmore;
-    marmore.scale.set(15, 15, 15);
-    marmore.position.set(0, 2, 0);
+    marmore.scale.set(1.5, 1.5, 1.5);
+    marmore.position.set(0, 1, 0);
     marmore.visible = false;
     content.marmore.model = marmore;
     scene.add(marmore)
@@ -287,7 +287,7 @@ const content = {
         
         source: `<a href="https://pt.wikipedia.org/wiki/M%C3%A1rmore" target="_blank" rel="noopener external">Wikipedia</a><br>
         <a href="https://mundoeducacao.uol.com.br/quimica/marmore.htm" target="_blank" rel="noopener external">Mundo Educação</a>`,
-        credits: '<a href="https://unsplash.com/photos/osuiatBDTww?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink" target="_blank" rel="noopener external">Annie Spratt</a> (adapted)',
+        credits: '<a href="https://sketchfab.com/3d-models/marble-3e6a621e4b084e44b78e71e9eabfad99" target="_blank" rel="noopener external">EduRock</a> (adapted)',
 
     }
 }
