@@ -73,7 +73,7 @@
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a id="fullscreenMediumQuality_link" href="./src/rocks-application.html?quality=0" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Rocks/marmore.png') center;">
+                         style="background: url('img/Rocks/fullscreen.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
                             <br /><div id="fullscreen">Fullscreen - Standart Quality</div>
@@ -85,7 +85,7 @@
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
                 <a id="fullscreenHighQuality_link" href="./src/rocks-application.html?quality=1" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Rocks/marmore.png') center;">
+                         style="background: url('img/Rocks/fullscreen.jpg') center;">
                         <div class="w3-padding" style="width:100%">
                             <img src="img/icons/fullscreen-icon.png" alt="fullscreen" style="width: 64px;" />
                             <br /><div id="fullscreen2">Fullscreen - High Quality</div>
@@ -100,11 +100,11 @@
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a id="vr" href="./src/rocks-application-VR-low.html" target="_blank" style="text-decoration: none;">
+                <a id="vr_link" href="./src/rocks-application-VR-low.html" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Rocks/calcario.png') center;">
+                         style="background: url('img/Rocks/vr.jpg') center;">
                         <div class="w3-padding" style="width:100%">
-                            <img src="img/icons/vr-icon.png" alt="Augmented Reality" style="width: 64px;" />
+                            <img src="img/icons/vr-icon.png" alt="Virtual Reality" style="width: 64px;" />
                             <br /><div id="vr">Virtual Reality - Standart Quality</div>
                         </div>
                     </div>
@@ -128,12 +128,12 @@
             </div>
 
             <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
-                <a id="vr2" href="./src/rocks-application-VR.html" target="_blank" style="text-decoration: none;">
+                <a id="vr_link2" href="./src/rocks-application-VR.html" target="_blank" style="text-decoration: none;">
                     <div class="more-modes w3-display-container"
-                         style="background: url('img/Rocks/calcario.png') center;">
+                         style="background: url('img/Rocks/vr.jpg') center;">
                         <div class="w3-padding" style="width:100%">
-                            <img src="img/icons/vr-icon.png" alt="Augmented Reality" style="width: 64px;" />
-                            <br /><div id="vr">Virtual Reality - High Quality</div>
+                            <img src="img/icons/vr-icon.png" alt="Virutal Reality" style="width: 64px;" />
+                            <br /><div id="vr2">Virtual Reality - High Quality</div>
                         </div>
                     </div>
                 </a>
@@ -157,29 +157,6 @@
 
         </div>
         <!-- End of more modes-->
-
-
-        <div class="w3-panel w3-leftbar w3-serif">
-            <h5 id="refer"><b>Reference:</b></h5>
-            <p>
-                <i>
-                    Alpha-Element, "Saturn-Ring texture", Web resource:
-                    https://www.deviantart.com/alpha-element/art/Stock-Image-Saturn-Rings-393767006
-                </i>
-            </p>
-            <p>
-                <i>
-                    Solar System Scope, "Solar System textures", Web resource:
-                    https://www.solarsystemscope.com/textures/
-                </i>
-            </p>
-            <p>
-                <i>
-                    Owen, T.C. "Solar System." From Encyclopædia Britannica, inc. Web resource
-                    https://www.britannica.com/science/solar-system
-                </i>
-            </p>
-        </div>
 
         <!-- End page content -->
     </div>
@@ -218,6 +195,7 @@
                 document.getElementById("fullscreenHighQuality_link").href = ("./src/rocks-application.html" + language + "&quality=1"); 
             //    document.getElementById("ar_link").href = ("./src/solar-system-application-AR.html" + language); 
                 document.getElementById("vr_link").href = ("./src/rocks-application-VR.html" + language); 
+                document.getElementById("vr_link2").href = ("./src/rocks-application-VR-low.html" + language); 
             }
             else{
                 document.getElementById("scene").src = ("./src/rocks-application.html?lang=en-US&quality=0");
@@ -225,6 +203,7 @@
                 document.getElementById("fullscreenHighQuality_link").href = ("./src/rocks-application.html?lang=en-US&quality=1"); 
             //    document.getElementById("ar_link").href = ("./src/solar-system-application-AR.html?lang=pt-BR"); 
                 document.getElementById("vr_link").href = ("./src/rocks-application-VR.html?lang=pt-BR"); 
+                document.getElementById("vr_link2").href = ("./src/rocks-application-VR-low.html?lang=pt-BR"); 
             }
         }
 
@@ -273,12 +252,6 @@
         );
 
         TRANSLATION.add(
-            '#ar',
-            'Augmented Reality',
-            'Realidade Aumentada',
-        );
-
-        TRANSLATION.add(
             '#vr',
             'Virtual Reality - Standart Quality',
             'Realidade Virtual - Qualidade Padrão',
@@ -322,12 +295,6 @@
         );
 
         TRANSLATION.add(
-            '#refer',
-            'Reference',
-            'Referências'
-        );
-
-        TRANSLATION.add(
             '#title',
             'Rock Types',
             'Tipos de Rocha'
@@ -336,7 +303,7 @@
         TRANSLATION.add(
             '#bottom',
             'Powered by ',
-            'Distribuído por '
+            'Powered by '
         );
 
     </script>

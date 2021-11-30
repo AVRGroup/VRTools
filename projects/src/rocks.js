@@ -239,7 +239,7 @@ const content = {
         
         source: `<a href="https://pt.wikipedia.org/wiki/Calc%C3%A1rio" target="_blank" rel="noopener external">Wikipedia</a><br/>
         <a href="https://agropos.com.br/o-que-e-calcario/" target="_blank" rel="noopener external">Agropos</a><br/>`,
-        credits: `<a href="https://sketchfab.com/3d-models/calcite-f842f5c568af4b808ad309ba3a8db538" target="_blank" rel="noopener external">Edurock</a>`,
+        credits: `<a href="https://sketchfab.com/3d-models/calcite-f842f5c568af4b808ad309ba3a8db538" target="_blank" rel="noopener external">Edurock</a> (adapted)`,
 
     },
     basalto: {
@@ -263,7 +263,7 @@ const content = {
         
         source: `<a href="https://www.todamateria.com.br/tipos-de-granito-caracteristicas-e-composicao/" target="_blank" rel="noopener external">TodaMatéria</a><br>
         <a href="https://gra2003.pt/pt/utilizacao-do-granito/" target="_blank" rel="noopener external">gra2003</a> `,
-        credits: `<a href="https://unsplash.com/photos/0gGmd1tXCD4?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink" target="_blank" rel="noopener external">Gareth David</a> (adapted)`,
+        credits: `<a href="https://sketchfab.com/3d-models/granite-ed0d206cc713484da07fa6cb645ec875#download" target="_blank" rel="noopener external">Digital Atlas</a> (adapted)`,
  
     },
     ardosia: {

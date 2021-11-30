@@ -116,12 +116,7 @@
                                 self.rotate = !self.rotate;
                                 orbi.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
                             });
-/*
-                            orbi.addButton('toggleHighlight', '#toggleHighlight', () => {
-                                self.highlight.visible = !self.highlight.visible;
-                                orbi.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
-                            });
-*/
+
                             document.addEventListener('pointerlockchange', (event) => {
                                 orbi.show();
                                 self.hide = false;
@@ -208,17 +203,6 @@
                                 orbi.showMessage(`Rotação está ${self.rotate ? 'ligada' : 'desligada'}`);
                             });
 
-                            orbi.addButton('toggleHighlight-pt', '#toggleHighlight-pt', () => {
-                                //self.highlight.visible = !self.highlight.visible;
-                                //orbi.showMessage(`Destaque está  ? 'ativado' : 'desativado'}`);
-                                let string = '\nPLACE: San Francisco, California United States of America.\n';
-                                string += '\nFort Point is a masonry seacoast fortification \nlocated on the southern side of the Golden Gate at\n the entrance to San Francisco Bay.';
-                                string += '\nIt is also the geographic name of the promontory \nupon which the fort and the southern approach of\n the Golden Gate Bridge were constructed.\n\n';
-                                orbi.showSideText(string);
-                                orbi.showSideText('aaaaaaaaaaa');
-                                console.log(string)
-                            });
-
                             document.addEventListener('pointerlockchange', (event) => {
                                 orbi.show();
                                 self.hide = false;
@@ -297,12 +281,7 @@
                                 self.rotate = !self.rotate;
                                 orbi.showMessage(`Rotation is ${self.rotate ? 'on' : 'off'}`);
                             });
-/*
-                            orbi.addButton('toggleHighlight', '#toggleHighlight', () => {
-                                self.highlight.visible = !self.highlight.visible;
-                                orbi.showMessage(`Highlight is ${self.highlight.visible ? 'shown' : 'hidden'}`);
-                            });
-*/
+
                             document.addEventListener('pointerlockchange', (event) => {
                                 orbi.show();
                                 self.hide = false;
@@ -348,14 +327,12 @@
             <img id="rotation" src="assets/icons/rotation.png">
             <img id="zoomIn" src="assets/icons/zoomin.png">
             <img id="zoomOut" src="assets/icons/zoomout.png">
-            <img id="toggleHighlight" src="assets/icons/highlight.png">
 
             <img id="next-pt" src="assets/icons/next-(pt-BR).png">
             <img id="previous-pt" src="assets/icons/previous-(pt-BR).png">
             <img id="rotation-pt" src="assets/icons/rotation(pt-BR).png">
             <img id="zoomIn-pt" src="assets/icons/zoomin-(pt-BR).png">
             <img id="zoomOut-pt" src="assets/icons/zoomout-(pt-BR).png">
-            <img id="toggleHighlight-pt" src="assets/icons/highlight(pt-BR).png">
         </a-assets>
 
         <a-entity light="type: ambient; color: #fff; intensity: 0.3"></a-entity>
@@ -368,13 +345,13 @@
         <a-entity id="basalto" name="Basalt" class="menu-model" position="0 1 -2" scale="0.05 0.05 0.05"
             gltf-model="#basaltoModel" visible="false">
         </a-entity>
-        <a-entity id="granito" name="Granite" class="menu-model" position="0 1.5 -2" scale="0.25 0.25 0.25"
+        <a-entity id="granito" name="Granite" class="menu-model" position="0 1.5 -2" scale="0.8 0.8 0.8"
             gltf-model="#granitoModel" visible="false">
         </a-entity>
         <a-entity id="ardosia" name="Salte" class="menu-model" position="0 1.5 -2" scale="0.8 0.8 0.8"
             rotation="0 -10 0" gltf-model="#ardosiaModel" visible="false">
         </a-entity>
-        <a-entity id="marmore" name="Marble" class="menu-model" position="0 1.5 -2" scale="0.4 0.4 0.4"
+        <a-entity id="marmore" name="Marble" class="menu-model" position="0 1.5 -2" scale="0.04 0.04 0.04"
             rotation="0 -10 0" gltf-model="#marmoreModel" visible="false">
         </a-entity>
 
