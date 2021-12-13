@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Rocks Types</title>
+    <script src="../../js/translation.js"></script>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+
+        #panel {
+            position: absolute;
+            bottom: 0;
+            width: 100vw;
+            background-color: #E2E5E7;
+        }
+
+        #panel-title {
+            margin-top: 0;
+            margin-bottom: 0;
+            background-color: #B3A1A1;
+            padding: 7px;
+            font-family: sans-serif;
+            text-align: center;
+            color: #efefef;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #panel-title:after {
+            position: absolute;
+            content: "";
+            top: 0.5em;
+            right: 0.8em;
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-color: transparent transparent #fff transparent;
+        }
+
+        #panel-title.active:after {
+            border-color: #fff transparent transparent transparent;
+            top: 0.8em;
+        }
+
+        #panel-content {
+            display: none;
+            max-height: 60vh;
+            padding: 5px;
+            color: #736767;
+            overflow-y: scroll;
+        }
+
+        #panel select {
+            width: 100%;
+            padding: 0.3em;
+        }
+
+        #panel a {
+            color: #736767;
+        }
+
+        .btn {
+            padding-top: 0.2em;
+            padding-bottom: 0.2em;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #E2E5E7;
+            background-color: #CCBEB8;
+            border: none;
+            border-radius: 0.25em;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #D9CAC3;
+        }
+
+
+        .content-title {
+            margin-top: 1em;
+            margin-bottom: 0;
+            display: block;
+        }
+
+        .content {
+            margin-top: 0;
+        }
+
+        @media only screen and (min-width: 768px) {
+            #panel {
+                position: absolute;
+                right: 0;
+                width: 25vw;
+                height: 100vh;
+            }
+
+            #panel-title {
+                margin-top: 0;
+                margin-bottom: 0;
+                padding: 7px;
+                font-family: sans-serif;
+                text-align: center;
+                color: #efefef;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            #panel-title:after {
+                border: none;
+            }
+
+            #panel-title.active:after {
+                border: none;
+            }
+
+            #panel-content {
+                display: block;
+                /*Mais que 90vh corta o final do conteudo por algum motivo */
+                max-height: 90vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="three-stats"></div>
+    <div id="panel">
+        <h3 id="panel-title" onclick="toggleContent()">Tipos de Rocha</h3>
+
+        <div id="panel-content">
+            <select id="selector" onchange="changeContent()">
+                <!-- <option value="cardio" selected>Cardiovascular disease</option> -->
+                <option id="opt-basalto" value="basalto" selected>Basalt</option>
+                <option id="opt-calcario" value="calcario" >Limestone</option>
+                <option id="opt-granito" value="granito">Granite</option>
+                <option id="opt-ardosia" value="ardosia">Slate</option>
+                <option id="opt-marmore" value="marmore">Marble</option>
+            </select>
+
+
+
+            <b id="whatis-title" class="content-title">About</b>
+            <p id="whatis" class="content">
+                Basalt is an eruptive rock, consolidated from magma outside the earths crust. 
+                It usually appears in large extensions called "lava rivers". , hard, and rich in iron and magnesium. Basalt is a rock made up of plagioclases 
+                (mainly labradorite) and mafic minerals, with secondary components such as rhombic pyroxemes, biotite, magnesite and ilmenite. 
+                There is also columnar basalt that comes from certain conditions cooling magma, causing disjunction in prisms.
+            </p>
+
+            <b id="risk-title" class="content-title">Applications</b>
+            <p id="risk" class="content">
+                Basalt, due to its hardness and resistance to weathering, is used for the production of masonry and construction aggregates and as an ornamental stone for 
+                coverings and sidewalks. Basalt fiber production is a booming industry.
+            </p>
+
+
+
+            <b id="source-title" class="content-title">Source</b>
+            <p id="source" class="content">
+                <a href="https://www.infopedia.pt/$basalto#:~:text=O%20basalto%20%C3%A9%20uma%20rocha,rica%20em%20ferro%20e%20magn%C3%A9sio" target="_blank"
+                    rel="noopener external">Infopedia</a><br />
+                <a href="https://pt.wikipedia.org/wiki/Basalto"
+                    target="_blank" rel="noopener external">Wikipedia</a><br />
+
+            </p>
+
+            <b id="credits-title" class="content-title">3D Model Credits</b>
+            <p id="credits" class="content">
+                <a href="https://sketchfab.com/3d-models/basalt-b6fa41f193c94eefa2661bdff7bd71e8" target="_blank" rel="noopener external">
+                    Edurock
+                </a>
+                
+            </p> 
+        </div>
+    </div>
+
+    <div id="output"></div>
+
+    <script>
+        function toggleContent() {
+            if (window.innerWidth >= 768) return;
+            let title = document.querySelector('#panel-title');
+            let content = document.querySelector('#panel-content');
+
+            title.classList.toggle('active');
+
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            }
+            else content.style.display = 'block';
+        }
+    </script>
+
+    <script src="../libs/three/three.js"></script>
+    <!-- <script src="../libs/three/controls/OrbitControls.js"></script> -->
+    <script src="../libs/three/controls/TrackballControls.js"></script>
+    <script src="../libs/util/Stats.js"></script>
+    <script src="../libs/util/loadScreen/LoadScreenDraco.js"></script>
+    <script src="../libs/loaders/GLTFLoader.js"></script>
+    <script src="../libs/loaders/DRACOLoader.js"></script>
+    <script src="rocks.js"></script>
+    <script>
+        TRANSLATION.add(
+            '#page-title',
+            'Rock Types',
+            'Tipos de rocha'
+        );
+        TRANSLATION.add(
+            '#panel-title',
+            'Rock Types',
+            'Tipos de Rocha'
+        );
+    </script>
+</body>
+
+</html>
