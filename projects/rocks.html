@@ -155,6 +155,48 @@
                 </p>
             </div>
 
+            <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
+                <a id="ar_link"href="./src/rocks-application-AR-low.html" target="_blank" style="text-decoration: none;">
+                    <div class="more-modes w3-display-container"
+                         style="background: url('img/Solar-System/blur-AR.jpg') center;">
+                        <div class="w3-padding" style="width:100%">
+                            <img src="img/icons/ar-icon.png" alt="Augmented Reality" style="width: 64px;" />
+                            <br /><div id="ar">Augmented Reality - Standart Quality</div>
+                        </div>
+                    </div>
+                </a>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-fiducial">
+                        You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
+                                                                                           target="_blank">click here</a> to
+                        download).
+                        </div>
+                </p>
+            </div>
+
+            <div class="w3-col l3 m6 w3-margin-bottom w3-margin-top">
+                <a id="ar_link2"href="./src/rocks-application-AR.html" target="_blank" style="text-decoration: none;">
+                    <div class="more-modes w3-display-container"
+                         style="background: url('img/Solar-System/blur-AR.jpg') center;">
+                        <div class="w3-padding" style="width:100%">
+                            <img src="img/icons/ar-icon.png" alt="Augmented Reality" style="width: 64px;" />
+                            <br /><div id="ar2">Augmented Reality - High Quality</div>
+                        </div>
+                    </div>
+                </a>
+
+                <p class="more-modes-text">
+                    <img src="img/icons/alert.png" alt="alert" style="height: 32px;">
+                    <div id="warning-fiducial">
+                        You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png"
+                                                                                           target="_blank">click here</a> to
+                        download).
+                        </div>
+                </p>
+            </div>
+
         </div>
         <!-- End of more modes-->
 
@@ -193,15 +235,18 @@
                 document.getElementById("scene").src = ("./src/rocks-application.html" + language + "&quality=0");
                 document.getElementById("fullscreenMediumQuality_link").href = ("./src/rocks-application.html" + language + "&quality=0"); 
                 document.getElementById("fullscreenHighQuality_link").href = ("./src/rocks-application.html" + language + "&quality=1"); 
-            //    document.getElementById("ar_link").href = ("./src/solar-system-application-AR.html" + language); 
+                document.getElementById("ar_link").href = ("./src/rocks-application-AR-low.html" + language);
+                document.getElementById("ar_link2").href = ("./src/rocks-application-AR.html" + language);  
                 document.getElementById("vr_link").href = ("./src/rocks-application-VR.html" + language); 
                 document.getElementById("vr_link2").href = ("./src/rocks-application-VR-low.html" + language); 
+
             }
             else{
                 document.getElementById("scene").src = ("./src/rocks-application.html?lang=en-US&quality=0");
                 document.getElementById("fullscreenMediumQuality_link").href = ("./src/rocks-application.html?lang=en-US&quality=0"); 
                 document.getElementById("fullscreenHighQuality_link").href = ("./src/rocks-application.html?lang=en-US&quality=1"); 
-            //    document.getElementById("ar_link").href = ("./src/solar-system-application-AR.html?lang=pt-BR"); 
+                document.getElementById("ar_link").href = ("./src/rocks-application-AR-low.html?lang=pt-BR"); 
+                document.getElementById("ar_link2").href = ("./src/rocks-application-AR.html" + language); 
                 document.getElementById("vr_link").href = ("./src/rocks-application-VR.html?lang=pt-BR"); 
                 document.getElementById("vr_link2").href = ("./src/rocks-application-VR-low.html?lang=pt-BR"); 
             }
@@ -285,8 +330,24 @@
                         no primeiro acesso. `
         );
 
+        TRANSLATION.add(
+            '#ar',
+            'Augmented Reality - Standart Quality',
+            'Realidade Aumentada - Qualidade Padrão',
+        );
 
+        TRANSLATION.add(
+            '#ar2',
+            'Augmented Reality - High Quality',
+            'Realidade Aumentada - Qualidade Alta'
+        );
 
+        TRANSLATION.add(
+            '#warning-fiducial',
+            `You must print a fiducial marker to use Augmented Reality mode (<a href="data/markers/hiro.png" target="_blank">click here</a> to download).`,
+            `É necessário imprimir o marcador fiducial para usar o modo de Realidade Aumentada (<a href="data/markers/hiro.png" target="_blank">
+                            Clique aqui</a> par baixar).`
+        );
 
         TRANSLATION.add(
             '#more-modes-header',
