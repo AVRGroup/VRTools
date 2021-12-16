@@ -18,7 +18,7 @@ import {
     Texture,
     TextureLoader,
     CanvasTexture,
-} from '../libs/three/build/three.module.js';
+} from './three/build/three.module.js';
 
 // propertys
 let currentOrbit, isFusing, config;
