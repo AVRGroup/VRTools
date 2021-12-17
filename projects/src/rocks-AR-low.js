@@ -45,7 +45,7 @@ function mainMediumQuality(lang) {
                 fileSize: 23521,
             },
             basalto: {
-                path: 'assets/models/rocks/basalt_low_ar.glb',
+                path: 'assets/models/rocks/basalt_low.glb',
 
                 fileSize: 24647,
             },

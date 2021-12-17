@@ -39,6 +39,7 @@
     <script type="text/javascript" charset="UTF-8" src="../libs/three/build/js/controls/OrbitControls.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/three/build/js/libs/stats.min.js"></script>
     <script type="text/javascript" charset="UTF-8" src="../libs/three/build/js/libs/dat.gui.min.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../libs/util.js"></script>    
 
     <!-- Library of Augmented Reality that uses Three.js -->
     <script type="text/javascript" charset="UTF-8" src="../libs/MarkerTracking--LocationBasedAR/THREE/ar-modified.js"></script>
@@ -65,15 +66,15 @@
             language = language.substring(aux.length, language.length);
             switch (language) {
                 case "en-US":
-                    mainMediumQuality("en-US");
+                    mainMediumQuality("en-US", "high");
                     break;
                 case "pt-BR":
-                    mainMediumQuality("pt-BR");
+                    mainMediumQuality("pt-BR", "high");
                     break;
             }
         }
         else {
-            mainMediumQuality("en-US");
+            mainMediumQuality("en-US", "high");
         }
     </script>
     <script>
