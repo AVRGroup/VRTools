@@ -292,7 +292,7 @@ function mainMediumQuality(lang, quality)
 
         guiFolder.add(controls, 'type', [rocks.calcario, rocks.basalto, rocks.granito, rocks.ardosia, rocks.marmore]).onChange(function (e) {
             controls.chooseObject();
-        }).name(interfaceTexts.type);;
+        }).name(interfaceTexts.type);
 
         ////////////////////////////////////////////////////////////////////////////////
         //          Handler arToolkitSource
