@@ -153,22 +153,28 @@ function mainMediumQuality(lang) {
                             switch (this.type) {
                                 case 'Basalt':
                                     this.meshNumber = 1;
+                                    
                                     break;
                                 case 'Limestone':
                                     this.meshNumber = 0;
+                                    
                                     break;
                                 case 'Granite':
                                     this.meshNumber = 2;
+                                    
                                     break;
                                 case 'Slate':
                                     this.meshNumber = 3;
+                                    
                                     break;
                                 case 'Marble':
                                     this.meshNumber = 4;
+                                    
                                     break;
                             }
                             objectArray[this.meshNumber].visible = true;
                             this.mesh = objectArray[this.meshNumber];
+                            this.resize();
                         }
 
 
@@ -178,7 +184,7 @@ function mainMediumQuality(lang) {
                             {
                                 case 1: {
                                     objectArray[this.meshNumber].scale.set(this.size * SIZE.basalto,this.size * SIZE.basalto, this.size * SIZE.basalto);
-                                    //objectArray[this.meshNumber].position.y = -this.size + SIZE.basaltoY;
+                                    //objectArray[this.meshNumber].position.y = this.size * SIZE.basaltoY;
                                     break;
                                 }
                                 case 0: {
@@ -258,6 +264,7 @@ function mainMediumQuality(lang) {
                             }
                             objectArray[this.meshNumber].visible = true;
                             this.mesh = objectArray[this.meshNumber];
+                            this.resize();
                         }
 
                         this.resize = function () {

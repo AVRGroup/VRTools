@@ -178,6 +178,7 @@
                             }
                             objectArray[this.meshNumber].visible = true;
                             this.mesh = objectArray[this.meshNumber];
+                            this.resize();
                         }
 
 
@@ -275,6 +276,7 @@
                             }
                             objectArray[this.meshNumber].visible = true;
                             this.mesh = objectArray[this.meshNumber];
+                            this.resize();
                         }
                         controls.mesh.visible = true;
                         this.resize = function () {
