@@ -286,7 +286,7 @@ function mainMediumQuality(lang, quality)
             }
         }).name(interfaceTexts.axis);
 
-        guiFolder.add(controls, "size", 1, 2).listen().onChange(function (e) {
+        guiFolder.add(controls, "size", 1, 3).listen().onChange(function (e) {
             controls.resize();
         }).name(interfaceTexts.size);
 
