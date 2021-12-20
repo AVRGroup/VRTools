@@ -170,7 +170,7 @@ function mainMediumQuality(lang, quality)
             ardosia = ASSETS.objects.ardosia;
             scale = rockParam.slatSize;            
             ardosia.scale.set(scale, scale, scale);
-            ardosia.rotation.set(-Math.PI / 6, -Math.PI / 6, 0);
+            //ardosia.rotation.set(-Math.PI / 6, -Math.PI / 6, 0);
             ardosia.visible = false;
             objectArray.push(ardosia);
             scene.add(ardosia)
