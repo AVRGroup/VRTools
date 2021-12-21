@@ -1,18 +1,17 @@
-/******************************
- *                            *
- *  MEDIUM QUALITY TEXTURES   *
- *                            *
- *****************************/
-
-function mainMediumQuality(lang, quality) 
+function startApp(lang, quality) 
 {
-    console.log("Medium Quality of the textures");
+    if(quality == "high")
+        console.log("High Quality textures");
+    else
+        console.log("Low Quality textures");
 
     // It's necessary to create renderer before than load Assets because they use the renderer
     var renderer = new THREE.WebGLRenderer({
         antialias: true,
-        alpha: true
+        alpha: true,
     });
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
     renderer.setPixelRatio(window.devicePixelRatio);            //Improve Ratio of pixel in function of the of device
     renderer.setSize(window.innerWidth, window.innerHeight); //640, 480
     const rockParam = {
@@ -20,27 +19,29 @@ function mainMediumQuality(lang, quality)
         basaSize:  0.025,
         granSize:  0.350,
         slatSize:  0.250,
-        marbSize:  0.020,
-        defaultDirectLight: 1,
-        basaltLight: 6,
-        slateLight: 3,        
-        graniteLight: 2,                
+        marbSize:  0.020, 
+        
+        limeHigh: 28719,
+        basaHigh: 30895,
+        granHigh: 33486,
+        marbHigh: 26975,
+        slatHigh: 23685,
     };
 
     const usRocks = {
-        calcario: "Limestone",
-        basalto:  "Basalt",
-        granito:  "Granite",
-        ardosia:  "Slate",
-        marmore:  "Marble"
+        limestone: "Limestone",
+        basalt:  "Basalt",
+        granite:  "Granite",
+        slate:  "Slate",
+        marble:  "Marble"
     };
 
     const brRocks = {
-        calcario: "Calcario",
-        basalto:  "Basalto",
-        granito:  "Granito",
-        ardosia:  "Ardosia",
-        marmore:  "Marmore"
+        limestone: "Calcario",
+        basalt:  "Basalto",
+        granite:  "Granito",
+        slate:  "Ardosia",
+        marble:  "Marmore"
     };
 
     const usTexts = {
@@ -58,15 +59,15 @@ function mainMediumQuality(lang, quality)
     }; 
 
     const highPaths = {
-        calcario: 'assets/models/rocks/limestone.glb',
-        basalto:  'assets/models/rocks/basalt.glb',
-        granito:  'assets/models/rocks/granite.glb',
-        ardosia:  'assets/models/rocks/slate.glb',
-        marmore: 'assets/models/rocks/marble.glb',
+        limestone: 'assets/models/rocks/limestone.glb',
+        basalt:  'assets/models/rocks/basalt.glb',
+        granite:  'assets/models/rocks/granite.glb',
+        slate:  'assets/models/rocks/slate.glb',
+        marble: 'assets/models/rocks/marble.glb',
     }
 
     const lowPaths = {
-        calcario: 'assets...',
+        limestone: 'assets...',
         /* COMPLETAR AQUI OS CAMINHOS DE BAIXA QUALIDADE */
     }
 
@@ -82,36 +83,30 @@ function mainMediumQuality(lang, quality)
         textures: {
             helper: {
                 path: 'assets/textures/loader-helper.jpg',
-                fileSize: 23521 + 24647 + 32702 + 13302 + 26344, 
+                fileSize: rockParam.limeHigh + rockParam.basaHigh + rockParam.granHigh + rockParam.marbHigh + rockParam.slatHigh, 
             }
         },
-        geometries: {
-            sphereGeometry: new THREE.SphereGeometry(1, 20, 20),
-        },
-        materials: {
-            sphereMaterial: new THREE.MeshPhongMaterial({ color: 0x0D8CFF, transparent: true, opacity: 0.5, wireframe: false })
-        },
-    
+   
         objects: {
-            calcario: {
-                path: paths.calcario,
-                fileSize: 23521,
+            limestone: {
+                path: paths.limestone,
+                fileSize: rockParam.limeHigh,
             },
-            basalto: {
-                path: paths.basalto,
-                fileSize: 24647,
+            basalt: {
+                path: paths.basalt,
+                fileSize: rockParam.basaHigh,
             },
-            granito: {
-                path: paths.granito,
-                fileSize: 32702,
+            granite: {
+                path: paths.granite,
+                fileSize: rockParam.granHigh,
             },
-            ardosia: {
-                path: paths.ardosia,
-                fileSize: 13302,
+            slate: {
+                path: paths.slate,
+                fileSize: rockParam.slatHigh,
             },
-            marmore: {
-                path: paths.marmore,
-                fileSize: 26344,
+            marble: {
+                path: paths.marble,
+                fileSize: rockParam.marbHigh,
             }
         }
     };
@@ -141,54 +136,15 @@ function mainMediumQuality(lang, quality)
         var axesHelper = new THREE.AxesHelper( 1 );
             axesHelper.visible = false;
         scene.add( axesHelper );
+        
         var scale = 0;
-
-        function insertSolarObjectsOnScene(objectArray){
-            calcario = ASSETS.objects.calcario;
-            scale = rockParam.limeSize;
-            calcario.scale.set(scale, scale, scale);
-            calcario.visible = true;
-            objectArray.push(calcario);
-            scene.add(calcario);
-        
-            basalto = ASSETS.objects.basalto;
-            scale = rockParam.basaSize;
-            basalto.scale.set(scale, scale, scale);
-            basalto.rotation.set(0, Math.PI / 4, 0);            
-            basalto.visible = false;
-            objectArray.push(basalto);
-            scene.add(basalto)
-        
-            granito = ASSETS.objects.granito;
-            scale = rockParam.granSize;            
-            granito.scale.set(scale, scale, scale);
-            granito.rotation.set(0, -Math.PI / 12, 0);
-            granito.visible = false;
-            objectArray.push(granito);
-            scene.add(granito)
-        
-            ardosia = ASSETS.objects.ardosia;
-            scale = rockParam.slatSize;            
-            ardosia.scale.set(scale, scale, scale);
-            //ardosia.rotation.set(-Math.PI / 6, -Math.PI / 6, 0);
-            ardosia.visible = false;
-            objectArray.push(ardosia);
-            scene.add(ardosia)
-        
-            marmore = ASSETS.objects.marmore;
-            scale = rockParam.marbSize;            
-            marmore.scale.set(scale, scale, scale);
-            //marmore.position.set(0, 0.04, 0);
-            marmore.visible = false;
-            objectArray.push(marmore);
-            scene.add(marmore)
-        }
-    
+        var defaultSize = 2;
+   
         // Add objects to scene
         var objectArray = new Array();
     
         // Creating de planets and stars
-        insertSolarObjectsOnScene(objectArray);
+        insertObjectsOnScene(objectArray);
 
         var rocks = usRocks; // Default
         var interfaceTexts = usTexts;
@@ -211,42 +167,36 @@ function mainMediumQuality(lang, quality)
             // Geometry
             this.meshNumber = 0;
             this.mesh = objectArray[this.meshNumber];
-            this.size = 1;
-            this.type = rocks.calcario;
+            this.size = defaultSize; // 2
+            this.type = rocks.limestone;
             this.axes = false;
 
             this.chooseObject = function () {
                 objectArray[this.meshNumber].visible = false;
-                light.intensity = rockParam.defaultDirectLight;
                 switch (this.type) {
-                    case rocks.calcario: // Limestone
+                    case rocks.limestone: // Limestone
                         this.meshNumber = 0;
                         break;
-                    case rocks.basalto: // Basalt
+                    case rocks.basalt: // Basalt
                         this.meshNumber = 1;
-                        light.intensity = rockParam.basaltLight;
                         break;
-                    case rocks.granito: // Granite
+                    case rocks.granite: // Granite
                         this.meshNumber = 2;
-                        light.intensity = rockParam.graniteLight;                        
                         break;
-                    case rocks.ardosia: // Slate
+                    case rocks.slate: // Slate
                         this.meshNumber = 3;
-                        light.intensity = rockParam.slateLight;                        
                         break;
-                    case rocks.marmore: // Marble
+                    case rocks.marble: // Marble
                         this.meshNumber = 4;
                         break;
                 }
-                objectArray[this.meshNumber].visible = true;
-                var mesh = objectArray[this.meshNumber]
-                var meshBounds = new THREE.Box3().setFromObject( mesh );
-                mesh.translateY(-1*meshBounds.min.y)                            
+                mesh = objectArray[this.meshNumber];
+                mesh.visible = true;                         
                 this.resize();
             }
 
             this.resize = function () {
-                var mesh, meshBounds, objectSize;
+                var meshBounds, objectSize;
                 switch(this.meshNumber)
                 {                                                            
                     case 0: 
@@ -266,10 +216,22 @@ function mainMediumQuality(lang, quality)
                         break;
                 }
                 mesh = objectArray[this.meshNumber];
-                mesh.scale.set(this.size * objectSize, this.size * objectSize, this.size * objectSize);                                  
-                meshBounds = new THREE.Box3().setFromObject( mesh );
-                mesh.translateY(-1*meshBounds.min.y);
+               
+                fixObjectPositionAndSize(mesh, this.size * objectSize);                                                          
             }
+        }
+
+        function fixObjectPositionAndSize(mesh, size)
+        {
+            // Põe o objeto na origem antes de fazer a escala            
+            meshBounds = new THREE.Box3().setFromObject( mesh );                
+            var ySize = Math.abs(meshBounds.max.y-meshBounds.min.y);
+            mesh.position.y = -ySize/2.0 + (meshBounds.min.y > 0) ? -meshBounds.min.y : meshBounds.min.y;               
+
+            // Faz a escala e reposiciona objeto após escala
+            mesh.scale.set(size, size, size);                                                  
+            meshBounds = new THREE.Box3().setFromObject( mesh );
+            mesh.position.y += (meshBounds.min.y < 0) ? -meshBounds.min.y : meshBounds.min.y;            
         }
 
         // GUI de controle e ajuste de valores especificos da geometria do objeto
@@ -290,9 +252,50 @@ function mainMediumQuality(lang, quality)
             controls.resize();
         }).name(interfaceTexts.size);
 
-        guiFolder.add(controls, 'type', [rocks.calcario, rocks.basalto, rocks.granito, rocks.ardosia, rocks.marmore]).onChange(function (e) {
+        guiFolder.add(controls, 'type', [rocks.limestone, rocks.basalt, rocks.granite, rocks.slate, rocks.marble]).onChange(function (e) {
             controls.chooseObject();
         }).name(interfaceTexts.type);
+
+        function insertObjectsOnScene(objectArray){
+            limestone = ASSETS.objects.limestone;
+            scale = rockParam.limeSize;
+            limestone.scale.set(scale, scale, scale);
+            limestone.visible = true;
+            objectArray.push(limestone);
+            scene.add(limestone);
+        
+            basalt = ASSETS.objects.basalt;
+            scale = rockParam.basaSize;
+            basalt.scale.set(scale, scale, scale);          
+            basalt.visible = false;
+            objectArray.push(basalt);
+            scene.add(basalt)
+        
+            granite = ASSETS.objects.granite;
+            scale = rockParam.granSize;            
+            granite.scale.set(scale, scale, scale);
+            granite.visible = false;
+            objectArray.push(granite);
+            scene.add(granite)
+
+        
+            slate = ASSETS.objects.slate;
+            scale = rockParam.slatSize;            
+            slate.scale.set(scale, scale, scale);
+            slate.visible = false;
+            objectArray.push(slate);
+            scene.add(slate)
+        
+            marble = ASSETS.objects.marble;
+            scale = rockParam.marbSize;            
+            marble.scale.set(scale, scale, scale);
+            marble.visible = false;
+            objectArray.push(marble);
+            scene.add(marble)
+
+            // Acerta posição do primeiro objeto a ser colocado na cena
+            fixObjectPositionAndSize(objectArray[0], rockParam.limeSize * defaultSize); 
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         //          Handler arToolkitSource
