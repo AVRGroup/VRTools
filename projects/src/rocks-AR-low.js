@@ -1,25 +1,92 @@
-function mainMediumQuality(lang) {
-    console.log("Medium Quality of the textures");
+function startApp(lang, quality) 
+{
+    if(quality == "high")
+        console.log("High Quality textures");
+    else
+        console.log("Low Quality textures");
 
     // It's necessary to create renderer before than load Assets because they use the renderer
     var renderer = new THREE.WebGLRenderer({
         antialias: true,
-        alpha: true
+        alpha: true,
     });
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
     renderer.setPixelRatio(window.devicePixelRatio);            //Improve Ratio of pixel in function of the of device
     renderer.setSize(window.innerWidth, window.innerHeight); //640, 480
-    const SIZE = {
-        calario: 0.025,
-        calcarioY: 1,
-        basalto: 0.025,
-        basaltoY: 30,
-        granito: 0.5,
-        granitoY: 1,
-        ardosia: 0.25,
-        ardosia: 1,
-        marmore: 0.02,
-        marmoreY: 0.04
+    const rockParam = {
+        limeSize: 0.025,
+        basaSize:  0.025,
+        granSize:  0.350,
+        slatSize:  0.250,
+        marbSize:  0.020, 
+        
+        limeHigh: 28719,
+        basaHigh: 30895,
+        granHigh: 33486,
+        marbHigh: 26975,
+        slatHigh: 23685,
     };
+
+    const usRocks = {
+        limestone: "Limestone",
+        basalt:  "Basalt",
+        granite:  "Granite",
+        slate:  "Slate",
+        marble:  "Marble"
+    };
+
+    const brRocks = {
+        limestone: "Calcario",
+        basalt:  "Basalto",
+        granite:  "Granito",
+        slate:  "Ardosia",
+        marble:  "Marmore"
+    };
+
+    const usTexts = {
+        folderName: "Properties",
+        axis: "Axes",
+        size: "Object Size",
+        type: "Type"
+    };    
+
+    const brTexts = {
+        folderName: "Parâmetros",
+        axis: "Eixos",
+        size: "Tamanho do Objeto",
+        type: "Tipo de Rocha"
+    }; 
+
+    const highPaths = {
+        limestone: 'assets/models/rocks/limestone.glb',
+        basalt:  'assets/models/rocks/basalt.glb',
+        granite:  'assets/models/rocks/granite.glb',
+        slate:  'assets/models/rocks/slate.glb',
+        marble: 'assets/models/rocks/marble.glb',
+    }
+
+    const lowPaths = {
+        limestone: 'assets/models/rocks/limestone_low.glb',
+        basalt:  'assets/models/rocks/basalt_low.glb',
+        granite:  'assets/models/rocks/granite_low.glb',
+        slate:  'assets/models/rocks/slate_low.glb',
+        marble: 'assets/models/rocks/marble_low.glb',
+    }
+
+    // Default paths
+    var paths = highPaths;
+    if(quality == "low") 
+    {
+        paths = lowPaths;
+        rockParam.limeHigh = 1627;
+        rockParam.basaHigh = 2095;
+        rockParam.granHigh = 2350;
+        rockParam.marbHigh = 1799;
+        rockParam.slatHigh = 2310;
+    }
+
+
     // Adiciona a saída do renderizador para um elemento da página HTML
     document.getElementById("webgl-output").appendChild(renderer.domElement);
 
@@ -28,38 +95,30 @@ function mainMediumQuality(lang) {
         textures: {
             helper: {
                 path: 'assets/textures/loader-helper.jpg',
-                fileSize: 23521 + 24647 + 32702 + 13302 + 26344, 
+                fileSize: rockParam.limeHigh + rockParam.basaHigh + rockParam.granHigh + rockParam.marbHigh + rockParam.slatHigh, 
             }
         },
-        geometries: {
-            sphereGeometry: new THREE.SphereGeometry(1, 20, 20),
-        },
-        materials: {
-            sphereMaterial: new THREE.MeshPhongMaterial({ color: 0x0D8CFF, transparent: true, opacity: 0.5, wireframe: false })
-        },
-    
+   
         objects: {
-            calcario: {
-                path: 'assets/models/rocks/limestone_low.glb',
-
-                fileSize: 23521,
+            limestone: {
+                path: paths.limestone,
+                fileSize: rockParam.limeHigh,
             },
-            basalto: {
-                path: 'assets/models/rocks/basalt_low.glb',
-
-                fileSize: 24647,
+            basalt: {
+                path: paths.basalt,
+                fileSize: rockParam.basaHigh,
             },
-            granito: {
-                path: 'assets/models/rocks/granite_low.glb',
-                fileSize: 32702,
+            granite: {
+                path: paths.granite,
+                fileSize: rockParam.granHigh,
             },
-            ardosia: {
-                path: 'assets/models/rocks/slate_low.glb',
-                fileSize: 13302,
+            slate: {
+                path: paths.slate,
+                fileSize: rockParam.slatHigh,
             },
-            marmore: {
-                path: 'assets/models/rocks/marble_low.glb',
-                fileSize: 26344,
+            marble: {
+                path: paths.marble,
+                fileSize: rockParam.marbHigh,
             }
         }
     };
@@ -73,261 +132,189 @@ function mainMediumQuality(lang) {
         // use the defaults
         // use the basic elements
         var scene = new THREE.Scene();  // Create main scene;
-        var clock = new THREE.Clock();
         
         // Setting Camera
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.lookAt(0, 0, 0);
-        camera.position.set(5, 15, 50);
-        camera.up.set(0, 1, 0);
         scene.add(camera);
 
         //  Setting the Lights
-
-   
-
-        var light = new THREE.DirectionalLight(0xffffff, 1.8);
+        var light = new THREE.DirectionalLight(0xffffff, 1);
         camera.add(light); 
 
-        function insertSolarObjectsOnScene(objectArray){
-            calcario = ASSETS.objects.calcario;
-            calcario.scale.set(0.025, 0.025, 0.025);
-            calcario.position.set(0, 0, 0);
-            calcario.rotation.set(0, -Math.PI / 12, 0);
-            calcario.visible = false;
-            objectArray.push(calcario);
-            scene.add(calcario);
+        var ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+
+        // Show axes (parameter is size of each axis)
+        var axesHelper = new THREE.AxesHelper( 1 );
+            axesHelper.visible = false;
+        scene.add( axesHelper );
         
-            basalto = ASSETS.objects.basalto;
-            basalto.scale.set(0.025, 0.025, 0.025);
-            basalto.position.set(0, 0, 0);
-            basalto.visible = true;
-            objectArray.push(basalto);
-            scene.add(basalto)
-        
-            granito = ASSETS.objects.granito;
-            granito.scale.set(0.5, 0.5, 0.5);
-            granito.position.set(0, 0, 0);
-            granito.rotation.set(0, -Math.PI / 12, 0);
-            granito.visible = false;
-            objectArray.push(granito);
-            scene.add(granito)
-        
-            ardosia = ASSETS.objects.ardosia;
-            ardosia.scale.set(0.25, 0.25, 0.25);
-            ardosia.position.set(0, 0, 0);
-            ardosia.rotation.set(0, -Math.PI / 6, 0);
-            ardosia.visible = false;
-            objectArray.push(ardosia);
-            scene.add(ardosia)
-        
-            marmore = ASSETS.objects.marmore;
-            marmore.scale.set(0.02, 0.02, 0.02);
-            marmore.position.set(0, 0.04, 0);
-            marmore.visible = false;
-            objectArray.push(marmore);
-            scene.add(marmore)
-        }
-    
+        var scale = 0;
+        var defaultSize = 2;
+   
         // Add objects to scene
         var objectArray = new Array();
     
         // Creating de planets and stars
-        insertSolarObjectsOnScene(objectArray);
-    
-        // Controls of sidebar
+        insertObjectsOnScene(objectArray);
 
-        switch (lang) {
+        var rocks = usRocks; // Default
+        var interfaceTexts = usTexts;
+
+        // Language selector (link address)
+        switch (lang) 
+        {
             case "en-US":
-                {
-                    var controls = new function () {
-
-                        // Geometry
-                        this.meshNumber = 1;//4;
-                        this.mesh = objectArray[this.meshNumber];
-                        this.size = 1;
-                        this.type = "Basalt";//"Earth";
-
-                        this.chooseObject = function () {
-                            objectArray[this.meshNumber].visible = false;
-                            switch (this.type) {
-                                case 'Basalt':
-                                    this.meshNumber = 1;
-                                    
-                                    break;
-                                case 'Limestone':
-                                    this.meshNumber = 0;
-                                    
-                                    break;
-                                case 'Granite':
-                                    this.meshNumber = 2;
-                                    
-                                    break;
-                                case 'Slate':
-                                    this.meshNumber = 3;
-                                    
-                                    break;
-                                case 'Marble':
-                                    this.meshNumber = 4;
-                                    
-                                    break;
-                            }
-                            objectArray[this.meshNumber].visible = true;
-                            this.mesh = objectArray[this.meshNumber];
-                            this.resize();
-                        }
-
-
-
-                        this.resize = function () {
-                            switch(this.meshNumber)
-                            {
-                                case 1: {
-                                    objectArray[this.meshNumber].scale.set(this.size * SIZE.basalto,this.size * SIZE.basalto, this.size * SIZE.basalto);
-                                    //objectArray[this.meshNumber].position.y = this.size * SIZE.basaltoY;
-                                    break;
-                                }
-                                case 0: {
-                                    objectArray[this.meshNumber].scale.set(this.size * SIZE.calario,this.size * SIZE.calario, this.size * SIZE.calario);
-                                    //objectArray[this.meshNumber].position.y = -this.size + SIZE.calcarioY;
-                                    break;
-                                }
-                                case 2: {
-                                    objectArray[this.meshNumber].scale.set(this.size * SIZE.granito,this.size * SIZE.granito, this.size * SIZE.granito);
-                                    //objectArray[this.meshNumber].position.y = -this.size + SIZE.granitoY;
-                                    break;
-                                }
-                                case 3: {
-                                    objectArray[this.meshNumber].scale.set(this.size * SIZE.ardosia,this.size * SIZE.ardosia, this.size * SIZE.ardosia);
-                                    //objectArray[this.meshNumber].position.y = -this.size * SIZE.ardosia + SIZE.ardosiaY;
-                                    break;
-                                }
-                                case 4: {
-                                    objectArray[this.meshNumber].scale.set(this.size * SIZE.marmore,this.size * SIZE.marmore, this.size * SIZE.marmore);
-                                    //objectArray[this.meshNumber].position.y = -this.size + SIZE.marmoreY;
-                                    break;
-                                }
-                            }
-                            /*
-                            objectArray[this.meshNumber].scale.set(this.size, this.size, this.size);
-
-                            objectArray[this.meshNumber].position.y = -this.size + 0.5;
-                            */
-                        }
-                    }
-
-                    // First object is visible
-
-                    // GUI de controle e ajuste de valores especificos da geometria do objeto
-                    var gui = new dat.GUI();
-
-                    var guiFolder = gui.addFolder("Properties");
-                    guiFolder.open(); // Open the folder
-
-                    guiFolder.add(controls, "size", 1, 4).listen().onChange(function (e) {
-                        controls.resize();
-                    });
-
-                    guiFolder.add(controls, 'type', ['Basalt', 'Limestone', 'Granite', 'Slate', 'Marble']).onChange(function (e) {
-                        controls.chooseObject();
-                    });
-                    break;
-                }
+                rocks = usRocks;  
+                interfaceTexts = usTexts;
+                break;
             case "pt-BR":
-                {
-                    var controls = new function () {
-
-                        // Geometry
-                        this.meshNumber = 0;//4;
-                        this.mesh = objectArray[this.meshNumber];
-                        this.tamanho = 1;
-                        this.tipo = "Basalto";//"Earth";
-
-                        this.chooseObject = function () {
-                            objectArray[this.meshNumber].visible = false;
-                            switch (this.tipo) {
-                                case 'Basalto':
-                                    this.meshNumber = 0;
-                                    break;
-                                case 'Calcário':
-                                    this.meshNumber = 1;
-                                    break;
-                                case 'Ganito':
-                                    this.meshNumber = 2;
-                                    break;
-                                case 'Ardósia':
-                                    this.meshNumber = 3;
-                                    break;
-                                case 'Mármore':
-                                    this.meshNumber = 4;
-                                    break;
-                            }
-                            objectArray[this.meshNumber].visible = true;
-                            this.mesh = objectArray[this.meshNumber];
-                            this.resize();
-                        }
-
-                        this.resize = function () {
-                            switch(this.meshNumber)
-                            {
-                                case 1: {
-                                    objectArray[this.meshNumber].scale.set(this.size * SIZE.basalto,this.size * SIZE.basalto, this.size * SIZE.basalto);
-                                    //objectArray[this.meshNumber].position.y = -this.size + SIZE.basaltoY;
-                                    break;
-                                }
-                                case 0: {
-                                    objectArray[this.meshNumber].scale.set(this.size * SIZE.calario,this.size * SIZE.calario, this.size * SIZE.calario);
-                                    //objectArray[this.meshNumber].position.y = -this.size + SIZE.calcarioY;
-                                    break;
-                                }
-                                case 2: {
-                                    objectArray[this.meshNumber].scale.set(this.size * SIZE.granito,this.size * SIZE.granito, this.size * SIZE.granito);
-                                    //objectArray[this.meshNumber].position.y = -this.size + SIZE.granitoY;
-                                    break;
-                                }
-                                case 3: {
-                                    objectArray[this.meshNumber].scale.set(this.size * SIZE.ardosia,this.size * SIZE.ardosia, this.size * SIZE.ardosia);
-                                    //objectArray[this.meshNumber].position.y = -this.size * SIZE.ardosia + SIZE.ardosiaY;
-                                    break;
-                                }
-                                case 4: {
-                                    objectArray[this.meshNumber].scale.set(this.size * SIZE.marmore,this.size * SIZE.marmore, this.size * SIZE.marmore);
-                                    //objectArray[this.meshNumber].position.y = -this.size + SIZE.marmoreY;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    // First object is visible
-
-                    // GUI de controle e ajuste de valores especificos da geometria do objeto
-                    var gui = new dat.GUI();
-
-                    var guiFolder = gui.addFolder("Properties");
-                    guiFolder.open(); // Open the folder
-
-                    guiFolder.add(controls, "tamanho", 0.5, 4).listen().onChange(function (e) {
-                        controls.resize();
-                    });
-
-                    guiFolder.add(controls, 'tipo', ['Basalto', 'Calcário', 'Granito', 'Ardósia', 'Mármore']).onChange(function (e) {
-                        controls.chooseObject();
-                    });
-                    break;
-                }
+                rocks = brRocks;  
+                interfaceTexts = brTexts;                
+                break;
         }
 
-    
+        var controls = new function () 
+        {
+            // Geometry
+            this.meshNumber = 0;
+            this.mesh = objectArray[this.meshNumber];
+            this.size = defaultSize; // 2
+            this.type = rocks.limestone;
+            this.axes = false;
+
+            this.chooseObject = function () {
+                objectArray[this.meshNumber].visible = false;
+                switch (this.type) {
+                    case rocks.limestone: // Limestone
+                        this.meshNumber = 0;
+                        break;
+                    case rocks.basalt: // Basalt
+                        this.meshNumber = 1;
+                        break;
+                    case rocks.granite: // Granite
+                        this.meshNumber = 2;
+                        break;
+                    case rocks.slate: // Slate
+                        this.meshNumber = 3;
+                        break;
+                    case rocks.marble: // Marble
+                        this.meshNumber = 4;
+                        break;
+                }
+                mesh = objectArray[this.meshNumber];
+                mesh.visible = true;                         
+                this.resize();
+            }
+
+            this.resize = function () {
+                var meshBounds, objectSize;
+                switch(this.meshNumber)
+                {                                                            
+                    case 0: 
+                        objectSize = rockParam.limeSize;
+                        break;
+                    case 1: 
+                        objectSize = rockParam.basaSize;
+                        break;
+                    case 2: 
+                        objectSize = rockParam.granSize;                        
+                        break;
+                    case 3:
+                        objectSize = rockParam.slatSize;
+                        break;
+                    case 4: 
+                        objectSize = rockParam.marbSize;
+                        break;
+                }
+                mesh = objectArray[this.meshNumber];
+               
+                fixObjectPositionAndSize(mesh, this.size * objectSize);                                                          
+            }
+        }
+
+        function fixObjectPositionAndSize(mesh, size)
+        {
+            // Põe o objeto na origem antes de fazer a escala            
+            meshBounds = new THREE.Box3().setFromObject( mesh );                
+            var ySize = Math.abs(meshBounds.max.y-meshBounds.min.y);
+            mesh.position.y = -ySize/2.0 + (meshBounds.min.y > 0) ? -meshBounds.min.y : meshBounds.min.y;               
+
+            // Faz a escala e reposiciona objeto após escala
+            mesh.scale.set(size, size, size);                                                  
+            meshBounds = new THREE.Box3().setFromObject( mesh );
+            mesh.position.y += (meshBounds.min.y < 0) ? -meshBounds.min.y : meshBounds.min.y;            
+        }
+
+        // GUI de controle e ajuste de valores especificos da geometria do objeto
+        var gui = new dat.GUI();
+
+        var guiFolder = gui.addFolder( interfaceTexts.folderName);
+        guiFolder.open(); // Open the folder
+
+        guiFolder.add(controls, "axes").listen().onChange(function(e) {
+            if (controls.axes) {
+                axesHelper.visible = true;
+            } else {
+                axesHelper.visible = false;
+            }
+        }).name(interfaceTexts.axis);
+
+        guiFolder.add(controls, "size", 1, 3).listen().onChange(function (e) {
+            controls.resize();
+        }).name(interfaceTexts.size);
+
+        guiFolder.add(controls, 'type', [rocks.limestone, rocks.basalt, rocks.granite, rocks.slate, rocks.marble]).onChange(function (e) {
+            controls.chooseObject();
+        }).name(interfaceTexts.type);
+
+        function insertObjectsOnScene(objectArray){
+            limestone = ASSETS.objects.limestone;
+            scale = rockParam.limeSize;
+            limestone.scale.set(scale, scale, scale);
+            limestone.visible = true;
+            objectArray.push(limestone);
+            scene.add(limestone);
+        
+            basalt = ASSETS.objects.basalt;
+            scale = rockParam.basaSize;
+            basalt.scale.set(scale, scale, scale);          
+            basalt.visible = false;
+            objectArray.push(basalt);
+            scene.add(basalt)
+        
+            granite = ASSETS.objects.granite;
+            scale = rockParam.granSize;            
+            granite.scale.set(scale, scale, scale);
+            granite.visible = false;
+            objectArray.push(granite);
+            scene.add(granite)
+
+        
+            slate = ASSETS.objects.slate;
+            scale = rockParam.slatSize;            
+            slate.scale.set(scale, scale, scale);
+            slate.visible = false;
+            objectArray.push(slate);
+            scene.add(slate)
+        
+            marble = ASSETS.objects.marble;
+            scale = rockParam.marbSize;            
+            marble.scale.set(scale, scale, scale);
+            marble.visible = false;
+            objectArray.push(marble);
+            scene.add(marble)
+
+            // Acerta posição do primeiro objeto a ser colocado na cena
+            fixObjectPositionAndSize(objectArray[0], rockParam.limeSize * defaultSize); 
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         //          Handler arToolkitSource
         ////////////////////////////////////////////////////////////////////////////////
-
         var arToolkitSource = new THREEx.ArToolkitSource({
             // to read from the webcam
             sourceType: 'webcam',
-
         })
 
         arToolkitSource.init(function onReady() {
@@ -351,7 +338,6 @@ function mainMediumQuality(lang) {
         ////////////////////////////////////////////////////////////////////////////////
         //          initialize arToolkitContext
         ////////////////////////////////////////////////////////////////////////////////
-
 
         // create atToolkitContext
         var arToolkitContext = new THREEx.ArToolkitContext({
@@ -384,7 +370,6 @@ function mainMediumQuality(lang) {
         //////////////////////////////////////////////////////////////////////////////////
         //		Rendering of camera and solids
         //////////////////////////////////////////////////////////////////////////////////
-
         function updateAR() {
             if (arToolkitSource.ready === false) return;
 
@@ -393,16 +378,11 @@ function mainMediumQuality(lang) {
             // update scene.visible if the marker is seen
             scene.visible = camera.visible;
         }
-    
         function render() {
             updateAR();
-    
-            // Rotating the mesh selected
             requestAnimationFrame(render);
             renderer.render(scene, camera);
         }
-
         ls.remove(render);   // Remove the interface of loading and play loop of render
     }
-
 }

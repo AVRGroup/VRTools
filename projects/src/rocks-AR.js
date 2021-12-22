@@ -67,14 +67,25 @@ function startApp(lang, quality)
     }
 
     const lowPaths = {
-        limestone: 'assets...',
-        /* COMPLETAR AQUI OS CAMINHOS DE BAIXA QUALIDADE */
+        limestone: 'assets/models/rocks/limestone_low.glb',
+        basalt:  'assets/models/rocks/basalt_low.glb',
+        granite:  'assets/models/rocks/granite_low.glb',
+        slate:  'assets/models/rocks/slate_low.glb',
+        marble: 'assets/models/rocks/marble_low.glb',
     }
 
     // Default paths
     var paths = highPaths;
-    if(quality == "low") path = lowPaths;
-
+    if(quality == "low") 
+    {
+        paths = lowPaths;
+        rockParam.limeHigh = 1627;
+        rockParam.basaHigh = 2095;
+        rockParam.granHigh = 2350;
+        rockParam.marbHigh = 1799;
+        rockParam.slatHigh = 2310;
+    }
+    
     // Adiciona a saída do renderizador para um elemento da página HTML
     document.getElementById("webgl-output").appendChild(renderer.domElement);
 
