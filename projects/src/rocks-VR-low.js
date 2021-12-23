@@ -160,23 +160,6 @@ function start(quality, lang)
     rockParam.slatHigh = 2310;
 var buttonsPaths = brButtonPaths;
 
-function start(quality, lang)
-{
-  console.log(quality)
-  console.log(lang)
-  paths = highPaths;
-  if(quality == "low") 
-  {
-    paths = lowPaths;
-    rockParam.limeHigh = 1627;
-    rockParam.basaHigh = 2095;
-    rockParam.granHigh = 2350;
-    rockParam.marbHigh = 1799;
-    rockParam.slatHigh = 2310;
-  }
-  if(lang == 'pt-BR')
-    buttonsPaths = brButtonPaths;
-}
 
 var ASSETS = {
   textures: {
