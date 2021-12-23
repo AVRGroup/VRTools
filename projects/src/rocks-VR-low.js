@@ -122,12 +122,42 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 document.getElementById("webgl-output").appendChild(renderer.domElement);
 
 let limestone, basalt, granite, slate, marble, rotateSpeed = 0.015;
+
+var paths = highPaths;
+var buttonsPaths = brButtonPaths;
+
 paths = lowPaths;
 rockParam.limeHigh = 1627;
 rockParam.basaHigh = 2095;
 rockParam.granHigh = 2350;
 rockParam.marbHigh = 1799;
 rockParam.slatHigh = 2310;
+
+function start(quality, lang)
+{
+  console.log(quality)
+  console.log(lang)
+  paths = highPaths;
+  if(quality == "low") 
+  {
+    paths = lowPaths;
+    rockParam.limeHigh = 1627;
+    rockParam.basaHigh = 2095;
+    rockParam.granHigh = 2350;
+    rockParam.marbHigh = 1799;
+    rockParam.slatHigh = 2310;
+  }
+  if(lang == 'pt-BR')
+    buttonsPaths = brButtonPaths;
+}
+
+
+    paths = lowPaths;
+    rockParam.limeHigh = 1627;
+    rockParam.basaHigh = 2095;
+    rockParam.granHigh = 2350;
+    rockParam.marbHigh = 1799;
+    rockParam.slatHigh = 2310;
 var buttonsPaths = brButtonPaths;
 
 function start(quality, lang)
