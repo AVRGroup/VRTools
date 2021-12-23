@@ -140,10 +140,8 @@
 <body>
     <div id="three-stats"></div>
     <div id="panel">
-        <h3 id="panel-title" onclick="changeQuality()">Tipos de Rocha</h3>
-        <input type="checkbox" id="changeQuality name="changeQuality" value="changeQuality" 
-             onchange="changeQuality()">
-        <label id="label-quality" for="changeQuality"> Change Quality</label>
+
+
 
         <div id="panel-content">
             <select id="selector" onchange="changeContent()">
@@ -154,6 +152,9 @@
                 <option id="opt-ardosia" value="ardosia">Slate</option>
                 <option id="opt-marmore" value="marmore">Marble</option>
             </select>
+
+            <input type="button" id="changeQuality" class="btn" name="changeQuality" value="Change Quality"
+            onclick="changeQuality()" />
 
 
 
