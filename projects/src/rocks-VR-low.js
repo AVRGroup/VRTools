@@ -4,9 +4,105 @@ import { VRButton } from '../libs/three/build/jsm/webxr/VRButton.js';
 import { Orbi } from '../libs/orbixr.js';
 import {GLTFLoader} from '../libs/three/build/jsm/loaders/GLTFLoader.js'
 
-// import {
-//   onWindowResize,
-// } from "../../libs/util/util.js";
+
+
+
+const rockParam = {
+  limeSize: 0.025,
+  basaSize:  0.025,
+  granSize:  0.350,
+  slatSize:  0.250,
+  marbSize:  0.020, 
+  
+  limeHigh: 28719,
+  basaHigh: 30895,
+  granHigh: 33486,
+  marbHigh: 26975,
+  slatHigh: 23685,
+};
+
+const usRocks = {
+  limestone: "Limestone",
+  basalt:  "Basalt",
+  granite:  "Granite",
+  slate:  "Slate",
+  marble:  "Marble"
+};
+
+const brRocks = {
+  limestone: "Calcario",
+  basalt:  "Basalto",
+  granite:  "Granito",
+  slate:  "Ardosia",
+  marble:  "Marmore"
+};
+
+const usTexts = {
+  folderName: "Properties",
+  axis: "Axes",
+  size: "Object Size",
+  type: "Type",
+};    
+
+const brTexts = {
+  folderName: "Parâmetros",
+  axis: "Eixos",
+  size: "Tamanho do Objeto",
+  type: "Tipo de Rocha",
+
+}; 
+
+const brButtonPaths = {
+  buttonNext: 'assets/icons/next-(pt-BR).png',
+  buttonPrevious: 'assets/icons/previous-(pt-BR).png',
+  buttonDecrease: 'assets/icons/decrease(pt-BR).png',
+  buttonIncrease: 'assets/icons/increase(pt-BR).png',
+  buttonRotation: 'assets/icons/rotation(pt-BR).png',
+}
+
+const usButtonPaths = {
+  buttonNext: 'assets/icons/next.png',
+  buttonPrevious: 'assets/icons/previous.png',
+  buttonDecrease: 'assets/icons/decrease.png',
+  buttonIncrease: 'assets/icons/increase.png',
+  buttonRotation: 'assets/icons/rotation.png',
+}
+
+const highPaths = {
+  limestone: 'assets/models/rocks/limestone.glb',
+  basalt:  'assets/models/rocks/basalt.glb',
+  granite:  'assets/models/rocks/granite.glb',
+  slate:  'assets/models/rocks/slate.glb',
+  marble: 'assets/models/rocks/marble.glb',
+
+}
+
+const lowPaths = {
+  limestone: 'assets/models/rocks/limestone_low.glb',
+  basalt:  'assets/models/rocks/basalt_low.glb',
+  granite:  'assets/models/rocks/granite_low.glb',
+  slate:  'assets/models/rocks/slate_low.glb',
+  marble: 'assets/models/rocks/marble_low.glb',
+
+}
+
+
+
+var rocks = usRocks; // Default
+var interfaceTexts = usTexts;
+var lang = "en-US";
+// Language selector (link address)
+switch (lang) 
+{
+    case "en-US":
+        rocks = usRocks;  
+        interfaceTexts = usTexts;
+        break;
+    case "pt-BR":
+        rocks = brRocks;  
+        interfaceTexts = brTexts;                
+        break;
+}
 
 //-----------------------------------------------------------------------------------------------
 //-- MAIN SCRIPT --------------------------------------------------------------------------------
@@ -23,54 +119,124 @@ renderer.gammaFactor = 2.2;
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.shadowMap.enabled = false;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+document.getElementById("webgl-output").appendChild(renderer.domElement);
 
-let ASSETS, calcario, basalto, granito, ardosia, marmore;
+let limestone, basalt, granite, slate, marble, rotateSpeed = 0.015;
+paths = lowPaths;
+rockParam.limeHigh = 1627;
+rockParam.basaHigh = 2095;
+rockParam.granHigh = 2350;
+rockParam.marbHigh = 1799;
+rockParam.slatHigh = 2310;
+var buttonsPaths = brButtonPaths;
 
-/*
-ASSETS = {
+function start(quality, lang)
+{
+  console.log(quality)
+  console.log(lang)
+  paths = highPaths;
+  if(quality == "low") 
+  {
+    paths = lowPaths;
+    rockParam.limeHigh = 1627;
+    rockParam.basaHigh = 2095;
+    rockParam.granHigh = 2350;
+    rockParam.marbHigh = 1799;
+    rockParam.slatHigh = 2310;
+  }
+  if(lang == 'pt-BR')
+    buttonsPaths = brButtonPaths;
+}
+
+var ASSETS = {
   textures: {
       helper: {
           path: 'assets/textures/loader-helper.jpg',
-          fileSize: 1627 + 2095 + 2350 + 1799 + 2310, 
+          fileSize: rockParam.limeHigh + rockParam.basaHigh + rockParam.granHigh + rockParam.marbHigh + rockParam.slatHigh, 
       }
   },
 
-
   objects: {
-      calcario: {
-          path: 'assets/models/rocks/limestone_low.glb',
-          fileSize: 1627,
-          //draco: dracoLoader,
+      limestone: {
+          path: paths.limestone,
+          fileSize: rockParam.limeHigh,
       },
-      basalto: {
-          path: 'assets/models/rocks/basalt_low.glb',
-          fileSize: 2095,
+      basalt: {
+          path: paths.basalt,
+          fileSize: rockParam.basaHigh,
       },
-      granito: {
-          path: 'assets/models/rocks/granite_low.glb',
-          fileSize: 2350,
+      granite: {
+          path: paths.granite,
+          fileSize: rockParam.granHigh,
       },
-      ardosia: {
-          path: 'assets/models/rocks/slate_low.glb',
-          fileSize: 1799,
+      slate: {
+          path: paths.slate,
+          fileSize: rockParam.slatHigh,
       },
-      marmore: {
-          path: 'assets/models/rocks/marble_low.glb',
-          fileSize: 2310,
+      marble: {
+          path: paths.marble,
+          fileSize: rockParam.marbHigh,
       }
   }
 };
-*/
 
-//loader.load('assets/models/rocks/limestone_low.glb');
 
-//var ls = new LoadScreen(renderer,{type:'stepped-circular-fancy-offset', progressColor:'#fff',infoStyle:{padding:'0'}}).onComplete(init).start(ASSETS);
-
+var ls = new LoadScreen(renderer,{type:'stepped-circular-fancy-offset', progressColor:'#fff',infoStyle:{padding:'0'}}).onComplete(init).start(ASSETS);
+var content;
 //-- Setting scene and camera -------------------------------------------------------------------
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, .1, 1000);
 
-rock = new THREE.Object3D();
+
+
+function init() {
+
+  createScene();
+
+  console.log('aaaa')
+  light = new THREE.DirectionalLight(0xffffff, 2);
+  light.position.set(0, 0, 100);
+  scene.add(light);  
+
+  basalt = ASSETS.objects.basalt;
+  basalt.position.set(1, 1, -1);
+  basalt.scale.set(0.05, 0.05, 0.05);
+  basalt.visible = true;
+  scene.add(basalt);
+
+  limestone = ASSETS.objects.limestone;
+  limestone.position.set(1.2, 1, -2);
+  limestone.scale.set(0.05, 0.05, 0.05);
+  limestone.rotation.set(0, -Math.PI / 12, 0);
+  limestone.visible = false;
+  scene.add(limestone);
+
+  granite = ASSETS.objects.granite;
+  granite.position.set(1.2, 1, -2);
+  granite.scale.set(0.8, 0.8, 0.8);
+  granite.rotation.set(0, -Math.PI / 12, 0);
+  granite.visible = false;
+  scene.add(granite)
+
+  slate = ASSETS.objects.slate;
+  slate.position.set(1.2, 1.3, -2);
+  slate.scale.set(0.5, 0.5, 0.5);
+  slate.rotation.set(0, -Math.PI / 6, 0);
+  slate.visible = false;
+  scene.add(slate)
+
+  marble = ASSETS.objects.marble;
+  marble.position.set(1.8, 1, -3);
+  marble.scale.set(0.06, 0.06, 0.06);
+  marble.visible = false;
+  scene.add(marble)
+
+
+  ls.remove(() => {
+    animate();
+  });
+}
+
 
 const SIZE = {
   limestone: 0.05,
@@ -117,26 +283,14 @@ var light = new THREE.DirectionalLight(0xffffff, 1);
 scene.add(light);
 light.position.set(0, 1.6, 0);
 
-var rock;
-var firstLoad = new GLTFLoader();
-firstLoad.load('assets/models/rocks/basalt_low.glb', function(object) {
-  rock = object.scene;
-  calcario = object.scene;
-  rock.position.set(1, 1, -1);
-  rock.scale.set(0.05, 0.05, 0.05);
-  scene.add(rock);
-});
 var number = 1;
-
-
+var size = 1;
 
 const orbi = new Orbi(camera, config);
 cameraHolder.add(orbi);
 var loader = new GLTFLoader();
 
-
-
-orbi.addButton('1', '../img/icons/alert.png', () => {
+orbi.addButton('1', buttonsPaths.buttonPrevious, () => {
   if(number == 5)
     number = 1;
   else
@@ -145,64 +299,54 @@ orbi.addButton('1', '../img/icons/alert.png', () => {
   switch(number) {
     case 1:
       {
-        scene.remove(rock);
-        loader.load('assets/models/rocks/basalt_low.glb', function(object) {
-          rock = object.scene;
-          rock.position.set(1, 1, -1);
-          rock.scale.set(0.05, 0.05, 0.05);
-          scene.add(rock);
-        });
+        limestone.visible = false;
+        marble.visible = false;
+        granite.visible = false;
+        slate.visible = false;
+        basalt.visible = true;
         break;
       }
     case 2:
       {
-        scene.remove(rock);
-        loader.load('assets/models/rocks/limestone_low.glb', function(object) {
-          rock = object.scene;
-          rock.position.set(1.2, 1, -2);
-          rock.scale.set(0.05, 0.05, 0.05);
-          scene.add(rock);
-        });
+        limestone.visible = false;
+        marble.visible = false;
+        granite.visible = false;
+        slate.visible = true;
+        basalt.visible = false;
         break;
       }
     case 3:
       {
-        scene.remove(rock);
-        loader.load('assets/models/rocks/granite_low.glb', function(object) {
-          rock = object.scene;
-          rock.position.set(1.2, 1, -2);
-          rock.scale.set(0.8, 0.8, 0.8);
-          scene.add(rock);
-        });
+        limestone.visible = false;
+        marble.visible = false;
+        granite.visible = true;
+        slate.visible = false;
+        basalt.visible = false;
         break;
       }
     case 4:
       {
-        scene.remove(rock);
-        loader.load('assets/models/rocks/slate_low.glb', function(object) {
-          rock = object.scene;
-          rock.position.set(1.2, 1.3, -2);
-          rock.scale.set(0.5, 0.5, 0.5);
-          scene.add(rock);
-        });
+        limestone.visible = false;
+        marble.visible = true;
+        granite.visible = false;
+        slate.visible = false;
+        basalt.visible = false;
         break;
       }
     case 5:
       {
-        scene.remove(rock);
-        loader.load('assets/models/rocks/marble_low.glb', function(object) {
-          rock = object.scene;
-          rock.position.set(1.8, 1, -3);
-          rock.scale.set(0.06, 0.06, 0.06);
-          scene.add(rock);
-        });
+        limestone.visible = true;
+        marble.visible = false;
+        granite.visible = false;
+        slate.visible = false;
+        basalt.visible = false;
         break;
       }
   }
   
 });
 
-orbi.addButton('2', '../img/icons/alert.png', () => { 
+orbi.addButton('2', buttonsPaths.buttonNext, () => { 
   if(number == 1)
   number = 5;
 else
@@ -211,125 +355,127 @@ else
 switch(number) {
   case 1:
     {
-      scene.remove(rock);
-      loader.load('assets/models/rocks/basalt_low.glb', function(object) {
-        rock = object.scene;
-        rock.position.set(1, 1, -1);
-        rock.scale.set(0.05, 0.05, 0.05);
-        scene.add(rock);
-      });
+      limestone.visible = false;
+      marble.visible = false;
+      granite.visible = false;
+      slate.visible = false;
+      basalt.visible = true;
       break;
     }
   case 2:
     {
-      scene.remove(rock);
-      loader.load('assets/models/rocks/limestone_low.glb', function(object) {
-        rock = object.scene;
-        rock.position.set(1.2, 1, -2);
-        rock.scale.set(0.05, 0.05, 0.05);
-        scene.add(rock);
-      });
+      limestone.visible = false;
+      marble.visible = false;
+      granite.visible = false;
+      slate.visible = true;
+      basalt.visible = false;
       break;
     }
   case 3:
     {
-      scene.remove(rock);
-      loader.load('assets/models/rocks/granite_low.glb', function(object) {
-        rock = object.scene;
-        rock.position.set(1.2, 1, -2);
-        rock.scale.set(1, 1, 1);
-        scene.add(rock);
-      });
+      limestone.visible = false;
+      marble.visible = false;
+      granite.visible = true;
+      slate.visible = false;
+      basalt.visible = false;
       break;
     }
   case 4:
     {
-      scene.remove(rock);
-      loader.load('assets/models/rocks/slate_low.glb', function(object) {
-        rock = object.scene;
-        rock.position.set(1.2, 1.3, -2);
-        rock.scale.set(0.5, 0.5, 0.5);
-        scene.add(rock);
-      });
+      limestone.visible = false;
+      marble.visible = true;
+      granite.visible = false;
+      slate.visible = false;
+      basalt.visible = false;
       break;
     }
   case 5:
     {
-      scene.remove(rock);
-      loader.load('assets/models/rocks/marble_low.glb', function(object) {
-        rock = object.scene;
-        rock.position.set(1.8, 1, -3);
-        rock.scale.set(0.06, 0.06, 0.06);
-        scene.add(rock);
-      });
+      limestone.visible = true;
+      marble.visible = false;
+      granite.visible = false;
+      slate.visible = false;
+      basalt.visible = false;
       break;
     }
 }
  });
-console.log(cameraHolder.position)
-orbi.addButton('3', '../img/icons/alert.png', () => { 
-  switch(number) {
-    case 1:
-      {
-        scene.remove(rock);
-        loader.load('assets/models/rocks/basalt_low.glb', function(object) {
-          rock = object.scene;
-          rock.position.set(1, 1, -1);
-          rock.scale.set(0.05, 0.05, 0.05);
-          scene.add(rock);
-        });
-        break;
-      }
-    case 2:
-      {
-        scene.remove(rock);
-        loader.load('assets/models/rocks/limestone_low.glb', function(object) {
-          rock = object.scene;
-          rock.position.set(1.2, 1, -2);
-          rock.scale.set(0.05, 0.05, 0.05);
-          scene.add(rock);
-        });
-        break;
-      }
-    case 3:
-      {
-        scene.remove(rock);
-        loader.load('assets/models/rocks/granite_low.glb', function(object) {
-          rock = object.scene;
-          rock.position.set(1.2, 1, -2);
-          rock.scale.set(1, 1, 1);
-          scene.add(rock);
-        });
-        break;
-      }
-    case 4:
-      {
-        scene.remove(rock);
-        loader.load('assets/models/rocks/slate_low.glb', function(object) {
-          rock = object.scene;
-          rock.position.set(1.2, 1.3, -2);
-          rock.scale.set(0.5, 0.5, 0.5);
-          scene.add(rock);
-        });
-        break;
-      }
-    case 5:
-      {
-        scene.remove(rock);
-        loader.load('assets/models/rocks/marble_low.glb', function(object) {
-          rock = object.scene;
-          rock.position.set(1.8, 1, -3);
-          rock.scale.set(0.06, 0.06, 0.06);
-          scene.add(rock);
-        });
-        break;
-      }
+
+orbi.addButton('3', buttonsPaths.buttonDecrease, () => {
+  if(size > 1)
+  {
+    size --;
+    switch(number) {
+      case 1:
+        {
+          basalt.scale.set(SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt)
+          break;
+        }
+      case 2:
+        {
+          slate.scale.set(SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate);
+          break;
+        }
+      case 3:
+        {
+          granite.scale.set(SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite);
+          break;
+        }
+      case 4:
+        {
+          marble.scale.set(SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble);
+          break;
+        }
+      case 5:
+        {
+          limestone.scale.set(SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone);
+          break;
+        }
+    }
   }
+ 
  });
 
-orbi.addButton('4', '../img/icons/alert.png', () => { orbi.showMessage('button 4') });
+orbi.addButton('4', buttonsPaths.buttonIncrease, () => {
+  if(size < 3)
+  {
+    size ++;
+    switch(number) {
+      case 1:
+        {
+          basalt.scale.set(SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt)
+          break;
+        }
+      case 2:
+        {
+          slate.scale.set(SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate);
+          break;
+        }
+      case 3:
+        {
+          granite.scale.set(SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite);
+          break;
+        }
+      case 4:
+        {
+          marble.scale.set(SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble);
+          break;
+        }
+      case 5:
+        {
+          limestone.scale.set(SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone);
+          break;
+        }
+    }
+  }
+});
 
-orbi.addButton('5', '../img/icons/alert.png', () => { orbi.showMessage('button 5') });
+orbi.addButton('5', buttonsPaths.buttonRotation, () => { 
+  if(rotateSpeed == 0.015)
+    rotateSpeed = 0;
+  else
+    rotateSpeed = 0.015;  
+});
 
 
 
@@ -339,9 +485,9 @@ orbi.addButton('5', '../img/icons/alert.png', () => { orbi.showMessage('button 5
 
 
 //-- Creating Scene and calling the main loop ----------------------------------------------------
-createScene();
+/*createScene();
 animate();
-
+*/
 //------------------------------------------------------------------------------------------------
 //-- FUNCTIONS -----------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
@@ -352,6 +498,11 @@ function animate() {
 }
 
 function render() {
+  limestone.rotation.y += rotateSpeed;
+  marble.rotation.y += rotateSpeed;
+  granite.rotation.y += rotateSpeed;
+  slate.rotation.y += rotateSpeed;
+  basalt.rotation.y += rotateSpeed;
   renderer.xr.updateCamera(camera);
   orbi.update();
   renderer.render(scene, camera);
