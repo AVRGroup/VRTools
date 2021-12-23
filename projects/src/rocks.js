@@ -172,10 +172,10 @@ function init() {
     scene.add(marmore)
 
     window.addEventListener('resize', onResize);
-
+/*
     window.parent.addEventListener('mouseup', (e) => {
         trackballControls.handleParentKeyUp(e);
-    });
+    });*/
 
     ls.remove(() => {
         animate();

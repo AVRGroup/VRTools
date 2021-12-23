@@ -69,6 +69,11 @@
             color: #736767;
         }
 
+        
+        #changeQuality {
+            margin-top: 10px;
+        }
+
         .btn {
             padding-top: 0.2em;
             padding-bottom: 0.2em;
@@ -135,7 +140,10 @@
 <body>
     <div id="three-stats"></div>
     <div id="panel">
-        <h3 id="panel-title" onclick="toggleContent()">Tipos de Rocha</h3>
+        <h3 id="panel-title" onclick="changeQuality()">Tipos de Rocha</h3>
+        <input type="checkbox" id="changeQuality name="changeQuality" value="changeQuality" 
+             onchange="changeQuality()">
+        <label id="label-quality" for="changeQuality"> Change Quality</label>
 
         <div id="panel-content">
             <select id="selector" onchange="changeContent()">
@@ -198,6 +206,40 @@
                 content.style.display = 'none';
             }
             else content.style.display = 'block';
+        }
+    </script>
+
+    <script>
+        function changeQuality()
+        {
+            var searchBar = location.search;
+            let quality;
+        
+        if(searchBar.length != 0){
+            let langPattern = "?lang=";
+            let separatorIndex = searchBar.indexOf("&");
+            let qualityPattern = "&quality=";
+            let lang = searchBar.substring(langPattern.length, separatorIndex);
+             quality = parseInt(searchBar.substring(separatorIndex + qualityPattern.length, searchBar.length));
+            console.log(quality);
+            switch(quality){
+                case 0:             // Medium Quality
+                    quality = 1;
+                    break;
+                case 1:             // High Quality
+                    quality = 0;
+                    break;
+            }
+        }
+        //quality = 1;
+        console.log(quality)
+            
+            var newTab = true;
+            const prevPath = window.location.origin === "https://avrgroup.github.io" ? '/vrtools/' : '/vrtools/';
+            const newURL = window.location.origin + prevPath + 'projects/src/rocks-application.html' + '?lang=' + TRANSLATION.currentLang  + '&quality=' + quality;
+            if (!newTab) window.open(newURL, '_blank');
+            else window.location.href = newURL;
+                
         }
     </script>
 
