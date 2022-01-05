@@ -123,7 +123,6 @@ function init() {
 
     ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
     //scene.add(ambientLight);
-    console.log('aaaa')
     light = new THREE.DirectionalLight(0xffffff, 2);
     light.position.set(0, 0, 100);
     scene.add(light);  
@@ -135,7 +134,7 @@ function init() {
 
     calcario = ASSETS.objects.calcario;
     calcario.scale.set(2, 2, 2);
-    calcario.position.set(0, -20, 0);
+    calcario.position.set(0, -18, 0);
     calcario.rotation.set(0, -Math.PI / 12, 0);
     calcario.visible = false;
     content.calcario.model = calcario;
@@ -143,7 +142,7 @@ function init() {
 
     basalto = ASSETS.objects.basalto;
     basalto.scale.set(2, 2, 2);
-    basalto.position.set(0, -20, 0);
+    basalto.position.set(0, -18, 0);
     basalto.visible = true;
     content.basalto.model = basalto;
     scene.add(basalto)
