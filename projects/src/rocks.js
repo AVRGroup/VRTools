@@ -26,7 +26,7 @@ if(quality == 1)
         textures: {
             helper: {
                 path: 'assets/textures/loader-helper.jpg',
-                fileSize: 23521 + 24647 + 32702 + 13302 + 26344, 
+                fileSize: 28047 + 30172 + 32702 + 23131 + 26344, 
             }
         },
         geometries: {
