@@ -213,7 +213,7 @@ function startApp(lang, quality)
   
     basalt = ASSETS.objects.basalt;
     basalt.position.set(1, 1, -1);
-    basalt.scale.set(0.05, 0.05, 0.05);
+    basalt.scale.set(0.03, 0.03, 0.03);
     basalt.visible = true;
     scene.add(basalt);
   
