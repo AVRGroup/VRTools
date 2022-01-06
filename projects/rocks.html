@@ -235,20 +235,20 @@
                 document.getElementById("scene").src = ("./src/rocks-application.html" + language + "&quality=0");
                 document.getElementById("fullscreenMediumQuality_link").href = ("./src/rocks-application.html" + language + "&quality=0"); 
                 document.getElementById("fullscreenHighQuality_link").href = ("./src/rocks-application.html" + language + "&quality=1"); 
-                document.getElementById("ar_link").href = ("./src/rocks-application-AR-low.html" + language);
-                document.getElementById("ar_link2").href = ("./src/rocks-application-AR.html" + language);  
-                document.getElementById("vr_link").href = ("./src/rocks-application-VR.html" + language); 
-                document.getElementById("vr_link2").href = ("./src/rocks-application-VR-low.html" + language); 
+                document.getElementById("ar_link").href = ("./src/rocks-application-AR.html" + language + "&quality=0");
+                document.getElementById("ar_link2").href = ("./src/rocks-application-AR.html" + language + "&quality=1");  
+                document.getElementById("vr_link").href = ("./src/rocks-application-VR.html" + language + "&quality=0"); 
+                document.getElementById("vr_link2").href = ("./src/rocks-application-VR.html" + language + "&quality=1"); 
 
             }
             else{
                 document.getElementById("scene").src = ("./src/rocks-application.html?lang=en-US&quality=0");
                 document.getElementById("fullscreenMediumQuality_link").href = ("./src/rocks-application.html?lang=en-US&quality=0"); 
                 document.getElementById("fullscreenHighQuality_link").href = ("./src/rocks-application.html?lang=en-US&quality=1"); 
-                document.getElementById("ar_link").href = ("./src/rocks-application-AR-low.html?lang=pt-BR"); 
-                document.getElementById("ar_link2").href = ("./src/rocks-application-AR.html" + language); 
-                document.getElementById("vr_link").href = ("./src/rocks-application-VR.html?lang=pt-BR"); 
-                document.getElementById("vr_link2").href = ("./src/rocks-application-VR-low.html?lang=pt-BR"); 
+                document.getElementById("ar_link").href = ("./src/rocks-application-AR-low.html?lang=en-US&quality=0"); 
+                document.getElementById("ar_link2").href = ("./src/rocks-application-AR.html?lang=en-US&quality=1"); 
+                document.getElementById("vr_link").href = ("./src/rocks-application-VR.html?lang=en-US&quality=0"); 
+                document.getElementById("vr_link2").href = ("./src/rocks-application-VR-low.html?lang=en-US&quality=1"); 
             }
         }
 
