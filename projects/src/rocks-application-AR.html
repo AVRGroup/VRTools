@@ -60,21 +60,24 @@
 <body>
     <div id="webgl-output"></div>
     <script type="text/javascript">
-        var language = location.search;
-        if (language.length != 0) {
-            let aux = "?lang=";
-            language = language.substring(aux.length, language.length);
-            switch (language) {
-                case "en-US":
-                    startApp("en-US", "high");
+        var searchBar = location.search;
+        if (searchBar.length != 0) {
+            let langPattern = "?lang=";
+            let separatorIndex = searchBar.indexOf("&");
+            let qualityPattern = "&quality=";
+            let lang = searchBar.substring(langPattern.length, separatorIndex);
+            let quality = parseInt(searchBar.substring(separatorIndex + qualityPattern.length, searchBar.length));
+            switch (quality) {
+                case 1:
+                    startApp(lang, "high");
                     break;
-                case "pt-BR":
-                    startApp("pt-BR", "high");
+                case 0:
+                    startApp(lang, "low");
                     break;
             }
         }
         else {
-            startApp("en-US", "high");
+            startApp("en-US", "low");
         }
     </script>
     <script>
