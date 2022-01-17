@@ -218,7 +218,7 @@ function startApp(lang, quality)
     scene.add(basalt);
   
     limestone = ASSETS.objects.limestone;
-    limestone.position.set(1.99, 0.5, -2);
+    limestone.position.set(2, 0.5, -2);
     limestone.scale.set(0.05, 0.05, 0.05);
     limestone.rotation.set(0, -Math.PI / 12, 0);
     limestone.visible = false;
@@ -424,6 +424,11 @@ function startApp(lang, quality)
       marble.scale.set(SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble);
       limestone.scale.set(SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone);
 
+      basalt.position.set(1 + size/10, 1, -1 + size/10);
+      limestone.position.set(1.99 + size/10, 0.5 + size/10, -2 + size/10);
+      granite.position.set(2 + size/10, 0.9 + size/10, -2 + size/10);
+      slate.position.set(1.5 + size/10, 1 + size/10, -2 + size/10);
+      marble.position.set(2.3 + size/5, 0.8 + size/10, -3 + size/10);
     }
    
    });
@@ -438,6 +443,11 @@ function startApp(lang, quality)
       marble.scale.set(SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble);
       limestone.scale.set(SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone);
 
+      basalt.position.set(1 + size/10, 1, -1 + size/10);
+      limestone.position.set(1.99 + size/10, 0.5 + size/10, -2 + size/10);
+      granite.position.set(2 + size/10, 0.9 + size/10, -2 + size/10);
+      slate.position.set(1.5 + size/10, 1 + size/10, -2 + size/10);
+      marble.position.set(2.3 + size/5, 0.8 + size/10, -3 + size/10);
     }
   });
   
