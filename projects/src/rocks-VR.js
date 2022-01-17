@@ -213,34 +213,34 @@ function startApp(lang, quality)
   
     basalt = ASSETS.objects.basalt;
     basalt.position.set(1, 1, -1);
-    basalt.scale.set(0.03, 0.03, 0.03);
+    basalt.scale.set(0.025, 0.025, 0.025);
     basalt.visible = true;
     scene.add(basalt);
   
     limestone = ASSETS.objects.limestone;
-    limestone.position.set(1.2, 1, -2);
+    limestone.position.set(1.99, 0.5, -2);
     limestone.scale.set(0.05, 0.05, 0.05);
     limestone.rotation.set(0, -Math.PI / 12, 0);
     limestone.visible = false;
     scene.add(limestone);
   
     granite = ASSETS.objects.granite;
-    granite.position.set(1.2, 1, -2);
-    granite.scale.set(0.8, 0.8, 0.8);
+    granite.position.set(1.9, 0.9, -2);
+    granite.scale.set(0.6, 0.6, 0.6);
     granite.rotation.set(0, -Math.PI / 12, 0);
     granite.visible = false;
     scene.add(granite)
   
     slate = ASSETS.objects.slate;
-    slate.position.set(1.2, 1.3, -2);
+    slate.position.set(1.5, 1, -2);
     slate.scale.set(0.5, 0.5, 0.5);
     slate.rotation.set(0, -Math.PI / 6, 0);
     slate.visible = false;
     scene.add(slate)
   
     marble = ASSETS.objects.marble;
-    marble.position.set(1.8, 1, -3);
-    marble.scale.set(0.06, 0.06, 0.06);
+    marble.position.set(2.3, 0.8, -3);
+    marble.scale.set(0.05, 0.05, 0.05);
     marble.visible = false;
     scene.add(marble)
   
@@ -254,13 +254,13 @@ function startApp(lang, quality)
   const SIZE = {
     limestone: 0.05,
     calcarioY: 1,
-    basalt: 0.05,
+    basalt: 0.025,
     basaltoY: 30,
-    granite: 0.8,
+    granite: 0.6,
     granitoY: 1,
     slate: 0.5,
     ardosia: 1,
-    marble: 0.06,
+    marble: 0.05,
     marmoreY: 0.04
   };
   
@@ -418,33 +418,12 @@ function startApp(lang, quality)
     if(size > 1)
     {
       size --;
-      switch(number) {
-        case 1:
-          {
-            basalt.scale.set(SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt)
-            break;
-          }
-        case 2:
-          {
-            slate.scale.set(SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate);
-            break;
-          }
-        case 3:
-          {
-            granite.scale.set(SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite);
-            break;
-          }
-        case 4:
-          {
-            marble.scale.set(SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble);
-            break;
-          }
-        case 5:
-          {
-            limestone.scale.set(SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone);
-            break;
-          }
-      }
+      basalt.scale.set(SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt);
+      slate.scale.set(SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate);
+      granite.scale.set(SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite);
+      marble.scale.set(SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble);
+      limestone.scale.set(SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone);
+
     }
    
    });
@@ -453,33 +432,12 @@ function startApp(lang, quality)
     if(size < 3)
     {
       size ++;
-      switch(number) {
-        case 1:
-          {
-            basalt.scale.set(SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt)
-            break;
-          }
-        case 2:
-          {
-            slate.scale.set(SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate);
-            break;
-          }
-        case 3:
-          {
-            granite.scale.set(SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite);
-            break;
-          }
-        case 4:
-          {
-            marble.scale.set(SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble);
-            break;
-          }
-        case 5:
-          {
-            limestone.scale.set(SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone);
-            break;
-          }
-      }
+      basalt.scale.set(SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt, SIZE.basalt + size/3 * SIZE.basalt);
+      slate.scale.set(SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate, SIZE.slate + size/3 * SIZE.slate);
+      granite.scale.set(SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite, SIZE.granite + size/3 * SIZE.granite);
+      marble.scale.set(SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble, SIZE.marble + size/3 * SIZE.marble);
+      limestone.scale.set(SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone, SIZE.limestone + size/3 * SIZE.limestone);
+
     }
   });
   
