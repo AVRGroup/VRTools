@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/translation.js"></script>
     <script src="../components/navbar.js"></script>
+    <script src="../components/developer.js"></script>
 </head>
 
 <body>
@@ -122,15 +123,25 @@
                   onclick="closeModal(0)" style="cursor:pointer">×</span>
         </div>
 
-    </div>
-    <div class="w3-panel w3-leftbar w3-serif">
-        <h5 id="credit"><b>Images credit:</b></h5>
-        <p>
-            <i>
-                Used images from the websites:
-                https://pixexid.com/search/360%20panorama and https://unsplash.com/s/photos/360-panorama.
-            </i>
-        </p>
+        <div class="w3-container w3-padding-16 ">
+            <h3 id="devs-header" class=" w3-border-bottom w3-border-light-grey">
+                Developers
+            </h3>
+        </div>
+        
+        <div class="w3-row-padding">
+            <vrtools-dev dev="andre" main class="w3-col l2 m6 w3-margin-bottom"></vrtools-dev>
+        </div>
+        
+        <div class="w3-panel w3-leftbar w3-serif">
+            <h5 id="credit"><b>Images credit:</b></h5>
+            <p>
+                <i>
+                    Used images from the websites:
+                    https://pixexid.com/search/360%20panorama and https://unsplash.com/s/photos/360-panorama.
+                </i>
+            </p>
+        </div>
     </div>
     <!-- Footer -->
     <footer class="w3-center w3-black w3-padding-16 ">
@@ -219,6 +230,12 @@
                                                                         target="_blank">serviços de Realidade Virtual da Google</a>
                         no primeiro acesso. `
         );
+
+        TRANSLATION.add(
+            '#devs-header',
+            'Developers',
+            'Desenvolvedores'
+        )
 
             // TRANSLATION.add(
             //     '#bottom',

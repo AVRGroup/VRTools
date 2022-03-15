@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/translation.js"></script>
     <script src="../components/navbar.js"></script>
+    <script src="../components/developer.js"></script>
 </head>
 
 <body>
@@ -224,6 +225,16 @@
 
             <span class="w3-black w3-text-white w3-opacity w3-xxlarge w3-hover-text-grey w3-container w3-display-topright"
                   onclick="closeModal2()" style="cursor:pointer">×</span>
+        </div>
+
+        <div class="w3-container w3-padding-16 ">
+            <h3 id="devs-header" class=" w3-border-bottom w3-border-light-grey">
+                Developers
+            </h3>
+        </div>
+
+        <div class="w3-row-padding">
+            <vrtools-dev dev="lucas" main class="w3-col l2 m6 w3-margin-bottom"></vrtools-dev>
         </div>
 
         <div class="w3-panel w3-leftbar w3-serif">
@@ -481,7 +492,12 @@
             'Powered by ',
             'Distribuído por '
         );
-
+        
+        TRANSLATION.add(
+            '#devs-header',
+            'Developers',
+            'Desenvolvedores'
+        )
     </script>
 </body>
 

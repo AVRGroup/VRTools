@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/translation.js"></script>
     <script src="../components/navbar.js"></script>
+    <script src="../components/developer.js"></script>
 </head>
 
 <body>
@@ -180,6 +181,17 @@
                 onclick="closeModal2()" style="cursor:pointer">×</span>
         </div>
 
+        <div class="w3-container w3-padding-16 ">
+            <h3 id="devs-header" class=" w3-border-bottom w3-border-light-grey">
+                Developers
+            </h3>
+        </div>
+
+        <div class="w3-row-padding">
+            <vrtools-dev dev="lucas" main class="w3-col l2 m6 w3-margin-bottom"></vrtools-dev>
+            <vrtools-dev dev="paulo" class="w3-col l2 m6 w3-margin-bottom"></vrtools-dev>
+        </div>
+
         <div class="w3-panel w3-leftbar w3-serif">
             <h5><b>Reference:</b></h5>
             <p><i>Tom Henderson, "Inclined Planes." From The Physics Classroom.
@@ -295,7 +307,13 @@
             '#images-header',
             'Images in Augmented and Virtual Reality',
             'Imagens em Realidade Virtual e Aumentada'
-        );        
+        );
+        
+        TRANSLATION.add(
+            '#devs-header',
+            'Developers',
+            'Desenvolvedores'
+        )
 
         // TRANSLATION.add(
         //     '#bottom',

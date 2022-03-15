@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/translation.js"></script>
     <script src="../components/navbar.js"></script>
+    <script src="../components/developer.js"></script>
 </head>
 
 <body>
@@ -127,6 +128,16 @@
         </div>
 
         <!-- End page content -->
+
+        <div class="w3-container w3-padding-16 ">
+            <h3 id="devs-header" class=" w3-border-bottom w3-border-light-grey">
+                Developers
+            </h3>
+        </div>
+
+        <div class="w3-row-padding">
+            <vrtools-dev dev="paulo" main class="w3-col l2 m6 w3-margin-bottom"></vrtools-dev>
+        </div>
     </div>
 
     <footer class="w3-center w3-black w3-padding-16 ">
@@ -223,6 +234,12 @@
             'Eletric Circuits',
             'Circuitos Elétricos'
         );
+
+        TRANSLATION.add(
+            '#devs-header',
+            'Developers',
+            'Desenvolvedores'
+        )
     </script>
 </body>
 
