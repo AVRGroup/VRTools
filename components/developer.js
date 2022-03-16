@@ -59,7 +59,7 @@ class Developer extends HTMLElement {
                 <img src="${dev.pic}" alt="" style="width:100%; border-radius: 0%;">
 
                 <div class="w3-container">
-                <div style="text-align: center; font-size: 1.2em; width:90%; border-bottom: 1px solid grey;">${dev.name}</div>
+                <div style="text-align: center; font-size: 1.2em; border-bottom: 1px solid grey;">${dev.name}</div>
                 <div style="text-align: center; font-size: 1em;">
                     ${isMain ? '<b class="main-dev">main dev</b>' : '<span class="aux-dev">auxiliar dev<span>'}
                 </div>
